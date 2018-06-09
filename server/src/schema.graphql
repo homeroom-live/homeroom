@@ -1,0 +1,83 @@
+# import User, Class, Classroom, File from '../schemas/prisma.graphql'
+
+scalar Upload
+scalar Json
+
+type Query {
+  me: User
+  user(username: String!): User!
+  isFollowing(username: String!): Boolean!
+  isClassStudent(classId: ID!): Boolean!
+  isClassStudentOrTeacher(classroomId: ID!): Boolean!
+  userDefaultCard: Json
+  userStats(username: String): Json
+  userStripeUrl: String
+
+  class(id: ID!): Class!
+  myClasses(first: Int): [Class!]!
+  myTaughtClasses(first: Int): [Class!]!
+  classes(
+    where: ClassWhereInput
+    orderBy: ClassOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Class!]!
+
+  classroom(id: ID!): Classroom!
+  liveClassrooms: [Classroom!]!
+
+  # messages(classroomId: ID!, last: Int): [Message!]!
+  messages(
+    classroomId: ID!
+    where: MessageWhereInput
+    orderBy: MessageOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Message]!
+}
+
+type Mutation {
+  createUser: User
+  updateUser(data: UserUpdateInput!): User!
+  updateUserWithFiles(
+    data: UserUpdateInput!
+    video: Upload
+    picture: Upload
+    removeFiles: [Json]
+  ): User!
+  follow(username: String!): User!
+  unfollow(username: String!): User!
+  createStripeAccount(code: String!): User!
+  createStripeCustomer(token: String!): User!
+  updateStripeCustomer(token: String!): User!
+
+  createClass(data: ClassCreateInput!): Class!
+  updateClass(id: ID!, data: ClassUpdateInput!): Class!
+  deleteClass(id: ID!): Class!
+  joinClass(id: ID!, studentsCount: Int!): Class!
+  leaveClass(id: ID!, studentsCount: Int!): Class!
+
+  createClassroom(data: ClassroomCreateInput!): Classroom!
+  updateClassroom(id: ID!, data: ClassroomUpdateInput!): Classroom!
+
+  createMessage(data: MessageCreateInput!): Message!
+
+  createCharge(amount: Float!, teacherId: ID!, classId: ID!): Charge!
+  createRefund(classId: ID!): Refund!
+
+  uploadFile(upload: Upload!): File!
+  uploadClassFiles(classId: ID!, uploads: [Upload!]!): [File!]!
+  uploadClassVideo(classId: ID!, upload: Upload!): File!
+  removeFile(file: FileWhereUniqueInput!): File!
+  removeFiles(files: FileUpdateManyWithoutClassInput!): [File!]!
+}
+
+type Subscription {
+  message(classroomId: ID!): MessageSubscriptionPayload
+}
