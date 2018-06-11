@@ -4,18 +4,19 @@ scalar Upload
 scalar Json
 
 type Query {
-  me: User
+  viewer: Viewer
+  # me: User
   user(username: String!): User!
-  isFollowing(username: String!): Boolean!
-  isClassStudent(classId: ID!): Boolean!
-  isClassStudentOrTeacher(classroomId: ID!): Boolean!
+  # isFollowing(username: String!): Boolean!
+  # isClassStudent(classId: ID!): Boolean!
+  # isClassStudentOrTeacher(classroomId: ID!): Boolean!
   userDefaultCard: Json
   userStats(username: String): Json
-  userStripeUrl: String
+  # userStripeUrl: String
 
   class(id: ID!): Class!
-  myClasses(first: Int): [Class!]!
-  myTaughtClasses(first: Int): [Class!]!
+  # myClasses(first: Int): [Class!]!
+  # myTaughtClasses(first: Int): [Class!]!
   classes(
     where: ClassWhereInput
     orderBy: ClassOrderByInput
@@ -53,16 +54,19 @@ type Mutation {
   ): User!
   follow(username: String!): User!
   unfollow(username: String!): User!
+  # Stripe
   createStripeAccount(code: String!): User!
   createStripeCustomer(token: String!): User!
   updateStripeCustomer(token: String!): User!
 
+  # Classes
   createClass(data: ClassCreateInput!): Class!
   updateClass(id: ID!, data: ClassUpdateInput!): Class!
   deleteClass(id: ID!): Class!
   joinClass(id: ID!, studentsCount: Int!): Class!
   leaveClass(id: ID!, studentsCount: Int!): Class!
 
+  # Classroom
   createClassroom(data: ClassroomCreateInput!): Classroom!
   updateClassroom(id: ID!, data: ClassroomUpdateInput!): Classroom!
 
@@ -80,4 +84,11 @@ type Mutation {
 
 type Subscription {
   message(classroomId: ID!): MessageSubscriptionPayload
+}
+
+type Viewer {
+  user: User!
+  stripeURL: String!
+  classes(first: Int): [Class!]!
+  taughtClasses(first: Int!): [Class!]!
 }

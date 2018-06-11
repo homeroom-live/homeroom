@@ -1,6 +1,8 @@
 endpoint: ${env:PRISMA_ENDPOINT}
 
-datamodel: datamodel.graphql
+datamodel: 
+  - datamodel/types.graphql
+  - datamodel/enums.graphql
 
 hooks:
   post-deploy:

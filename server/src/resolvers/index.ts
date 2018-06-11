@@ -1,15 +1,19 @@
-import { Query } from './Query'
-import { Subscription } from './Subscription'
+import { extractFragmentReplacements } from 'prisma-binding'
+// Query
+import { classes as classesQueries } from './Query/classes'
+// Mutation
 import { auth } from './Mutation/auth'
-import { post } from './Mutation/post'
-import { AuthPayload } from './AuthPayload'
+// Types
+import { Viewer } from './Viewer'
 
-export default {
-  Query,
+export const resolvers = {
+  Query: {
+    ...classesQueries,
+  },
   Mutation: {
     ...auth,
-    ...post,
   },
-  Subscription,
-  AuthPayload,
+  Viewer,
 }
+
+export const fragmentReplacements = extractFragmentReplacements(resolvers)

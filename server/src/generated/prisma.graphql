@@ -1,5 +1,29 @@
 # source: https://eu1.prisma.sh/matic-zavadlal-03c51f/homeroom-setup/dev
-# timestamp: Sat Jun 09 2018 12:46:29 GMT+0200 (CEST)
+# timestamp: Mon Jun 11 2018 07:42:12 GMT+0200 (CEST)
+
+type AggregateCharge {
+  count: Int!
+}
+
+type AggregateClass {
+  count: Int!
+}
+
+type AggregateClassroom {
+  count: Int!
+}
+
+type AggregateFile {
+  count: Int!
+}
+
+type AggregateMessage {
+  count: Int!
+}
+
+type AggregateRefund {
+  count: Int!
+}
 
 type AggregateUser {
   count: Int!
@@ -10,124 +34,117 @@ type BatchPayload {
   count: Long!
 }
 
-"""
-The `Long` scalar type represents non-fractional signed whole numeric values.
-Long can represent values between -(2^63) and 2^63 - 1.
-"""
-scalar Long
-
-type Mutation {
-  createUser(data: UserCreateInput!): User!
-  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  deleteUser(where: UserWhereUniqueInput!): User
-  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
-  deleteManyUsers(where: UserWhereInput): BatchPayload!
-}
-
-enum MutationType {
-  CREATED
-  UPDATED
-  DELETED
-}
-
-"""An object with an ID"""
-interface Node {
-  """The id of the object."""
+type Charge implements Node {
   id: ID!
-}
-
-"""Information about pagination in a connection."""
-type PageInfo {
-  """When paginating forwards, are there more items?"""
-  hasNextPage: Boolean!
-
-  """When paginating backwards, are there more items?"""
-  hasPreviousPage: Boolean!
-
-  """When paginating backwards, the cursor to continue."""
-  startCursor: String
-
-  """When paginating forwards, the cursor to continue."""
-  endCursor: String
-}
-
-type Query {
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  user(where: UserWhereUniqueInput!): User
-  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
-
-  """Fetches an object given its ID"""
-  node(
-    """The ID of an object"""
-    id: ID!
-  ): Node
-}
-
-type Subscription {
-  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-}
-
-type User implements Node {
-  id: ID!
-  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  stripeId: String!
+  amount: Float!
+  refund(where: RefundWhereInput): Refund
+  class(where: ClassWhereInput): Class!
+  user(where: UserWhereInput): User!
 }
 
 """A connection to a list of items."""
-type UserConnection {
+type ChargeConnection {
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
   """A list of edges."""
-  edges: [UserEdge]!
-  aggregate: AggregateUser!
+  edges: [ChargeEdge]!
+  aggregate: AggregateCharge!
 }
 
-input UserCreateInput {
-  name: String!
+input ChargeCreateInput {
+  stripeId: String!
+  amount: Float!
+  refund: RefundCreateOneWithoutChargeInput
+  class: ClassCreateOneWithoutChargesInput!
+  user: UserCreateOneWithoutChargesInput!
+}
+
+input ChargeCreateManyWithoutClassInput {
+  create: [ChargeCreateWithoutClassInput!]
+  connect: [ChargeWhereUniqueInput!]
+}
+
+input ChargeCreateManyWithoutUserInput {
+  create: [ChargeCreateWithoutUserInput!]
+  connect: [ChargeWhereUniqueInput!]
+}
+
+input ChargeCreateOneWithoutRefundInput {
+  create: ChargeCreateWithoutRefundInput
+  connect: ChargeWhereUniqueInput
+}
+
+input ChargeCreateWithoutClassInput {
+  stripeId: String!
+  amount: Float!
+  refund: RefundCreateOneWithoutChargeInput
+  user: UserCreateOneWithoutChargesInput!
+}
+
+input ChargeCreateWithoutRefundInput {
+  stripeId: String!
+  amount: Float!
+  class: ClassCreateOneWithoutChargesInput!
+  user: UserCreateOneWithoutChargesInput!
+}
+
+input ChargeCreateWithoutUserInput {
+  stripeId: String!
+  amount: Float!
+  refund: RefundCreateOneWithoutChargeInput
+  class: ClassCreateOneWithoutChargesInput!
 }
 
 """An edge in a connection."""
-type UserEdge {
+type ChargeEdge {
   """The item at the end of the edge."""
-  node: User!
+  node: Charge!
 
   """A cursor for use in pagination."""
   cursor: String!
 }
 
-enum UserOrderByInput {
+enum ChargeOrderByInput {
   id_ASC
   id_DESC
-  name_ASC
-  name_DESC
-  updatedAt_ASC
-  updatedAt_DESC
   createdAt_ASC
   createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  stripeId_ASC
+  stripeId_DESC
+  amount_ASC
+  amount_DESC
 }
 
-type UserPreviousValues {
+type ChargePreviousValues {
   id: ID!
-  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  stripeId: String!
+  amount: Float!
 }
 
-type UserSubscriptionPayload {
+type ChargeSubscriptionPayload {
   mutation: MutationType!
-  node: User
+  node: Charge
   updatedFields: [String!]
-  previousValues: UserPreviousValues
+  previousValues: ChargePreviousValues
 }
 
-input UserSubscriptionWhereInput {
+input ChargeSubscriptionWhereInput {
   """Logical AND on all given filters."""
-  AND: [UserSubscriptionWhereInput!]
+  AND: [ChargeSubscriptionWhereInput!]
 
   """Logical OR on all given filters."""
-  OR: [UserSubscriptionWhereInput!]
+  OR: [ChargeSubscriptionWhereInput!]
 
   """Logical NOT on all given filters combined by AND."""
-  NOT: [UserSubscriptionWhereInput!]
+  NOT: [ChargeSubscriptionWhereInput!]
 
   """
   The subscription event gets dispatched when it's listed in mutation_in
@@ -148,22 +165,1429 @@ input UserSubscriptionWhereInput {
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
   updatedFields_contains_some: [String!]
-  node: UserWhereInput
+  node: ChargeWhereInput
 }
 
-input UserUpdateInput {
-  name: String
+input ChargeUpdateInput {
+  stripeId: String
+  amount: Float
+  refund: RefundUpdateOneWithoutChargeInput
+  class: ClassUpdateOneWithoutChargesInput
+  user: UserUpdateOneWithoutChargesInput
 }
 
-input UserWhereInput {
+input ChargeUpdateManyWithoutClassInput {
+  create: [ChargeCreateWithoutClassInput!]
+  connect: [ChargeWhereUniqueInput!]
+  disconnect: [ChargeWhereUniqueInput!]
+  delete: [ChargeWhereUniqueInput!]
+  update: [ChargeUpdateWithWhereUniqueWithoutClassInput!]
+  upsert: [ChargeUpsertWithWhereUniqueWithoutClassInput!]
+}
+
+input ChargeUpdateManyWithoutUserInput {
+  create: [ChargeCreateWithoutUserInput!]
+  connect: [ChargeWhereUniqueInput!]
+  disconnect: [ChargeWhereUniqueInput!]
+  delete: [ChargeWhereUniqueInput!]
+  update: [ChargeUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [ChargeUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input ChargeUpdateOneWithoutRefundInput {
+  create: ChargeCreateWithoutRefundInput
+  connect: ChargeWhereUniqueInput
+  delete: Boolean
+  update: ChargeUpdateWithoutRefundDataInput
+  upsert: ChargeUpsertWithoutRefundInput
+}
+
+input ChargeUpdateWithoutClassDataInput {
+  stripeId: String
+  amount: Float
+  refund: RefundUpdateOneWithoutChargeInput
+  user: UserUpdateOneWithoutChargesInput
+}
+
+input ChargeUpdateWithoutRefundDataInput {
+  stripeId: String
+  amount: Float
+  class: ClassUpdateOneWithoutChargesInput
+  user: UserUpdateOneWithoutChargesInput
+}
+
+input ChargeUpdateWithoutUserDataInput {
+  stripeId: String
+  amount: Float
+  refund: RefundUpdateOneWithoutChargeInput
+  class: ClassUpdateOneWithoutChargesInput
+}
+
+input ChargeUpdateWithWhereUniqueWithoutClassInput {
+  where: ChargeWhereUniqueInput!
+  data: ChargeUpdateWithoutClassDataInput!
+}
+
+input ChargeUpdateWithWhereUniqueWithoutUserInput {
+  where: ChargeWhereUniqueInput!
+  data: ChargeUpdateWithoutUserDataInput!
+}
+
+input ChargeUpsertWithoutRefundInput {
+  update: ChargeUpdateWithoutRefundDataInput!
+  create: ChargeCreateWithoutRefundInput!
+}
+
+input ChargeUpsertWithWhereUniqueWithoutClassInput {
+  where: ChargeWhereUniqueInput!
+  update: ChargeUpdateWithoutClassDataInput!
+  create: ChargeCreateWithoutClassInput!
+}
+
+input ChargeUpsertWithWhereUniqueWithoutUserInput {
+  where: ChargeWhereUniqueInput!
+  update: ChargeUpdateWithoutUserDataInput!
+  create: ChargeCreateWithoutUserInput!
+}
+
+input ChargeWhereInput {
   """Logical AND on all given filters."""
-  AND: [UserWhereInput!]
+  AND: [ChargeWhereInput!]
 
   """Logical OR on all given filters."""
-  OR: [UserWhereInput!]
+  OR: [ChargeWhereInput!]
 
   """Logical NOT on all given filters combined by AND."""
-  NOT: [UserWhereInput!]
+  NOT: [ChargeWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  stripeId: String
+
+  """All values that are not equal to given value."""
+  stripeId_not: String
+
+  """All values that are contained in given list."""
+  stripeId_in: [String!]
+
+  """All values that are not contained in given list."""
+  stripeId_not_in: [String!]
+
+  """All values less than the given value."""
+  stripeId_lt: String
+
+  """All values less than or equal the given value."""
+  stripeId_lte: String
+
+  """All values greater than the given value."""
+  stripeId_gt: String
+
+  """All values greater than or equal the given value."""
+  stripeId_gte: String
+
+  """All values containing the given string."""
+  stripeId_contains: String
+
+  """All values not containing the given string."""
+  stripeId_not_contains: String
+
+  """All values starting with the given string."""
+  stripeId_starts_with: String
+
+  """All values not starting with the given string."""
+  stripeId_not_starts_with: String
+
+  """All values ending with the given string."""
+  stripeId_ends_with: String
+
+  """All values not ending with the given string."""
+  stripeId_not_ends_with: String
+  amount: Float
+
+  """All values that are not equal to given value."""
+  amount_not: Float
+
+  """All values that are contained in given list."""
+  amount_in: [Float!]
+
+  """All values that are not contained in given list."""
+  amount_not_in: [Float!]
+
+  """All values less than the given value."""
+  amount_lt: Float
+
+  """All values less than or equal the given value."""
+  amount_lte: Float
+
+  """All values greater than the given value."""
+  amount_gt: Float
+
+  """All values greater than or equal the given value."""
+  amount_gte: Float
+  refund: RefundWhereInput
+  class: ClassWhereInput
+  user: UserWhereInput
+}
+
+input ChargeWhereUniqueInput {
+  id: ID
+  stripeId: String
+}
+
+type Class implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  description: String
+  video(where: FileWhereInput): File
+  picture: String
+  duration: Int
+  price: Float
+  startDate: DateTime
+  teachers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  students(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File!]
+  vods(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File!]
+  classroom(where: ClassroomWhereInput): Classroom
+  charges(where: ChargeWhereInput, orderBy: ChargeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Charge!]
+  refunds(where: RefundWhereInput, orderBy: RefundOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Refund!]
+}
+
+"""A connection to a list of items."""
+type ClassConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [ClassEdge]!
+  aggregate: AggregateClass!
+}
+
+input ClassCreateInput {
+  name: String!
+  description: String
+  picture: String
+  duration: Int
+  price: Float
+  startDate: DateTime
+  video: FileCreateOneInput
+  teachers: UserCreateManyWithoutTaughtClassesInput
+  students: UserCreateManyWithoutClassesInput
+  files: FileCreateManyInput
+  vods: FileCreateManyInput
+  classroom: ClassroomCreateOneWithoutClassInput
+  charges: ChargeCreateManyWithoutClassInput
+  refunds: RefundCreateManyWithoutClassInput
+}
+
+input ClassCreateManyWithoutStudentsInput {
+  create: [ClassCreateWithoutStudentsInput!]
+  connect: [ClassWhereUniqueInput!]
+}
+
+input ClassCreateManyWithoutTeachersInput {
+  create: [ClassCreateWithoutTeachersInput!]
+  connect: [ClassWhereUniqueInput!]
+}
+
+input ClassCreateOneWithoutChargesInput {
+  create: ClassCreateWithoutChargesInput
+  connect: ClassWhereUniqueInput
+}
+
+input ClassCreateOneWithoutClassroomInput {
+  create: ClassCreateWithoutClassroomInput
+  connect: ClassWhereUniqueInput
+}
+
+input ClassCreateOneWithoutRefundsInput {
+  create: ClassCreateWithoutRefundsInput
+  connect: ClassWhereUniqueInput
+}
+
+input ClassCreateWithoutChargesInput {
+  name: String!
+  description: String
+  picture: String
+  duration: Int
+  price: Float
+  startDate: DateTime
+  video: FileCreateOneInput
+  teachers: UserCreateManyWithoutTaughtClassesInput
+  students: UserCreateManyWithoutClassesInput
+  files: FileCreateManyInput
+  vods: FileCreateManyInput
+  classroom: ClassroomCreateOneWithoutClassInput
+  refunds: RefundCreateManyWithoutClassInput
+}
+
+input ClassCreateWithoutClassroomInput {
+  name: String!
+  description: String
+  picture: String
+  duration: Int
+  price: Float
+  startDate: DateTime
+  video: FileCreateOneInput
+  teachers: UserCreateManyWithoutTaughtClassesInput
+  students: UserCreateManyWithoutClassesInput
+  files: FileCreateManyInput
+  vods: FileCreateManyInput
+  charges: ChargeCreateManyWithoutClassInput
+  refunds: RefundCreateManyWithoutClassInput
+}
+
+input ClassCreateWithoutRefundsInput {
+  name: String!
+  description: String
+  picture: String
+  duration: Int
+  price: Float
+  startDate: DateTime
+  video: FileCreateOneInput
+  teachers: UserCreateManyWithoutTaughtClassesInput
+  students: UserCreateManyWithoutClassesInput
+  files: FileCreateManyInput
+  vods: FileCreateManyInput
+  classroom: ClassroomCreateOneWithoutClassInput
+  charges: ChargeCreateManyWithoutClassInput
+}
+
+input ClassCreateWithoutStudentsInput {
+  name: String!
+  description: String
+  picture: String
+  duration: Int
+  price: Float
+  startDate: DateTime
+  video: FileCreateOneInput
+  teachers: UserCreateManyWithoutTaughtClassesInput
+  files: FileCreateManyInput
+  vods: FileCreateManyInput
+  classroom: ClassroomCreateOneWithoutClassInput
+  charges: ChargeCreateManyWithoutClassInput
+  refunds: RefundCreateManyWithoutClassInput
+}
+
+input ClassCreateWithoutTeachersInput {
+  name: String!
+  description: String
+  picture: String
+  duration: Int
+  price: Float
+  startDate: DateTime
+  video: FileCreateOneInput
+  students: UserCreateManyWithoutClassesInput
+  files: FileCreateManyInput
+  vods: FileCreateManyInput
+  classroom: ClassroomCreateOneWithoutClassInput
+  charges: ChargeCreateManyWithoutClassInput
+  refunds: RefundCreateManyWithoutClassInput
+}
+
+"""An edge in a connection."""
+type ClassEdge {
+  """The item at the end of the edge."""
+  node: Class!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum ClassOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  name_ASC
+  name_DESC
+  description_ASC
+  description_DESC
+  picture_ASC
+  picture_DESC
+  duration_ASC
+  duration_DESC
+  price_ASC
+  price_DESC
+  startDate_ASC
+  startDate_DESC
+}
+
+type ClassPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  description: String
+  picture: String
+  duration: Int
+  price: Float
+  startDate: DateTime
+}
+
+type Classroom implements Node {
+  id: ID!
+  live: Boolean
+  viewers: Int
+  teachers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  class(where: ClassWhereInput): Class
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
+}
+
+"""A connection to a list of items."""
+type ClassroomConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [ClassroomEdge]!
+  aggregate: AggregateClassroom!
+}
+
+input ClassroomCreateInput {
+  live: Boolean
+  viewers: Int
+  teachers: UserCreateManyWithoutClassroomInput
+  class: ClassCreateOneWithoutClassroomInput
+  messages: MessageCreateManyWithoutClassroomInput
+}
+
+input ClassroomCreateOneWithoutClassInput {
+  create: ClassroomCreateWithoutClassInput
+  connect: ClassroomWhereUniqueInput
+}
+
+input ClassroomCreateOneWithoutMessagesInput {
+  create: ClassroomCreateWithoutMessagesInput
+  connect: ClassroomWhereUniqueInput
+}
+
+input ClassroomCreateOneWithoutTeachersInput {
+  create: ClassroomCreateWithoutTeachersInput
+  connect: ClassroomWhereUniqueInput
+}
+
+input ClassroomCreateWithoutClassInput {
+  live: Boolean
+  viewers: Int
+  teachers: UserCreateManyWithoutClassroomInput
+  messages: MessageCreateManyWithoutClassroomInput
+}
+
+input ClassroomCreateWithoutMessagesInput {
+  live: Boolean
+  viewers: Int
+  teachers: UserCreateManyWithoutClassroomInput
+  class: ClassCreateOneWithoutClassroomInput
+}
+
+input ClassroomCreateWithoutTeachersInput {
+  live: Boolean
+  viewers: Int
+  class: ClassCreateOneWithoutClassroomInput
+  messages: MessageCreateManyWithoutClassroomInput
+}
+
+"""An edge in a connection."""
+type ClassroomEdge {
+  """The item at the end of the edge."""
+  node: Classroom!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum ClassroomOrderByInput {
+  id_ASC
+  id_DESC
+  live_ASC
+  live_DESC
+  viewers_ASC
+  viewers_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type ClassroomPreviousValues {
+  id: ID!
+  live: Boolean
+  viewers: Int
+}
+
+type ClassroomSubscriptionPayload {
+  mutation: MutationType!
+  node: Classroom
+  updatedFields: [String!]
+  previousValues: ClassroomPreviousValues
+}
+
+input ClassroomSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ClassroomSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ClassroomSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ClassroomSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: ClassroomWhereInput
+}
+
+input ClassroomUpdateInput {
+  live: Boolean
+  viewers: Int
+  teachers: UserUpdateManyWithoutClassroomInput
+  class: ClassUpdateOneWithoutClassroomInput
+  messages: MessageUpdateManyWithoutClassroomInput
+}
+
+input ClassroomUpdateOneWithoutClassInput {
+  create: ClassroomCreateWithoutClassInput
+  connect: ClassroomWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: ClassroomUpdateWithoutClassDataInput
+  upsert: ClassroomUpsertWithoutClassInput
+}
+
+input ClassroomUpdateOneWithoutMessagesInput {
+  create: ClassroomCreateWithoutMessagesInput
+  connect: ClassroomWhereUniqueInput
+  delete: Boolean
+  update: ClassroomUpdateWithoutMessagesDataInput
+  upsert: ClassroomUpsertWithoutMessagesInput
+}
+
+input ClassroomUpdateOneWithoutTeachersInput {
+  create: ClassroomCreateWithoutTeachersInput
+  connect: ClassroomWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: ClassroomUpdateWithoutTeachersDataInput
+  upsert: ClassroomUpsertWithoutTeachersInput
+}
+
+input ClassroomUpdateWithoutClassDataInput {
+  live: Boolean
+  viewers: Int
+  teachers: UserUpdateManyWithoutClassroomInput
+  messages: MessageUpdateManyWithoutClassroomInput
+}
+
+input ClassroomUpdateWithoutMessagesDataInput {
+  live: Boolean
+  viewers: Int
+  teachers: UserUpdateManyWithoutClassroomInput
+  class: ClassUpdateOneWithoutClassroomInput
+}
+
+input ClassroomUpdateWithoutTeachersDataInput {
+  live: Boolean
+  viewers: Int
+  class: ClassUpdateOneWithoutClassroomInput
+  messages: MessageUpdateManyWithoutClassroomInput
+}
+
+input ClassroomUpsertWithoutClassInput {
+  update: ClassroomUpdateWithoutClassDataInput!
+  create: ClassroomCreateWithoutClassInput!
+}
+
+input ClassroomUpsertWithoutMessagesInput {
+  update: ClassroomUpdateWithoutMessagesDataInput!
+  create: ClassroomCreateWithoutMessagesInput!
+}
+
+input ClassroomUpsertWithoutTeachersInput {
+  update: ClassroomUpdateWithoutTeachersDataInput!
+  create: ClassroomCreateWithoutTeachersInput!
+}
+
+input ClassroomWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ClassroomWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ClassroomWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ClassroomWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  live: Boolean
+
+  """All values that are not equal to given value."""
+  live_not: Boolean
+  viewers: Int
+
+  """All values that are not equal to given value."""
+  viewers_not: Int
+
+  """All values that are contained in given list."""
+  viewers_in: [Int!]
+
+  """All values that are not contained in given list."""
+  viewers_not_in: [Int!]
+
+  """All values less than the given value."""
+  viewers_lt: Int
+
+  """All values less than or equal the given value."""
+  viewers_lte: Int
+
+  """All values greater than the given value."""
+  viewers_gt: Int
+
+  """All values greater than or equal the given value."""
+  viewers_gte: Int
+  teachers_every: UserWhereInput
+  teachers_some: UserWhereInput
+  teachers_none: UserWhereInput
+  class: ClassWhereInput
+  messages_every: MessageWhereInput
+  messages_some: MessageWhereInput
+  messages_none: MessageWhereInput
+}
+
+input ClassroomWhereUniqueInput {
+  id: ID
+}
+
+type ClassSubscriptionPayload {
+  mutation: MutationType!
+  node: Class
+  updatedFields: [String!]
+  previousValues: ClassPreviousValues
+}
+
+input ClassSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ClassSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ClassSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ClassSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: ClassWhereInput
+}
+
+input ClassUpdateInput {
+  name: String
+  description: String
+  picture: String
+  duration: Int
+  price: Float
+  startDate: DateTime
+  video: FileUpdateOneInput
+  teachers: UserUpdateManyWithoutTaughtClassesInput
+  students: UserUpdateManyWithoutClassesInput
+  files: FileUpdateManyInput
+  vods: FileUpdateManyInput
+  classroom: ClassroomUpdateOneWithoutClassInput
+  charges: ChargeUpdateManyWithoutClassInput
+  refunds: RefundUpdateManyWithoutClassInput
+}
+
+input ClassUpdateManyWithoutStudentsInput {
+  create: [ClassCreateWithoutStudentsInput!]
+  connect: [ClassWhereUniqueInput!]
+  disconnect: [ClassWhereUniqueInput!]
+  delete: [ClassWhereUniqueInput!]
+  update: [ClassUpdateWithWhereUniqueWithoutStudentsInput!]
+  upsert: [ClassUpsertWithWhereUniqueWithoutStudentsInput!]
+}
+
+input ClassUpdateManyWithoutTeachersInput {
+  create: [ClassCreateWithoutTeachersInput!]
+  connect: [ClassWhereUniqueInput!]
+  disconnect: [ClassWhereUniqueInput!]
+  delete: [ClassWhereUniqueInput!]
+  update: [ClassUpdateWithWhereUniqueWithoutTeachersInput!]
+  upsert: [ClassUpsertWithWhereUniqueWithoutTeachersInput!]
+}
+
+input ClassUpdateOneWithoutChargesInput {
+  create: ClassCreateWithoutChargesInput
+  connect: ClassWhereUniqueInput
+  delete: Boolean
+  update: ClassUpdateWithoutChargesDataInput
+  upsert: ClassUpsertWithoutChargesInput
+}
+
+input ClassUpdateOneWithoutClassroomInput {
+  create: ClassCreateWithoutClassroomInput
+  connect: ClassWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: ClassUpdateWithoutClassroomDataInput
+  upsert: ClassUpsertWithoutClassroomInput
+}
+
+input ClassUpdateOneWithoutRefundsInput {
+  create: ClassCreateWithoutRefundsInput
+  connect: ClassWhereUniqueInput
+  delete: Boolean
+  update: ClassUpdateWithoutRefundsDataInput
+  upsert: ClassUpsertWithoutRefundsInput
+}
+
+input ClassUpdateWithoutChargesDataInput {
+  name: String
+  description: String
+  picture: String
+  duration: Int
+  price: Float
+  startDate: DateTime
+  video: FileUpdateOneInput
+  teachers: UserUpdateManyWithoutTaughtClassesInput
+  students: UserUpdateManyWithoutClassesInput
+  files: FileUpdateManyInput
+  vods: FileUpdateManyInput
+  classroom: ClassroomUpdateOneWithoutClassInput
+  refunds: RefundUpdateManyWithoutClassInput
+}
+
+input ClassUpdateWithoutClassroomDataInput {
+  name: String
+  description: String
+  picture: String
+  duration: Int
+  price: Float
+  startDate: DateTime
+  video: FileUpdateOneInput
+  teachers: UserUpdateManyWithoutTaughtClassesInput
+  students: UserUpdateManyWithoutClassesInput
+  files: FileUpdateManyInput
+  vods: FileUpdateManyInput
+  charges: ChargeUpdateManyWithoutClassInput
+  refunds: RefundUpdateManyWithoutClassInput
+}
+
+input ClassUpdateWithoutRefundsDataInput {
+  name: String
+  description: String
+  picture: String
+  duration: Int
+  price: Float
+  startDate: DateTime
+  video: FileUpdateOneInput
+  teachers: UserUpdateManyWithoutTaughtClassesInput
+  students: UserUpdateManyWithoutClassesInput
+  files: FileUpdateManyInput
+  vods: FileUpdateManyInput
+  classroom: ClassroomUpdateOneWithoutClassInput
+  charges: ChargeUpdateManyWithoutClassInput
+}
+
+input ClassUpdateWithoutStudentsDataInput {
+  name: String
+  description: String
+  picture: String
+  duration: Int
+  price: Float
+  startDate: DateTime
+  video: FileUpdateOneInput
+  teachers: UserUpdateManyWithoutTaughtClassesInput
+  files: FileUpdateManyInput
+  vods: FileUpdateManyInput
+  classroom: ClassroomUpdateOneWithoutClassInput
+  charges: ChargeUpdateManyWithoutClassInput
+  refunds: RefundUpdateManyWithoutClassInput
+}
+
+input ClassUpdateWithoutTeachersDataInput {
+  name: String
+  description: String
+  picture: String
+  duration: Int
+  price: Float
+  startDate: DateTime
+  video: FileUpdateOneInput
+  students: UserUpdateManyWithoutClassesInput
+  files: FileUpdateManyInput
+  vods: FileUpdateManyInput
+  classroom: ClassroomUpdateOneWithoutClassInput
+  charges: ChargeUpdateManyWithoutClassInput
+  refunds: RefundUpdateManyWithoutClassInput
+}
+
+input ClassUpdateWithWhereUniqueWithoutStudentsInput {
+  where: ClassWhereUniqueInput!
+  data: ClassUpdateWithoutStudentsDataInput!
+}
+
+input ClassUpdateWithWhereUniqueWithoutTeachersInput {
+  where: ClassWhereUniqueInput!
+  data: ClassUpdateWithoutTeachersDataInput!
+}
+
+input ClassUpsertWithoutChargesInput {
+  update: ClassUpdateWithoutChargesDataInput!
+  create: ClassCreateWithoutChargesInput!
+}
+
+input ClassUpsertWithoutClassroomInput {
+  update: ClassUpdateWithoutClassroomDataInput!
+  create: ClassCreateWithoutClassroomInput!
+}
+
+input ClassUpsertWithoutRefundsInput {
+  update: ClassUpdateWithoutRefundsDataInput!
+  create: ClassCreateWithoutRefundsInput!
+}
+
+input ClassUpsertWithWhereUniqueWithoutStudentsInput {
+  where: ClassWhereUniqueInput!
+  update: ClassUpdateWithoutStudentsDataInput!
+  create: ClassCreateWithoutStudentsInput!
+}
+
+input ClassUpsertWithWhereUniqueWithoutTeachersInput {
+  where: ClassWhereUniqueInput!
+  update: ClassUpdateWithoutTeachersDataInput!
+  create: ClassCreateWithoutTeachersInput!
+}
+
+input ClassWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ClassWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ClassWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ClassWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  picture: String
+
+  """All values that are not equal to given value."""
+  picture_not: String
+
+  """All values that are contained in given list."""
+  picture_in: [String!]
+
+  """All values that are not contained in given list."""
+  picture_not_in: [String!]
+
+  """All values less than the given value."""
+  picture_lt: String
+
+  """All values less than or equal the given value."""
+  picture_lte: String
+
+  """All values greater than the given value."""
+  picture_gt: String
+
+  """All values greater than or equal the given value."""
+  picture_gte: String
+
+  """All values containing the given string."""
+  picture_contains: String
+
+  """All values not containing the given string."""
+  picture_not_contains: String
+
+  """All values starting with the given string."""
+  picture_starts_with: String
+
+  """All values not starting with the given string."""
+  picture_not_starts_with: String
+
+  """All values ending with the given string."""
+  picture_ends_with: String
+
+  """All values not ending with the given string."""
+  picture_not_ends_with: String
+  duration: Int
+
+  """All values that are not equal to given value."""
+  duration_not: Int
+
+  """All values that are contained in given list."""
+  duration_in: [Int!]
+
+  """All values that are not contained in given list."""
+  duration_not_in: [Int!]
+
+  """All values less than the given value."""
+  duration_lt: Int
+
+  """All values less than or equal the given value."""
+  duration_lte: Int
+
+  """All values greater than the given value."""
+  duration_gt: Int
+
+  """All values greater than or equal the given value."""
+  duration_gte: Int
+  price: Float
+
+  """All values that are not equal to given value."""
+  price_not: Float
+
+  """All values that are contained in given list."""
+  price_in: [Float!]
+
+  """All values that are not contained in given list."""
+  price_not_in: [Float!]
+
+  """All values less than the given value."""
+  price_lt: Float
+
+  """All values less than or equal the given value."""
+  price_lte: Float
+
+  """All values greater than the given value."""
+  price_gt: Float
+
+  """All values greater than or equal the given value."""
+  price_gte: Float
+  startDate: DateTime
+
+  """All values that are not equal to given value."""
+  startDate_not: DateTime
+
+  """All values that are contained in given list."""
+  startDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  startDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  startDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  startDate_lte: DateTime
+
+  """All values greater than the given value."""
+  startDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  startDate_gte: DateTime
+  video: FileWhereInput
+  teachers_every: UserWhereInput
+  teachers_some: UserWhereInput
+  teachers_none: UserWhereInput
+  students_every: UserWhereInput
+  students_some: UserWhereInput
+  students_none: UserWhereInput
+  files_every: FileWhereInput
+  files_some: FileWhereInput
+  files_none: FileWhereInput
+  vods_every: FileWhereInput
+  vods_some: FileWhereInput
+  vods_none: FileWhereInput
+  classroom: ClassroomWhereInput
+  charges_every: ChargeWhereInput
+  charges_some: ChargeWhereInput
+  charges_none: ChargeWhereInput
+  refunds_every: RefundWhereInput
+  refunds_some: RefundWhereInput
+  refunds_none: RefundWhereInput
+}
+
+input ClassWhereUniqueInput {
+  id: ID
+}
+
+scalar DateTime
+
+type File implements Node {
+  id: ID!
+  name: String!
+  secret: String
+  contentType: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  url: String!
+}
+
+"""A connection to a list of items."""
+type FileConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [FileEdge]!
+  aggregate: AggregateFile!
+}
+
+input FileCreateInput {
+  name: String!
+  secret: String
+  contentType: String
+  url: String!
+}
+
+input FileCreateManyInput {
+  create: [FileCreateInput!]
+  connect: [FileWhereUniqueInput!]
+}
+
+input FileCreateOneInput {
+  create: FileCreateInput
+  connect: FileWhereUniqueInput
+}
+
+"""An edge in a connection."""
+type FileEdge {
+  """The item at the end of the edge."""
+  node: File!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum FileOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  secret_ASC
+  secret_DESC
+  contentType_ASC
+  contentType_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  url_ASC
+  url_DESC
+}
+
+type FilePreviousValues {
+  id: ID!
+  name: String!
+  secret: String
+  contentType: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  url: String!
+}
+
+type FileSubscriptionPayload {
+  mutation: MutationType!
+  node: File
+  updatedFields: [String!]
+  previousValues: FilePreviousValues
+}
+
+input FileSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [FileSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [FileSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [FileSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: FileWhereInput
+}
+
+input FileUpdateDataInput {
+  name: String
+  secret: String
+  contentType: String
+  url: String
+}
+
+input FileUpdateInput {
+  name: String
+  secret: String
+  contentType: String
+  url: String
+}
+
+input FileUpdateManyInput {
+  create: [FileCreateInput!]
+  connect: [FileWhereUniqueInput!]
+  disconnect: [FileWhereUniqueInput!]
+  delete: [FileWhereUniqueInput!]
+  update: [FileUpdateWithWhereUniqueNestedInput!]
+  upsert: [FileUpsertWithWhereUniqueNestedInput!]
+}
+
+input FileUpdateOneInput {
+  create: FileCreateInput
+  connect: FileWhereUniqueInput
+  delete: Boolean
+  update: FileUpdateDataInput
+  upsert: FileUpsertNestedInput
+}
+
+input FileUpdateWithWhereUniqueNestedInput {
+  where: FileWhereUniqueInput!
+  data: FileUpdateDataInput!
+}
+
+input FileUpsertNestedInput {
+  update: FileUpdateDataInput!
+  create: FileCreateInput!
+}
+
+input FileUpsertWithWhereUniqueNestedInput {
+  where: FileWhereUniqueInput!
+  update: FileUpdateDataInput!
+  create: FileCreateInput!
+}
+
+input FileWhereInput {
+  """Logical AND on all given filters."""
+  AND: [FileWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [FileWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [FileWhereInput!]
   id: ID
 
   """All values that are not equal to given value."""
@@ -244,8 +1668,2124 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  secret: String
+
+  """All values that are not equal to given value."""
+  secret_not: String
+
+  """All values that are contained in given list."""
+  secret_in: [String!]
+
+  """All values that are not contained in given list."""
+  secret_not_in: [String!]
+
+  """All values less than the given value."""
+  secret_lt: String
+
+  """All values less than or equal the given value."""
+  secret_lte: String
+
+  """All values greater than the given value."""
+  secret_gt: String
+
+  """All values greater than or equal the given value."""
+  secret_gte: String
+
+  """All values containing the given string."""
+  secret_contains: String
+
+  """All values not containing the given string."""
+  secret_not_contains: String
+
+  """All values starting with the given string."""
+  secret_starts_with: String
+
+  """All values not starting with the given string."""
+  secret_not_starts_with: String
+
+  """All values ending with the given string."""
+  secret_ends_with: String
+
+  """All values not ending with the given string."""
+  secret_not_ends_with: String
+  contentType: String
+
+  """All values that are not equal to given value."""
+  contentType_not: String
+
+  """All values that are contained in given list."""
+  contentType_in: [String!]
+
+  """All values that are not contained in given list."""
+  contentType_not_in: [String!]
+
+  """All values less than the given value."""
+  contentType_lt: String
+
+  """All values less than or equal the given value."""
+  contentType_lte: String
+
+  """All values greater than the given value."""
+  contentType_gt: String
+
+  """All values greater than or equal the given value."""
+  contentType_gte: String
+
+  """All values containing the given string."""
+  contentType_contains: String
+
+  """All values not containing the given string."""
+  contentType_not_contains: String
+
+  """All values starting with the given string."""
+  contentType_starts_with: String
+
+  """All values not starting with the given string."""
+  contentType_not_starts_with: String
+
+  """All values ending with the given string."""
+  contentType_ends_with: String
+
+  """All values not ending with the given string."""
+  contentType_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  url: String
+
+  """All values that are not equal to given value."""
+  url_not: String
+
+  """All values that are contained in given list."""
+  url_in: [String!]
+
+  """All values that are not contained in given list."""
+  url_not_in: [String!]
+
+  """All values less than the given value."""
+  url_lt: String
+
+  """All values less than or equal the given value."""
+  url_lte: String
+
+  """All values greater than the given value."""
+  url_gt: String
+
+  """All values greater than or equal the given value."""
+  url_gte: String
+
+  """All values containing the given string."""
+  url_contains: String
+
+  """All values not containing the given string."""
+  url_not_contains: String
+
+  """All values starting with the given string."""
+  url_starts_with: String
+
+  """All values not starting with the given string."""
+  url_not_starts_with: String
+
+  """All values ending with the given string."""
+  url_ends_with: String
+
+  """All values not ending with the given string."""
+  url_not_ends_with: String
+}
+
+input FileWhereUniqueInput {
+  id: ID
+  secret: String
+  url: String
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+"""
+The `Long` scalar type represents non-fractional signed whole numeric values.
+Long can represent values between -(2^63) and 2^63 - 1.
+"""
+scalar Long
+
+type Message implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  text: String!
+  sender(where: UserWhereInput): User!
+  classroom(where: ClassroomWhereInput): Classroom!
+}
+
+"""A connection to a list of items."""
+type MessageConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [MessageEdge]!
+  aggregate: AggregateMessage!
+}
+
+input MessageCreateInput {
+  text: String!
+  sender: UserCreateOneWithoutMessagesInput!
+  classroom: ClassroomCreateOneWithoutMessagesInput!
+}
+
+input MessageCreateManyWithoutClassroomInput {
+  create: [MessageCreateWithoutClassroomInput!]
+  connect: [MessageWhereUniqueInput!]
+}
+
+input MessageCreateManyWithoutSenderInput {
+  create: [MessageCreateWithoutSenderInput!]
+  connect: [MessageWhereUniqueInput!]
+}
+
+input MessageCreateWithoutClassroomInput {
+  text: String!
+  sender: UserCreateOneWithoutMessagesInput!
+}
+
+input MessageCreateWithoutSenderInput {
+  text: String!
+  classroom: ClassroomCreateOneWithoutMessagesInput!
+}
+
+"""An edge in a connection."""
+type MessageEdge {
+  """The item at the end of the edge."""
+  node: Message!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum MessageOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  text_ASC
+  text_DESC
+}
+
+type MessagePreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  text: String!
+}
+
+type MessageSubscriptionPayload {
+  mutation: MutationType!
+  node: Message
+  updatedFields: [String!]
+  previousValues: MessagePreviousValues
+}
+
+input MessageSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [MessageSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [MessageSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [MessageSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: MessageWhereInput
+}
+
+input MessageUpdateInput {
+  text: String
+  sender: UserUpdateOneWithoutMessagesInput
+  classroom: ClassroomUpdateOneWithoutMessagesInput
+}
+
+input MessageUpdateManyWithoutClassroomInput {
+  create: [MessageCreateWithoutClassroomInput!]
+  connect: [MessageWhereUniqueInput!]
+  disconnect: [MessageWhereUniqueInput!]
+  delete: [MessageWhereUniqueInput!]
+  update: [MessageUpdateWithWhereUniqueWithoutClassroomInput!]
+  upsert: [MessageUpsertWithWhereUniqueWithoutClassroomInput!]
+}
+
+input MessageUpdateManyWithoutSenderInput {
+  create: [MessageCreateWithoutSenderInput!]
+  connect: [MessageWhereUniqueInput!]
+  disconnect: [MessageWhereUniqueInput!]
+  delete: [MessageWhereUniqueInput!]
+  update: [MessageUpdateWithWhereUniqueWithoutSenderInput!]
+  upsert: [MessageUpsertWithWhereUniqueWithoutSenderInput!]
+}
+
+input MessageUpdateWithoutClassroomDataInput {
+  text: String
+  sender: UserUpdateOneWithoutMessagesInput
+}
+
+input MessageUpdateWithoutSenderDataInput {
+  text: String
+  classroom: ClassroomUpdateOneWithoutMessagesInput
+}
+
+input MessageUpdateWithWhereUniqueWithoutClassroomInput {
+  where: MessageWhereUniqueInput!
+  data: MessageUpdateWithoutClassroomDataInput!
+}
+
+input MessageUpdateWithWhereUniqueWithoutSenderInput {
+  where: MessageWhereUniqueInput!
+  data: MessageUpdateWithoutSenderDataInput!
+}
+
+input MessageUpsertWithWhereUniqueWithoutClassroomInput {
+  where: MessageWhereUniqueInput!
+  update: MessageUpdateWithoutClassroomDataInput!
+  create: MessageCreateWithoutClassroomInput!
+}
+
+input MessageUpsertWithWhereUniqueWithoutSenderInput {
+  where: MessageWhereUniqueInput!
+  update: MessageUpdateWithoutSenderDataInput!
+  create: MessageCreateWithoutSenderInput!
+}
+
+input MessageWhereInput {
+  """Logical AND on all given filters."""
+  AND: [MessageWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [MessageWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [MessageWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  text: String
+
+  """All values that are not equal to given value."""
+  text_not: String
+
+  """All values that are contained in given list."""
+  text_in: [String!]
+
+  """All values that are not contained in given list."""
+  text_not_in: [String!]
+
+  """All values less than the given value."""
+  text_lt: String
+
+  """All values less than or equal the given value."""
+  text_lte: String
+
+  """All values greater than the given value."""
+  text_gt: String
+
+  """All values greater than or equal the given value."""
+  text_gte: String
+
+  """All values containing the given string."""
+  text_contains: String
+
+  """All values not containing the given string."""
+  text_not_contains: String
+
+  """All values starting with the given string."""
+  text_starts_with: String
+
+  """All values not starting with the given string."""
+  text_not_starts_with: String
+
+  """All values ending with the given string."""
+  text_ends_with: String
+
+  """All values not ending with the given string."""
+  text_not_ends_with: String
+  sender: UserWhereInput
+  classroom: ClassroomWhereInput
+}
+
+input MessageWhereUniqueInput {
+  id: ID
+}
+
+type Mutation {
+  createUser(data: UserCreateInput!): User!
+  createClass(data: ClassCreateInput!): Class!
+  createFile(data: FileCreateInput!): File!
+  createClassroom(data: ClassroomCreateInput!): Classroom!
+  createMessage(data: MessageCreateInput!): Message!
+  createCharge(data: ChargeCreateInput!): Charge!
+  createRefund(data: RefundCreateInput!): Refund!
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateClass(data: ClassUpdateInput!, where: ClassWhereUniqueInput!): Class
+  updateFile(data: FileUpdateInput!, where: FileWhereUniqueInput!): File
+  updateClassroom(data: ClassroomUpdateInput!, where: ClassroomWhereUniqueInput!): Classroom
+  updateMessage(data: MessageUpdateInput!, where: MessageWhereUniqueInput!): Message
+  updateCharge(data: ChargeUpdateInput!, where: ChargeWhereUniqueInput!): Charge
+  updateRefund(data: RefundUpdateInput!, where: RefundWhereUniqueInput!): Refund
+  deleteUser(where: UserWhereUniqueInput!): User
+  deleteClass(where: ClassWhereUniqueInput!): Class
+  deleteFile(where: FileWhereUniqueInput!): File
+  deleteClassroom(where: ClassroomWhereUniqueInput!): Classroom
+  deleteMessage(where: MessageWhereUniqueInput!): Message
+  deleteCharge(where: ChargeWhereUniqueInput!): Charge
+  deleteRefund(where: RefundWhereUniqueInput!): Refund
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertClass(where: ClassWhereUniqueInput!, create: ClassCreateInput!, update: ClassUpdateInput!): Class!
+  upsertFile(where: FileWhereUniqueInput!, create: FileCreateInput!, update: FileUpdateInput!): File!
+  upsertClassroom(where: ClassroomWhereUniqueInput!, create: ClassroomCreateInput!, update: ClassroomUpdateInput!): Classroom!
+  upsertMessage(where: MessageWhereUniqueInput!, create: MessageCreateInput!, update: MessageUpdateInput!): Message!
+  upsertCharge(where: ChargeWhereUniqueInput!, create: ChargeCreateInput!, update: ChargeUpdateInput!): Charge!
+  upsertRefund(where: RefundWhereUniqueInput!, create: RefundCreateInput!, update: RefundUpdateInput!): Refund!
+  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  updateManyClasses(data: ClassUpdateInput!, where: ClassWhereInput): BatchPayload!
+  updateManyFiles(data: FileUpdateInput!, where: FileWhereInput): BatchPayload!
+  updateManyClassrooms(data: ClassroomUpdateInput!, where: ClassroomWhereInput): BatchPayload!
+  updateManyMessages(data: MessageUpdateInput!, where: MessageWhereInput): BatchPayload!
+  updateManyCharges(data: ChargeUpdateInput!, where: ChargeWhereInput): BatchPayload!
+  updateManyRefunds(data: RefundUpdateInput!, where: RefundWhereInput): BatchPayload!
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyClasses(where: ClassWhereInput): BatchPayload!
+  deleteManyFiles(where: FileWhereInput): BatchPayload!
+  deleteManyClassrooms(where: ClassroomWhereInput): BatchPayload!
+  deleteManyMessages(where: MessageWhereInput): BatchPayload!
+  deleteManyCharges(where: ChargeWhereInput): BatchPayload!
+  deleteManyRefunds(where: RefundWhereInput): BatchPayload!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+type Query {
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  classes(where: ClassWhereInput, orderBy: ClassOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Class]!
+  files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File]!
+  classrooms(where: ClassroomWhereInput, orderBy: ClassroomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Classroom]!
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message]!
+  charges(where: ChargeWhereInput, orderBy: ChargeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Charge]!
+  refunds(where: RefundWhereInput, orderBy: RefundOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Refund]!
+  user(where: UserWhereUniqueInput!): User
+  class(where: ClassWhereUniqueInput!): Class
+  file(where: FileWhereUniqueInput!): File
+  classroom(where: ClassroomWhereUniqueInput!): Classroom
+  message(where: MessageWhereUniqueInput!): Message
+  charge(where: ChargeWhereUniqueInput!): Charge
+  refund(where: RefundWhereUniqueInput!): Refund
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  classesConnection(where: ClassWhereInput, orderBy: ClassOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClassConnection!
+  filesConnection(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FileConnection!
+  classroomsConnection(where: ClassroomWhereInput, orderBy: ClassroomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClassroomConnection!
+  messagesConnection(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MessageConnection!
+  chargesConnection(where: ChargeWhereInput, orderBy: ChargeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChargeConnection!
+  refundsConnection(where: RefundWhereInput, orderBy: RefundOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RefundConnection!
+
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+}
+
+type Refund implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  stripeId: String!
+  amount: Float!
+  charge(where: ChargeWhereInput): Charge!
+  class(where: ClassWhereInput): Class!
+  user(where: UserWhereInput): User!
+}
+
+"""A connection to a list of items."""
+type RefundConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [RefundEdge]!
+  aggregate: AggregateRefund!
+}
+
+input RefundCreateInput {
+  stripeId: String!
+  amount: Float!
+  charge: ChargeCreateOneWithoutRefundInput!
+  class: ClassCreateOneWithoutRefundsInput!
+  user: UserCreateOneWithoutRefundsInput!
+}
+
+input RefundCreateManyWithoutClassInput {
+  create: [RefundCreateWithoutClassInput!]
+  connect: [RefundWhereUniqueInput!]
+}
+
+input RefundCreateManyWithoutUserInput {
+  create: [RefundCreateWithoutUserInput!]
+  connect: [RefundWhereUniqueInput!]
+}
+
+input RefundCreateOneWithoutChargeInput {
+  create: RefundCreateWithoutChargeInput
+  connect: RefundWhereUniqueInput
+}
+
+input RefundCreateWithoutChargeInput {
+  stripeId: String!
+  amount: Float!
+  class: ClassCreateOneWithoutRefundsInput!
+  user: UserCreateOneWithoutRefundsInput!
+}
+
+input RefundCreateWithoutClassInput {
+  stripeId: String!
+  amount: Float!
+  charge: ChargeCreateOneWithoutRefundInput!
+  user: UserCreateOneWithoutRefundsInput!
+}
+
+input RefundCreateWithoutUserInput {
+  stripeId: String!
+  amount: Float!
+  charge: ChargeCreateOneWithoutRefundInput!
+  class: ClassCreateOneWithoutRefundsInput!
+}
+
+"""An edge in a connection."""
+type RefundEdge {
+  """The item at the end of the edge."""
+  node: Refund!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum RefundOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  stripeId_ASC
+  stripeId_DESC
+  amount_ASC
+  amount_DESC
+}
+
+type RefundPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  stripeId: String!
+  amount: Float!
+}
+
+type RefundSubscriptionPayload {
+  mutation: MutationType!
+  node: Refund
+  updatedFields: [String!]
+  previousValues: RefundPreviousValues
+}
+
+input RefundSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [RefundSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [RefundSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [RefundSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: RefundWhereInput
+}
+
+input RefundUpdateInput {
+  stripeId: String
+  amount: Float
+  charge: ChargeUpdateOneWithoutRefundInput
+  class: ClassUpdateOneWithoutRefundsInput
+  user: UserUpdateOneWithoutRefundsInput
+}
+
+input RefundUpdateManyWithoutClassInput {
+  create: [RefundCreateWithoutClassInput!]
+  connect: [RefundWhereUniqueInput!]
+  disconnect: [RefundWhereUniqueInput!]
+  delete: [RefundWhereUniqueInput!]
+  update: [RefundUpdateWithWhereUniqueWithoutClassInput!]
+  upsert: [RefundUpsertWithWhereUniqueWithoutClassInput!]
+}
+
+input RefundUpdateManyWithoutUserInput {
+  create: [RefundCreateWithoutUserInput!]
+  connect: [RefundWhereUniqueInput!]
+  disconnect: [RefundWhereUniqueInput!]
+  delete: [RefundWhereUniqueInput!]
+  update: [RefundUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [RefundUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input RefundUpdateOneWithoutChargeInput {
+  create: RefundCreateWithoutChargeInput
+  connect: RefundWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: RefundUpdateWithoutChargeDataInput
+  upsert: RefundUpsertWithoutChargeInput
+}
+
+input RefundUpdateWithoutChargeDataInput {
+  stripeId: String
+  amount: Float
+  class: ClassUpdateOneWithoutRefundsInput
+  user: UserUpdateOneWithoutRefundsInput
+}
+
+input RefundUpdateWithoutClassDataInput {
+  stripeId: String
+  amount: Float
+  charge: ChargeUpdateOneWithoutRefundInput
+  user: UserUpdateOneWithoutRefundsInput
+}
+
+input RefundUpdateWithoutUserDataInput {
+  stripeId: String
+  amount: Float
+  charge: ChargeUpdateOneWithoutRefundInput
+  class: ClassUpdateOneWithoutRefundsInput
+}
+
+input RefundUpdateWithWhereUniqueWithoutClassInput {
+  where: RefundWhereUniqueInput!
+  data: RefundUpdateWithoutClassDataInput!
+}
+
+input RefundUpdateWithWhereUniqueWithoutUserInput {
+  where: RefundWhereUniqueInput!
+  data: RefundUpdateWithoutUserDataInput!
+}
+
+input RefundUpsertWithoutChargeInput {
+  update: RefundUpdateWithoutChargeDataInput!
+  create: RefundCreateWithoutChargeInput!
+}
+
+input RefundUpsertWithWhereUniqueWithoutClassInput {
+  where: RefundWhereUniqueInput!
+  update: RefundUpdateWithoutClassDataInput!
+  create: RefundCreateWithoutClassInput!
+}
+
+input RefundUpsertWithWhereUniqueWithoutUserInput {
+  where: RefundWhereUniqueInput!
+  update: RefundUpdateWithoutUserDataInput!
+  create: RefundCreateWithoutUserInput!
+}
+
+input RefundWhereInput {
+  """Logical AND on all given filters."""
+  AND: [RefundWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [RefundWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [RefundWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  stripeId: String
+
+  """All values that are not equal to given value."""
+  stripeId_not: String
+
+  """All values that are contained in given list."""
+  stripeId_in: [String!]
+
+  """All values that are not contained in given list."""
+  stripeId_not_in: [String!]
+
+  """All values less than the given value."""
+  stripeId_lt: String
+
+  """All values less than or equal the given value."""
+  stripeId_lte: String
+
+  """All values greater than the given value."""
+  stripeId_gt: String
+
+  """All values greater than or equal the given value."""
+  stripeId_gte: String
+
+  """All values containing the given string."""
+  stripeId_contains: String
+
+  """All values not containing the given string."""
+  stripeId_not_contains: String
+
+  """All values starting with the given string."""
+  stripeId_starts_with: String
+
+  """All values not starting with the given string."""
+  stripeId_not_starts_with: String
+
+  """All values ending with the given string."""
+  stripeId_ends_with: String
+
+  """All values not ending with the given string."""
+  stripeId_not_ends_with: String
+  amount: Float
+
+  """All values that are not equal to given value."""
+  amount_not: Float
+
+  """All values that are contained in given list."""
+  amount_in: [Float!]
+
+  """All values that are not contained in given list."""
+  amount_not_in: [Float!]
+
+  """All values less than the given value."""
+  amount_lt: Float
+
+  """All values less than or equal the given value."""
+  amount_lte: Float
+
+  """All values greater than the given value."""
+  amount_gt: Float
+
+  """All values greater than or equal the given value."""
+  amount_gte: Float
+  charge: ChargeWhereInput
+  class: ClassWhereInput
+  user: UserWhereInput
+}
+
+input RefundWhereUniqueInput {
+  id: ID
+  stripeId: String
+}
+
+type Subscription {
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  class(where: ClassSubscriptionWhereInput): ClassSubscriptionPayload
+  file(where: FileSubscriptionWhereInput): FileSubscriptionPayload
+  classroom(where: ClassroomSubscriptionWhereInput): ClassroomSubscriptionPayload
+  message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
+  charge(where: ChargeSubscriptionWhereInput): ChargeSubscriptionPayload
+  refund(where: RefundSubscriptionWhereInput): RefundSubscriptionPayload
+}
+
+type User implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  auth0Id: String!
+  username: String!
+  email: String!
+  email_verified: String
+  name: String
+  gender: Gender!
+  description: String
+  url: String
+  picture(where: FileWhereInput): File!
+  video(where: FileWhereInput): File
+  isTeacher: Boolean
+  stripeId: String
+  stripeCustomerId: String
+  classes(where: ClassWhereInput, orderBy: ClassOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Class!]
+  taughtClasses(where: ClassWhereInput, orderBy: ClassOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Class!]
+  followers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  following(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  classroom(where: ClassroomWhereInput): Classroom
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
+  charges(where: ChargeWhereInput, orderBy: ChargeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Charge!]
+  refunds(where: RefundWhereInput, orderBy: RefundOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Refund!]
+}
+
+"""A connection to a list of items."""
+type UserConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [UserEdge]!
+  aggregate: AggregateUser!
+}
+
+input UserCreateInput {
+  auth0Id: String!
+  username: String!
+  email: String!
+  email_verified: String
+  name: String
+  gender: Gender!
+  description: String
+  url: String
+  isTeacher: Boolean
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileCreateOneInput!
+  video: FileCreateOneInput
+  classes: ClassCreateManyWithoutStudentsInput
+  taughtClasses: ClassCreateManyWithoutTeachersInput
+  followers: UserCreateManyInput
+  following: UserCreateManyInput
+  classroom: ClassroomCreateOneWithoutTeachersInput
+  messages: MessageCreateManyWithoutSenderInput
+  charges: ChargeCreateManyWithoutUserInput
+  refunds: RefundCreateManyWithoutUserInput
+}
+
+input UserCreateManyInput {
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutClassesInput {
+  create: [UserCreateWithoutClassesInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutClassroomInput {
+  create: [UserCreateWithoutClassroomInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutTaughtClassesInput {
+  create: [UserCreateWithoutTaughtClassesInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateOneWithoutChargesInput {
+  create: UserCreateWithoutChargesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutMessagesInput {
+  create: UserCreateWithoutMessagesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutRefundsInput {
+  create: UserCreateWithoutRefundsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutChargesInput {
+  auth0Id: String!
+  username: String!
+  email: String!
+  email_verified: String
+  name: String
+  gender: Gender!
+  description: String
+  url: String
+  isTeacher: Boolean
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileCreateOneInput!
+  video: FileCreateOneInput
+  classes: ClassCreateManyWithoutStudentsInput
+  taughtClasses: ClassCreateManyWithoutTeachersInput
+  followers: UserCreateManyInput
+  following: UserCreateManyInput
+  classroom: ClassroomCreateOneWithoutTeachersInput
+  messages: MessageCreateManyWithoutSenderInput
+  refunds: RefundCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutClassesInput {
+  auth0Id: String!
+  username: String!
+  email: String!
+  email_verified: String
+  name: String
+  gender: Gender!
+  description: String
+  url: String
+  isTeacher: Boolean
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileCreateOneInput!
+  video: FileCreateOneInput
+  taughtClasses: ClassCreateManyWithoutTeachersInput
+  followers: UserCreateManyInput
+  following: UserCreateManyInput
+  classroom: ClassroomCreateOneWithoutTeachersInput
+  messages: MessageCreateManyWithoutSenderInput
+  charges: ChargeCreateManyWithoutUserInput
+  refunds: RefundCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutClassroomInput {
+  auth0Id: String!
+  username: String!
+  email: String!
+  email_verified: String
+  name: String
+  gender: Gender!
+  description: String
+  url: String
+  isTeacher: Boolean
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileCreateOneInput!
+  video: FileCreateOneInput
+  classes: ClassCreateManyWithoutStudentsInput
+  taughtClasses: ClassCreateManyWithoutTeachersInput
+  followers: UserCreateManyInput
+  following: UserCreateManyInput
+  messages: MessageCreateManyWithoutSenderInput
+  charges: ChargeCreateManyWithoutUserInput
+  refunds: RefundCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutMessagesInput {
+  auth0Id: String!
+  username: String!
+  email: String!
+  email_verified: String
+  name: String
+  gender: Gender!
+  description: String
+  url: String
+  isTeacher: Boolean
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileCreateOneInput!
+  video: FileCreateOneInput
+  classes: ClassCreateManyWithoutStudentsInput
+  taughtClasses: ClassCreateManyWithoutTeachersInput
+  followers: UserCreateManyInput
+  following: UserCreateManyInput
+  classroom: ClassroomCreateOneWithoutTeachersInput
+  charges: ChargeCreateManyWithoutUserInput
+  refunds: RefundCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutRefundsInput {
+  auth0Id: String!
+  username: String!
+  email: String!
+  email_verified: String
+  name: String
+  gender: Gender!
+  description: String
+  url: String
+  isTeacher: Boolean
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileCreateOneInput!
+  video: FileCreateOneInput
+  classes: ClassCreateManyWithoutStudentsInput
+  taughtClasses: ClassCreateManyWithoutTeachersInput
+  followers: UserCreateManyInput
+  following: UserCreateManyInput
+  classroom: ClassroomCreateOneWithoutTeachersInput
+  messages: MessageCreateManyWithoutSenderInput
+  charges: ChargeCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutTaughtClassesInput {
+  auth0Id: String!
+  username: String!
+  email: String!
+  email_verified: String
+  name: String
+  gender: Gender!
+  description: String
+  url: String
+  isTeacher: Boolean
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileCreateOneInput!
+  video: FileCreateOneInput
+  classes: ClassCreateManyWithoutStudentsInput
+  followers: UserCreateManyInput
+  following: UserCreateManyInput
+  classroom: ClassroomCreateOneWithoutTeachersInput
+  messages: MessageCreateManyWithoutSenderInput
+  charges: ChargeCreateManyWithoutUserInput
+  refunds: RefundCreateManyWithoutUserInput
+}
+
+"""An edge in a connection."""
+type UserEdge {
+  """The item at the end of the edge."""
+  node: User!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum UserOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  auth0Id_ASC
+  auth0Id_DESC
+  username_ASC
+  username_DESC
+  email_ASC
+  email_DESC
+  email_verified_ASC
+  email_verified_DESC
+  name_ASC
+  name_DESC
+  gender_ASC
+  gender_DESC
+  description_ASC
+  description_DESC
+  url_ASC
+  url_DESC
+  isTeacher_ASC
+  isTeacher_DESC
+  stripeId_ASC
+  stripeId_DESC
+  stripeCustomerId_ASC
+  stripeCustomerId_DESC
+}
+
+type UserPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  auth0Id: String!
+  username: String!
+  email: String!
+  email_verified: String
+  name: String
+  gender: Gender!
+  description: String
+  url: String
+  isTeacher: Boolean
+  stripeId: String
+  stripeCustomerId: String
+}
+
+type UserSubscriptionPayload {
+  mutation: MutationType!
+  node: User
+  updatedFields: [String!]
+  previousValues: UserPreviousValues
+}
+
+input UserSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [UserSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [UserSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: UserWhereInput
+}
+
+input UserUpdateDataInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified: String
+  name: String
+  gender: Gender
+  description: String
+  url: String
+  isTeacher: Boolean
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileUpdateOneInput
+  video: FileUpdateOneInput
+  classes: ClassUpdateManyWithoutStudentsInput
+  taughtClasses: ClassUpdateManyWithoutTeachersInput
+  followers: UserUpdateManyInput
+  following: UserUpdateManyInput
+  classroom: ClassroomUpdateOneWithoutTeachersInput
+  messages: MessageUpdateManyWithoutSenderInput
+  charges: ChargeUpdateManyWithoutUserInput
+  refunds: RefundUpdateManyWithoutUserInput
+}
+
+input UserUpdateInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified: String
+  name: String
+  gender: Gender
+  description: String
+  url: String
+  isTeacher: Boolean
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileUpdateOneInput
+  video: FileUpdateOneInput
+  classes: ClassUpdateManyWithoutStudentsInput
+  taughtClasses: ClassUpdateManyWithoutTeachersInput
+  followers: UserUpdateManyInput
+  following: UserUpdateManyInput
+  classroom: ClassroomUpdateOneWithoutTeachersInput
+  messages: MessageUpdateManyWithoutSenderInput
+  charges: ChargeUpdateManyWithoutUserInput
+  refunds: RefundUpdateManyWithoutUserInput
+}
+
+input UserUpdateManyInput {
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueNestedInput!]
+  upsert: [UserUpsertWithWhereUniqueNestedInput!]
+}
+
+input UserUpdateManyWithoutClassesInput {
+  create: [UserCreateWithoutClassesInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutClassesInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutClassesInput!]
+}
+
+input UserUpdateManyWithoutClassroomInput {
+  create: [UserCreateWithoutClassroomInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutClassroomInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutClassroomInput!]
+}
+
+input UserUpdateManyWithoutTaughtClassesInput {
+  create: [UserCreateWithoutTaughtClassesInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutTaughtClassesInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutTaughtClassesInput!]
+}
+
+input UserUpdateOneWithoutChargesInput {
+  create: UserCreateWithoutChargesInput
+  connect: UserWhereUniqueInput
+  delete: Boolean
+  update: UserUpdateWithoutChargesDataInput
+  upsert: UserUpsertWithoutChargesInput
+}
+
+input UserUpdateOneWithoutMessagesInput {
+  create: UserCreateWithoutMessagesInput
+  connect: UserWhereUniqueInput
+  delete: Boolean
+  update: UserUpdateWithoutMessagesDataInput
+  upsert: UserUpsertWithoutMessagesInput
+}
+
+input UserUpdateOneWithoutRefundsInput {
+  create: UserCreateWithoutRefundsInput
+  connect: UserWhereUniqueInput
+  delete: Boolean
+  update: UserUpdateWithoutRefundsDataInput
+  upsert: UserUpsertWithoutRefundsInput
+}
+
+input UserUpdateWithoutChargesDataInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified: String
+  name: String
+  gender: Gender
+  description: String
+  url: String
+  isTeacher: Boolean
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileUpdateOneInput
+  video: FileUpdateOneInput
+  classes: ClassUpdateManyWithoutStudentsInput
+  taughtClasses: ClassUpdateManyWithoutTeachersInput
+  followers: UserUpdateManyInput
+  following: UserUpdateManyInput
+  classroom: ClassroomUpdateOneWithoutTeachersInput
+  messages: MessageUpdateManyWithoutSenderInput
+  refunds: RefundUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutClassesDataInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified: String
+  name: String
+  gender: Gender
+  description: String
+  url: String
+  isTeacher: Boolean
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileUpdateOneInput
+  video: FileUpdateOneInput
+  taughtClasses: ClassUpdateManyWithoutTeachersInput
+  followers: UserUpdateManyInput
+  following: UserUpdateManyInput
+  classroom: ClassroomUpdateOneWithoutTeachersInput
+  messages: MessageUpdateManyWithoutSenderInput
+  charges: ChargeUpdateManyWithoutUserInput
+  refunds: RefundUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutClassroomDataInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified: String
+  name: String
+  gender: Gender
+  description: String
+  url: String
+  isTeacher: Boolean
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileUpdateOneInput
+  video: FileUpdateOneInput
+  classes: ClassUpdateManyWithoutStudentsInput
+  taughtClasses: ClassUpdateManyWithoutTeachersInput
+  followers: UserUpdateManyInput
+  following: UserUpdateManyInput
+  messages: MessageUpdateManyWithoutSenderInput
+  charges: ChargeUpdateManyWithoutUserInput
+  refunds: RefundUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutMessagesDataInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified: String
+  name: String
+  gender: Gender
+  description: String
+  url: String
+  isTeacher: Boolean
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileUpdateOneInput
+  video: FileUpdateOneInput
+  classes: ClassUpdateManyWithoutStudentsInput
+  taughtClasses: ClassUpdateManyWithoutTeachersInput
+  followers: UserUpdateManyInput
+  following: UserUpdateManyInput
+  classroom: ClassroomUpdateOneWithoutTeachersInput
+  charges: ChargeUpdateManyWithoutUserInput
+  refunds: RefundUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutRefundsDataInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified: String
+  name: String
+  gender: Gender
+  description: String
+  url: String
+  isTeacher: Boolean
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileUpdateOneInput
+  video: FileUpdateOneInput
+  classes: ClassUpdateManyWithoutStudentsInput
+  taughtClasses: ClassUpdateManyWithoutTeachersInput
+  followers: UserUpdateManyInput
+  following: UserUpdateManyInput
+  classroom: ClassroomUpdateOneWithoutTeachersInput
+  messages: MessageUpdateManyWithoutSenderInput
+  charges: ChargeUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutTaughtClassesDataInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified: String
+  name: String
+  gender: Gender
+  description: String
+  url: String
+  isTeacher: Boolean
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileUpdateOneInput
+  video: FileUpdateOneInput
+  classes: ClassUpdateManyWithoutStudentsInput
+  followers: UserUpdateManyInput
+  following: UserUpdateManyInput
+  classroom: ClassroomUpdateOneWithoutTeachersInput
+  messages: MessageUpdateManyWithoutSenderInput
+  charges: ChargeUpdateManyWithoutUserInput
+  refunds: RefundUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutClassesInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutClassesDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutClassroomInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutClassroomDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutTaughtClassesInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutTaughtClassesDataInput!
+}
+
+input UserUpsertWithoutChargesInput {
+  update: UserUpdateWithoutChargesDataInput!
+  create: UserCreateWithoutChargesInput!
+}
+
+input UserUpsertWithoutMessagesInput {
+  update: UserUpdateWithoutMessagesDataInput!
+  create: UserCreateWithoutMessagesInput!
+}
+
+input UserUpsertWithoutRefundsInput {
+  update: UserUpdateWithoutRefundsDataInput!
+  create: UserCreateWithoutRefundsInput!
+}
+
+input UserUpsertWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutClassesInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutClassesDataInput!
+  create: UserCreateWithoutClassesInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutClassroomInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutClassroomDataInput!
+  create: UserCreateWithoutClassroomInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutTaughtClassesInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutTaughtClassesDataInput!
+  create: UserCreateWithoutTaughtClassesInput!
+}
+
+input UserWhereInput {
+  """Logical AND on all given filters."""
+  AND: [UserWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [UserWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  auth0Id: String
+
+  """All values that are not equal to given value."""
+  auth0Id_not: String
+
+  """All values that are contained in given list."""
+  auth0Id_in: [String!]
+
+  """All values that are not contained in given list."""
+  auth0Id_not_in: [String!]
+
+  """All values less than the given value."""
+  auth0Id_lt: String
+
+  """All values less than or equal the given value."""
+  auth0Id_lte: String
+
+  """All values greater than the given value."""
+  auth0Id_gt: String
+
+  """All values greater than or equal the given value."""
+  auth0Id_gte: String
+
+  """All values containing the given string."""
+  auth0Id_contains: String
+
+  """All values not containing the given string."""
+  auth0Id_not_contains: String
+
+  """All values starting with the given string."""
+  auth0Id_starts_with: String
+
+  """All values not starting with the given string."""
+  auth0Id_not_starts_with: String
+
+  """All values ending with the given string."""
+  auth0Id_ends_with: String
+
+  """All values not ending with the given string."""
+  auth0Id_not_ends_with: String
+  username: String
+
+  """All values that are not equal to given value."""
+  username_not: String
+
+  """All values that are contained in given list."""
+  username_in: [String!]
+
+  """All values that are not contained in given list."""
+  username_not_in: [String!]
+
+  """All values less than the given value."""
+  username_lt: String
+
+  """All values less than or equal the given value."""
+  username_lte: String
+
+  """All values greater than the given value."""
+  username_gt: String
+
+  """All values greater than or equal the given value."""
+  username_gte: String
+
+  """All values containing the given string."""
+  username_contains: String
+
+  """All values not containing the given string."""
+  username_not_contains: String
+
+  """All values starting with the given string."""
+  username_starts_with: String
+
+  """All values not starting with the given string."""
+  username_not_starts_with: String
+
+  """All values ending with the given string."""
+  username_ends_with: String
+
+  """All values not ending with the given string."""
+  username_not_ends_with: String
+  email: String
+
+  """All values that are not equal to given value."""
+  email_not: String
+
+  """All values that are contained in given list."""
+  email_in: [String!]
+
+  """All values that are not contained in given list."""
+  email_not_in: [String!]
+
+  """All values less than the given value."""
+  email_lt: String
+
+  """All values less than or equal the given value."""
+  email_lte: String
+
+  """All values greater than the given value."""
+  email_gt: String
+
+  """All values greater than or equal the given value."""
+  email_gte: String
+
+  """All values containing the given string."""
+  email_contains: String
+
+  """All values not containing the given string."""
+  email_not_contains: String
+
+  """All values starting with the given string."""
+  email_starts_with: String
+
+  """All values not starting with the given string."""
+  email_not_starts_with: String
+
+  """All values ending with the given string."""
+  email_ends_with: String
+
+  """All values not ending with the given string."""
+  email_not_ends_with: String
+  email_verified: String
+
+  """All values that are not equal to given value."""
+  email_verified_not: String
+
+  """All values that are contained in given list."""
+  email_verified_in: [String!]
+
+  """All values that are not contained in given list."""
+  email_verified_not_in: [String!]
+
+  """All values less than the given value."""
+  email_verified_lt: String
+
+  """All values less than or equal the given value."""
+  email_verified_lte: String
+
+  """All values greater than the given value."""
+  email_verified_gt: String
+
+  """All values greater than or equal the given value."""
+  email_verified_gte: String
+
+  """All values containing the given string."""
+  email_verified_contains: String
+
+  """All values not containing the given string."""
+  email_verified_not_contains: String
+
+  """All values starting with the given string."""
+  email_verified_starts_with: String
+
+  """All values not starting with the given string."""
+  email_verified_not_starts_with: String
+
+  """All values ending with the given string."""
+  email_verified_ends_with: String
+
+  """All values not ending with the given string."""
+  email_verified_not_ends_with: String
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  gender: Gender
+
+  """All values that are not equal to given value."""
+  gender_not: Gender
+
+  """All values that are contained in given list."""
+  gender_in: [Gender!]
+
+  """All values that are not contained in given list."""
+  gender_not_in: [Gender!]
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  url: String
+
+  """All values that are not equal to given value."""
+  url_not: String
+
+  """All values that are contained in given list."""
+  url_in: [String!]
+
+  """All values that are not contained in given list."""
+  url_not_in: [String!]
+
+  """All values less than the given value."""
+  url_lt: String
+
+  """All values less than or equal the given value."""
+  url_lte: String
+
+  """All values greater than the given value."""
+  url_gt: String
+
+  """All values greater than or equal the given value."""
+  url_gte: String
+
+  """All values containing the given string."""
+  url_contains: String
+
+  """All values not containing the given string."""
+  url_not_contains: String
+
+  """All values starting with the given string."""
+  url_starts_with: String
+
+  """All values not starting with the given string."""
+  url_not_starts_with: String
+
+  """All values ending with the given string."""
+  url_ends_with: String
+
+  """All values not ending with the given string."""
+  url_not_ends_with: String
+  isTeacher: Boolean
+
+  """All values that are not equal to given value."""
+  isTeacher_not: Boolean
+  stripeId: String
+
+  """All values that are not equal to given value."""
+  stripeId_not: String
+
+  """All values that are contained in given list."""
+  stripeId_in: [String!]
+
+  """All values that are not contained in given list."""
+  stripeId_not_in: [String!]
+
+  """All values less than the given value."""
+  stripeId_lt: String
+
+  """All values less than or equal the given value."""
+  stripeId_lte: String
+
+  """All values greater than the given value."""
+  stripeId_gt: String
+
+  """All values greater than or equal the given value."""
+  stripeId_gte: String
+
+  """All values containing the given string."""
+  stripeId_contains: String
+
+  """All values not containing the given string."""
+  stripeId_not_contains: String
+
+  """All values starting with the given string."""
+  stripeId_starts_with: String
+
+  """All values not starting with the given string."""
+  stripeId_not_starts_with: String
+
+  """All values ending with the given string."""
+  stripeId_ends_with: String
+
+  """All values not ending with the given string."""
+  stripeId_not_ends_with: String
+  stripeCustomerId: String
+
+  """All values that are not equal to given value."""
+  stripeCustomerId_not: String
+
+  """All values that are contained in given list."""
+  stripeCustomerId_in: [String!]
+
+  """All values that are not contained in given list."""
+  stripeCustomerId_not_in: [String!]
+
+  """All values less than the given value."""
+  stripeCustomerId_lt: String
+
+  """All values less than or equal the given value."""
+  stripeCustomerId_lte: String
+
+  """All values greater than the given value."""
+  stripeCustomerId_gt: String
+
+  """All values greater than or equal the given value."""
+  stripeCustomerId_gte: String
+
+  """All values containing the given string."""
+  stripeCustomerId_contains: String
+
+  """All values not containing the given string."""
+  stripeCustomerId_not_contains: String
+
+  """All values starting with the given string."""
+  stripeCustomerId_starts_with: String
+
+  """All values not starting with the given string."""
+  stripeCustomerId_not_starts_with: String
+
+  """All values ending with the given string."""
+  stripeCustomerId_ends_with: String
+
+  """All values not ending with the given string."""
+  stripeCustomerId_not_ends_with: String
+  picture: FileWhereInput
+  video: FileWhereInput
+  classes_every: ClassWhereInput
+  classes_some: ClassWhereInput
+  classes_none: ClassWhereInput
+  taughtClasses_every: ClassWhereInput
+  taughtClasses_some: ClassWhereInput
+  taughtClasses_none: ClassWhereInput
+  followers_every: UserWhereInput
+  followers_some: UserWhereInput
+  followers_none: UserWhereInput
+  following_every: UserWhereInput
+  following_some: UserWhereInput
+  following_none: UserWhereInput
+  classroom: ClassroomWhereInput
+  messages_every: MessageWhereInput
+  messages_some: MessageWhereInput
+  messages_none: MessageWhereInput
+  charges_every: ChargeWhereInput
+  charges_some: ChargeWhereInput
+  charges_none: ChargeWhereInput
+  refunds_every: RefundWhereInput
+  refunds_some: RefundWhereInput
+  refunds_none: RefundWhereInput
 }
 
 input UserWhereUniqueInput {
   id: ID
+  auth0Id: String
+  username: String
+  email: String
+  stripeId: String
+  stripeCustomerId: String
 }
