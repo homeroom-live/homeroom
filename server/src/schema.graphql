@@ -1,7 +1,6 @@
-# import User, Class, Classroom, File from '../schemas/prisma.graphql'
+# import Class, Classroom, File, Gender from '../schemas/prisma.graphql'
 
 scalar Upload
-scalar Json
 
 type Query {
   viewer: Viewer
@@ -10,41 +9,42 @@ type Query {
   # isFollowing(username: String!): Boolean!
   # isClassStudent(classId: ID!): Boolean!
   # isClassStudentOrTeacher(classroomId: ID!): Boolean!
-  userDefaultCard: Json
-  userStats(username: String): Json
+  # userDefaultCard: Json
+  # userStats(username: String): Json
   # userStripeUrl: String
 
   class(id: ID!): Class!
   # myClasses(first: Int): [Class!]!
   # myTaughtClasses(first: Int): [Class!]!
-  classes(
-    where: ClassWhereInput
-    orderBy: ClassOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Class!]!
+  # classes(
+  #   where: ClassWhereInput
+  #   orderBy: ClassOrderByInput
+  #   skip: Int
+  #   after: String
+  #   before: String
+  #   first: Int
+  #   last: Int
+  # ): [Class!]!
+  liveClasses: [Class!]!
 
-  classroom(id: ID!): Classroom!
-  liveClassrooms: [Classroom!]!
+  classroom(id: ID!): Classroom
+  # liveClassrooms: [Classroom!]!
 
-  # messages(classroomId: ID!, last: Int): [Message!]!
-  messages(
-    classroomId: ID!
-    where: MessageWhereInput
-    orderBy: MessageOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Message]!
+  messages(classroomId: ID!, last: Int): [Message!]!
+  # messages(
+  #   classroomId: ID!
+  #   where: MessageWhereInput
+  #   orderBy: MessageOrderByInput
+  #   skip: Int
+  #   after: String
+  #   before: String
+  #   first: Int
+  #   last: Int
+  # ): [Message]!
 }
 
 type Mutation {
-  createUser: User
+  createUser(): User
   updateUser(data: UserUpdateInput!): User!
   updateUserWithFiles(
     data: UserUpdateInput!
@@ -86,9 +86,65 @@ type Subscription {
   message(classroomId: ID!): MessageSubscriptionPayload
 }
 
+# Payloads
+
 type Viewer {
-  user: User!
-  stripeURL: String!
-  classes(first: Int): [Class!]!
-  taughtClasses(first: Int!): [Class!]!
+  user: User
+  requiresSetup: Boolean!
 }
+
+# Types
+
+type User {
+  id: ID!
+
+  # Info
+  username: String!
+  email: String!
+  email_verified: String
+  name: String
+  gender: Gender!
+  description: String
+  url: String
+  picture(where: FileWhereInput): File!
+  video(where: FileWhereInput): File
+
+  # Stripe
+  stripeId: String # Additional resolver
+  stripeCustomerId: String # Additional resolver
+  stripeURL: String # Additional resolver
+  defaultCard: DefaultCard # Additional resolver
+  charges: [Charge!]
+  refunds: [Refund!]
+
+  # Teacher
+  classrooms: UserClassrooms! # Additional resolver
+
+  # Social
+  followers: UserFollowers! # Additional resolver
+  following: UserFollowing! # Additional resolver
+  messages: [Message!]
+}
+
+type UserClassrooms { 
+  classrooms: [Classroom!]!
+  count: Int!
+}
+
+type UserFollowers { 
+  followers: [User!]!
+  count: Int!
+}
+
+type UserFollowing { 
+  following: [User!]!
+  count: Int!
+}
+
+type DefaultCard {
+  last4: String!
+  expMonth: String!
+  expYear: String!
+  brand: String!
+}
+

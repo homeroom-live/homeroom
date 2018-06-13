@@ -1,26 +1,30 @@
-export const users = {
-  async createUser(parent, args, ctx, info) {
-    const payload = await parseTokenPayload(ctx)
-    const auth0Id = payload.sub
-    const userExists = await ctx.db.exists.User({ auth0Id })
+import { Context } from '../../utils'
 
-    if (userExists) {
-      return null
-    }
+export const users = {
+  async createUser(parent, args, ctx: Context, info) {
+    // const payload = await parseTokenPayload(ctx)
+    // const auth0Id = payload.sub
+    // const userExists = await ctx.db.exists.User({ auth0Id })
+
+    // if (userExists) {
+    //   return null
+    // }
+
+    const auth0Id = ctx.user.id
 
     return await ctx.db.mutation.createUser(
       {
         data: {
           auth0Id,
-          email: payload.email,
-          email_verified: payload.email_verified,
+          email: ctx.user.email,
+          email_verified: ctx.user.email_verified,
           picture: {
             create: {
-              name: `${payload.email}-picture`,
-              url: payload.picture,
+              name: `${ctx.user.email}-picture`,
+              url: ctx.user.picture,
             },
           },
-          username: await generateUsername(ctx, payload),
+          username: await generateUsername(ctx, ctx.user),
           ...addFacebookFields(payload),
           classroom: {
             create: {

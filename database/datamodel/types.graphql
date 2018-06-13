@@ -16,21 +16,43 @@ type User {
   url: String
   picture: File! @relation(name: "UserPicture")
   video: File @relation(name: "UserVideo")
-  isTeacher: Boolean
+  # isTeacher: Boolean
 
   # Stripe
   stripeId: String @unique
   stripeCustomerId: String @unique
 
-  classes: [Class!]! @relation(name: "UserClasses")
-  taughtClasses: [Class!]! @relation(name: "UserTaughtClasses")
-  followers: [User!]! @relation(name: "UserFollows")
-  following: [User!]! @relation(name: "UserFollowing")
-  classroom: Classroom @relation(name: "ClassroomTeachers")
+  # classes: [Class!]! @relation(name: "UserClasses")
+  # taughtClasses: [Class!]! @relation(name: "UserTaughtClasses")
+  classrooms: [Classroom!]! @relation(name: "ClassroomTeacher")
+  followers: [Follow!]! @relation(name: "UserFollowed")
+  following: [Follow!]! @relation(name: "UserFollowing")
   # activities: [Activity!]! @relation(name: "UserActivities")
   messages: [Message!]! @relation(name: "UserMessages")
   charges: [Charge!]! @relation(name: "UserCharges")
   refunds: [Refund!]! @relation(name: "UserRefunds")
+}
+
+type Follow {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  user_following: User! @relation(name: "UserFollowing")
+  user_followed: User! @relation(name: "UserFollowed")
+}
+
+type Classroom {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  name: String!
+  description: String!
+  classes: [Class!]! @relation(name: "ClassroomClass")
+
+  teacher: User! @relation(name: "ClassroomTeacher")
+  students: [User!]! @relation(name: "ClassroomStudent")
 }
 
 type Class {
@@ -46,16 +68,19 @@ type Class {
   duration: Int # in minutes
   price: Float
   startDate: DateTime
-  teachers: [User!]! @relation(name: "UserTaughtClasses")
-  students: [User!]! @relation(name: "UserClasses")
+
+  # Specs
+  live: Boolean! @default(value: "false")
+  # teachers: [User!]! @relation(name: "UserTaughtClasses")
+  # students: [User!]! @relation(name: "UserClasses")
   # studentsCount: Int
   files: [File!]! @relation(name: "ClassFiles")
   vods: [File!]! @relation(name: "ClassVods")
   classroom: Classroom @relation(name: "ClassroomClass")
   # messages: [Message!]! @relation(name: "ClassroomMessages")
   # activities: [Activity!]! @relation(name: "ClassActivities")
-  charges: [Charge!]! @relation(name: "ClassCharges")
-  refunds: [Refund!]! @relation(name: "ClassRefunds")
+  # charges: [Charge!]! @relation(name: "ClassCharges")
+  # refunds: [Refund!]! @relation(name: "ClassRefunds")
 }
 
 type File {
@@ -74,15 +99,6 @@ type File {
   # classVideo: Class @relation(name: "ClassVideo")
 }
 
-type Classroom {
-  id: ID! @unique
-  live: Boolean
-  viewers: Int
-  teachers: [User!]! @relation(name: "ClassroomTeachers")
-  class: Class @relation(name: "ClassroomClass")
-  messages: [Message!]! @relation(name: "ClassroomMessages")
-}
-
 type Message {
   id: ID! @unique
   createdAt: DateTime!
@@ -98,11 +114,13 @@ type Charge {
   createdAt: DateTime!
   updatedAt: DateTime!
 
-  stripeId: String! @unique
   amount: Float!
-  refund: Refund @relation(name: "ChargeRefund")
+  stripeId: String! @unique
+
   class: Class! @relation(name: "ClassCharges")
   user: User! @relation(name: "UserCharges")
+
+  refund: Refund @relation(name: "ChargeRefund")
 }
 
 type Refund {
