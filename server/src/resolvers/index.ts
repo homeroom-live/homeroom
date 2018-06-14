@@ -12,7 +12,19 @@ import { messages as messagesMutations } from './Mutation/messages'
 import { refunds as refundsMutations } from './Mutation/refunds'
 import { stripe as stripeMutations } from './Mutation/stripe'
 import { users as usersMutations } from './Mutation/users'
+// Subscriptions
+import { Subscription } from './Subscription'
 // Types
+import { ClassMessages } from './ClassMessages'
+import { ClassroomClasses } from './ClassroomClasses'
+import { ClassroomStudents } from './ClassroomStudents'
+import { User } from './User'
+import { UserCharges } from './UserCharges'
+import { UserFollowers } from './UserFollowers'
+import { UserFollowing } from './UserFollowing'
+import { UserRefunds } from './UserRefunds'
+import { UserStudyingClassrooms } from './UserStudyingClassrooms'
+import { UserTaughtClassrooms } from './UserTaughtClassrooms'
 import { Viewer } from './Viewer'
 
 export const resolvers = {
@@ -31,6 +43,17 @@ export const resolvers = {
     ...stripeMutations,
     ...usersMutations,
   },
+  Subscription,
+  ClassMessages,
+  ClassroomClasses,
+  ClassroomStudents,
+  User,
+  UserCharges,
+  UserFollowers,
+  UserFollowing,
+  UserRefunds,
+  UserStudyingClassrooms,
+  UserTaughtClassrooms,
   Viewer,
 }
 

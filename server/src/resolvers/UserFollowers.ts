@@ -1,6 +1,6 @@
 import { Context } from '../utils'
 
-export const UserFollowing = {
+export const UserFollowers = {
   followers: {
     fragment: `fragment UserID on User { id }`,
     resolve: async ({ id }, args, ctx: Context, info) => {
@@ -23,6 +23,16 @@ export const UserFollowing = {
       )
 
       return followers.aggregate.count
+    },
+  },
+  followed_by_viewer: {
+    fragment: `fragment UserID on User { id }`,
+    resolve: async ({ id }, args, ctx: Context, info) => {
+      const viewerId = ctx.user.id
+      return ctx.db.exists.Follow({
+        user_following: { auth0Id: viewerId },
+        user_followed: { id },
+      })
     },
   },
 }

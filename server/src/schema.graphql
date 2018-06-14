@@ -26,7 +26,6 @@ type Query {
   #   last: Int
   # ): [Class!]!
   liveClasses: [Class!]! # DONE
-
   classroom(id: ID!): Classroom # DONE
   # liveClassrooms: [Classroom!]!
 
@@ -44,7 +43,7 @@ type Query {
 }
 
 type Mutation {
-  createUser(): User
+  createUser(receiveNotifications: Boolean!): User
   updateUser(data: UserUpdateInput!): User!
   updateUserWithFiles(
     data: UserUpdateInput!
@@ -54,7 +53,7 @@ type Mutation {
   ): User!
   follow(username: String!): Viewer
   unfollow(username: String!): Viewer
-  
+
   # Stripe
   createStripeAccount(code: String!): User!
   createStripeCustomer(token: String!): User!
@@ -70,7 +69,6 @@ type Mutation {
   updateClassroom(id: ID!, data: ClassroomUpdateInput!): Classroom! # TODO: security
   joinClassroom(id: ID!): Classroom! # DONE
   leaveClassroom(id: ID): Classroom! # DONE
-
   createMessage(data: MessageCreateInput!): Message!
 
   createCharge(amount: Float!, teacherId: ID!, classId: ID!): Charge!
@@ -115,37 +113,48 @@ type User {
   stripeCustomerId: String # Additional resolver
   stripeURL: String # Additional resolver
   defaultCard: DefaultCard # Additional resolver
-  charges: [Charge!]
-  refunds: [Refund!]
+  charges: UserCharges!
+  refunds: UserRefunds!
 
   # Teacher
   taught_classrooms: UserTaughtClassrooms! # Additional resolver
   studying_classrooms: UserStudyingClassrooms! # Additional resolver
-
   # Social
   followers: UserFollowers! # Additional resolver
   following: UserFollowing! # Additional resolver
   messages: [Message!]
 }
 
-type UserTaughtClassrooms { 
+type UserCharges {
+  charges: [Charge!]
+  count: Int!
+}
+
+type UserRefunds {
+  refunds: [Refund!]!
+  count: Int!
+}
+
+type UserTaughtClassrooms {
   classrooms: [Classroom!]!
   count: Int!
 }
 
-type UserStudyingClassrooms { 
+type UserStudyingClassrooms {
   classrooms: [Classroom!]!
   count: Int!
 }
 
-type UserFollowers { 
+type UserFollowers {
   followers: [User!]!
   count: Int!
+  followed_by_viewer: Boolean!
 }
 
-type UserFollowing { 
+type UserFollowing {
   following: [User!]!
   count: Int!
+  following_viewer: Boolean!
 }
 
 type DefaultCard {
@@ -170,6 +179,7 @@ type Classroom {
 type ClassroomStudents {
   count: Int!
   students: [User!]!
+  studied_by_viewer: Boolean!
 }
 
 type ClassroomClasses {
@@ -195,5 +205,51 @@ type Class {
   files: [File!]!
   vods: File!
   classroom: Classroom!
+  messages: ClassMessages!
+}
+
+type ClassMessages {
+  count: Int!
   messages: [Message!]!
+}
+
+type Message {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  text: String!
+  sender: User!
+  class: Class!
+}
+
+type Charge {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  amount: Float!
+  class: Class!
+  user: User!
+  refund: Refund
+}
+
+type Refund {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  amount: Float!
+  charge: Charge!
+}
+
+type File {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  name: String!
+  secret: String
+  contentType: String
+  url: String!
 }

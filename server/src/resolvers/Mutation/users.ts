@@ -1,21 +1,12 @@
 import { Context } from '../../utils'
 
 export const users = {
-  async createUser(parent, args, ctx: Context, info) {
-    // const payload = await parseTokenPayload(ctx)
-    // const auth0Id = payload.sub
-    // const userExists = await ctx.db.exists.User({ auth0Id })
-
-    // if (userExists) {
-    //   return null
-    // }
-
-    const auth0Id = ctx.user.id
-
-    return await ctx.db.mutation.createUser(
+  async createUser(parent, { receiveNotifications }, ctx: Context, info) {
+    const username = ''
+    const user = await ctx.db.mutation.createUser(
       {
         data: {
-          auth0Id,
+          auth0Id: ctx.user.id,
           email: ctx.user.email,
           email_verified: ctx.user.email_verified,
           picture: {
@@ -24,17 +15,13 @@ export const users = {
               url: ctx.user.picture,
             },
           },
-          username: await generateUsername(ctx, ctx.user),
-          ...addFacebookFields(payload),
-          classroom: {
-            create: {
-              live: false,
-            },
-          },
+          username,
         },
       },
       info,
     )
+
+    return {}
   },
 
   async updateUser(parent, args, ctx, info) {

@@ -1,6 +1,8 @@
-export const Subscriptions = {
+import { Context } from '../utils'
+
+export const Subscription = {
   messages: {
-    subscribe: async (parent, { classroomId }, ctx, info) => {
+    subscribe: async (parent, { classroomId }, ctx: Context, info) => {
       return ctx.db.subscription.message(
         {
           // where: {
@@ -13,7 +15,7 @@ export const Subscriptions = {
         info,
       )
     },
-    resolve: ({ message }, { classroomId }, context, info) => {
+    resolve: ({ message }, { classroomId }, ctx: Context, info) => {
       if (
         !message ||
         !message.node ||

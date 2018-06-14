@@ -4,11 +4,10 @@ type User {
   updatedAt: DateTime!
 
   # Info
-  auth0Id: String! @unique
+  auth0Id: ID! @unique
   username: String! @unique
   email: String! @unique
-  email_verified: String
-
+  email_verified: String # Shouldn't these be Boolean?
   # Meta
   name: String
   gender: Gender!
@@ -32,7 +31,10 @@ type User {
   # activities: [Activity!]! @relation(name: "UserActivities")
   messages: [Message!]! @relation(name: "UserMessages")
   charges: [Charge!]! @relation(name: "UserCharges")
-  refunds: [Refund!]! @relation(name: "UserRefunds")
+  # refunds: [Refund!]! @relation(name: "UserRefunds")
+
+  # Settings
+  receiveNotifications: Boolean! @default(value: "true")
 }
 
 type Follow {
@@ -90,11 +92,12 @@ type Class {
 
 type File {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
   name: String!
   secret: String @unique
   contentType: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
   url: String! @unique
   # TODO: this can all be deleted - one way bindings
   # user: User @relation(name: "UserVideo")
@@ -135,10 +138,10 @@ type Refund {
 
   stripeId: String! @unique
   amount: Float!
-  # TODO: some of this can be omitted
   charge: Charge! @relation(name: "ChargeRefund")
-  class: Class! @relation(name: "ClassRefunds")
-  user: User! @relation(name: "UserRefunds")
+  # TODO: some of this can be omitted
+  # class: Class! @relation(name: "ClassRefunds")
+  # user: User! @relation(name: "UserRefunds")
 }
 
 #

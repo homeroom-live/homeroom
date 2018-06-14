@@ -27,4 +27,14 @@ export const UserFollowing = {
       return following.aggregate.count
     },
   },
+  following_viewer: {
+    fragment: `fragment UserID on User { id }`,
+    resolve: async ({ id }, args, ctx: Context, info) => {
+      const viewerId = ctx.user.id
+      return ctx.db.exists.Follow({
+        user_followed: { auth0Id: viewerId },
+        user_following: { id },
+      })
+    },
+  },
 }
