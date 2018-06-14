@@ -24,7 +24,9 @@ type User {
 
   # classes: [Class!]! @relation(name: "UserClasses")
   # taughtClasses: [Class!]! @relation(name: "UserTaughtClasses")
-  classrooms: [Classroom!]! @relation(name: "ClassroomTeacher")
+  taught_classrooms: [Classroom!]! @relation(name: "ClassroomTeacher")
+  studying_classrooms: [Classroom!]! @relation(name: "ClassroomStudent")
+
   followers: [Follow!]! @relation(name: "UserFollowed")
   following: [Follow!]! @relation(name: "UserFollowing")
   # activities: [Activity!]! @relation(name: "UserActivities")
@@ -49,6 +51,7 @@ type Classroom {
 
   name: String!
   description: String!
+  price: Float! @deafult(value: "0")
   classes: [Class!]! @relation(name: "ClassroomClass")
 
   teacher: User! @relation(name: "ClassroomTeacher")
@@ -62,22 +65,24 @@ type Class {
 
   # Info
   name: String!
-  description: String
-  video: File @relation(name: "ClassVideo")
+  description: String!
   picture: String # TODO: move to file
-  duration: Int # in minutes
-  price: Float
+  price: Float! @default(value: "0")
   startDate: DateTime
 
-  # Specs
+  # Stream
   live: Boolean! @default(value: "false")
+  duration: Int # in minutes
+  video: File @relation(name: "ClassVideo")
+
+  # Specs
   # teachers: [User!]! @relation(name: "UserTaughtClasses")
   # students: [User!]! @relation(name: "UserClasses")
   # studentsCount: Int
   files: [File!]! @relation(name: "ClassFiles")
   vods: [File!]! @relation(name: "ClassVods")
-  classroom: Classroom @relation(name: "ClassroomClass")
-  # messages: [Message!]! @relation(name: "ClassroomMessages")
+  classroom: Classroom! @relation(name: "ClassroomClass")
+  messages: [Message!]! @relation(name: "ClassMessages")
   # activities: [Activity!]! @relation(name: "ClassActivities")
   # charges: [Charge!]! @relation(name: "ClassCharges")
   # refunds: [Refund!]! @relation(name: "ClassRefunds")
@@ -106,7 +111,7 @@ type Message {
 
   text: String!
   sender: User! @relation(name: "UserMessages")
-  classroom: Classroom! @relation(name: "ClassroomMessages")
+  class: Class! @relation(name: "ClassMessages")
 }
 
 type Charge {

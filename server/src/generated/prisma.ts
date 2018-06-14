@@ -510,16 +510,17 @@ type Class implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
-  description: String
-  video(where: FileWhereInput): File
+  description: String!
   picture: String
-  duration: Int
-  price: Float
+  price: Float!
   startDate: DateTime
   live: Boolean!
+  duration: Int
+  video(where: FileWhereInput): File
   files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File!]
   vods(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File!]
-  classroom(where: ClassroomWhereInput): Classroom
+  classroom(where: ClassroomWhereInput): Classroom!
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
 }
 
 """A connection to a list of items."""
@@ -534,16 +535,17 @@ type ClassConnection {
 
 input ClassCreateInput {
   name: String!
-  description: String
+  description: String!
   picture: String
-  duration: Int
   price: Float
   startDate: DateTime
   live: Boolean
+  duration: Int
   video: FileCreateOneInput
   files: FileCreateManyInput
   vods: FileCreateManyInput
-  classroom: ClassroomCreateOneWithoutClassesInput
+  classroom: ClassroomCreateOneWithoutClassesInput!
+  messages: MessageCreateManyWithoutClassInput
 }
 
 input ClassCreateManyWithoutClassroomInput {
@@ -556,17 +558,37 @@ input ClassCreateOneInput {
   connect: ClassWhereUniqueInput
 }
 
+input ClassCreateOneWithoutMessagesInput {
+  create: ClassCreateWithoutMessagesInput
+  connect: ClassWhereUniqueInput
+}
+
 input ClassCreateWithoutClassroomInput {
   name: String!
-  description: String
+  description: String!
   picture: String
-  duration: Int
   price: Float
   startDate: DateTime
   live: Boolean
+  duration: Int
   video: FileCreateOneInput
   files: FileCreateManyInput
   vods: FileCreateManyInput
+  messages: MessageCreateManyWithoutClassInput
+}
+
+input ClassCreateWithoutMessagesInput {
+  name: String!
+  description: String!
+  picture: String
+  price: Float
+  startDate: DateTime
+  live: Boolean
+  duration: Int
+  video: FileCreateOneInput
+  files: FileCreateManyInput
+  vods: FileCreateManyInput
+  classroom: ClassroomCreateOneWithoutClassesInput!
 }
 
 """An edge in a connection."""
@@ -591,14 +613,14 @@ enum ClassOrderByInput {
   description_DESC
   picture_ASC
   picture_DESC
-  duration_ASC
-  duration_DESC
   price_ASC
   price_DESC
   startDate_ASC
   startDate_DESC
   live_ASC
   live_DESC
+  duration_ASC
+  duration_DESC
 }
 
 type ClassPreviousValues {
@@ -606,12 +628,12 @@ type ClassPreviousValues {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
-  description: String
+  description: String!
   picture: String
-  duration: Int
-  price: Float
+  price: Float!
   startDate: DateTime
   live: Boolean!
+  duration: Int
 }
 
 type Classroom implements Node {
@@ -620,6 +642,7 @@ type Classroom implements Node {
   updatedAt: DateTime!
   name: String!
   description: String!
+  price: Float!
   classes(where: ClassWhereInput, orderBy: ClassOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Class!]
   teacher(where: UserWhereInput): User!
   students(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
@@ -638,19 +661,20 @@ type ClassroomConnection {
 input ClassroomCreateInput {
   name: String!
   description: String!
+  price: Float!
   classes: ClassCreateManyWithoutClassroomInput
-  teacher: UserCreateOneWithoutClassroomsInput!
-  students: UserCreateManyInput
+  teacher: UserCreateOneWithoutTaught_classroomsInput!
+  students: UserCreateManyWithoutStudying_classroomsInput
+}
+
+input ClassroomCreateManyWithoutStudentsInput {
+  create: [ClassroomCreateWithoutStudentsInput!]
+  connect: [ClassroomWhereUniqueInput!]
 }
 
 input ClassroomCreateManyWithoutTeacherInput {
   create: [ClassroomCreateWithoutTeacherInput!]
   connect: [ClassroomWhereUniqueInput!]
-}
-
-input ClassroomCreateOneInput {
-  create: ClassroomCreateInput
-  connect: ClassroomWhereUniqueInput
 }
 
 input ClassroomCreateOneWithoutClassesInput {
@@ -661,15 +685,25 @@ input ClassroomCreateOneWithoutClassesInput {
 input ClassroomCreateWithoutClassesInput {
   name: String!
   description: String!
-  teacher: UserCreateOneWithoutClassroomsInput!
-  students: UserCreateManyInput
+  price: Float!
+  teacher: UserCreateOneWithoutTaught_classroomsInput!
+  students: UserCreateManyWithoutStudying_classroomsInput
+}
+
+input ClassroomCreateWithoutStudentsInput {
+  name: String!
+  description: String!
+  price: Float!
+  classes: ClassCreateManyWithoutClassroomInput
+  teacher: UserCreateOneWithoutTaught_classroomsInput!
 }
 
 input ClassroomCreateWithoutTeacherInput {
   name: String!
   description: String!
+  price: Float!
   classes: ClassCreateManyWithoutClassroomInput
-  students: UserCreateManyInput
+  students: UserCreateManyWithoutStudying_classroomsInput
 }
 
 """An edge in a connection."""
@@ -692,6 +726,8 @@ enum ClassroomOrderByInput {
   name_DESC
   description_ASC
   description_DESC
+  price_ASC
+  price_DESC
 }
 
 type ClassroomPreviousValues {
@@ -700,6 +736,7 @@ type ClassroomPreviousValues {
   updatedAt: DateTime!
   name: String!
   description: String!
+  price: Float!
 }
 
 type ClassroomSubscriptionPayload {
@@ -741,20 +778,22 @@ input ClassroomSubscriptionWhereInput {
   node: ClassroomWhereInput
 }
 
-input ClassroomUpdateDataInput {
-  name: String
-  description: String
-  classes: ClassUpdateManyWithoutClassroomInput
-  teacher: UserUpdateOneWithoutClassroomsInput
-  students: UserUpdateManyInput
-}
-
 input ClassroomUpdateInput {
   name: String
   description: String
+  price: Float
   classes: ClassUpdateManyWithoutClassroomInput
-  teacher: UserUpdateOneWithoutClassroomsInput
-  students: UserUpdateManyInput
+  teacher: UserUpdateOneWithoutTaught_classroomsInput
+  students: UserUpdateManyWithoutStudying_classroomsInput
+}
+
+input ClassroomUpdateManyWithoutStudentsInput {
+  create: [ClassroomCreateWithoutStudentsInput!]
+  connect: [ClassroomWhereUniqueInput!]
+  disconnect: [ClassroomWhereUniqueInput!]
+  delete: [ClassroomWhereUniqueInput!]
+  update: [ClassroomUpdateWithWhereUniqueWithoutStudentsInput!]
+  upsert: [ClassroomUpsertWithWhereUniqueWithoutStudentsInput!]
 }
 
 input ClassroomUpdateManyWithoutTeacherInput {
@@ -766,18 +805,9 @@ input ClassroomUpdateManyWithoutTeacherInput {
   upsert: [ClassroomUpsertWithWhereUniqueWithoutTeacherInput!]
 }
 
-input ClassroomUpdateOneInput {
-  create: ClassroomCreateInput
-  connect: ClassroomWhereUniqueInput
-  delete: Boolean
-  update: ClassroomUpdateDataInput
-  upsert: ClassroomUpsertNestedInput
-}
-
 input ClassroomUpdateOneWithoutClassesInput {
   create: ClassroomCreateWithoutClassesInput
   connect: ClassroomWhereUniqueInput
-  disconnect: Boolean
   delete: Boolean
   update: ClassroomUpdateWithoutClassesDataInput
   upsert: ClassroomUpsertWithoutClassesInput
@@ -786,15 +816,30 @@ input ClassroomUpdateOneWithoutClassesInput {
 input ClassroomUpdateWithoutClassesDataInput {
   name: String
   description: String
-  teacher: UserUpdateOneWithoutClassroomsInput
-  students: UserUpdateManyInput
+  price: Float
+  teacher: UserUpdateOneWithoutTaught_classroomsInput
+  students: UserUpdateManyWithoutStudying_classroomsInput
+}
+
+input ClassroomUpdateWithoutStudentsDataInput {
+  name: String
+  description: String
+  price: Float
+  classes: ClassUpdateManyWithoutClassroomInput
+  teacher: UserUpdateOneWithoutTaught_classroomsInput
 }
 
 input ClassroomUpdateWithoutTeacherDataInput {
   name: String
   description: String
+  price: Float
   classes: ClassUpdateManyWithoutClassroomInput
-  students: UserUpdateManyInput
+  students: UserUpdateManyWithoutStudying_classroomsInput
+}
+
+input ClassroomUpdateWithWhereUniqueWithoutStudentsInput {
+  where: ClassroomWhereUniqueInput!
+  data: ClassroomUpdateWithoutStudentsDataInput!
 }
 
 input ClassroomUpdateWithWhereUniqueWithoutTeacherInput {
@@ -802,14 +847,15 @@ input ClassroomUpdateWithWhereUniqueWithoutTeacherInput {
   data: ClassroomUpdateWithoutTeacherDataInput!
 }
 
-input ClassroomUpsertNestedInput {
-  update: ClassroomUpdateDataInput!
-  create: ClassroomCreateInput!
-}
-
 input ClassroomUpsertWithoutClassesInput {
   update: ClassroomUpdateWithoutClassesDataInput!
   create: ClassroomCreateWithoutClassesInput!
+}
+
+input ClassroomUpsertWithWhereUniqueWithoutStudentsInput {
+  where: ClassroomWhereUniqueInput!
+  update: ClassroomUpdateWithoutStudentsDataInput!
+  create: ClassroomCreateWithoutStudentsInput!
 }
 
 input ClassroomUpsertWithWhereUniqueWithoutTeacherInput {
@@ -991,6 +1037,28 @@ input ClassroomWhereInput {
 
   """All values not ending with the given string."""
   description_not_ends_with: String
+  price: Float
+
+  """All values that are not equal to given value."""
+  price_not: Float
+
+  """All values that are contained in given list."""
+  price_in: [Float!]
+
+  """All values that are not contained in given list."""
+  price_not_in: [Float!]
+
+  """All values less than the given value."""
+  price_lt: Float
+
+  """All values less than or equal the given value."""
+  price_lte: Float
+
+  """All values greater than the given value."""
+  price_gt: Float
+
+  """All values greater than or equal the given value."""
+  price_gte: Float
   classes_every: ClassWhereInput
   classes_some: ClassWhereInput
   classes_none: ClassWhereInput
@@ -1047,28 +1115,30 @@ input ClassUpdateDataInput {
   name: String
   description: String
   picture: String
-  duration: Int
   price: Float
   startDate: DateTime
   live: Boolean
+  duration: Int
   video: FileUpdateOneInput
   files: FileUpdateManyInput
   vods: FileUpdateManyInput
   classroom: ClassroomUpdateOneWithoutClassesInput
+  messages: MessageUpdateManyWithoutClassInput
 }
 
 input ClassUpdateInput {
   name: String
   description: String
   picture: String
-  duration: Int
   price: Float
   startDate: DateTime
   live: Boolean
+  duration: Int
   video: FileUpdateOneInput
   files: FileUpdateManyInput
   vods: FileUpdateManyInput
   classroom: ClassroomUpdateOneWithoutClassesInput
+  messages: MessageUpdateManyWithoutClassInput
 }
 
 input ClassUpdateManyWithoutClassroomInput {
@@ -1088,17 +1158,40 @@ input ClassUpdateOneInput {
   upsert: ClassUpsertNestedInput
 }
 
+input ClassUpdateOneWithoutMessagesInput {
+  create: ClassCreateWithoutMessagesInput
+  connect: ClassWhereUniqueInput
+  delete: Boolean
+  update: ClassUpdateWithoutMessagesDataInput
+  upsert: ClassUpsertWithoutMessagesInput
+}
+
 input ClassUpdateWithoutClassroomDataInput {
   name: String
   description: String
   picture: String
-  duration: Int
   price: Float
   startDate: DateTime
   live: Boolean
+  duration: Int
   video: FileUpdateOneInput
   files: FileUpdateManyInput
   vods: FileUpdateManyInput
+  messages: MessageUpdateManyWithoutClassInput
+}
+
+input ClassUpdateWithoutMessagesDataInput {
+  name: String
+  description: String
+  picture: String
+  price: Float
+  startDate: DateTime
+  live: Boolean
+  duration: Int
+  video: FileUpdateOneInput
+  files: FileUpdateManyInput
+  vods: FileUpdateManyInput
+  classroom: ClassroomUpdateOneWithoutClassesInput
 }
 
 input ClassUpdateWithWhereUniqueWithoutClassroomInput {
@@ -1109,6 +1202,11 @@ input ClassUpdateWithWhereUniqueWithoutClassroomInput {
 input ClassUpsertNestedInput {
   update: ClassUpdateDataInput!
   create: ClassCreateInput!
+}
+
+input ClassUpsertWithoutMessagesInput {
+  update: ClassUpdateWithoutMessagesDataInput!
+  create: ClassCreateWithoutMessagesInput!
 }
 
 input ClassUpsertWithWhereUniqueWithoutClassroomInput {
@@ -1330,28 +1428,6 @@ input ClassWhereInput {
 
   """All values not ending with the given string."""
   picture_not_ends_with: String
-  duration: Int
-
-  """All values that are not equal to given value."""
-  duration_not: Int
-
-  """All values that are contained in given list."""
-  duration_in: [Int!]
-
-  """All values that are not contained in given list."""
-  duration_not_in: [Int!]
-
-  """All values less than the given value."""
-  duration_lt: Int
-
-  """All values less than or equal the given value."""
-  duration_lte: Int
-
-  """All values greater than the given value."""
-  duration_gt: Int
-
-  """All values greater than or equal the given value."""
-  duration_gte: Int
   price: Float
 
   """All values that are not equal to given value."""
@@ -1400,6 +1476,28 @@ input ClassWhereInput {
 
   """All values that are not equal to given value."""
   live_not: Boolean
+  duration: Int
+
+  """All values that are not equal to given value."""
+  duration_not: Int
+
+  """All values that are contained in given list."""
+  duration_in: [Int!]
+
+  """All values that are not contained in given list."""
+  duration_not_in: [Int!]
+
+  """All values less than the given value."""
+  duration_lt: Int
+
+  """All values less than or equal the given value."""
+  duration_lte: Int
+
+  """All values greater than the given value."""
+  duration_gt: Int
+
+  """All values greater than or equal the given value."""
+  duration_gte: Int
   video: FileWhereInput
   files_every: FileWhereInput
   files_some: FileWhereInput
@@ -1408,6 +1506,9 @@ input ClassWhereInput {
   vods_some: FileWhereInput
   vods_none: FileWhereInput
   classroom: ClassroomWhereInput
+  messages_every: MessageWhereInput
+  messages_some: MessageWhereInput
+  messages_none: MessageWhereInput
 }
 
 input ClassWhereUniqueInput {
@@ -2111,7 +2212,7 @@ type Message implements Node {
   updatedAt: DateTime!
   text: String!
   sender(where: UserWhereInput): User!
-  classroom(where: ClassroomWhereInput): Classroom!
+  class(where: ClassWhereInput): Class!
 }
 
 """A connection to a list of items."""
@@ -2127,7 +2228,12 @@ type MessageConnection {
 input MessageCreateInput {
   text: String!
   sender: UserCreateOneWithoutMessagesInput!
-  classroom: ClassroomCreateOneInput!
+  class: ClassCreateOneWithoutMessagesInput!
+}
+
+input MessageCreateManyWithoutClassInput {
+  create: [MessageCreateWithoutClassInput!]
+  connect: [MessageWhereUniqueInput!]
 }
 
 input MessageCreateManyWithoutSenderInput {
@@ -2135,9 +2241,14 @@ input MessageCreateManyWithoutSenderInput {
   connect: [MessageWhereUniqueInput!]
 }
 
+input MessageCreateWithoutClassInput {
+  text: String!
+  sender: UserCreateOneWithoutMessagesInput!
+}
+
 input MessageCreateWithoutSenderInput {
   text: String!
-  classroom: ClassroomCreateOneInput!
+  class: ClassCreateOneWithoutMessagesInput!
 }
 
 """An edge in a connection."""
@@ -2209,7 +2320,16 @@ input MessageSubscriptionWhereInput {
 input MessageUpdateInput {
   text: String
   sender: UserUpdateOneWithoutMessagesInput
-  classroom: ClassroomUpdateOneInput
+  class: ClassUpdateOneWithoutMessagesInput
+}
+
+input MessageUpdateManyWithoutClassInput {
+  create: [MessageCreateWithoutClassInput!]
+  connect: [MessageWhereUniqueInput!]
+  disconnect: [MessageWhereUniqueInput!]
+  delete: [MessageWhereUniqueInput!]
+  update: [MessageUpdateWithWhereUniqueWithoutClassInput!]
+  upsert: [MessageUpsertWithWhereUniqueWithoutClassInput!]
 }
 
 input MessageUpdateManyWithoutSenderInput {
@@ -2221,14 +2341,30 @@ input MessageUpdateManyWithoutSenderInput {
   upsert: [MessageUpsertWithWhereUniqueWithoutSenderInput!]
 }
 
+input MessageUpdateWithoutClassDataInput {
+  text: String
+  sender: UserUpdateOneWithoutMessagesInput
+}
+
 input MessageUpdateWithoutSenderDataInput {
   text: String
-  classroom: ClassroomUpdateOneInput
+  class: ClassUpdateOneWithoutMessagesInput
+}
+
+input MessageUpdateWithWhereUniqueWithoutClassInput {
+  where: MessageWhereUniqueInput!
+  data: MessageUpdateWithoutClassDataInput!
 }
 
 input MessageUpdateWithWhereUniqueWithoutSenderInput {
   where: MessageWhereUniqueInput!
   data: MessageUpdateWithoutSenderDataInput!
+}
+
+input MessageUpsertWithWhereUniqueWithoutClassInput {
+  where: MessageWhereUniqueInput!
+  update: MessageUpdateWithoutClassDataInput!
+  create: MessageCreateWithoutClassInput!
 }
 
 input MessageUpsertWithWhereUniqueWithoutSenderInput {
@@ -2371,7 +2507,7 @@ input MessageWhereInput {
   """All values not ending with the given string."""
   text_not_ends_with: String
   sender: UserWhereInput
-  classroom: ClassroomWhereInput
+  class: ClassWhereInput
 }
 
 input MessageWhereUniqueInput {
@@ -2859,7 +2995,8 @@ type User implements Node {
   video(where: FileWhereInput): File
   stripeId: String
   stripeCustomerId: String
-  classrooms(where: ClassroomWhereInput, orderBy: ClassroomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Classroom!]
+  taught_classrooms(where: ClassroomWhereInput, orderBy: ClassroomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Classroom!]
+  studying_classrooms(where: ClassroomWhereInput, orderBy: ClassroomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Classroom!]
   followers(where: FollowWhereInput, orderBy: FollowOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Follow!]
   following(where: FollowWhereInput, orderBy: FollowOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Follow!]
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
@@ -2890,7 +3027,8 @@ input UserCreateInput {
   stripeCustomerId: String
   picture: FileCreateOneInput!
   video: FileCreateOneInput
-  classrooms: ClassroomCreateManyWithoutTeacherInput
+  taught_classrooms: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   followers: FollowCreateManyWithoutUser_followedInput
   following: FollowCreateManyWithoutUser_followingInput
   messages: MessageCreateManyWithoutSenderInput
@@ -2898,18 +3036,13 @@ input UserCreateInput {
   refunds: RefundCreateManyWithoutUserInput
 }
 
-input UserCreateManyInput {
-  create: [UserCreateInput!]
+input UserCreateManyWithoutStudying_classroomsInput {
+  create: [UserCreateWithoutStudying_classroomsInput!]
   connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateOneWithoutChargesInput {
   create: UserCreateWithoutChargesInput
-  connect: UserWhereUniqueInput
-}
-
-input UserCreateOneWithoutClassroomsInput {
-  create: UserCreateWithoutClassroomsInput
   connect: UserWhereUniqueInput
 }
 
@@ -2933,6 +3066,11 @@ input UserCreateOneWithoutRefundsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutTaught_classroomsInput {
+  create: UserCreateWithoutTaught_classroomsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateWithoutChargesInput {
   auth0Id: String!
   username: String!
@@ -2946,30 +3084,11 @@ input UserCreateWithoutChargesInput {
   stripeCustomerId: String
   picture: FileCreateOneInput!
   video: FileCreateOneInput
-  classrooms: ClassroomCreateManyWithoutTeacherInput
+  taught_classrooms: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   followers: FollowCreateManyWithoutUser_followedInput
   following: FollowCreateManyWithoutUser_followingInput
   messages: MessageCreateManyWithoutSenderInput
-  refunds: RefundCreateManyWithoutUserInput
-}
-
-input UserCreateWithoutClassroomsInput {
-  auth0Id: String!
-  username: String!
-  email: String!
-  email_verified: String
-  name: String
-  gender: Gender!
-  description: String
-  url: String
-  stripeId: String
-  stripeCustomerId: String
-  picture: FileCreateOneInput!
-  video: FileCreateOneInput
-  followers: FollowCreateManyWithoutUser_followedInput
-  following: FollowCreateManyWithoutUser_followingInput
-  messages: MessageCreateManyWithoutSenderInput
-  charges: ChargeCreateManyWithoutUserInput
   refunds: RefundCreateManyWithoutUserInput
 }
 
@@ -2986,7 +3105,8 @@ input UserCreateWithoutFollowersInput {
   stripeCustomerId: String
   picture: FileCreateOneInput!
   video: FileCreateOneInput
-  classrooms: ClassroomCreateManyWithoutTeacherInput
+  taught_classrooms: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   following: FollowCreateManyWithoutUser_followingInput
   messages: MessageCreateManyWithoutSenderInput
   charges: ChargeCreateManyWithoutUserInput
@@ -3006,7 +3126,8 @@ input UserCreateWithoutFollowingInput {
   stripeCustomerId: String
   picture: FileCreateOneInput!
   video: FileCreateOneInput
-  classrooms: ClassroomCreateManyWithoutTeacherInput
+  taught_classrooms: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   followers: FollowCreateManyWithoutUser_followedInput
   messages: MessageCreateManyWithoutSenderInput
   charges: ChargeCreateManyWithoutUserInput
@@ -3026,7 +3147,8 @@ input UserCreateWithoutMessagesInput {
   stripeCustomerId: String
   picture: FileCreateOneInput!
   video: FileCreateOneInput
-  classrooms: ClassroomCreateManyWithoutTeacherInput
+  taught_classrooms: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   followers: FollowCreateManyWithoutUser_followedInput
   following: FollowCreateManyWithoutUser_followingInput
   charges: ChargeCreateManyWithoutUserInput
@@ -3046,11 +3168,54 @@ input UserCreateWithoutRefundsInput {
   stripeCustomerId: String
   picture: FileCreateOneInput!
   video: FileCreateOneInput
-  classrooms: ClassroomCreateManyWithoutTeacherInput
+  taught_classrooms: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   followers: FollowCreateManyWithoutUser_followedInput
   following: FollowCreateManyWithoutUser_followingInput
   messages: MessageCreateManyWithoutSenderInput
   charges: ChargeCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutStudying_classroomsInput {
+  auth0Id: String!
+  username: String!
+  email: String!
+  email_verified: String
+  name: String
+  gender: Gender!
+  description: String
+  url: String
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileCreateOneInput!
+  video: FileCreateOneInput
+  taught_classrooms: ClassroomCreateManyWithoutTeacherInput
+  followers: FollowCreateManyWithoutUser_followedInput
+  following: FollowCreateManyWithoutUser_followingInput
+  messages: MessageCreateManyWithoutSenderInput
+  charges: ChargeCreateManyWithoutUserInput
+  refunds: RefundCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutTaught_classroomsInput {
+  auth0Id: String!
+  username: String!
+  email: String!
+  email_verified: String
+  name: String
+  gender: Gender!
+  description: String
+  url: String
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileCreateOneInput!
+  video: FileCreateOneInput
+  studying_classrooms: ClassroomCreateManyWithoutStudentsInput
+  followers: FollowCreateManyWithoutUser_followedInput
+  following: FollowCreateManyWithoutUser_followingInput
+  messages: MessageCreateManyWithoutSenderInput
+  charges: ChargeCreateManyWithoutUserInput
+  refunds: RefundCreateManyWithoutUserInput
 }
 
 """An edge in a connection."""
@@ -3146,27 +3311,6 @@ input UserSubscriptionWhereInput {
   node: UserWhereInput
 }
 
-input UserUpdateDataInput {
-  auth0Id: String
-  username: String
-  email: String
-  email_verified: String
-  name: String
-  gender: Gender
-  description: String
-  url: String
-  stripeId: String
-  stripeCustomerId: String
-  picture: FileUpdateOneInput
-  video: FileUpdateOneInput
-  classrooms: ClassroomUpdateManyWithoutTeacherInput
-  followers: FollowUpdateManyWithoutUser_followedInput
-  following: FollowUpdateManyWithoutUser_followingInput
-  messages: MessageUpdateManyWithoutSenderInput
-  charges: ChargeUpdateManyWithoutUserInput
-  refunds: RefundUpdateManyWithoutUserInput
-}
-
 input UserUpdateInput {
   auth0Id: String
   username: String
@@ -3180,7 +3324,8 @@ input UserUpdateInput {
   stripeCustomerId: String
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  classrooms: ClassroomUpdateManyWithoutTeacherInput
+  taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   followers: FollowUpdateManyWithoutUser_followedInput
   following: FollowUpdateManyWithoutUser_followingInput
   messages: MessageUpdateManyWithoutSenderInput
@@ -3188,13 +3333,13 @@ input UserUpdateInput {
   refunds: RefundUpdateManyWithoutUserInput
 }
 
-input UserUpdateManyInput {
-  create: [UserCreateInput!]
+input UserUpdateManyWithoutStudying_classroomsInput {
+  create: [UserCreateWithoutStudying_classroomsInput!]
   connect: [UserWhereUniqueInput!]
   disconnect: [UserWhereUniqueInput!]
   delete: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueNestedInput!]
-  upsert: [UserUpsertWithWhereUniqueNestedInput!]
+  update: [UserUpdateWithWhereUniqueWithoutStudying_classroomsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutStudying_classroomsInput!]
 }
 
 input UserUpdateOneWithoutChargesInput {
@@ -3203,14 +3348,6 @@ input UserUpdateOneWithoutChargesInput {
   delete: Boolean
   update: UserUpdateWithoutChargesDataInput
   upsert: UserUpsertWithoutChargesInput
-}
-
-input UserUpdateOneWithoutClassroomsInput {
-  create: UserCreateWithoutClassroomsInput
-  connect: UserWhereUniqueInput
-  delete: Boolean
-  update: UserUpdateWithoutClassroomsDataInput
-  upsert: UserUpsertWithoutClassroomsInput
 }
 
 input UserUpdateOneWithoutFollowersInput {
@@ -3245,6 +3382,14 @@ input UserUpdateOneWithoutRefundsInput {
   upsert: UserUpsertWithoutRefundsInput
 }
 
+input UserUpdateOneWithoutTaught_classroomsInput {
+  create: UserCreateWithoutTaught_classroomsInput
+  connect: UserWhereUniqueInput
+  delete: Boolean
+  update: UserUpdateWithoutTaught_classroomsDataInput
+  upsert: UserUpsertWithoutTaught_classroomsInput
+}
+
 input UserUpdateWithoutChargesDataInput {
   auth0Id: String
   username: String
@@ -3258,30 +3403,11 @@ input UserUpdateWithoutChargesDataInput {
   stripeCustomerId: String
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  classrooms: ClassroomUpdateManyWithoutTeacherInput
+  taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   followers: FollowUpdateManyWithoutUser_followedInput
   following: FollowUpdateManyWithoutUser_followingInput
   messages: MessageUpdateManyWithoutSenderInput
-  refunds: RefundUpdateManyWithoutUserInput
-}
-
-input UserUpdateWithoutClassroomsDataInput {
-  auth0Id: String
-  username: String
-  email: String
-  email_verified: String
-  name: String
-  gender: Gender
-  description: String
-  url: String
-  stripeId: String
-  stripeCustomerId: String
-  picture: FileUpdateOneInput
-  video: FileUpdateOneInput
-  followers: FollowUpdateManyWithoutUser_followedInput
-  following: FollowUpdateManyWithoutUser_followingInput
-  messages: MessageUpdateManyWithoutSenderInput
-  charges: ChargeUpdateManyWithoutUserInput
   refunds: RefundUpdateManyWithoutUserInput
 }
 
@@ -3298,7 +3424,8 @@ input UserUpdateWithoutFollowersDataInput {
   stripeCustomerId: String
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  classrooms: ClassroomUpdateManyWithoutTeacherInput
+  taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   following: FollowUpdateManyWithoutUser_followingInput
   messages: MessageUpdateManyWithoutSenderInput
   charges: ChargeUpdateManyWithoutUserInput
@@ -3318,7 +3445,8 @@ input UserUpdateWithoutFollowingDataInput {
   stripeCustomerId: String
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  classrooms: ClassroomUpdateManyWithoutTeacherInput
+  taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   followers: FollowUpdateManyWithoutUser_followedInput
   messages: MessageUpdateManyWithoutSenderInput
   charges: ChargeUpdateManyWithoutUserInput
@@ -3338,7 +3466,8 @@ input UserUpdateWithoutMessagesDataInput {
   stripeCustomerId: String
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  classrooms: ClassroomUpdateManyWithoutTeacherInput
+  taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   followers: FollowUpdateManyWithoutUser_followedInput
   following: FollowUpdateManyWithoutUser_followingInput
   charges: ChargeUpdateManyWithoutUserInput
@@ -3358,26 +3487,64 @@ input UserUpdateWithoutRefundsDataInput {
   stripeCustomerId: String
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  classrooms: ClassroomUpdateManyWithoutTeacherInput
+  taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   followers: FollowUpdateManyWithoutUser_followedInput
   following: FollowUpdateManyWithoutUser_followingInput
   messages: MessageUpdateManyWithoutSenderInput
   charges: ChargeUpdateManyWithoutUserInput
 }
 
-input UserUpdateWithWhereUniqueNestedInput {
+input UserUpdateWithoutStudying_classroomsDataInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified: String
+  name: String
+  gender: Gender
+  description: String
+  url: String
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileUpdateOneInput
+  video: FileUpdateOneInput
+  taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  followers: FollowUpdateManyWithoutUser_followedInput
+  following: FollowUpdateManyWithoutUser_followingInput
+  messages: MessageUpdateManyWithoutSenderInput
+  charges: ChargeUpdateManyWithoutUserInput
+  refunds: RefundUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutTaught_classroomsDataInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified: String
+  name: String
+  gender: Gender
+  description: String
+  url: String
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileUpdateOneInput
+  video: FileUpdateOneInput
+  studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
+  followers: FollowUpdateManyWithoutUser_followedInput
+  following: FollowUpdateManyWithoutUser_followingInput
+  messages: MessageUpdateManyWithoutSenderInput
+  charges: ChargeUpdateManyWithoutUserInput
+  refunds: RefundUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithWhereUniqueWithoutStudying_classroomsInput {
   where: UserWhereUniqueInput!
-  data: UserUpdateDataInput!
+  data: UserUpdateWithoutStudying_classroomsDataInput!
 }
 
 input UserUpsertWithoutChargesInput {
   update: UserUpdateWithoutChargesDataInput!
   create: UserCreateWithoutChargesInput!
-}
-
-input UserUpsertWithoutClassroomsInput {
-  update: UserUpdateWithoutClassroomsDataInput!
-  create: UserCreateWithoutClassroomsInput!
 }
 
 input UserUpsertWithoutFollowersInput {
@@ -3400,10 +3567,15 @@ input UserUpsertWithoutRefundsInput {
   create: UserCreateWithoutRefundsInput!
 }
 
-input UserUpsertWithWhereUniqueNestedInput {
+input UserUpsertWithoutTaught_classroomsInput {
+  update: UserUpdateWithoutTaught_classroomsDataInput!
+  create: UserCreateWithoutTaught_classroomsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutStudying_classroomsInput {
   where: UserWhereUniqueInput!
-  update: UserUpdateDataInput!
-  create: UserCreateInput!
+  update: UserUpdateWithoutStudying_classroomsDataInput!
+  create: UserCreateWithoutStudying_classroomsInput!
 }
 
 input UserWhereInput {
@@ -3871,9 +4043,12 @@ input UserWhereInput {
   stripeCustomerId_not_ends_with: String
   picture: FileWhereInput
   video: FileWhereInput
-  classrooms_every: ClassroomWhereInput
-  classrooms_some: ClassroomWhereInput
-  classrooms_none: ClassroomWhereInput
+  taught_classrooms_every: ClassroomWhereInput
+  taught_classrooms_some: ClassroomWhereInput
+  taught_classrooms_none: ClassroomWhereInput
+  studying_classrooms_every: ClassroomWhereInput
+  studying_classrooms_some: ClassroomWhereInput
+  studying_classrooms_none: ClassroomWhereInput
   followers_every: FollowWhereInput
   followers_some: FollowWhereInput
   followers_none: FollowWhereInput
@@ -3907,14 +4082,12 @@ export const Prisma = makePrismaBindingClass<BindingConstructor<Prisma>>({typeDe
  * Types
 */
 
-export type MessageOrderByInput =   'id_ASC' |
+export type FollowOrderByInput =   'id_ASC' |
   'id_DESC' |
   'createdAt_ASC' |
   'createdAt_DESC' |
   'updatedAt_ASC' |
-  'updatedAt_DESC' |
-  'text_ASC' |
-  'text_DESC'
+  'updatedAt_DESC'
 
 export type UserOrderByInput =   'id_ASC' |
   'id_DESC' |
@@ -3952,7 +4125,9 @@ export type ClassroomOrderByInput =   'id_ASC' |
   'name_ASC' |
   'name_DESC' |
   'description_ASC' |
-  'description_DESC'
+  'description_DESC' |
+  'price_ASC' |
+  'price_DESC'
 
 export type ClassOrderByInput =   'id_ASC' |
   'id_DESC' |
@@ -3966,14 +4141,14 @@ export type ClassOrderByInput =   'id_ASC' |
   'description_DESC' |
   'picture_ASC' |
   'picture_DESC' |
-  'duration_ASC' |
-  'duration_DESC' |
   'price_ASC' |
   'price_DESC' |
   'startDate_ASC' |
   'startDate_DESC' |
   'live_ASC' |
-  'live_DESC'
+  'live_DESC' |
+  'duration_ASC' |
+  'duration_DESC'
 
 export type FileOrderByInput =   'id_ASC' |
   'id_DESC' |
@@ -3990,12 +4165,14 @@ export type FileOrderByInput =   'id_ASC' |
   'url_ASC' |
   'url_DESC'
 
-export type FollowOrderByInput =   'id_ASC' |
+export type MessageOrderByInput =   'id_ASC' |
   'id_DESC' |
   'createdAt_ASC' |
   'createdAt_DESC' |
   'updatedAt_ASC' |
-  'updatedAt_DESC'
+  'updatedAt_DESC' |
+  'text_ASC' |
+  'text_DESC'
 
 export type MutationType =   'CREATED' |
   'UPDATED' |
@@ -4026,12 +4203,12 @@ export type RefundOrderByInput =   'id_ASC' |
   'amount_ASC' |
   'amount_DESC'
 
-export interface ChargeCreateInput {
-  amount: Float
+export interface RefundCreateInput {
   stripeId: String
+  amount: Float
+  charge: ChargeCreateOneWithoutRefundInput
   class: ClassCreateOneInput
-  user: UserCreateOneWithoutChargesInput
-  refund?: RefundCreateOneWithoutChargeInput
+  user: UserCreateOneWithoutRefundsInput
 }
 
 export interface UserWhereInput {
@@ -4200,9 +4377,12 @@ export interface UserWhereInput {
   stripeCustomerId_not_ends_with?: String
   picture?: FileWhereInput
   video?: FileWhereInput
-  classrooms_every?: ClassroomWhereInput
-  classrooms_some?: ClassroomWhereInput
-  classrooms_none?: ClassroomWhereInput
+  taught_classrooms_every?: ClassroomWhereInput
+  taught_classrooms_some?: ClassroomWhereInput
+  taught_classrooms_none?: ClassroomWhereInput
+  studying_classrooms_every?: ClassroomWhereInput
+  studying_classrooms_some?: ClassroomWhereInput
+  studying_classrooms_none?: ClassroomWhereInput
   followers_every?: FollowWhereInput
   followers_some?: FollowWhereInput
   followers_none?: FollowWhereInput
@@ -4220,19 +4400,15 @@ export interface UserWhereInput {
   refunds_none?: RefundWhereInput
 }
 
-export interface ClassroomUpdateManyWithoutTeacherInput {
-  create?: ClassroomCreateWithoutTeacherInput[] | ClassroomCreateWithoutTeacherInput
-  connect?: ClassroomWhereUniqueInput[] | ClassroomWhereUniqueInput
-  disconnect?: ClassroomWhereUniqueInput[] | ClassroomWhereUniqueInput
-  delete?: ClassroomWhereUniqueInput[] | ClassroomWhereUniqueInput
-  update?: ClassroomUpdateWithWhereUniqueWithoutTeacherInput[] | ClassroomUpdateWithWhereUniqueWithoutTeacherInput
-  upsert?: ClassroomUpsertWithWhereUniqueWithoutTeacherInput[] | ClassroomUpsertWithWhereUniqueWithoutTeacherInput
+export interface ClassroomUpdateWithWhereUniqueWithoutTeacherInput {
+  where: ClassroomWhereUniqueInput
+  data: ClassroomUpdateWithoutTeacherDataInput
 }
 
-export interface MessageWhereInput {
-  AND?: MessageWhereInput[] | MessageWhereInput
-  OR?: MessageWhereInput[] | MessageWhereInput
-  NOT?: MessageWhereInput[] | MessageWhereInput
+export interface FollowWhereInput {
+  AND?: FollowWhereInput[] | FollowWhereInput
+  OR?: FollowWhereInput[] | FollowWhereInput
+  NOT?: FollowWhereInput[] | FollowWhereInput
   id?: ID_Input
   id_not?: ID_Input
   id_in?: ID_Input[] | ID_Input
@@ -4263,27 +4439,16 @@ export interface MessageWhereInput {
   updatedAt_lte?: DateTime
   updatedAt_gt?: DateTime
   updatedAt_gte?: DateTime
-  text?: String
-  text_not?: String
-  text_in?: String[] | String
-  text_not_in?: String[] | String
-  text_lt?: String
-  text_lte?: String
-  text_gt?: String
-  text_gte?: String
-  text_contains?: String
-  text_not_contains?: String
-  text_starts_with?: String
-  text_not_starts_with?: String
-  text_ends_with?: String
-  text_not_ends_with?: String
-  sender?: UserWhereInput
-  classroom?: ClassroomWhereInput
+  user_following?: UserWhereInput
+  user_followed?: UserWhereInput
 }
 
-export interface ClassroomUpdateWithWhereUniqueWithoutTeacherInput {
-  where: ClassroomWhereUniqueInput
-  data: ClassroomUpdateWithoutTeacherDataInput
+export interface ClassroomUpdateWithoutTeacherDataInput {
+  name?: String
+  description?: String
+  price?: Float
+  classes?: ClassUpdateManyWithoutClassroomInput
+  students?: UserUpdateManyWithoutStudying_classroomsInput
 }
 
 export interface RefundWhereInput {
@@ -4347,681 +4512,14 @@ export interface RefundWhereInput {
   user?: UserWhereInput
 }
 
-export interface ChargeCreateManyWithoutUserInput {
-  create?: ChargeCreateWithoutUserInput[] | ChargeCreateWithoutUserInput
-  connect?: ChargeWhereUniqueInput[] | ChargeWhereUniqueInput
-}
-
-export interface ChargeUpsertWithWhereUniqueWithoutUserInput {
-  where: ChargeWhereUniqueInput
-  update: ChargeUpdateWithoutUserDataInput
-  create: ChargeCreateWithoutUserInput
-}
-
-export interface ChargeCreateWithoutUserInput {
-  amount: Float
-  stripeId: String
-  class: ClassCreateOneInput
-  refund?: RefundCreateOneWithoutChargeInput
-}
-
-export interface ClassroomUpdateWithoutTeacherDataInput {
-  name?: String
-  description?: String
-  classes?: ClassUpdateManyWithoutClassroomInput
-  students?: UserUpdateManyInput
-}
-
-export interface ClassCreateOneInput {
-  create?: ClassCreateInput
-  connect?: ClassWhereUniqueInput
-}
-
-export interface ChargeSubscriptionWhereInput {
-  AND?: ChargeSubscriptionWhereInput[] | ChargeSubscriptionWhereInput
-  OR?: ChargeSubscriptionWhereInput[] | ChargeSubscriptionWhereInput
-  NOT?: ChargeSubscriptionWhereInput[] | ChargeSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: ChargeWhereInput
-}
-
-export interface ClassCreateInput {
-  name: String
-  description?: String
-  picture?: String
-  duration?: Int
-  price?: Float
-  startDate?: DateTime
-  live?: Boolean
-  video?: FileCreateOneInput
-  files?: FileCreateManyInput
-  vods?: FileCreateManyInput
-  classroom?: ClassroomCreateOneWithoutClassesInput
-}
-
-export interface FileSubscriptionWhereInput {
-  AND?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput
-  OR?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput
-  NOT?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: FileWhereInput
-}
-
-export interface ClassroomCreateOneWithoutClassesInput {
-  create?: ClassroomCreateWithoutClassesInput
-  connect?: ClassroomWhereUniqueInput
-}
-
-export interface ClassroomSubscriptionWhereInput {
-  AND?: ClassroomSubscriptionWhereInput[] | ClassroomSubscriptionWhereInput
-  OR?: ClassroomSubscriptionWhereInput[] | ClassroomSubscriptionWhereInput
-  NOT?: ClassroomSubscriptionWhereInput[] | ClassroomSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: ClassroomWhereInput
-}
-
-export interface ClassroomCreateWithoutClassesInput {
-  name: String
-  description: String
-  teacher: UserCreateOneWithoutClassroomsInput
-  students?: UserCreateManyInput
-}
-
-export interface FollowSubscriptionWhereInput {
-  AND?: FollowSubscriptionWhereInput[] | FollowSubscriptionWhereInput
-  OR?: FollowSubscriptionWhereInput[] | FollowSubscriptionWhereInput
-  NOT?: FollowSubscriptionWhereInput[] | FollowSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: FollowWhereInput
-}
-
-export interface RefundCreateOneWithoutChargeInput {
-  create?: RefundCreateWithoutChargeInput
-  connect?: RefundWhereUniqueInput
-}
-
-export interface UserSubscriptionWhereInput {
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: UserWhereInput
-}
-
-export interface RefundCreateWithoutChargeInput {
-  stripeId: String
-  amount: Float
-  class: ClassCreateOneInput
-  user: UserCreateOneWithoutRefundsInput
-}
-
-export interface RefundUpdateInput {
-  stripeId?: String
-  amount?: Float
-  charge?: ChargeUpdateOneWithoutRefundInput
-  class?: ClassUpdateOneInput
-  user?: UserUpdateOneWithoutRefundsInput
-}
-
-export interface UserCreateOneWithoutRefundsInput {
-  create?: UserCreateWithoutRefundsInput
+export interface UserCreateOneWithoutFollowersInput {
+  create?: UserCreateWithoutFollowersInput
   connect?: UserWhereUniqueInput
 }
 
-export interface UserUpsertWithoutMessagesInput {
-  update: UserUpdateWithoutMessagesDataInput
-  create: UserCreateWithoutMessagesInput
-}
-
-export interface UserCreateWithoutRefundsInput {
-  auth0Id: String
-  username: String
-  email: String
-  email_verified?: String
-  name?: String
-  gender: Gender
-  description?: String
-  url?: String
-  stripeId?: String
-  stripeCustomerId?: String
-  picture: FileCreateOneInput
-  video?: FileCreateOneInput
-  classrooms?: ClassroomCreateManyWithoutTeacherInput
-  followers?: FollowCreateManyWithoutUser_followedInput
-  following?: FollowCreateManyWithoutUser_followingInput
-  messages?: MessageCreateManyWithoutSenderInput
-  charges?: ChargeCreateManyWithoutUserInput
-}
-
-export interface FollowWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface RefundCreateManyWithoutUserInput {
-  create?: RefundCreateWithoutUserInput[] | RefundCreateWithoutUserInput
-  connect?: RefundWhereUniqueInput[] | RefundWhereUniqueInput
-}
-
-export interface ClassWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface RefundCreateWithoutUserInput {
-  stripeId: String
-  amount: Float
-  charge: ChargeCreateOneWithoutRefundInput
-  class: ClassCreateOneInput
-}
-
-export interface MessageWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface ChargeCreateOneWithoutRefundInput {
-  create?: ChargeCreateWithoutRefundInput
-  connect?: ChargeWhereUniqueInput
-}
-
-export interface RefundWhereUniqueInput {
-  id?: ID_Input
-  stripeId?: String
-}
-
-export interface ChargeCreateWithoutRefundInput {
-  amount: Float
-  stripeId: String
-  class: ClassCreateOneInput
-  user: UserCreateOneWithoutChargesInput
-}
-
-export interface UserUpdateOneWithoutMessagesInput {
-  create?: UserCreateWithoutMessagesInput
-  connect?: UserWhereUniqueInput
-  delete?: Boolean
-  update?: UserUpdateWithoutMessagesDataInput
-  upsert?: UserUpsertWithoutMessagesInput
-}
-
-export interface UserCreateOneWithoutChargesInput {
-  create?: UserCreateWithoutChargesInput
-  connect?: UserWhereUniqueInput
-}
-
-export interface FileUpdateInput {
-  name?: String
-  secret?: String
-  contentType?: String
-  url?: String
-}
-
-export interface UserCreateWithoutChargesInput {
-  auth0Id: String
-  username: String
-  email: String
-  email_verified?: String
-  name?: String
-  gender: Gender
-  description?: String
-  url?: String
-  stripeId?: String
-  stripeCustomerId?: String
-  picture: FileCreateOneInput
-  video?: FileCreateOneInput
-  classrooms?: ClassroomCreateManyWithoutTeacherInput
-  followers?: FollowCreateManyWithoutUser_followedInput
-  following?: FollowCreateManyWithoutUser_followingInput
-  messages?: MessageCreateManyWithoutSenderInput
-  refunds?: RefundCreateManyWithoutUserInput
-}
-
-export interface ClassroomUpdateInput {
-  name?: String
-  description?: String
-  classes?: ClassUpdateManyWithoutClassroomInput
-  teacher?: UserUpdateOneWithoutClassroomsInput
-  students?: UserUpdateManyInput
-}
-
-export interface FollowCreateInput {
-  user_following: UserCreateOneWithoutFollowingInput
-  user_followed: UserCreateOneWithoutFollowersInput
-}
-
-export interface ClassroomUpsertWithWhereUniqueWithoutTeacherInput {
-  where: ClassroomWhereUniqueInput
-  update: ClassroomUpdateWithoutTeacherDataInput
-  create: ClassroomCreateWithoutTeacherInput
-}
-
-export interface MessageCreateInput {
-  text: String
-  sender: UserCreateOneWithoutMessagesInput
-  classroom: ClassroomCreateOneInput
-}
-
-export interface FollowUpsertWithWhereUniqueWithoutUser_followedInput {
-  where: FollowWhereUniqueInput
-  update: FollowUpdateWithoutUser_followedDataInput
-  create: FollowCreateWithoutUser_followedInput
-}
-
-export interface UserCreateOneWithoutMessagesInput {
-  create?: UserCreateWithoutMessagesInput
-  connect?: UserWhereUniqueInput
-}
-
-export interface MessageUpsertWithWhereUniqueWithoutSenderInput {
-  where: MessageWhereUniqueInput
-  update: MessageUpdateWithoutSenderDataInput
-  create: MessageCreateWithoutSenderInput
-}
-
-export interface UserCreateWithoutMessagesInput {
-  auth0Id: String
-  username: String
-  email: String
-  email_verified?: String
-  name?: String
-  gender: Gender
-  description?: String
-  url?: String
-  stripeId?: String
-  stripeCustomerId?: String
-  picture: FileCreateOneInput
-  video?: FileCreateOneInput
-  classrooms?: ClassroomCreateManyWithoutTeacherInput
-  followers?: FollowCreateManyWithoutUser_followedInput
-  following?: FollowCreateManyWithoutUser_followingInput
-  charges?: ChargeCreateManyWithoutUserInput
-  refunds?: RefundCreateManyWithoutUserInput
-}
-
-export interface UserUpsertWithoutClassroomsInput {
-  update: UserUpdateWithoutClassroomsDataInput
-  create: UserCreateWithoutClassroomsInput
-}
-
-export interface RefundUpdateManyWithoutUserInput {
-  create?: RefundCreateWithoutUserInput[] | RefundCreateWithoutUserInput
-  connect?: RefundWhereUniqueInput[] | RefundWhereUniqueInput
-  disconnect?: RefundWhereUniqueInput[] | RefundWhereUniqueInput
-  delete?: RefundWhereUniqueInput[] | RefundWhereUniqueInput
-  update?: RefundUpdateWithWhereUniqueWithoutUserInput[] | RefundUpdateWithWhereUniqueWithoutUserInput
-  upsert?: RefundUpsertWithWhereUniqueWithoutUserInput[] | RefundUpsertWithWhereUniqueWithoutUserInput
-}
-
-export interface UserUpsertWithoutFollowersInput {
-  update: UserUpdateWithoutFollowersDataInput
-  create: UserCreateWithoutFollowersInput
-}
-
-export interface RefundCreateInput {
-  stripeId: String
-  amount: Float
-  charge: ChargeCreateOneWithoutRefundInput
-  class: ClassCreateOneInput
-  user: UserCreateOneWithoutRefundsInput
-}
-
-export interface ChargeUpsertWithoutRefundInput {
-  update: ChargeUpdateWithoutRefundDataInput
-  create: ChargeCreateWithoutRefundInput
-}
-
-export interface UserUpdateInput {
-  auth0Id?: String
-  username?: String
-  email?: String
-  email_verified?: String
-  name?: String
-  gender?: Gender
-  description?: String
-  url?: String
-  stripeId?: String
-  stripeCustomerId?: String
-  picture?: FileUpdateOneInput
-  video?: FileUpdateOneInput
-  classrooms?: ClassroomUpdateManyWithoutTeacherInput
-  followers?: FollowUpdateManyWithoutUser_followedInput
-  following?: FollowUpdateManyWithoutUser_followingInput
-  messages?: MessageUpdateManyWithoutSenderInput
-  charges?: ChargeUpdateManyWithoutUserInput
-  refunds?: RefundUpdateManyWithoutUserInput
-}
-
-export interface UserUpdateWithoutChargesDataInput {
-  auth0Id?: String
-  username?: String
-  email?: String
-  email_verified?: String
-  name?: String
-  gender?: Gender
-  description?: String
-  url?: String
-  stripeId?: String
-  stripeCustomerId?: String
-  picture?: FileUpdateOneInput
-  video?: FileUpdateOneInput
-  classrooms?: ClassroomUpdateManyWithoutTeacherInput
-  followers?: FollowUpdateManyWithoutUser_followedInput
-  following?: FollowUpdateManyWithoutUser_followingInput
-  messages?: MessageUpdateManyWithoutSenderInput
-  refunds?: RefundUpdateManyWithoutUserInput
-}
-
-export interface FileUpdateOneInput {
-  create?: FileCreateInput
-  connect?: FileWhereUniqueInput
-  delete?: Boolean
-  update?: FileUpdateDataInput
-  upsert?: FileUpsertNestedInput
-}
-
-export interface ChargeUpdateWithoutRefundDataInput {
-  amount?: Float
-  stripeId?: String
-  class?: ClassUpdateOneInput
-  user?: UserUpdateOneWithoutChargesInput
-}
-
-export interface FileUpdateDataInput {
-  name?: String
-  secret?: String
-  contentType?: String
-  url?: String
-}
-
-export interface RefundUpdateWithoutUserDataInput {
-  stripeId?: String
-  amount?: Float
-  charge?: ChargeUpdateOneWithoutRefundInput
-  class?: ClassUpdateOneInput
-}
-
-export interface FileUpsertNestedInput {
-  update: FileUpdateDataInput
-  create: FileCreateInput
-}
-
-export interface UserCreateInput {
-  auth0Id: String
-  username: String
-  email: String
-  email_verified?: String
-  name?: String
-  gender: Gender
-  description?: String
-  url?: String
-  stripeId?: String
-  stripeCustomerId?: String
-  picture: FileCreateOneInput
-  video?: FileCreateOneInput
-  classrooms?: ClassroomCreateManyWithoutTeacherInput
-  followers?: FollowCreateManyWithoutUser_followedInput
-  following?: FollowCreateManyWithoutUser_followingInput
-  messages?: MessageCreateManyWithoutSenderInput
-  charges?: ChargeCreateManyWithoutUserInput
-  refunds?: RefundCreateManyWithoutUserInput
-}
-
-export interface ChargeWhereInput {
-  AND?: ChargeWhereInput[] | ChargeWhereInput
-  OR?: ChargeWhereInput[] | ChargeWhereInput
-  NOT?: ChargeWhereInput[] | ChargeWhereInput
-  id?: ID_Input
-  id_not?: ID_Input
-  id_in?: ID_Input[] | ID_Input
-  id_not_in?: ID_Input[] | ID_Input
-  id_lt?: ID_Input
-  id_lte?: ID_Input
-  id_gt?: ID_Input
-  id_gte?: ID_Input
-  id_contains?: ID_Input
-  id_not_contains?: ID_Input
-  id_starts_with?: ID_Input
-  id_not_starts_with?: ID_Input
-  id_ends_with?: ID_Input
-  id_not_ends_with?: ID_Input
-  createdAt?: DateTime
-  createdAt_not?: DateTime
-  createdAt_in?: DateTime[] | DateTime
-  createdAt_not_in?: DateTime[] | DateTime
-  createdAt_lt?: DateTime
-  createdAt_lte?: DateTime
-  createdAt_gt?: DateTime
-  createdAt_gte?: DateTime
-  updatedAt?: DateTime
-  updatedAt_not?: DateTime
-  updatedAt_in?: DateTime[] | DateTime
-  updatedAt_not_in?: DateTime[] | DateTime
-  updatedAt_lt?: DateTime
-  updatedAt_lte?: DateTime
-  updatedAt_gt?: DateTime
-  updatedAt_gte?: DateTime
-  amount?: Float
-  amount_not?: Float
-  amount_in?: Float[] | Float
-  amount_not_in?: Float[] | Float
-  amount_lt?: Float
-  amount_lte?: Float
-  amount_gt?: Float
-  amount_gte?: Float
-  stripeId?: String
-  stripeId_not?: String
-  stripeId_in?: String[] | String
-  stripeId_not_in?: String[] | String
-  stripeId_lt?: String
-  stripeId_lte?: String
-  stripeId_gt?: String
-  stripeId_gte?: String
-  stripeId_contains?: String
-  stripeId_not_contains?: String
-  stripeId_starts_with?: String
-  stripeId_not_starts_with?: String
-  stripeId_ends_with?: String
-  stripeId_not_ends_with?: String
-  class?: ClassWhereInput
-  user?: UserWhereInput
-  refund?: RefundWhereInput
-}
-
-export interface FileCreateInput {
-  name: String
-  secret?: String
-  contentType?: String
-  url: String
-}
-
-export interface FollowWhereInput {
-  AND?: FollowWhereInput[] | FollowWhereInput
-  OR?: FollowWhereInput[] | FollowWhereInput
-  NOT?: FollowWhereInput[] | FollowWhereInput
-  id?: ID_Input
-  id_not?: ID_Input
-  id_in?: ID_Input[] | ID_Input
-  id_not_in?: ID_Input[] | ID_Input
-  id_lt?: ID_Input
-  id_lte?: ID_Input
-  id_gt?: ID_Input
-  id_gte?: ID_Input
-  id_contains?: ID_Input
-  id_not_contains?: ID_Input
-  id_starts_with?: ID_Input
-  id_not_starts_with?: ID_Input
-  id_ends_with?: ID_Input
-  id_not_ends_with?: ID_Input
-  createdAt?: DateTime
-  createdAt_not?: DateTime
-  createdAt_in?: DateTime[] | DateTime
-  createdAt_not_in?: DateTime[] | DateTime
-  createdAt_lt?: DateTime
-  createdAt_lte?: DateTime
-  createdAt_gt?: DateTime
-  createdAt_gte?: DateTime
-  updatedAt?: DateTime
-  updatedAt_not?: DateTime
-  updatedAt_in?: DateTime[] | DateTime
-  updatedAt_not_in?: DateTime[] | DateTime
-  updatedAt_lt?: DateTime
-  updatedAt_lte?: DateTime
-  updatedAt_gt?: DateTime
-  updatedAt_gte?: DateTime
-  user_following?: UserWhereInput
-  user_followed?: UserWhereInput
-}
-
-export interface ClassroomCreateWithoutTeacherInput {
-  name: String
-  description: String
-  classes?: ClassCreateManyWithoutClassroomInput
-  students?: UserCreateManyInput
-}
-
-export interface ClassCreateWithoutClassroomInput {
-  name: String
-  description?: String
-  picture?: String
-  duration?: Int
-  price?: Float
-  startDate?: DateTime
-  live?: Boolean
-  video?: FileCreateOneInput
-  files?: FileCreateManyInput
-  vods?: FileCreateManyInput
-}
-
-export interface UserCreateManyInput {
-  create?: UserCreateInput[] | UserCreateInput
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
-}
-
-export interface ClassUpdateManyWithoutClassroomInput {
-  create?: ClassCreateWithoutClassroomInput[] | ClassCreateWithoutClassroomInput
-  connect?: ClassWhereUniqueInput[] | ClassWhereUniqueInput
-  disconnect?: ClassWhereUniqueInput[] | ClassWhereUniqueInput
-  delete?: ClassWhereUniqueInput[] | ClassWhereUniqueInput
-  update?: ClassUpdateWithWhereUniqueWithoutClassroomInput[] | ClassUpdateWithWhereUniqueWithoutClassroomInput
-  upsert?: ClassUpsertWithWhereUniqueWithoutClassroomInput[] | ClassUpsertWithWhereUniqueWithoutClassroomInput
-}
-
-export interface FollowCreateWithoutUser_followedInput {
-  user_following: UserCreateOneWithoutFollowingInput
-}
-
-export interface ClassUpdateWithWhereUniqueWithoutClassroomInput {
-  where: ClassWhereUniqueInput
-  data: ClassUpdateWithoutClassroomDataInput
-}
-
-export interface UserCreateWithoutFollowingInput {
-  auth0Id: String
-  username: String
-  email: String
-  email_verified?: String
-  name?: String
-  gender: Gender
-  description?: String
-  url?: String
-  stripeId?: String
-  stripeCustomerId?: String
-  picture: FileCreateOneInput
-  video?: FileCreateOneInput
-  classrooms?: ClassroomCreateManyWithoutTeacherInput
-  followers?: FollowCreateManyWithoutUser_followedInput
-  messages?: MessageCreateManyWithoutSenderInput
-  charges?: ChargeCreateManyWithoutUserInput
-  refunds?: RefundCreateManyWithoutUserInput
-}
-
-export interface ClassUpdateWithoutClassroomDataInput {
-  name?: String
-  description?: String
-  picture?: String
-  duration?: Int
-  price?: Float
-  startDate?: DateTime
-  live?: Boolean
-  video?: FileUpdateOneInput
-  files?: FileUpdateManyInput
-  vods?: FileUpdateManyInput
-}
-
-export interface MessageCreateWithoutSenderInput {
-  text: String
-  classroom: ClassroomCreateOneInput
-}
-
-export interface FileUpdateManyInput {
-  create?: FileCreateInput[] | FileCreateInput
-  connect?: FileWhereUniqueInput[] | FileWhereUniqueInput
-  disconnect?: FileWhereUniqueInput[] | FileWhereUniqueInput
-  delete?: FileWhereUniqueInput[] | FileWhereUniqueInput
-  update?: FileUpdateWithWhereUniqueNestedInput[] | FileUpdateWithWhereUniqueNestedInput
-  upsert?: FileUpsertWithWhereUniqueNestedInput[] | FileUpsertWithWhereUniqueNestedInput
-}
-
-export interface ClassroomCreateInput {
-  name: String
-  description: String
-  classes?: ClassCreateManyWithoutClassroomInput
-  teacher: UserCreateOneWithoutClassroomsInput
-  students?: UserCreateManyInput
-}
-
-export interface FileUpdateWithWhereUniqueNestedInput {
-  where: FileWhereUniqueInput
-  data: FileUpdateDataInput
-}
-
-export interface UserCreateWithoutClassroomsInput {
-  auth0Id: String
-  username: String
-  email: String
-  email_verified?: String
-  name?: String
-  gender: Gender
-  description?: String
-  url?: String
-  stripeId?: String
-  stripeCustomerId?: String
-  picture: FileCreateOneInput
-  video?: FileCreateOneInput
-  followers?: FollowCreateManyWithoutUser_followedInput
-  following?: FollowCreateManyWithoutUser_followingInput
-  messages?: MessageCreateManyWithoutSenderInput
-  charges?: ChargeCreateManyWithoutUserInput
-  refunds?: RefundCreateManyWithoutUserInput
-}
-
-export interface FileUpsertWithWhereUniqueNestedInput {
-  where: FileWhereUniqueInput
-  update: FileUpdateDataInput
-  create: FileCreateInput
-}
-
-export interface FollowCreateWithoutUser_followingInput {
-  user_followed: UserCreateOneWithoutFollowersInput
-}
-
-export interface ClassUpsertWithWhereUniqueWithoutClassroomInput {
-  where: ClassWhereUniqueInput
-  update: ClassUpdateWithoutClassroomDataInput
-  create: ClassCreateWithoutClassroomInput
+export interface RefundUpdateWithWhereUniqueWithoutUserInput {
+  where: RefundWhereUniqueInput
+  data: RefundUpdateWithoutUserDataInput
 }
 
 export interface UserCreateWithoutFollowersInput {
@@ -5037,36 +4535,60 @@ export interface UserCreateWithoutFollowersInput {
   stripeCustomerId?: String
   picture: FileCreateOneInput
   video?: FileCreateOneInput
-  classrooms?: ClassroomCreateManyWithoutTeacherInput
+  taught_classrooms?: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms?: ClassroomCreateManyWithoutStudentsInput
   following?: FollowCreateManyWithoutUser_followingInput
   messages?: MessageCreateManyWithoutSenderInput
   charges?: ChargeCreateManyWithoutUserInput
   refunds?: RefundCreateManyWithoutUserInput
 }
 
-export interface UserUpdateManyInput {
-  create?: UserCreateInput[] | UserCreateInput
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput
-  update?: UserUpdateWithWhereUniqueNestedInput[] | UserUpdateWithWhereUniqueNestedInput
-  upsert?: UserUpsertWithWhereUniqueNestedInput[] | UserUpsertWithWhereUniqueNestedInput
+export interface ClassUpdateManyWithoutClassroomInput {
+  create?: ClassCreateWithoutClassroomInput[] | ClassCreateWithoutClassroomInput
+  connect?: ClassWhereUniqueInput[] | ClassWhereUniqueInput
+  disconnect?: ClassWhereUniqueInput[] | ClassWhereUniqueInput
+  delete?: ClassWhereUniqueInput[] | ClassWhereUniqueInput
+  update?: ClassUpdateWithWhereUniqueWithoutClassroomInput[] | ClassUpdateWithWhereUniqueWithoutClassroomInput
+  upsert?: ClassUpsertWithWhereUniqueWithoutClassroomInput[] | ClassUpsertWithWhereUniqueWithoutClassroomInput
 }
 
-export interface MessageSubscriptionWhereInput {
-  AND?: MessageSubscriptionWhereInput[] | MessageSubscriptionWhereInput
-  OR?: MessageSubscriptionWhereInput[] | MessageSubscriptionWhereInput
-  NOT?: MessageSubscriptionWhereInput[] | MessageSubscriptionWhereInput
+export interface ChargeCreateManyWithoutUserInput {
+  create?: ChargeCreateWithoutUserInput[] | ChargeCreateWithoutUserInput
+  connect?: ChargeWhereUniqueInput[] | ChargeWhereUniqueInput
+}
+
+export interface ChargeSubscriptionWhereInput {
+  AND?: ChargeSubscriptionWhereInput[] | ChargeSubscriptionWhereInput
+  OR?: ChargeSubscriptionWhereInput[] | ChargeSubscriptionWhereInput
+  NOT?: ChargeSubscriptionWhereInput[] | ChargeSubscriptionWhereInput
   mutation_in?: MutationType[] | MutationType
   updatedFields_contains?: String
   updatedFields_contains_every?: String[] | String
   updatedFields_contains_some?: String[] | String
-  node?: MessageWhereInput
+  node?: ChargeWhereInput
 }
 
-export interface UserUpdateWithWhereUniqueNestedInput {
-  where: UserWhereUniqueInput
-  data: UserUpdateDataInput
+export interface ChargeCreateWithoutUserInput {
+  amount: Float
+  stripeId: String
+  class: ClassCreateOneInput
+  refund?: RefundCreateOneWithoutChargeInput
+}
+
+export interface FileSubscriptionWhereInput {
+  AND?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput
+  OR?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput
+  NOT?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: FileWhereInput
+}
+
+export interface ClassCreateOneInput {
+  create?: ClassCreateInput
+  connect?: ClassWhereUniqueInput
 }
 
 export interface ClassWhereInput {
@@ -5145,14 +4667,6 @@ export interface ClassWhereInput {
   picture_not_starts_with?: String
   picture_ends_with?: String
   picture_not_ends_with?: String
-  duration?: Int
-  duration_not?: Int
-  duration_in?: Int[] | Int
-  duration_not_in?: Int[] | Int
-  duration_lt?: Int
-  duration_lte?: Int
-  duration_gt?: Int
-  duration_gte?: Int
   price?: Float
   price_not?: Float
   price_in?: Float[] | Float
@@ -5171,6 +4685,14 @@ export interface ClassWhereInput {
   startDate_gte?: DateTime
   live?: Boolean
   live_not?: Boolean
+  duration?: Int
+  duration_not?: Int
+  duration_in?: Int[] | Int
+  duration_not_in?: Int[] | Int
+  duration_lt?: Int
+  duration_lte?: Int
+  duration_gt?: Int
+  duration_gte?: Int
   video?: FileWhereInput
   files_every?: FileWhereInput
   files_some?: FileWhereInput
@@ -5179,9 +4701,255 @@ export interface ClassWhereInput {
   vods_some?: FileWhereInput
   vods_none?: FileWhereInput
   classroom?: ClassroomWhereInput
+  messages_every?: MessageWhereInput
+  messages_some?: MessageWhereInput
+  messages_none?: MessageWhereInput
 }
 
-export interface UserUpdateDataInput {
+export interface ClassCreateInput {
+  name: String
+  description: String
+  picture?: String
+  price?: Float
+  startDate?: DateTime
+  live?: Boolean
+  duration?: Int
+  video?: FileCreateOneInput
+  files?: FileCreateManyInput
+  vods?: FileCreateManyInput
+  classroom: ClassroomCreateOneWithoutClassesInput
+  messages?: MessageCreateManyWithoutClassInput
+}
+
+export interface FollowSubscriptionWhereInput {
+  AND?: FollowSubscriptionWhereInput[] | FollowSubscriptionWhereInput
+  OR?: FollowSubscriptionWhereInput[] | FollowSubscriptionWhereInput
+  NOT?: FollowSubscriptionWhereInput[] | FollowSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: FollowWhereInput
+}
+
+export interface RefundCreateOneWithoutChargeInput {
+  create?: RefundCreateWithoutChargeInput
+  connect?: RefundWhereUniqueInput
+}
+
+export interface UserSubscriptionWhereInput {
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: UserWhereInput
+}
+
+export interface RefundCreateWithoutChargeInput {
+  stripeId: String
+  amount: Float
+  class: ClassCreateOneInput
+  user: UserCreateOneWithoutRefundsInput
+}
+
+export interface RefundUpdateInput {
+  stripeId?: String
+  amount?: Float
+  charge?: ChargeUpdateOneWithoutRefundInput
+  class?: ClassUpdateOneInput
+  user?: UserUpdateOneWithoutRefundsInput
+}
+
+export interface UserCreateOneWithoutRefundsInput {
+  create?: UserCreateWithoutRefundsInput
+  connect?: UserWhereUniqueInput
+}
+
+export interface MessageUpdateInput {
+  text?: String
+  sender?: UserUpdateOneWithoutMessagesInput
+  class?: ClassUpdateOneWithoutMessagesInput
+}
+
+export interface UserCreateWithoutRefundsInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified?: String
+  name?: String
+  gender: Gender
+  description?: String
+  url?: String
+  stripeId?: String
+  stripeCustomerId?: String
+  picture: FileCreateOneInput
+  video?: FileCreateOneInput
+  taught_classrooms?: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms?: ClassroomCreateManyWithoutStudentsInput
+  followers?: FollowCreateManyWithoutUser_followedInput
+  following?: FollowCreateManyWithoutUser_followingInput
+  messages?: MessageCreateManyWithoutSenderInput
+  charges?: ChargeCreateManyWithoutUserInput
+}
+
+export interface FollowWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface RefundCreateManyWithoutUserInput {
+  create?: RefundCreateWithoutUserInput[] | RefundCreateWithoutUserInput
+  connect?: RefundWhereUniqueInput[] | RefundWhereUniqueInput
+}
+
+export interface ClassWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface RefundCreateWithoutUserInput {
+  stripeId: String
+  amount: Float
+  charge: ChargeCreateOneWithoutRefundInput
+  class: ClassCreateOneInput
+}
+
+export interface MessageWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface ChargeCreateOneWithoutRefundInput {
+  create?: ChargeCreateWithoutRefundInput
+  connect?: ChargeWhereUniqueInput
+}
+
+export interface RefundWhereUniqueInput {
+  id?: ID_Input
+  stripeId?: String
+}
+
+export interface ChargeCreateWithoutRefundInput {
+  amount: Float
+  stripeId: String
+  class: ClassCreateOneInput
+  user: UserCreateOneWithoutChargesInput
+}
+
+export interface ClassUpdateInput {
+  name?: String
+  description?: String
+  picture?: String
+  price?: Float
+  startDate?: DateTime
+  live?: Boolean
+  duration?: Int
+  video?: FileUpdateOneInput
+  files?: FileUpdateManyInput
+  vods?: FileUpdateManyInput
+  classroom?: ClassroomUpdateOneWithoutClassesInput
+  messages?: MessageUpdateManyWithoutClassInput
+}
+
+export interface UserCreateOneWithoutChargesInput {
+  create?: UserCreateWithoutChargesInput
+  connect?: UserWhereUniqueInput
+}
+
+export interface FollowUpdateInput {
+  user_following?: UserUpdateOneWithoutFollowingInput
+  user_followed?: UserUpdateOneWithoutFollowersInput
+}
+
+export interface UserCreateWithoutChargesInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified?: String
+  name?: String
+  gender: Gender
+  description?: String
+  url?: String
+  stripeId?: String
+  stripeCustomerId?: String
+  picture: FileCreateOneInput
+  video?: FileCreateOneInput
+  taught_classrooms?: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms?: ClassroomCreateManyWithoutStudentsInput
+  followers?: FollowCreateManyWithoutUser_followedInput
+  following?: FollowCreateManyWithoutUser_followingInput
+  messages?: MessageCreateManyWithoutSenderInput
+  refunds?: RefundCreateManyWithoutUserInput
+}
+
+export interface ClassUpsertWithWhereUniqueWithoutClassroomInput {
+  where: ClassWhereUniqueInput
+  update: ClassUpdateWithoutClassroomDataInput
+  create: ClassCreateWithoutClassroomInput
+}
+
+export interface FollowCreateInput {
+  user_following: UserCreateOneWithoutFollowingInput
+  user_followed: UserCreateOneWithoutFollowersInput
+}
+
+export interface UserUpsertWithoutMessagesInput {
+  update: UserUpdateWithoutMessagesDataInput
+  create: UserCreateWithoutMessagesInput
+}
+
+export interface ClassroomCreateInput {
+  name: String
+  description: String
+  price: Float
+  classes?: ClassCreateManyWithoutClassroomInput
+  teacher: UserCreateOneWithoutTaught_classroomsInput
+  students?: UserCreateManyWithoutStudying_classroomsInput
+}
+
+export interface UserUpsertWithoutTaught_classroomsInput {
+  update: UserUpdateWithoutTaught_classroomsDataInput
+  create: UserCreateWithoutTaught_classroomsInput
+}
+
+export interface MessageCreateInput {
+  text: String
+  sender: UserCreateOneWithoutMessagesInput
+  class: ClassCreateOneWithoutMessagesInput
+}
+
+export interface UserUpsertWithoutFollowingInput {
+  update: UserUpdateWithoutFollowingDataInput
+  create: UserCreateWithoutFollowingInput
+}
+
+export interface ChargeCreateInput {
+  amount: Float
+  stripeId: String
+  class: ClassCreateOneInput
+  user: UserCreateOneWithoutChargesInput
+  refund?: RefundCreateOneWithoutChargeInput
+}
+
+export interface ClassUpsertWithoutMessagesInput {
+  update: ClassUpdateWithoutMessagesDataInput
+  create: ClassCreateWithoutMessagesInput
+}
+
+export interface RefundUpdateWithoutUserDataInput {
+  stripeId?: String
+  amount?: Float
+  charge?: ChargeUpdateOneWithoutRefundInput
+  class?: ClassUpdateOneInput
+}
+
+export interface UserUpsertWithWhereUniqueWithoutStudying_classroomsInput {
+  where: UserWhereUniqueInput
+  update: UserUpdateWithoutStudying_classroomsDataInput
+  create: UserCreateWithoutStudying_classroomsInput
+}
+
+export interface UserUpdateInput {
   auth0Id?: String
   username?: String
   email?: String
@@ -5194,12 +4962,1055 @@ export interface UserUpdateDataInput {
   stripeCustomerId?: String
   picture?: FileUpdateOneInput
   video?: FileUpdateOneInput
-  classrooms?: ClassroomUpdateManyWithoutTeacherInput
+  taught_classrooms?: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms?: ClassroomUpdateManyWithoutStudentsInput
   followers?: FollowUpdateManyWithoutUser_followedInput
   following?: FollowUpdateManyWithoutUser_followingInput
   messages?: MessageUpdateManyWithoutSenderInput
   charges?: ChargeUpdateManyWithoutUserInput
   refunds?: RefundUpdateManyWithoutUserInput
+}
+
+export interface UserUpsertWithoutFollowersInput {
+  update: UserUpdateWithoutFollowersDataInput
+  create: UserCreateWithoutFollowersInput
+}
+
+export interface FileUpdateOneInput {
+  create?: FileCreateInput
+  connect?: FileWhereUniqueInput
+  delete?: Boolean
+  update?: FileUpdateDataInput
+  upsert?: FileUpsertNestedInput
+}
+
+export interface ChargeUpsertWithoutRefundInput {
+  update: ChargeUpdateWithoutRefundDataInput
+  create: ChargeCreateWithoutRefundInput
+}
+
+export interface FileUpdateDataInput {
+  name?: String
+  secret?: String
+  contentType?: String
+  url?: String
+}
+
+export interface UserUpdateWithoutChargesDataInput {
+  auth0Id?: String
+  username?: String
+  email?: String
+  email_verified?: String
+  name?: String
+  gender?: Gender
+  description?: String
+  url?: String
+  stripeId?: String
+  stripeCustomerId?: String
+  picture?: FileUpdateOneInput
+  video?: FileUpdateOneInput
+  taught_classrooms?: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms?: ClassroomUpdateManyWithoutStudentsInput
+  followers?: FollowUpdateManyWithoutUser_followedInput
+  following?: FollowUpdateManyWithoutUser_followingInput
+  messages?: MessageUpdateManyWithoutSenderInput
+  refunds?: RefundUpdateManyWithoutUserInput
+}
+
+export interface FileUpsertNestedInput {
+  update: FileUpdateDataInput
+  create: FileCreateInput
+}
+
+export interface ChargeUpdateWithoutRefundDataInput {
+  amount?: Float
+  stripeId?: String
+  class?: ClassUpdateOneInput
+  user?: UserUpdateOneWithoutChargesInput
+}
+
+export interface ClassroomUpdateManyWithoutTeacherInput {
+  create?: ClassroomCreateWithoutTeacherInput[] | ClassroomCreateWithoutTeacherInput
+  connect?: ClassroomWhereUniqueInput[] | ClassroomWhereUniqueInput
+  disconnect?: ClassroomWhereUniqueInput[] | ClassroomWhereUniqueInput
+  delete?: ClassroomWhereUniqueInput[] | ClassroomWhereUniqueInput
+  update?: ClassroomUpdateWithWhereUniqueWithoutTeacherInput[] | ClassroomUpdateWithWhereUniqueWithoutTeacherInput
+  upsert?: ClassroomUpsertWithWhereUniqueWithoutTeacherInput[] | ClassroomUpsertWithWhereUniqueWithoutTeacherInput
+}
+
+export interface UserCreateInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified?: String
+  name?: String
+  gender: Gender
+  description?: String
+  url?: String
+  stripeId?: String
+  stripeCustomerId?: String
+  picture: FileCreateOneInput
+  video?: FileCreateOneInput
+  taught_classrooms?: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms?: ClassroomCreateManyWithoutStudentsInput
+  followers?: FollowCreateManyWithoutUser_followedInput
+  following?: FollowCreateManyWithoutUser_followingInput
+  messages?: MessageCreateManyWithoutSenderInput
+  charges?: ChargeCreateManyWithoutUserInput
+  refunds?: RefundCreateManyWithoutUserInput
+}
+
+export interface ChargeWhereInput {
+  AND?: ChargeWhereInput[] | ChargeWhereInput
+  OR?: ChargeWhereInput[] | ChargeWhereInput
+  NOT?: ChargeWhereInput[] | ChargeWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  createdAt?: DateTime
+  createdAt_not?: DateTime
+  createdAt_in?: DateTime[] | DateTime
+  createdAt_not_in?: DateTime[] | DateTime
+  createdAt_lt?: DateTime
+  createdAt_lte?: DateTime
+  createdAt_gt?: DateTime
+  createdAt_gte?: DateTime
+  updatedAt?: DateTime
+  updatedAt_not?: DateTime
+  updatedAt_in?: DateTime[] | DateTime
+  updatedAt_not_in?: DateTime[] | DateTime
+  updatedAt_lt?: DateTime
+  updatedAt_lte?: DateTime
+  updatedAt_gt?: DateTime
+  updatedAt_gte?: DateTime
+  amount?: Float
+  amount_not?: Float
+  amount_in?: Float[] | Float
+  amount_not_in?: Float[] | Float
+  amount_lt?: Float
+  amount_lte?: Float
+  amount_gt?: Float
+  amount_gte?: Float
+  stripeId?: String
+  stripeId_not?: String
+  stripeId_in?: String[] | String
+  stripeId_not_in?: String[] | String
+  stripeId_lt?: String
+  stripeId_lte?: String
+  stripeId_gt?: String
+  stripeId_gte?: String
+  stripeId_contains?: String
+  stripeId_not_contains?: String
+  stripeId_starts_with?: String
+  stripeId_not_starts_with?: String
+  stripeId_ends_with?: String
+  stripeId_not_ends_with?: String
+  class?: ClassWhereInput
+  user?: UserWhereInput
+  refund?: RefundWhereInput
+}
+
+export interface FileCreateInput {
+  name: String
+  secret?: String
+  contentType?: String
+  url: String
+}
+
+export interface MessageWhereInput {
+  AND?: MessageWhereInput[] | MessageWhereInput
+  OR?: MessageWhereInput[] | MessageWhereInput
+  NOT?: MessageWhereInput[] | MessageWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  createdAt?: DateTime
+  createdAt_not?: DateTime
+  createdAt_in?: DateTime[] | DateTime
+  createdAt_not_in?: DateTime[] | DateTime
+  createdAt_lt?: DateTime
+  createdAt_lte?: DateTime
+  createdAt_gt?: DateTime
+  createdAt_gte?: DateTime
+  updatedAt?: DateTime
+  updatedAt_not?: DateTime
+  updatedAt_in?: DateTime[] | DateTime
+  updatedAt_not_in?: DateTime[] | DateTime
+  updatedAt_lt?: DateTime
+  updatedAt_lte?: DateTime
+  updatedAt_gt?: DateTime
+  updatedAt_gte?: DateTime
+  text?: String
+  text_not?: String
+  text_in?: String[] | String
+  text_not_in?: String[] | String
+  text_lt?: String
+  text_lte?: String
+  text_gt?: String
+  text_gte?: String
+  text_contains?: String
+  text_not_contains?: String
+  text_starts_with?: String
+  text_not_starts_with?: String
+  text_ends_with?: String
+  text_not_ends_with?: String
+  sender?: UserWhereInput
+  class?: ClassWhereInput
+}
+
+export interface ClassroomCreateWithoutTeacherInput {
+  name: String
+  description: String
+  price: Float
+  classes?: ClassCreateManyWithoutClassroomInput
+  students?: UserCreateManyWithoutStudying_classroomsInput
+}
+
+export interface ClassCreateWithoutClassroomInput {
+  name: String
+  description: String
+  picture?: String
+  price?: Float
+  startDate?: DateTime
+  live?: Boolean
+  duration?: Int
+  video?: FileCreateOneInput
+  files?: FileCreateManyInput
+  vods?: FileCreateManyInput
+  messages?: MessageCreateManyWithoutClassInput
+}
+
+export interface MessageCreateManyWithoutClassInput {
+  create?: MessageCreateWithoutClassInput[] | MessageCreateWithoutClassInput
+  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
+}
+
+export interface ClassUpdateWithWhereUniqueWithoutClassroomInput {
+  where: ClassWhereUniqueInput
+  data: ClassUpdateWithoutClassroomDataInput
+}
+
+export interface UserCreateOneWithoutMessagesInput {
+  create?: UserCreateWithoutMessagesInput
+  connect?: UserWhereUniqueInput
+}
+
+export interface ClassUpdateWithoutClassroomDataInput {
+  name?: String
+  description?: String
+  picture?: String
+  price?: Float
+  startDate?: DateTime
+  live?: Boolean
+  duration?: Int
+  video?: FileUpdateOneInput
+  files?: FileUpdateManyInput
+  vods?: FileUpdateManyInput
+  messages?: MessageUpdateManyWithoutClassInput
+}
+
+export interface ClassroomCreateManyWithoutStudentsInput {
+  create?: ClassroomCreateWithoutStudentsInput[] | ClassroomCreateWithoutStudentsInput
+  connect?: ClassroomWhereUniqueInput[] | ClassroomWhereUniqueInput
+}
+
+export interface FileUpdateManyInput {
+  create?: FileCreateInput[] | FileCreateInput
+  connect?: FileWhereUniqueInput[] | FileWhereUniqueInput
+  disconnect?: FileWhereUniqueInput[] | FileWhereUniqueInput
+  delete?: FileWhereUniqueInput[] | FileWhereUniqueInput
+  update?: FileUpdateWithWhereUniqueNestedInput[] | FileUpdateWithWhereUniqueNestedInput
+  upsert?: FileUpsertWithWhereUniqueNestedInput[] | FileUpsertWithWhereUniqueNestedInput
+}
+
+export interface UserCreateOneWithoutTaught_classroomsInput {
+  create?: UserCreateWithoutTaught_classroomsInput
+  connect?: UserWhereUniqueInput
+}
+
+export interface FileUpdateWithWhereUniqueNestedInput {
+  where: FileWhereUniqueInput
+  data: FileUpdateDataInput
+}
+
+export interface FollowCreateManyWithoutUser_followedInput {
+  create?: FollowCreateWithoutUser_followedInput[] | FollowCreateWithoutUser_followedInput
+  connect?: FollowWhereUniqueInput[] | FollowWhereUniqueInput
+}
+
+export interface FileUpsertWithWhereUniqueNestedInput {
+  where: FileWhereUniqueInput
+  update: FileUpdateDataInput
+  create: FileCreateInput
+}
+
+export interface UserCreateOneWithoutFollowingInput {
+  create?: UserCreateWithoutFollowingInput
+  connect?: UserWhereUniqueInput
+}
+
+export interface MessageUpdateManyWithoutClassInput {
+  create?: MessageCreateWithoutClassInput[] | MessageCreateWithoutClassInput
+  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
+  disconnect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
+  delete?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
+  update?: MessageUpdateWithWhereUniqueWithoutClassInput[] | MessageUpdateWithWhereUniqueWithoutClassInput
+  upsert?: MessageUpsertWithWhereUniqueWithoutClassInput[] | MessageUpsertWithWhereUniqueWithoutClassInput
+}
+
+export interface MessageCreateManyWithoutSenderInput {
+  create?: MessageCreateWithoutSenderInput[] | MessageCreateWithoutSenderInput
+  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
+}
+
+export interface MessageUpdateWithWhereUniqueWithoutClassInput {
+  where: MessageWhereUniqueInput
+  data: MessageUpdateWithoutClassDataInput
+}
+
+export interface ClassCreateOneWithoutMessagesInput {
+  create?: ClassCreateWithoutMessagesInput
+  connect?: ClassWhereUniqueInput
+}
+
+export interface MessageUpdateWithoutClassDataInput {
+  text?: String
+  sender?: UserUpdateOneWithoutMessagesInput
+}
+
+export interface ClassroomCreateOneWithoutClassesInput {
+  create?: ClassroomCreateWithoutClassesInput
+  connect?: ClassroomWhereUniqueInput
+}
+
+export interface UserUpdateOneWithoutMessagesInput {
+  create?: UserCreateWithoutMessagesInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutMessagesDataInput
+  upsert?: UserUpsertWithoutMessagesInput
+}
+
+export interface UserCreateManyWithoutStudying_classroomsInput {
+  create?: UserCreateWithoutStudying_classroomsInput[] | UserCreateWithoutStudying_classroomsInput
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
+}
+
+export interface UserUpdateWithoutMessagesDataInput {
+  auth0Id?: String
+  username?: String
+  email?: String
+  email_verified?: String
+  name?: String
+  gender?: Gender
+  description?: String
+  url?: String
+  stripeId?: String
+  stripeCustomerId?: String
+  picture?: FileUpdateOneInput
+  video?: FileUpdateOneInput
+  taught_classrooms?: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms?: ClassroomUpdateManyWithoutStudentsInput
+  followers?: FollowUpdateManyWithoutUser_followedInput
+  following?: FollowUpdateManyWithoutUser_followingInput
+  charges?: ChargeUpdateManyWithoutUserInput
+  refunds?: RefundUpdateManyWithoutUserInput
+}
+
+export interface FollowCreateManyWithoutUser_followingInput {
+  create?: FollowCreateWithoutUser_followingInput[] | FollowCreateWithoutUser_followingInput
+  connect?: FollowWhereUniqueInput[] | FollowWhereUniqueInput
+}
+
+export interface ClassroomUpdateManyWithoutStudentsInput {
+  create?: ClassroomCreateWithoutStudentsInput[] | ClassroomCreateWithoutStudentsInput
+  connect?: ClassroomWhereUniqueInput[] | ClassroomWhereUniqueInput
+  disconnect?: ClassroomWhereUniqueInput[] | ClassroomWhereUniqueInput
+  delete?: ClassroomWhereUniqueInput[] | ClassroomWhereUniqueInput
+  update?: ClassroomUpdateWithWhereUniqueWithoutStudentsInput[] | ClassroomUpdateWithWhereUniqueWithoutStudentsInput
+  upsert?: ClassroomUpsertWithWhereUniqueWithoutStudentsInput[] | ClassroomUpsertWithWhereUniqueWithoutStudentsInput
+}
+
+export interface RefundSubscriptionWhereInput {
+  AND?: RefundSubscriptionWhereInput[] | RefundSubscriptionWhereInput
+  OR?: RefundSubscriptionWhereInput[] | RefundSubscriptionWhereInput
+  NOT?: RefundSubscriptionWhereInput[] | RefundSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: RefundWhereInput
+}
+
+export interface ClassroomUpdateWithWhereUniqueWithoutStudentsInput {
+  where: ClassroomWhereUniqueInput
+  data: ClassroomUpdateWithoutStudentsDataInput
+}
+
+export interface ClassSubscriptionWhereInput {
+  AND?: ClassSubscriptionWhereInput[] | ClassSubscriptionWhereInput
+  OR?: ClassSubscriptionWhereInput[] | ClassSubscriptionWhereInput
+  NOT?: ClassSubscriptionWhereInput[] | ClassSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: ClassWhereInput
+}
+
+export interface ClassroomUpdateWithoutStudentsDataInput {
+  name?: String
+  description?: String
+  price?: Float
+  classes?: ClassUpdateManyWithoutClassroomInput
+  teacher?: UserUpdateOneWithoutTaught_classroomsInput
+}
+
+export interface ClassroomWhereInput {
+  AND?: ClassroomWhereInput[] | ClassroomWhereInput
+  OR?: ClassroomWhereInput[] | ClassroomWhereInput
+  NOT?: ClassroomWhereInput[] | ClassroomWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  createdAt?: DateTime
+  createdAt_not?: DateTime
+  createdAt_in?: DateTime[] | DateTime
+  createdAt_not_in?: DateTime[] | DateTime
+  createdAt_lt?: DateTime
+  createdAt_lte?: DateTime
+  createdAt_gt?: DateTime
+  createdAt_gte?: DateTime
+  updatedAt?: DateTime
+  updatedAt_not?: DateTime
+  updatedAt_in?: DateTime[] | DateTime
+  updatedAt_not_in?: DateTime[] | DateTime
+  updatedAt_lt?: DateTime
+  updatedAt_lte?: DateTime
+  updatedAt_gt?: DateTime
+  updatedAt_gte?: DateTime
+  name?: String
+  name_not?: String
+  name_in?: String[] | String
+  name_not_in?: String[] | String
+  name_lt?: String
+  name_lte?: String
+  name_gt?: String
+  name_gte?: String
+  name_contains?: String
+  name_not_contains?: String
+  name_starts_with?: String
+  name_not_starts_with?: String
+  name_ends_with?: String
+  name_not_ends_with?: String
+  description?: String
+  description_not?: String
+  description_in?: String[] | String
+  description_not_in?: String[] | String
+  description_lt?: String
+  description_lte?: String
+  description_gt?: String
+  description_gte?: String
+  description_contains?: String
+  description_not_contains?: String
+  description_starts_with?: String
+  description_not_starts_with?: String
+  description_ends_with?: String
+  description_not_ends_with?: String
+  price?: Float
+  price_not?: Float
+  price_in?: Float[] | Float
+  price_not_in?: Float[] | Float
+  price_lt?: Float
+  price_lte?: Float
+  price_gt?: Float
+  price_gte?: Float
+  classes_every?: ClassWhereInput
+  classes_some?: ClassWhereInput
+  classes_none?: ClassWhereInput
+  teacher?: UserWhereInput
+  students_every?: UserWhereInput
+  students_some?: UserWhereInput
+  students_none?: UserWhereInput
+}
+
+export interface UserUpdateOneWithoutTaught_classroomsInput {
+  create?: UserCreateWithoutTaught_classroomsInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutTaught_classroomsDataInput
+  upsert?: UserUpsertWithoutTaught_classroomsInput
+}
+
+export interface ChargeUpdateInput {
+  amount?: Float
+  stripeId?: String
+  class?: ClassUpdateOneInput
+  user?: UserUpdateOneWithoutChargesInput
+  refund?: RefundUpdateOneWithoutChargeInput
+}
+
+export interface UserUpdateWithoutTaught_classroomsDataInput {
+  auth0Id?: String
+  username?: String
+  email?: String
+  email_verified?: String
+  name?: String
+  gender?: Gender
+  description?: String
+  url?: String
+  stripeId?: String
+  stripeCustomerId?: String
+  picture?: FileUpdateOneInput
+  video?: FileUpdateOneInput
+  studying_classrooms?: ClassroomUpdateManyWithoutStudentsInput
+  followers?: FollowUpdateManyWithoutUser_followedInput
+  following?: FollowUpdateManyWithoutUser_followingInput
+  messages?: MessageUpdateManyWithoutSenderInput
+  charges?: ChargeUpdateManyWithoutUserInput
+  refunds?: RefundUpdateManyWithoutUserInput
+}
+
+export interface ClassroomWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface FollowUpdateManyWithoutUser_followedInput {
+  create?: FollowCreateWithoutUser_followedInput[] | FollowCreateWithoutUser_followedInput
+  connect?: FollowWhereUniqueInput[] | FollowWhereUniqueInput
+  disconnect?: FollowWhereUniqueInput[] | FollowWhereUniqueInput
+  delete?: FollowWhereUniqueInput[] | FollowWhereUniqueInput
+  update?: FollowUpdateWithWhereUniqueWithoutUser_followedInput[] | FollowUpdateWithWhereUniqueWithoutUser_followedInput
+  upsert?: FollowUpsertWithWhereUniqueWithoutUser_followedInput[] | FollowUpsertWithWhereUniqueWithoutUser_followedInput
+}
+
+export interface ChargeWhereUniqueInput {
+  id?: ID_Input
+  stripeId?: String
+}
+
+export interface FollowUpdateWithWhereUniqueWithoutUser_followedInput {
+  where: FollowWhereUniqueInput
+  data: FollowUpdateWithoutUser_followedDataInput
+}
+
+export interface ClassroomUpdateInput {
+  name?: String
+  description?: String
+  price?: Float
+  classes?: ClassUpdateManyWithoutClassroomInput
+  teacher?: UserUpdateOneWithoutTaught_classroomsInput
+  students?: UserUpdateManyWithoutStudying_classroomsInput
+}
+
+export interface FollowUpdateWithoutUser_followedDataInput {
+  user_following?: UserUpdateOneWithoutFollowingInput
+}
+
+export interface MessageUpsertWithWhereUniqueWithoutClassInput {
+  where: MessageWhereUniqueInput
+  update: MessageUpdateWithoutClassDataInput
+  create: MessageCreateWithoutClassInput
+}
+
+export interface UserUpdateOneWithoutFollowingInput {
+  create?: UserCreateWithoutFollowingInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutFollowingDataInput
+  upsert?: UserUpsertWithoutFollowingInput
+}
+
+export interface FollowUpsertWithWhereUniqueWithoutUser_followedInput {
+  where: FollowWhereUniqueInput
+  update: FollowUpdateWithoutUser_followedDataInput
+  create: FollowCreateWithoutUser_followedInput
+}
+
+export interface UserUpdateWithoutFollowingDataInput {
+  auth0Id?: String
+  username?: String
+  email?: String
+  email_verified?: String
+  name?: String
+  gender?: Gender
+  description?: String
+  url?: String
+  stripeId?: String
+  stripeCustomerId?: String
+  picture?: FileUpdateOneInput
+  video?: FileUpdateOneInput
+  taught_classrooms?: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms?: ClassroomUpdateManyWithoutStudentsInput
+  followers?: FollowUpdateManyWithoutUser_followedInput
+  messages?: MessageUpdateManyWithoutSenderInput
+  charges?: ChargeUpdateManyWithoutUserInput
+  refunds?: RefundUpdateManyWithoutUserInput
+}
+
+export interface ClassroomUpsertWithoutClassesInput {
+  update: ClassroomUpdateWithoutClassesDataInput
+  create: ClassroomCreateWithoutClassesInput
+}
+
+export interface MessageUpdateManyWithoutSenderInput {
+  create?: MessageCreateWithoutSenderInput[] | MessageCreateWithoutSenderInput
+  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
+  disconnect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
+  delete?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
+  update?: MessageUpdateWithWhereUniqueWithoutSenderInput[] | MessageUpdateWithWhereUniqueWithoutSenderInput
+  upsert?: MessageUpsertWithWhereUniqueWithoutSenderInput[] | MessageUpsertWithWhereUniqueWithoutSenderInput
+}
+
+export interface RefundUpsertWithWhereUniqueWithoutUserInput {
+  where: RefundWhereUniqueInput
+  update: RefundUpdateWithoutUserDataInput
+  create: RefundCreateWithoutUserInput
+}
+
+export interface MessageUpdateWithWhereUniqueWithoutSenderInput {
+  where: MessageWhereUniqueInput
+  data: MessageUpdateWithoutSenderDataInput
+}
+
+export interface UserUpdateOneWithoutChargesInput {
+  create?: UserCreateWithoutChargesInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutChargesDataInput
+  upsert?: UserUpsertWithoutChargesInput
+}
+
+export interface MessageUpdateWithoutSenderDataInput {
+  text?: String
+  class?: ClassUpdateOneWithoutMessagesInput
+}
+
+export interface FileCreateOneInput {
+  create?: FileCreateInput
+  connect?: FileWhereUniqueInput
+}
+
+export interface ClassUpdateOneWithoutMessagesInput {
+  create?: ClassCreateWithoutMessagesInput
+  connect?: ClassWhereUniqueInput
+  delete?: Boolean
+  update?: ClassUpdateWithoutMessagesDataInput
+  upsert?: ClassUpsertWithoutMessagesInput
+}
+
+export interface ClassCreateManyWithoutClassroomInput {
+  create?: ClassCreateWithoutClassroomInput[] | ClassCreateWithoutClassroomInput
+  connect?: ClassWhereUniqueInput[] | ClassWhereUniqueInput
+}
+
+export interface ClassUpdateWithoutMessagesDataInput {
+  name?: String
+  description?: String
+  picture?: String
+  price?: Float
+  startDate?: DateTime
+  live?: Boolean
+  duration?: Int
+  video?: FileUpdateOneInput
+  files?: FileUpdateManyInput
+  vods?: FileUpdateManyInput
+  classroom?: ClassroomUpdateOneWithoutClassesInput
+}
+
+export interface MessageCreateWithoutClassInput {
+  text: String
+  sender: UserCreateOneWithoutMessagesInput
+}
+
+export interface ClassroomUpdateOneWithoutClassesInput {
+  create?: ClassroomCreateWithoutClassesInput
+  connect?: ClassroomWhereUniqueInput
+  delete?: Boolean
+  update?: ClassroomUpdateWithoutClassesDataInput
+  upsert?: ClassroomUpsertWithoutClassesInput
+}
+
+export interface ClassroomCreateWithoutStudentsInput {
+  name: String
+  description: String
+  price: Float
+  classes?: ClassCreateManyWithoutClassroomInput
+  teacher: UserCreateOneWithoutTaught_classroomsInput
+}
+
+export interface ClassroomUpdateWithoutClassesDataInput {
+  name?: String
+  description?: String
+  price?: Float
+  teacher?: UserUpdateOneWithoutTaught_classroomsInput
+  students?: UserUpdateManyWithoutStudying_classroomsInput
+}
+
+export interface FollowCreateWithoutUser_followedInput {
+  user_following: UserCreateOneWithoutFollowingInput
+}
+
+export interface UserUpdateManyWithoutStudying_classroomsInput {
+  create?: UserCreateWithoutStudying_classroomsInput[] | UserCreateWithoutStudying_classroomsInput
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput
+  update?: UserUpdateWithWhereUniqueWithoutStudying_classroomsInput[] | UserUpdateWithWhereUniqueWithoutStudying_classroomsInput
+  upsert?: UserUpsertWithWhereUniqueWithoutStudying_classroomsInput[] | UserUpsertWithWhereUniqueWithoutStudying_classroomsInput
+}
+
+export interface MessageCreateWithoutSenderInput {
+  text: String
+  class: ClassCreateOneWithoutMessagesInput
+}
+
+export interface UserUpdateWithWhereUniqueWithoutStudying_classroomsInput {
+  where: UserWhereUniqueInput
+  data: UserUpdateWithoutStudying_classroomsDataInput
+}
+
+export interface ClassroomCreateWithoutClassesInput {
+  name: String
+  description: String
+  price: Float
+  teacher: UserCreateOneWithoutTaught_classroomsInput
+  students?: UserCreateManyWithoutStudying_classroomsInput
+}
+
+export interface UserUpdateWithoutStudying_classroomsDataInput {
+  auth0Id?: String
+  username?: String
+  email?: String
+  email_verified?: String
+  name?: String
+  gender?: Gender
+  description?: String
+  url?: String
+  stripeId?: String
+  stripeCustomerId?: String
+  picture?: FileUpdateOneInput
+  video?: FileUpdateOneInput
+  taught_classrooms?: ClassroomUpdateManyWithoutTeacherInput
+  followers?: FollowUpdateManyWithoutUser_followedInput
+  following?: FollowUpdateManyWithoutUser_followingInput
+  messages?: MessageUpdateManyWithoutSenderInput
+  charges?: ChargeUpdateManyWithoutUserInput
+  refunds?: RefundUpdateManyWithoutUserInput
+}
+
+export interface FollowCreateWithoutUser_followingInput {
+  user_followed: UserCreateOneWithoutFollowersInput
+}
+
+export interface FollowUpdateManyWithoutUser_followingInput {
+  create?: FollowCreateWithoutUser_followingInput[] | FollowCreateWithoutUser_followingInput
+  connect?: FollowWhereUniqueInput[] | FollowWhereUniqueInput
+  disconnect?: FollowWhereUniqueInput[] | FollowWhereUniqueInput
+  delete?: FollowWhereUniqueInput[] | FollowWhereUniqueInput
+  update?: FollowUpdateWithWhereUniqueWithoutUser_followingInput[] | FollowUpdateWithWhereUniqueWithoutUser_followingInput
+  upsert?: FollowUpsertWithWhereUniqueWithoutUser_followingInput[] | FollowUpsertWithWhereUniqueWithoutUser_followingInput
+}
+
+export interface ClassroomSubscriptionWhereInput {
+  AND?: ClassroomSubscriptionWhereInput[] | ClassroomSubscriptionWhereInput
+  OR?: ClassroomSubscriptionWhereInput[] | ClassroomSubscriptionWhereInput
+  NOT?: ClassroomSubscriptionWhereInput[] | ClassroomSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: ClassroomWhereInput
+}
+
+export interface FollowUpdateWithWhereUniqueWithoutUser_followingInput {
+  where: FollowWhereUniqueInput
+  data: FollowUpdateWithoutUser_followingDataInput
+}
+
+export interface UserWhereUniqueInput {
+  id?: ID_Input
+  auth0Id?: String
+  username?: String
+  email?: String
+  stripeId?: String
+  stripeCustomerId?: String
+}
+
+export interface FollowUpdateWithoutUser_followingDataInput {
+  user_followed?: UserUpdateOneWithoutFollowersInput
+}
+
+export interface FileUpdateInput {
+  name?: String
+  secret?: String
+  contentType?: String
+  url?: String
+}
+
+export interface UserUpdateOneWithoutFollowersInput {
+  create?: UserCreateWithoutFollowersInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutFollowersDataInput
+  upsert?: UserUpsertWithoutFollowersInput
+}
+
+export interface ClassroomUpsertWithWhereUniqueWithoutStudentsInput {
+  where: ClassroomWhereUniqueInput
+  update: ClassroomUpdateWithoutStudentsDataInput
+  create: ClassroomCreateWithoutStudentsInput
+}
+
+export interface UserUpdateWithoutFollowersDataInput {
+  auth0Id?: String
+  username?: String
+  email?: String
+  email_verified?: String
+  name?: String
+  gender?: Gender
+  description?: String
+  url?: String
+  stripeId?: String
+  stripeCustomerId?: String
+  picture?: FileUpdateOneInput
+  video?: FileUpdateOneInput
+  taught_classrooms?: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms?: ClassroomUpdateManyWithoutStudentsInput
+  following?: FollowUpdateManyWithoutUser_followingInput
+  messages?: MessageUpdateManyWithoutSenderInput
+  charges?: ChargeUpdateManyWithoutUserInput
+  refunds?: RefundUpdateManyWithoutUserInput
+}
+
+export interface FollowUpsertWithWhereUniqueWithoutUser_followingInput {
+  where: FollowWhereUniqueInput
+  update: FollowUpdateWithoutUser_followingDataInput
+  create: FollowCreateWithoutUser_followingInput
+}
+
+export interface ChargeUpdateManyWithoutUserInput {
+  create?: ChargeCreateWithoutUserInput[] | ChargeCreateWithoutUserInput
+  connect?: ChargeWhereUniqueInput[] | ChargeWhereUniqueInput
+  disconnect?: ChargeWhereUniqueInput[] | ChargeWhereUniqueInput
+  delete?: ChargeWhereUniqueInput[] | ChargeWhereUniqueInput
+  update?: ChargeUpdateWithWhereUniqueWithoutUserInput[] | ChargeUpdateWithWhereUniqueWithoutUserInput
+  upsert?: ChargeUpsertWithWhereUniqueWithoutUserInput[] | ChargeUpsertWithWhereUniqueWithoutUserInput
+}
+
+export interface ChargeUpdateOneWithoutRefundInput {
+  create?: ChargeCreateWithoutRefundInput
+  connect?: ChargeWhereUniqueInput
+  delete?: Boolean
+  update?: ChargeUpdateWithoutRefundDataInput
+  upsert?: ChargeUpsertWithoutRefundInput
+}
+
+export interface ChargeUpdateWithWhereUniqueWithoutUserInput {
+  where: ChargeWhereUniqueInput
+  data: ChargeUpdateWithoutUserDataInput
+}
+
+export interface FileCreateManyInput {
+  create?: FileCreateInput[] | FileCreateInput
+  connect?: FileWhereUniqueInput[] | FileWhereUniqueInput
+}
+
+export interface ChargeUpdateWithoutUserDataInput {
+  amount?: Float
+  stripeId?: String
+  class?: ClassUpdateOneInput
+  refund?: RefundUpdateOneWithoutChargeInput
+}
+
+export interface UserCreateWithoutTaught_classroomsInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified?: String
+  name?: String
+  gender: Gender
+  description?: String
+  url?: String
+  stripeId?: String
+  stripeCustomerId?: String
+  picture: FileCreateOneInput
+  video?: FileCreateOneInput
+  studying_classrooms?: ClassroomCreateManyWithoutStudentsInput
+  followers?: FollowCreateManyWithoutUser_followedInput
+  following?: FollowCreateManyWithoutUser_followingInput
+  messages?: MessageCreateManyWithoutSenderInput
+  charges?: ChargeCreateManyWithoutUserInput
+  refunds?: RefundCreateManyWithoutUserInput
+}
+
+export interface ClassUpdateOneInput {
+  create?: ClassCreateInput
+  connect?: ClassWhereUniqueInput
+  delete?: Boolean
+  update?: ClassUpdateDataInput
+  upsert?: ClassUpsertNestedInput
+}
+
+export interface ClassCreateWithoutMessagesInput {
+  name: String
+  description: String
+  picture?: String
+  price?: Float
+  startDate?: DateTime
+  live?: Boolean
+  duration?: Int
+  video?: FileCreateOneInput
+  files?: FileCreateManyInput
+  vods?: FileCreateManyInput
+  classroom: ClassroomCreateOneWithoutClassesInput
+}
+
+export interface ClassUpdateDataInput {
+  name?: String
+  description?: String
+  picture?: String
+  price?: Float
+  startDate?: DateTime
+  live?: Boolean
+  duration?: Int
+  video?: FileUpdateOneInput
+  files?: FileUpdateManyInput
+  vods?: FileUpdateManyInput
+  classroom?: ClassroomUpdateOneWithoutClassesInput
+  messages?: MessageUpdateManyWithoutClassInput
+}
+
+export interface MessageSubscriptionWhereInput {
+  AND?: MessageSubscriptionWhereInput[] | MessageSubscriptionWhereInput
+  OR?: MessageSubscriptionWhereInput[] | MessageSubscriptionWhereInput
+  NOT?: MessageSubscriptionWhereInput[] | MessageSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: MessageWhereInput
+}
+
+export interface ClassUpsertNestedInput {
+  update: ClassUpdateDataInput
+  create: ClassCreateInput
+}
+
+export interface FileWhereUniqueInput {
+  id?: ID_Input
+  secret?: String
+  url?: String
+}
+
+export interface RefundUpdateOneWithoutChargeInput {
+  create?: RefundCreateWithoutChargeInput
+  connect?: RefundWhereUniqueInput
+  disconnect?: Boolean
+  delete?: Boolean
+  update?: RefundUpdateWithoutChargeDataInput
+  upsert?: RefundUpsertWithoutChargeInput
+}
+
+export interface MessageUpsertWithWhereUniqueWithoutSenderInput {
+  where: MessageWhereUniqueInput
+  update: MessageUpdateWithoutSenderDataInput
+  create: MessageCreateWithoutSenderInput
+}
+
+export interface RefundUpdateWithoutChargeDataInput {
+  stripeId?: String
+  amount?: Float
+  class?: ClassUpdateOneInput
+  user?: UserUpdateOneWithoutRefundsInput
+}
+
+export interface ClassroomCreateManyWithoutTeacherInput {
+  create?: ClassroomCreateWithoutTeacherInput[] | ClassroomCreateWithoutTeacherInput
+  connect?: ClassroomWhereUniqueInput[] | ClassroomWhereUniqueInput
+}
+
+export interface UserUpdateOneWithoutRefundsInput {
+  create?: UserCreateWithoutRefundsInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutRefundsDataInput
+  upsert?: UserUpsertWithoutRefundsInput
+}
+
+export interface UserCreateWithoutFollowingInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified?: String
+  name?: String
+  gender: Gender
+  description?: String
+  url?: String
+  stripeId?: String
+  stripeCustomerId?: String
+  picture: FileCreateOneInput
+  video?: FileCreateOneInput
+  taught_classrooms?: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms?: ClassroomCreateManyWithoutStudentsInput
+  followers?: FollowCreateManyWithoutUser_followedInput
+  messages?: MessageCreateManyWithoutSenderInput
+  charges?: ChargeCreateManyWithoutUserInput
+  refunds?: RefundCreateManyWithoutUserInput
+}
+
+export interface UserUpdateWithoutRefundsDataInput {
+  auth0Id?: String
+  username?: String
+  email?: String
+  email_verified?: String
+  name?: String
+  gender?: Gender
+  description?: String
+  url?: String
+  stripeId?: String
+  stripeCustomerId?: String
+  picture?: FileUpdateOneInput
+  video?: FileUpdateOneInput
+  taught_classrooms?: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms?: ClassroomUpdateManyWithoutStudentsInput
+  followers?: FollowUpdateManyWithoutUser_followedInput
+  following?: FollowUpdateManyWithoutUser_followingInput
+  messages?: MessageUpdateManyWithoutSenderInput
+  charges?: ChargeUpdateManyWithoutUserInput
 }
 
 export interface FileWhereInput {
@@ -5294,497 +6105,19 @@ export interface FileWhereInput {
   url_not_ends_with?: String
 }
 
-export interface FollowUpdateManyWithoutUser_followedInput {
-  create?: FollowCreateWithoutUser_followedInput[] | FollowCreateWithoutUser_followedInput
-  connect?: FollowWhereUniqueInput[] | FollowWhereUniqueInput
-  disconnect?: FollowWhereUniqueInput[] | FollowWhereUniqueInput
-  delete?: FollowWhereUniqueInput[] | FollowWhereUniqueInput
-  update?: FollowUpdateWithWhereUniqueWithoutUser_followedInput[] | FollowUpdateWithWhereUniqueWithoutUser_followedInput
-  upsert?: FollowUpsertWithWhereUniqueWithoutUser_followedInput[] | FollowUpsertWithWhereUniqueWithoutUser_followedInput
+export interface RefundUpdateManyWithoutUserInput {
+  create?: RefundCreateWithoutUserInput[] | RefundCreateWithoutUserInput
+  connect?: RefundWhereUniqueInput[] | RefundWhereUniqueInput
+  disconnect?: RefundWhereUniqueInput[] | RefundWhereUniqueInput
+  delete?: RefundWhereUniqueInput[] | RefundWhereUniqueInput
+  update?: RefundUpdateWithWhereUniqueWithoutUserInput[] | RefundUpdateWithWhereUniqueWithoutUserInput
+  upsert?: RefundUpsertWithWhereUniqueWithoutUserInput[] | RefundUpsertWithWhereUniqueWithoutUserInput
 }
 
-export interface UserWhereUniqueInput {
-  id?: ID_Input
-  auth0Id?: String
-  username?: String
-  email?: String
-  stripeId?: String
-  stripeCustomerId?: String
-}
-
-export interface FollowUpdateWithWhereUniqueWithoutUser_followedInput {
-  where: FollowWhereUniqueInput
-  data: FollowUpdateWithoutUser_followedDataInput
-}
-
-export interface FileWhereUniqueInput {
-  id?: ID_Input
-  secret?: String
-  url?: String
-}
-
-export interface FollowUpdateWithoutUser_followedDataInput {
-  user_following?: UserUpdateOneWithoutFollowingInput
-}
-
-export interface UserUpdateWithoutMessagesDataInput {
-  auth0Id?: String
-  username?: String
-  email?: String
-  email_verified?: String
-  name?: String
-  gender?: Gender
-  description?: String
-  url?: String
-  stripeId?: String
-  stripeCustomerId?: String
-  picture?: FileUpdateOneInput
-  video?: FileUpdateOneInput
-  classrooms?: ClassroomUpdateManyWithoutTeacherInput
-  followers?: FollowUpdateManyWithoutUser_followedInput
-  following?: FollowUpdateManyWithoutUser_followingInput
-  charges?: ChargeUpdateManyWithoutUserInput
-  refunds?: RefundUpdateManyWithoutUserInput
-}
-
-export interface UserUpdateOneWithoutFollowingInput {
-  create?: UserCreateWithoutFollowingInput
-  connect?: UserWhereUniqueInput
-  delete?: Boolean
-  update?: UserUpdateWithoutFollowingDataInput
-  upsert?: UserUpsertWithoutFollowingInput
-}
-
-export interface ClassUpdateInput {
-  name?: String
-  description?: String
-  picture?: String
-  duration?: Int
-  price?: Float
-  startDate?: DateTime
-  live?: Boolean
-  video?: FileUpdateOneInput
-  files?: FileUpdateManyInput
-  vods?: FileUpdateManyInput
-  classroom?: ClassroomUpdateOneWithoutClassesInput
-}
-
-export interface UserUpdateWithoutFollowingDataInput {
-  auth0Id?: String
-  username?: String
-  email?: String
-  email_verified?: String
-  name?: String
-  gender?: Gender
-  description?: String
-  url?: String
-  stripeId?: String
-  stripeCustomerId?: String
-  picture?: FileUpdateOneInput
-  video?: FileUpdateOneInput
-  classrooms?: ClassroomUpdateManyWithoutTeacherInput
-  followers?: FollowUpdateManyWithoutUser_followedInput
-  messages?: MessageUpdateManyWithoutSenderInput
-  charges?: ChargeUpdateManyWithoutUserInput
-  refunds?: RefundUpdateManyWithoutUserInput
-}
-
-export interface UserUpsertWithWhereUniqueNestedInput {
-  where: UserWhereUniqueInput
-  update: UserUpdateDataInput
-  create: UserCreateInput
-}
-
-export interface MessageUpdateManyWithoutSenderInput {
-  create?: MessageCreateWithoutSenderInput[] | MessageCreateWithoutSenderInput
-  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
-  disconnect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
-  delete?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
-  update?: MessageUpdateWithWhereUniqueWithoutSenderInput[] | MessageUpdateWithWhereUniqueWithoutSenderInput
-  upsert?: MessageUpsertWithWhereUniqueWithoutSenderInput[] | MessageUpsertWithWhereUniqueWithoutSenderInput
-}
-
-export interface ClassroomUpsertNestedInput {
-  update: ClassroomUpdateDataInput
-  create: ClassroomCreateInput
-}
-
-export interface MessageUpdateWithWhereUniqueWithoutSenderInput {
-  where: MessageWhereUniqueInput
-  data: MessageUpdateWithoutSenderDataInput
-}
-
-export interface RefundUpsertWithWhereUniqueWithoutUserInput {
-  where: RefundWhereUniqueInput
-  update: RefundUpdateWithoutUserDataInput
-  create: RefundCreateWithoutUserInput
-}
-
-export interface MessageUpdateWithoutSenderDataInput {
-  text?: String
-  classroom?: ClassroomUpdateOneInput
-}
-
-export interface UserUpdateOneWithoutChargesInput {
-  create?: UserCreateWithoutChargesInput
-  connect?: UserWhereUniqueInput
-  delete?: Boolean
-  update?: UserUpdateWithoutChargesDataInput
-  upsert?: UserUpsertWithoutChargesInput
-}
-
-export interface ClassroomUpdateOneInput {
-  create?: ClassroomCreateInput
-  connect?: ClassroomWhereUniqueInput
-  delete?: Boolean
-  update?: ClassroomUpdateDataInput
-  upsert?: ClassroomUpsertNestedInput
-}
-
-export interface RefundUpdateWithWhereUniqueWithoutUserInput {
-  where: RefundWhereUniqueInput
-  data: RefundUpdateWithoutUserDataInput
-}
-
-export interface ClassroomUpdateDataInput {
-  name?: String
-  description?: String
-  classes?: ClassUpdateManyWithoutClassroomInput
-  teacher?: UserUpdateOneWithoutClassroomsInput
-  students?: UserUpdateManyInput
-}
-
-export interface ClassroomCreateManyWithoutTeacherInput {
-  create?: ClassroomCreateWithoutTeacherInput[] | ClassroomCreateWithoutTeacherInput
-  connect?: ClassroomWhereUniqueInput[] | ClassroomWhereUniqueInput
-}
-
-export interface UserUpdateOneWithoutClassroomsInput {
-  create?: UserCreateWithoutClassroomsInput
-  connect?: UserWhereUniqueInput
-  delete?: Boolean
-  update?: UserUpdateWithoutClassroomsDataInput
-  upsert?: UserUpsertWithoutClassroomsInput
-}
-
-export interface FileCreateManyInput {
-  create?: FileCreateInput[] | FileCreateInput
-  connect?: FileWhereUniqueInput[] | FileWhereUniqueInput
-}
-
-export interface UserUpdateWithoutClassroomsDataInput {
-  auth0Id?: String
-  username?: String
-  email?: String
-  email_verified?: String
-  name?: String
-  gender?: Gender
-  description?: String
-  url?: String
-  stripeId?: String
-  stripeCustomerId?: String
-  picture?: FileUpdateOneInput
-  video?: FileUpdateOneInput
-  followers?: FollowUpdateManyWithoutUser_followedInput
-  following?: FollowUpdateManyWithoutUser_followingInput
-  messages?: MessageUpdateManyWithoutSenderInput
-  charges?: ChargeUpdateManyWithoutUserInput
-  refunds?: RefundUpdateManyWithoutUserInput
-}
-
-export interface UserCreateOneWithoutFollowingInput {
-  create?: UserCreateWithoutFollowingInput
-  connect?: UserWhereUniqueInput
-}
-
-export interface FollowUpdateManyWithoutUser_followingInput {
-  create?: FollowCreateWithoutUser_followingInput[] | FollowCreateWithoutUser_followingInput
-  connect?: FollowWhereUniqueInput[] | FollowWhereUniqueInput
-  disconnect?: FollowWhereUniqueInput[] | FollowWhereUniqueInput
-  delete?: FollowWhereUniqueInput[] | FollowWhereUniqueInput
-  update?: FollowUpdateWithWhereUniqueWithoutUser_followingInput[] | FollowUpdateWithWhereUniqueWithoutUser_followingInput
-  upsert?: FollowUpsertWithWhereUniqueWithoutUser_followingInput[] | FollowUpsertWithWhereUniqueWithoutUser_followingInput
-}
-
-export interface ClassroomCreateOneInput {
-  create?: ClassroomCreateInput
-  connect?: ClassroomWhereUniqueInput
-}
-
-export interface FollowUpdateWithWhereUniqueWithoutUser_followingInput {
-  where: FollowWhereUniqueInput
-  data: FollowUpdateWithoutUser_followingDataInput
-}
-
-export interface FollowCreateManyWithoutUser_followingInput {
-  create?: FollowCreateWithoutUser_followingInput[] | FollowCreateWithoutUser_followingInput
-  connect?: FollowWhereUniqueInput[] | FollowWhereUniqueInput
-}
-
-export interface FollowUpdateWithoutUser_followingDataInput {
-  user_followed?: UserUpdateOneWithoutFollowersInput
-}
-
-export interface RefundSubscriptionWhereInput {
-  AND?: RefundSubscriptionWhereInput[] | RefundSubscriptionWhereInput
-  OR?: RefundSubscriptionWhereInput[] | RefundSubscriptionWhereInput
-  NOT?: RefundSubscriptionWhereInput[] | RefundSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: RefundWhereInput
-}
-
-export interface UserUpdateOneWithoutFollowersInput {
-  create?: UserCreateWithoutFollowersInput
-  connect?: UserWhereUniqueInput
-  delete?: Boolean
-  update?: UserUpdateWithoutFollowersDataInput
-  upsert?: UserUpsertWithoutFollowersInput
-}
-
-export interface ClassroomWhereInput {
-  AND?: ClassroomWhereInput[] | ClassroomWhereInput
-  OR?: ClassroomWhereInput[] | ClassroomWhereInput
-  NOT?: ClassroomWhereInput[] | ClassroomWhereInput
-  id?: ID_Input
-  id_not?: ID_Input
-  id_in?: ID_Input[] | ID_Input
-  id_not_in?: ID_Input[] | ID_Input
-  id_lt?: ID_Input
-  id_lte?: ID_Input
-  id_gt?: ID_Input
-  id_gte?: ID_Input
-  id_contains?: ID_Input
-  id_not_contains?: ID_Input
-  id_starts_with?: ID_Input
-  id_not_starts_with?: ID_Input
-  id_ends_with?: ID_Input
-  id_not_ends_with?: ID_Input
-  createdAt?: DateTime
-  createdAt_not?: DateTime
-  createdAt_in?: DateTime[] | DateTime
-  createdAt_not_in?: DateTime[] | DateTime
-  createdAt_lt?: DateTime
-  createdAt_lte?: DateTime
-  createdAt_gt?: DateTime
-  createdAt_gte?: DateTime
-  updatedAt?: DateTime
-  updatedAt_not?: DateTime
-  updatedAt_in?: DateTime[] | DateTime
-  updatedAt_not_in?: DateTime[] | DateTime
-  updatedAt_lt?: DateTime
-  updatedAt_lte?: DateTime
-  updatedAt_gt?: DateTime
-  updatedAt_gte?: DateTime
-  name?: String
-  name_not?: String
-  name_in?: String[] | String
-  name_not_in?: String[] | String
-  name_lt?: String
-  name_lte?: String
-  name_gt?: String
-  name_gte?: String
-  name_contains?: String
-  name_not_contains?: String
-  name_starts_with?: String
-  name_not_starts_with?: String
-  name_ends_with?: String
-  name_not_ends_with?: String
-  description?: String
-  description_not?: String
-  description_in?: String[] | String
-  description_not_in?: String[] | String
-  description_lt?: String
-  description_lte?: String
-  description_gt?: String
-  description_gte?: String
-  description_contains?: String
-  description_not_contains?: String
-  description_starts_with?: String
-  description_not_starts_with?: String
-  description_ends_with?: String
-  description_not_ends_with?: String
-  classes_every?: ClassWhereInput
-  classes_some?: ClassWhereInput
-  classes_none?: ClassWhereInput
-  teacher?: UserWhereInput
-  students_every?: UserWhereInput
-  students_some?: UserWhereInput
-  students_none?: UserWhereInput
-}
-
-export interface UserUpdateWithoutFollowersDataInput {
-  auth0Id?: String
-  username?: String
-  email?: String
-  email_verified?: String
-  name?: String
-  gender?: Gender
-  description?: String
-  url?: String
-  stripeId?: String
-  stripeCustomerId?: String
-  picture?: FileUpdateOneInput
-  video?: FileUpdateOneInput
-  classrooms?: ClassroomUpdateManyWithoutTeacherInput
-  following?: FollowUpdateManyWithoutUser_followingInput
-  messages?: MessageUpdateManyWithoutSenderInput
-  charges?: ChargeUpdateManyWithoutUserInput
-  refunds?: RefundUpdateManyWithoutUserInput
-}
-
-export interface ClassroomWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface ChargeUpdateManyWithoutUserInput {
-  create?: ChargeCreateWithoutUserInput[] | ChargeCreateWithoutUserInput
-  connect?: ChargeWhereUniqueInput[] | ChargeWhereUniqueInput
-  disconnect?: ChargeWhereUniqueInput[] | ChargeWhereUniqueInput
-  delete?: ChargeWhereUniqueInput[] | ChargeWhereUniqueInput
-  update?: ChargeUpdateWithWhereUniqueWithoutUserInput[] | ChargeUpdateWithWhereUniqueWithoutUserInput
-  upsert?: ChargeUpsertWithWhereUniqueWithoutUserInput[] | ChargeUpsertWithWhereUniqueWithoutUserInput
-}
-
-export interface MessageUpdateInput {
-  text?: String
-  sender?: UserUpdateOneWithoutMessagesInput
-  classroom?: ClassroomUpdateOneInput
-}
-
-export interface ChargeUpdateWithWhereUniqueWithoutUserInput {
+export interface ChargeUpsertWithWhereUniqueWithoutUserInput {
   where: ChargeWhereUniqueInput
-  data: ChargeUpdateWithoutUserDataInput
-}
-
-export interface UserUpsertWithoutFollowingInput {
-  update: UserUpdateWithoutFollowingDataInput
-  create: UserCreateWithoutFollowingInput
-}
-
-export interface ChargeUpdateWithoutUserDataInput {
-  amount?: Float
-  stripeId?: String
-  class?: ClassUpdateOneInput
-  refund?: RefundUpdateOneWithoutChargeInput
-}
-
-export interface UserUpsertWithoutChargesInput {
-  update: UserUpdateWithoutChargesDataInput
-  create: UserCreateWithoutChargesInput
-}
-
-export interface ClassUpdateOneInput {
-  create?: ClassCreateInput
-  connect?: ClassWhereUniqueInput
-  delete?: Boolean
-  update?: ClassUpdateDataInput
-  upsert?: ClassUpsertNestedInput
-}
-
-export interface FileCreateOneInput {
-  create?: FileCreateInput
-  connect?: FileWhereUniqueInput
-}
-
-export interface ClassUpdateDataInput {
-  name?: String
-  description?: String
-  picture?: String
-  duration?: Int
-  price?: Float
-  startDate?: DateTime
-  live?: Boolean
-  video?: FileUpdateOneInput
-  files?: FileUpdateManyInput
-  vods?: FileUpdateManyInput
-  classroom?: ClassroomUpdateOneWithoutClassesInput
-}
-
-export interface FollowCreateManyWithoutUser_followedInput {
-  create?: FollowCreateWithoutUser_followedInput[] | FollowCreateWithoutUser_followedInput
-  connect?: FollowWhereUniqueInput[] | FollowWhereUniqueInput
-}
-
-export interface ClassroomUpdateOneWithoutClassesInput {
-  create?: ClassroomCreateWithoutClassesInput
-  connect?: ClassroomWhereUniqueInput
-  disconnect?: Boolean
-  delete?: Boolean
-  update?: ClassroomUpdateWithoutClassesDataInput
-  upsert?: ClassroomUpsertWithoutClassesInput
-}
-
-export interface UserCreateOneWithoutClassroomsInput {
-  create?: UserCreateWithoutClassroomsInput
-  connect?: UserWhereUniqueInput
-}
-
-export interface ClassroomUpdateWithoutClassesDataInput {
-  name?: String
-  description?: String
-  teacher?: UserUpdateOneWithoutClassroomsInput
-  students?: UserUpdateManyInput
-}
-
-export interface ClassSubscriptionWhereInput {
-  AND?: ClassSubscriptionWhereInput[] | ClassSubscriptionWhereInput
-  OR?: ClassSubscriptionWhereInput[] | ClassSubscriptionWhereInput
-  NOT?: ClassSubscriptionWhereInput[] | ClassSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: ClassWhereInput
-}
-
-export interface ClassroomUpsertWithoutClassesInput {
-  update: ClassroomUpdateWithoutClassesDataInput
-  create: ClassroomCreateWithoutClassesInput
-}
-
-export interface ChargeWhereUniqueInput {
-  id?: ID_Input
-  stripeId?: String
-}
-
-export interface ClassUpsertNestedInput {
-  update: ClassUpdateDataInput
-  create: ClassCreateInput
-}
-
-export interface FollowUpsertWithWhereUniqueWithoutUser_followingInput {
-  where: FollowWhereUniqueInput
-  update: FollowUpdateWithoutUser_followingDataInput
-  create: FollowCreateWithoutUser_followingInput
-}
-
-export interface RefundUpdateOneWithoutChargeInput {
-  create?: RefundCreateWithoutChargeInput
-  connect?: RefundWhereUniqueInput
-  disconnect?: Boolean
-  delete?: Boolean
-  update?: RefundUpdateWithoutChargeDataInput
-  upsert?: RefundUpsertWithoutChargeInput
-}
-
-export interface ClassCreateManyWithoutClassroomInput {
-  create?: ClassCreateWithoutClassroomInput[] | ClassCreateWithoutClassroomInput
-  connect?: ClassWhereUniqueInput[] | ClassWhereUniqueInput
-}
-
-export interface RefundUpdateWithoutChargeDataInput {
-  stripeId?: String
-  amount?: Float
-  class?: ClassUpdateOneInput
-  user?: UserUpdateOneWithoutRefundsInput
-}
-
-export interface UserCreateOneWithoutFollowersInput {
-  create?: UserCreateWithoutFollowersInput
-  connect?: UserWhereUniqueInput
+  update: ChargeUpdateWithoutUserDataInput
+  create: ChargeCreateWithoutUserInput
 }
 
 export interface RefundUpsertWithoutChargeInput {
@@ -5797,58 +6130,57 @@ export interface UserUpsertWithoutRefundsInput {
   create: UserCreateWithoutRefundsInput
 }
 
-export interface UserUpdateWithoutRefundsDataInput {
-  auth0Id?: String
-  username?: String
-  email?: String
+export interface ClassroomUpsertWithWhereUniqueWithoutTeacherInput {
+  where: ClassroomWhereUniqueInput
+  update: ClassroomUpdateWithoutTeacherDataInput
+  create: ClassroomCreateWithoutTeacherInput
+}
+
+export interface UserCreateWithoutStudying_classroomsInput {
+  auth0Id: String
+  username: String
+  email: String
   email_verified?: String
   name?: String
-  gender?: Gender
+  gender: Gender
   description?: String
   url?: String
   stripeId?: String
   stripeCustomerId?: String
-  picture?: FileUpdateOneInput
-  video?: FileUpdateOneInput
-  classrooms?: ClassroomUpdateManyWithoutTeacherInput
-  followers?: FollowUpdateManyWithoutUser_followedInput
-  following?: FollowUpdateManyWithoutUser_followingInput
-  messages?: MessageUpdateManyWithoutSenderInput
-  charges?: ChargeUpdateManyWithoutUserInput
+  picture: FileCreateOneInput
+  video?: FileCreateOneInput
+  taught_classrooms?: ClassroomCreateManyWithoutTeacherInput
+  followers?: FollowCreateManyWithoutUser_followedInput
+  following?: FollowCreateManyWithoutUser_followingInput
+  messages?: MessageCreateManyWithoutSenderInput
+  charges?: ChargeCreateManyWithoutUserInput
+  refunds?: RefundCreateManyWithoutUserInput
 }
 
-export interface UserUpdateOneWithoutRefundsInput {
-  create?: UserCreateWithoutRefundsInput
-  connect?: UserWhereUniqueInput
-  delete?: Boolean
-  update?: UserUpdateWithoutRefundsDataInput
-  upsert?: UserUpsertWithoutRefundsInput
-}
-
-export interface ChargeUpdateInput {
-  amount?: Float
+export interface UserCreateWithoutMessagesInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified?: String
+  name?: String
+  gender: Gender
+  description?: String
+  url?: String
   stripeId?: String
-  class?: ClassUpdateOneInput
-  user?: UserUpdateOneWithoutChargesInput
-  refund?: RefundUpdateOneWithoutChargeInput
+  stripeCustomerId?: String
+  picture: FileCreateOneInput
+  video?: FileCreateOneInput
+  taught_classrooms?: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms?: ClassroomCreateManyWithoutStudentsInput
+  followers?: FollowCreateManyWithoutUser_followedInput
+  following?: FollowCreateManyWithoutUser_followingInput
+  charges?: ChargeCreateManyWithoutUserInput
+  refunds?: RefundCreateManyWithoutUserInput
 }
 
-export interface MessageCreateManyWithoutSenderInput {
-  create?: MessageCreateWithoutSenderInput[] | MessageCreateWithoutSenderInput
-  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
-}
-
-export interface ChargeUpdateOneWithoutRefundInput {
-  create?: ChargeCreateWithoutRefundInput
-  connect?: ChargeWhereUniqueInput
-  delete?: Boolean
-  update?: ChargeUpdateWithoutRefundDataInput
-  upsert?: ChargeUpsertWithoutRefundInput
-}
-
-export interface FollowUpdateInput {
-  user_following?: UserUpdateOneWithoutFollowingInput
-  user_followed?: UserUpdateOneWithoutFollowersInput
+export interface UserUpsertWithoutChargesInput {
+  update: UserUpdateWithoutChargesDataInput
+  create: UserCreateWithoutChargesInput
 }
 
 /*
@@ -5894,7 +6226,8 @@ export interface User extends Node {
   video?: File
   stripeId?: String
   stripeCustomerId?: String
-  classrooms?: Classroom[]
+  taught_classrooms?: Classroom[]
+  studying_classrooms?: Classroom[]
   followers?: Follow[]
   following?: Follow[]
   messages?: Message[]
@@ -5974,13 +6307,12 @@ export interface MessageConnection {
   aggregate: AggregateMessage
 }
 
-export interface Message extends Node {
+export interface Follow extends Node {
   id: ID_Output
   createdAt: DateTime
   updatedAt: DateTime
-  text: String
-  sender: User
-  classroom: Classroom
+  user_following: User
+  user_followed: User
 }
 
 /*
@@ -6048,12 +6380,13 @@ export interface ClassroomEdge {
   cursor: String
 }
 
-export interface Follow extends Node {
+export interface Message extends Node {
   id: ID_Output
   createdAt: DateTime
   updatedAt: DateTime
-  user_following: User
-  user_followed: User
+  text: String
+  sender: User
+  class: Class
 }
 
 export interface AggregateFollow {
@@ -6133,6 +6466,7 @@ export interface ClassroomPreviousValues {
   updatedAt: DateTime
   name: String
   description: String
+  price: Float
 }
 
 export interface AggregateFile {
@@ -6144,16 +6478,17 @@ export interface Class extends Node {
   createdAt: DateTime
   updatedAt: DateTime
   name: String
-  description?: String
-  video?: File
+  description: String
   picture?: String
-  duration?: Int
-  price?: Float
+  price: Float
   startDate?: DateTime
   live: Boolean
+  duration?: Int
+  video?: File
   files?: File[]
   vods?: File[]
-  classroom?: Classroom
+  classroom: Classroom
+  messages?: Message[]
 }
 
 /*
@@ -6187,12 +6522,12 @@ export interface ClassPreviousValues {
   createdAt: DateTime
   updatedAt: DateTime
   name: String
-  description?: String
+  description: String
   picture?: String
-  duration?: Int
-  price?: Float
+  price: Float
   startDate?: DateTime
   live: Boolean
+  duration?: Int
 }
 
 export interface AggregateUser {
@@ -6236,6 +6571,7 @@ export interface Classroom extends Node {
   updatedAt: DateTime
   name: String
   description: String
+  price: Float
   classes?: Class[]
   teacher: User
   students?: User[]
@@ -6311,11 +6647,6 @@ export type String = string
 export type DateTime = Date | string
 
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
-*/
-export type Int = number
-
-/*
 The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
 */
 export type Float = number
@@ -6324,3 +6655,8 @@ export type Float = number
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean
+
+/*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+*/
+export type Int = number

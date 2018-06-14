@@ -28,10 +28,10 @@ export const User = {
   stripeURL: {
     fragment: `fragment UserStripeID on User { stripeId }`,
     resolve: async ({ stripeId }, args, ctx: Context, info) => {
-      if (stripeId) {
+      try {
         const res = await stripe.accounts.createLoginLink(stripeId)
-        return res.url || null
-      } else {
+        return res.url
+      } catch (err) {
         return null
       }
     },

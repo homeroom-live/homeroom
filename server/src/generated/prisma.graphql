@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/matic-zavadlal-03c51f/homeroom-setup/dev
-# timestamp: Wed Jun 13 2018 18:45:55 GMT+0200 (CEST)
+# timestamp: Thu Jun 14 2018 11:13:31 GMT+0200 (CEST)
 
 type AggregateCharge {
   count: Int!
@@ -385,16 +385,17 @@ type Class implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
-  description: String
-  video(where: FileWhereInput): File
+  description: String!
   picture: String
-  duration: Int
-  price: Float
+  price: Float!
   startDate: DateTime
   live: Boolean!
+  duration: Int
+  video(where: FileWhereInput): File
   files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File!]
   vods(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File!]
-  classroom(where: ClassroomWhereInput): Classroom
+  classroom(where: ClassroomWhereInput): Classroom!
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
 }
 
 """A connection to a list of items."""
@@ -409,16 +410,17 @@ type ClassConnection {
 
 input ClassCreateInput {
   name: String!
-  description: String
+  description: String!
   picture: String
-  duration: Int
   price: Float
   startDate: DateTime
   live: Boolean
+  duration: Int
   video: FileCreateOneInput
   files: FileCreateManyInput
   vods: FileCreateManyInput
-  classroom: ClassroomCreateOneWithoutClassesInput
+  classroom: ClassroomCreateOneWithoutClassesInput!
+  messages: MessageCreateManyWithoutClassInput
 }
 
 input ClassCreateManyWithoutClassroomInput {
@@ -431,17 +433,37 @@ input ClassCreateOneInput {
   connect: ClassWhereUniqueInput
 }
 
+input ClassCreateOneWithoutMessagesInput {
+  create: ClassCreateWithoutMessagesInput
+  connect: ClassWhereUniqueInput
+}
+
 input ClassCreateWithoutClassroomInput {
   name: String!
-  description: String
+  description: String!
   picture: String
-  duration: Int
   price: Float
   startDate: DateTime
   live: Boolean
+  duration: Int
   video: FileCreateOneInput
   files: FileCreateManyInput
   vods: FileCreateManyInput
+  messages: MessageCreateManyWithoutClassInput
+}
+
+input ClassCreateWithoutMessagesInput {
+  name: String!
+  description: String!
+  picture: String
+  price: Float
+  startDate: DateTime
+  live: Boolean
+  duration: Int
+  video: FileCreateOneInput
+  files: FileCreateManyInput
+  vods: FileCreateManyInput
+  classroom: ClassroomCreateOneWithoutClassesInput!
 }
 
 """An edge in a connection."""
@@ -466,14 +488,14 @@ enum ClassOrderByInput {
   description_DESC
   picture_ASC
   picture_DESC
-  duration_ASC
-  duration_DESC
   price_ASC
   price_DESC
   startDate_ASC
   startDate_DESC
   live_ASC
   live_DESC
+  duration_ASC
+  duration_DESC
 }
 
 type ClassPreviousValues {
@@ -481,12 +503,12 @@ type ClassPreviousValues {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
-  description: String
+  description: String!
   picture: String
-  duration: Int
-  price: Float
+  price: Float!
   startDate: DateTime
   live: Boolean!
+  duration: Int
 }
 
 type Classroom implements Node {
@@ -495,6 +517,7 @@ type Classroom implements Node {
   updatedAt: DateTime!
   name: String!
   description: String!
+  price: Float!
   classes(where: ClassWhereInput, orderBy: ClassOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Class!]
   teacher(where: UserWhereInput): User!
   students(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
@@ -513,19 +536,20 @@ type ClassroomConnection {
 input ClassroomCreateInput {
   name: String!
   description: String!
+  price: Float!
   classes: ClassCreateManyWithoutClassroomInput
-  teacher: UserCreateOneWithoutClassroomsInput!
-  students: UserCreateManyInput
+  teacher: UserCreateOneWithoutTaught_classroomsInput!
+  students: UserCreateManyWithoutStudying_classroomsInput
+}
+
+input ClassroomCreateManyWithoutStudentsInput {
+  create: [ClassroomCreateWithoutStudentsInput!]
+  connect: [ClassroomWhereUniqueInput!]
 }
 
 input ClassroomCreateManyWithoutTeacherInput {
   create: [ClassroomCreateWithoutTeacherInput!]
   connect: [ClassroomWhereUniqueInput!]
-}
-
-input ClassroomCreateOneInput {
-  create: ClassroomCreateInput
-  connect: ClassroomWhereUniqueInput
 }
 
 input ClassroomCreateOneWithoutClassesInput {
@@ -536,15 +560,25 @@ input ClassroomCreateOneWithoutClassesInput {
 input ClassroomCreateWithoutClassesInput {
   name: String!
   description: String!
-  teacher: UserCreateOneWithoutClassroomsInput!
-  students: UserCreateManyInput
+  price: Float!
+  teacher: UserCreateOneWithoutTaught_classroomsInput!
+  students: UserCreateManyWithoutStudying_classroomsInput
+}
+
+input ClassroomCreateWithoutStudentsInput {
+  name: String!
+  description: String!
+  price: Float!
+  classes: ClassCreateManyWithoutClassroomInput
+  teacher: UserCreateOneWithoutTaught_classroomsInput!
 }
 
 input ClassroomCreateWithoutTeacherInput {
   name: String!
   description: String!
+  price: Float!
   classes: ClassCreateManyWithoutClassroomInput
-  students: UserCreateManyInput
+  students: UserCreateManyWithoutStudying_classroomsInput
 }
 
 """An edge in a connection."""
@@ -567,6 +601,8 @@ enum ClassroomOrderByInput {
   name_DESC
   description_ASC
   description_DESC
+  price_ASC
+  price_DESC
 }
 
 type ClassroomPreviousValues {
@@ -575,6 +611,7 @@ type ClassroomPreviousValues {
   updatedAt: DateTime!
   name: String!
   description: String!
+  price: Float!
 }
 
 type ClassroomSubscriptionPayload {
@@ -616,20 +653,22 @@ input ClassroomSubscriptionWhereInput {
   node: ClassroomWhereInput
 }
 
-input ClassroomUpdateDataInput {
-  name: String
-  description: String
-  classes: ClassUpdateManyWithoutClassroomInput
-  teacher: UserUpdateOneWithoutClassroomsInput
-  students: UserUpdateManyInput
-}
-
 input ClassroomUpdateInput {
   name: String
   description: String
+  price: Float
   classes: ClassUpdateManyWithoutClassroomInput
-  teacher: UserUpdateOneWithoutClassroomsInput
-  students: UserUpdateManyInput
+  teacher: UserUpdateOneWithoutTaught_classroomsInput
+  students: UserUpdateManyWithoutStudying_classroomsInput
+}
+
+input ClassroomUpdateManyWithoutStudentsInput {
+  create: [ClassroomCreateWithoutStudentsInput!]
+  connect: [ClassroomWhereUniqueInput!]
+  disconnect: [ClassroomWhereUniqueInput!]
+  delete: [ClassroomWhereUniqueInput!]
+  update: [ClassroomUpdateWithWhereUniqueWithoutStudentsInput!]
+  upsert: [ClassroomUpsertWithWhereUniqueWithoutStudentsInput!]
 }
 
 input ClassroomUpdateManyWithoutTeacherInput {
@@ -641,18 +680,9 @@ input ClassroomUpdateManyWithoutTeacherInput {
   upsert: [ClassroomUpsertWithWhereUniqueWithoutTeacherInput!]
 }
 
-input ClassroomUpdateOneInput {
-  create: ClassroomCreateInput
-  connect: ClassroomWhereUniqueInput
-  delete: Boolean
-  update: ClassroomUpdateDataInput
-  upsert: ClassroomUpsertNestedInput
-}
-
 input ClassroomUpdateOneWithoutClassesInput {
   create: ClassroomCreateWithoutClassesInput
   connect: ClassroomWhereUniqueInput
-  disconnect: Boolean
   delete: Boolean
   update: ClassroomUpdateWithoutClassesDataInput
   upsert: ClassroomUpsertWithoutClassesInput
@@ -661,15 +691,30 @@ input ClassroomUpdateOneWithoutClassesInput {
 input ClassroomUpdateWithoutClassesDataInput {
   name: String
   description: String
-  teacher: UserUpdateOneWithoutClassroomsInput
-  students: UserUpdateManyInput
+  price: Float
+  teacher: UserUpdateOneWithoutTaught_classroomsInput
+  students: UserUpdateManyWithoutStudying_classroomsInput
+}
+
+input ClassroomUpdateWithoutStudentsDataInput {
+  name: String
+  description: String
+  price: Float
+  classes: ClassUpdateManyWithoutClassroomInput
+  teacher: UserUpdateOneWithoutTaught_classroomsInput
 }
 
 input ClassroomUpdateWithoutTeacherDataInput {
   name: String
   description: String
+  price: Float
   classes: ClassUpdateManyWithoutClassroomInput
-  students: UserUpdateManyInput
+  students: UserUpdateManyWithoutStudying_classroomsInput
+}
+
+input ClassroomUpdateWithWhereUniqueWithoutStudentsInput {
+  where: ClassroomWhereUniqueInput!
+  data: ClassroomUpdateWithoutStudentsDataInput!
 }
 
 input ClassroomUpdateWithWhereUniqueWithoutTeacherInput {
@@ -677,14 +722,15 @@ input ClassroomUpdateWithWhereUniqueWithoutTeacherInput {
   data: ClassroomUpdateWithoutTeacherDataInput!
 }
 
-input ClassroomUpsertNestedInput {
-  update: ClassroomUpdateDataInput!
-  create: ClassroomCreateInput!
-}
-
 input ClassroomUpsertWithoutClassesInput {
   update: ClassroomUpdateWithoutClassesDataInput!
   create: ClassroomCreateWithoutClassesInput!
+}
+
+input ClassroomUpsertWithWhereUniqueWithoutStudentsInput {
+  where: ClassroomWhereUniqueInput!
+  update: ClassroomUpdateWithoutStudentsDataInput!
+  create: ClassroomCreateWithoutStudentsInput!
 }
 
 input ClassroomUpsertWithWhereUniqueWithoutTeacherInput {
@@ -866,6 +912,28 @@ input ClassroomWhereInput {
 
   """All values not ending with the given string."""
   description_not_ends_with: String
+  price: Float
+
+  """All values that are not equal to given value."""
+  price_not: Float
+
+  """All values that are contained in given list."""
+  price_in: [Float!]
+
+  """All values that are not contained in given list."""
+  price_not_in: [Float!]
+
+  """All values less than the given value."""
+  price_lt: Float
+
+  """All values less than or equal the given value."""
+  price_lte: Float
+
+  """All values greater than the given value."""
+  price_gt: Float
+
+  """All values greater than or equal the given value."""
+  price_gte: Float
   classes_every: ClassWhereInput
   classes_some: ClassWhereInput
   classes_none: ClassWhereInput
@@ -922,28 +990,30 @@ input ClassUpdateDataInput {
   name: String
   description: String
   picture: String
-  duration: Int
   price: Float
   startDate: DateTime
   live: Boolean
+  duration: Int
   video: FileUpdateOneInput
   files: FileUpdateManyInput
   vods: FileUpdateManyInput
   classroom: ClassroomUpdateOneWithoutClassesInput
+  messages: MessageUpdateManyWithoutClassInput
 }
 
 input ClassUpdateInput {
   name: String
   description: String
   picture: String
-  duration: Int
   price: Float
   startDate: DateTime
   live: Boolean
+  duration: Int
   video: FileUpdateOneInput
   files: FileUpdateManyInput
   vods: FileUpdateManyInput
   classroom: ClassroomUpdateOneWithoutClassesInput
+  messages: MessageUpdateManyWithoutClassInput
 }
 
 input ClassUpdateManyWithoutClassroomInput {
@@ -963,17 +1033,40 @@ input ClassUpdateOneInput {
   upsert: ClassUpsertNestedInput
 }
 
+input ClassUpdateOneWithoutMessagesInput {
+  create: ClassCreateWithoutMessagesInput
+  connect: ClassWhereUniqueInput
+  delete: Boolean
+  update: ClassUpdateWithoutMessagesDataInput
+  upsert: ClassUpsertWithoutMessagesInput
+}
+
 input ClassUpdateWithoutClassroomDataInput {
   name: String
   description: String
   picture: String
-  duration: Int
   price: Float
   startDate: DateTime
   live: Boolean
+  duration: Int
   video: FileUpdateOneInput
   files: FileUpdateManyInput
   vods: FileUpdateManyInput
+  messages: MessageUpdateManyWithoutClassInput
+}
+
+input ClassUpdateWithoutMessagesDataInput {
+  name: String
+  description: String
+  picture: String
+  price: Float
+  startDate: DateTime
+  live: Boolean
+  duration: Int
+  video: FileUpdateOneInput
+  files: FileUpdateManyInput
+  vods: FileUpdateManyInput
+  classroom: ClassroomUpdateOneWithoutClassesInput
 }
 
 input ClassUpdateWithWhereUniqueWithoutClassroomInput {
@@ -984,6 +1077,11 @@ input ClassUpdateWithWhereUniqueWithoutClassroomInput {
 input ClassUpsertNestedInput {
   update: ClassUpdateDataInput!
   create: ClassCreateInput!
+}
+
+input ClassUpsertWithoutMessagesInput {
+  update: ClassUpdateWithoutMessagesDataInput!
+  create: ClassCreateWithoutMessagesInput!
 }
 
 input ClassUpsertWithWhereUniqueWithoutClassroomInput {
@@ -1205,28 +1303,6 @@ input ClassWhereInput {
 
   """All values not ending with the given string."""
   picture_not_ends_with: String
-  duration: Int
-
-  """All values that are not equal to given value."""
-  duration_not: Int
-
-  """All values that are contained in given list."""
-  duration_in: [Int!]
-
-  """All values that are not contained in given list."""
-  duration_not_in: [Int!]
-
-  """All values less than the given value."""
-  duration_lt: Int
-
-  """All values less than or equal the given value."""
-  duration_lte: Int
-
-  """All values greater than the given value."""
-  duration_gt: Int
-
-  """All values greater than or equal the given value."""
-  duration_gte: Int
   price: Float
 
   """All values that are not equal to given value."""
@@ -1275,6 +1351,28 @@ input ClassWhereInput {
 
   """All values that are not equal to given value."""
   live_not: Boolean
+  duration: Int
+
+  """All values that are not equal to given value."""
+  duration_not: Int
+
+  """All values that are contained in given list."""
+  duration_in: [Int!]
+
+  """All values that are not contained in given list."""
+  duration_not_in: [Int!]
+
+  """All values less than the given value."""
+  duration_lt: Int
+
+  """All values less than or equal the given value."""
+  duration_lte: Int
+
+  """All values greater than the given value."""
+  duration_gt: Int
+
+  """All values greater than or equal the given value."""
+  duration_gte: Int
   video: FileWhereInput
   files_every: FileWhereInput
   files_some: FileWhereInput
@@ -1283,6 +1381,9 @@ input ClassWhereInput {
   vods_some: FileWhereInput
   vods_none: FileWhereInput
   classroom: ClassroomWhereInput
+  messages_every: MessageWhereInput
+  messages_some: MessageWhereInput
+  messages_none: MessageWhereInput
 }
 
 input ClassWhereUniqueInput {
@@ -1986,7 +2087,7 @@ type Message implements Node {
   updatedAt: DateTime!
   text: String!
   sender(where: UserWhereInput): User!
-  classroom(where: ClassroomWhereInput): Classroom!
+  class(where: ClassWhereInput): Class!
 }
 
 """A connection to a list of items."""
@@ -2002,7 +2103,12 @@ type MessageConnection {
 input MessageCreateInput {
   text: String!
   sender: UserCreateOneWithoutMessagesInput!
-  classroom: ClassroomCreateOneInput!
+  class: ClassCreateOneWithoutMessagesInput!
+}
+
+input MessageCreateManyWithoutClassInput {
+  create: [MessageCreateWithoutClassInput!]
+  connect: [MessageWhereUniqueInput!]
 }
 
 input MessageCreateManyWithoutSenderInput {
@@ -2010,9 +2116,14 @@ input MessageCreateManyWithoutSenderInput {
   connect: [MessageWhereUniqueInput!]
 }
 
+input MessageCreateWithoutClassInput {
+  text: String!
+  sender: UserCreateOneWithoutMessagesInput!
+}
+
 input MessageCreateWithoutSenderInput {
   text: String!
-  classroom: ClassroomCreateOneInput!
+  class: ClassCreateOneWithoutMessagesInput!
 }
 
 """An edge in a connection."""
@@ -2084,7 +2195,16 @@ input MessageSubscriptionWhereInput {
 input MessageUpdateInput {
   text: String
   sender: UserUpdateOneWithoutMessagesInput
-  classroom: ClassroomUpdateOneInput
+  class: ClassUpdateOneWithoutMessagesInput
+}
+
+input MessageUpdateManyWithoutClassInput {
+  create: [MessageCreateWithoutClassInput!]
+  connect: [MessageWhereUniqueInput!]
+  disconnect: [MessageWhereUniqueInput!]
+  delete: [MessageWhereUniqueInput!]
+  update: [MessageUpdateWithWhereUniqueWithoutClassInput!]
+  upsert: [MessageUpsertWithWhereUniqueWithoutClassInput!]
 }
 
 input MessageUpdateManyWithoutSenderInput {
@@ -2096,14 +2216,30 @@ input MessageUpdateManyWithoutSenderInput {
   upsert: [MessageUpsertWithWhereUniqueWithoutSenderInput!]
 }
 
+input MessageUpdateWithoutClassDataInput {
+  text: String
+  sender: UserUpdateOneWithoutMessagesInput
+}
+
 input MessageUpdateWithoutSenderDataInput {
   text: String
-  classroom: ClassroomUpdateOneInput
+  class: ClassUpdateOneWithoutMessagesInput
+}
+
+input MessageUpdateWithWhereUniqueWithoutClassInput {
+  where: MessageWhereUniqueInput!
+  data: MessageUpdateWithoutClassDataInput!
 }
 
 input MessageUpdateWithWhereUniqueWithoutSenderInput {
   where: MessageWhereUniqueInput!
   data: MessageUpdateWithoutSenderDataInput!
+}
+
+input MessageUpsertWithWhereUniqueWithoutClassInput {
+  where: MessageWhereUniqueInput!
+  update: MessageUpdateWithoutClassDataInput!
+  create: MessageCreateWithoutClassInput!
 }
 
 input MessageUpsertWithWhereUniqueWithoutSenderInput {
@@ -2246,7 +2382,7 @@ input MessageWhereInput {
   """All values not ending with the given string."""
   text_not_ends_with: String
   sender: UserWhereInput
-  classroom: ClassroomWhereInput
+  class: ClassWhereInput
 }
 
 input MessageWhereUniqueInput {
@@ -2734,7 +2870,8 @@ type User implements Node {
   video(where: FileWhereInput): File
   stripeId: String
   stripeCustomerId: String
-  classrooms(where: ClassroomWhereInput, orderBy: ClassroomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Classroom!]
+  taught_classrooms(where: ClassroomWhereInput, orderBy: ClassroomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Classroom!]
+  studying_classrooms(where: ClassroomWhereInput, orderBy: ClassroomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Classroom!]
   followers(where: FollowWhereInput, orderBy: FollowOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Follow!]
   following(where: FollowWhereInput, orderBy: FollowOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Follow!]
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
@@ -2765,7 +2902,8 @@ input UserCreateInput {
   stripeCustomerId: String
   picture: FileCreateOneInput!
   video: FileCreateOneInput
-  classrooms: ClassroomCreateManyWithoutTeacherInput
+  taught_classrooms: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   followers: FollowCreateManyWithoutUser_followedInput
   following: FollowCreateManyWithoutUser_followingInput
   messages: MessageCreateManyWithoutSenderInput
@@ -2773,18 +2911,13 @@ input UserCreateInput {
   refunds: RefundCreateManyWithoutUserInput
 }
 
-input UserCreateManyInput {
-  create: [UserCreateInput!]
+input UserCreateManyWithoutStudying_classroomsInput {
+  create: [UserCreateWithoutStudying_classroomsInput!]
   connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateOneWithoutChargesInput {
   create: UserCreateWithoutChargesInput
-  connect: UserWhereUniqueInput
-}
-
-input UserCreateOneWithoutClassroomsInput {
-  create: UserCreateWithoutClassroomsInput
   connect: UserWhereUniqueInput
 }
 
@@ -2808,6 +2941,11 @@ input UserCreateOneWithoutRefundsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutTaught_classroomsInput {
+  create: UserCreateWithoutTaught_classroomsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateWithoutChargesInput {
   auth0Id: String!
   username: String!
@@ -2821,30 +2959,11 @@ input UserCreateWithoutChargesInput {
   stripeCustomerId: String
   picture: FileCreateOneInput!
   video: FileCreateOneInput
-  classrooms: ClassroomCreateManyWithoutTeacherInput
+  taught_classrooms: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   followers: FollowCreateManyWithoutUser_followedInput
   following: FollowCreateManyWithoutUser_followingInput
   messages: MessageCreateManyWithoutSenderInput
-  refunds: RefundCreateManyWithoutUserInput
-}
-
-input UserCreateWithoutClassroomsInput {
-  auth0Id: String!
-  username: String!
-  email: String!
-  email_verified: String
-  name: String
-  gender: Gender!
-  description: String
-  url: String
-  stripeId: String
-  stripeCustomerId: String
-  picture: FileCreateOneInput!
-  video: FileCreateOneInput
-  followers: FollowCreateManyWithoutUser_followedInput
-  following: FollowCreateManyWithoutUser_followingInput
-  messages: MessageCreateManyWithoutSenderInput
-  charges: ChargeCreateManyWithoutUserInput
   refunds: RefundCreateManyWithoutUserInput
 }
 
@@ -2861,7 +2980,8 @@ input UserCreateWithoutFollowersInput {
   stripeCustomerId: String
   picture: FileCreateOneInput!
   video: FileCreateOneInput
-  classrooms: ClassroomCreateManyWithoutTeacherInput
+  taught_classrooms: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   following: FollowCreateManyWithoutUser_followingInput
   messages: MessageCreateManyWithoutSenderInput
   charges: ChargeCreateManyWithoutUserInput
@@ -2881,7 +3001,8 @@ input UserCreateWithoutFollowingInput {
   stripeCustomerId: String
   picture: FileCreateOneInput!
   video: FileCreateOneInput
-  classrooms: ClassroomCreateManyWithoutTeacherInput
+  taught_classrooms: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   followers: FollowCreateManyWithoutUser_followedInput
   messages: MessageCreateManyWithoutSenderInput
   charges: ChargeCreateManyWithoutUserInput
@@ -2901,7 +3022,8 @@ input UserCreateWithoutMessagesInput {
   stripeCustomerId: String
   picture: FileCreateOneInput!
   video: FileCreateOneInput
-  classrooms: ClassroomCreateManyWithoutTeacherInput
+  taught_classrooms: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   followers: FollowCreateManyWithoutUser_followedInput
   following: FollowCreateManyWithoutUser_followingInput
   charges: ChargeCreateManyWithoutUserInput
@@ -2921,11 +3043,54 @@ input UserCreateWithoutRefundsInput {
   stripeCustomerId: String
   picture: FileCreateOneInput!
   video: FileCreateOneInput
-  classrooms: ClassroomCreateManyWithoutTeacherInput
+  taught_classrooms: ClassroomCreateManyWithoutTeacherInput
+  studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   followers: FollowCreateManyWithoutUser_followedInput
   following: FollowCreateManyWithoutUser_followingInput
   messages: MessageCreateManyWithoutSenderInput
   charges: ChargeCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutStudying_classroomsInput {
+  auth0Id: String!
+  username: String!
+  email: String!
+  email_verified: String
+  name: String
+  gender: Gender!
+  description: String
+  url: String
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileCreateOneInput!
+  video: FileCreateOneInput
+  taught_classrooms: ClassroomCreateManyWithoutTeacherInput
+  followers: FollowCreateManyWithoutUser_followedInput
+  following: FollowCreateManyWithoutUser_followingInput
+  messages: MessageCreateManyWithoutSenderInput
+  charges: ChargeCreateManyWithoutUserInput
+  refunds: RefundCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutTaught_classroomsInput {
+  auth0Id: String!
+  username: String!
+  email: String!
+  email_verified: String
+  name: String
+  gender: Gender!
+  description: String
+  url: String
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileCreateOneInput!
+  video: FileCreateOneInput
+  studying_classrooms: ClassroomCreateManyWithoutStudentsInput
+  followers: FollowCreateManyWithoutUser_followedInput
+  following: FollowCreateManyWithoutUser_followingInput
+  messages: MessageCreateManyWithoutSenderInput
+  charges: ChargeCreateManyWithoutUserInput
+  refunds: RefundCreateManyWithoutUserInput
 }
 
 """An edge in a connection."""
@@ -3021,27 +3186,6 @@ input UserSubscriptionWhereInput {
   node: UserWhereInput
 }
 
-input UserUpdateDataInput {
-  auth0Id: String
-  username: String
-  email: String
-  email_verified: String
-  name: String
-  gender: Gender
-  description: String
-  url: String
-  stripeId: String
-  stripeCustomerId: String
-  picture: FileUpdateOneInput
-  video: FileUpdateOneInput
-  classrooms: ClassroomUpdateManyWithoutTeacherInput
-  followers: FollowUpdateManyWithoutUser_followedInput
-  following: FollowUpdateManyWithoutUser_followingInput
-  messages: MessageUpdateManyWithoutSenderInput
-  charges: ChargeUpdateManyWithoutUserInput
-  refunds: RefundUpdateManyWithoutUserInput
-}
-
 input UserUpdateInput {
   auth0Id: String
   username: String
@@ -3055,7 +3199,8 @@ input UserUpdateInput {
   stripeCustomerId: String
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  classrooms: ClassroomUpdateManyWithoutTeacherInput
+  taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   followers: FollowUpdateManyWithoutUser_followedInput
   following: FollowUpdateManyWithoutUser_followingInput
   messages: MessageUpdateManyWithoutSenderInput
@@ -3063,13 +3208,13 @@ input UserUpdateInput {
   refunds: RefundUpdateManyWithoutUserInput
 }
 
-input UserUpdateManyInput {
-  create: [UserCreateInput!]
+input UserUpdateManyWithoutStudying_classroomsInput {
+  create: [UserCreateWithoutStudying_classroomsInput!]
   connect: [UserWhereUniqueInput!]
   disconnect: [UserWhereUniqueInput!]
   delete: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueNestedInput!]
-  upsert: [UserUpsertWithWhereUniqueNestedInput!]
+  update: [UserUpdateWithWhereUniqueWithoutStudying_classroomsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutStudying_classroomsInput!]
 }
 
 input UserUpdateOneWithoutChargesInput {
@@ -3078,14 +3223,6 @@ input UserUpdateOneWithoutChargesInput {
   delete: Boolean
   update: UserUpdateWithoutChargesDataInput
   upsert: UserUpsertWithoutChargesInput
-}
-
-input UserUpdateOneWithoutClassroomsInput {
-  create: UserCreateWithoutClassroomsInput
-  connect: UserWhereUniqueInput
-  delete: Boolean
-  update: UserUpdateWithoutClassroomsDataInput
-  upsert: UserUpsertWithoutClassroomsInput
 }
 
 input UserUpdateOneWithoutFollowersInput {
@@ -3120,6 +3257,14 @@ input UserUpdateOneWithoutRefundsInput {
   upsert: UserUpsertWithoutRefundsInput
 }
 
+input UserUpdateOneWithoutTaught_classroomsInput {
+  create: UserCreateWithoutTaught_classroomsInput
+  connect: UserWhereUniqueInput
+  delete: Boolean
+  update: UserUpdateWithoutTaught_classroomsDataInput
+  upsert: UserUpsertWithoutTaught_classroomsInput
+}
+
 input UserUpdateWithoutChargesDataInput {
   auth0Id: String
   username: String
@@ -3133,30 +3278,11 @@ input UserUpdateWithoutChargesDataInput {
   stripeCustomerId: String
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  classrooms: ClassroomUpdateManyWithoutTeacherInput
+  taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   followers: FollowUpdateManyWithoutUser_followedInput
   following: FollowUpdateManyWithoutUser_followingInput
   messages: MessageUpdateManyWithoutSenderInput
-  refunds: RefundUpdateManyWithoutUserInput
-}
-
-input UserUpdateWithoutClassroomsDataInput {
-  auth0Id: String
-  username: String
-  email: String
-  email_verified: String
-  name: String
-  gender: Gender
-  description: String
-  url: String
-  stripeId: String
-  stripeCustomerId: String
-  picture: FileUpdateOneInput
-  video: FileUpdateOneInput
-  followers: FollowUpdateManyWithoutUser_followedInput
-  following: FollowUpdateManyWithoutUser_followingInput
-  messages: MessageUpdateManyWithoutSenderInput
-  charges: ChargeUpdateManyWithoutUserInput
   refunds: RefundUpdateManyWithoutUserInput
 }
 
@@ -3173,7 +3299,8 @@ input UserUpdateWithoutFollowersDataInput {
   stripeCustomerId: String
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  classrooms: ClassroomUpdateManyWithoutTeacherInput
+  taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   following: FollowUpdateManyWithoutUser_followingInput
   messages: MessageUpdateManyWithoutSenderInput
   charges: ChargeUpdateManyWithoutUserInput
@@ -3193,7 +3320,8 @@ input UserUpdateWithoutFollowingDataInput {
   stripeCustomerId: String
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  classrooms: ClassroomUpdateManyWithoutTeacherInput
+  taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   followers: FollowUpdateManyWithoutUser_followedInput
   messages: MessageUpdateManyWithoutSenderInput
   charges: ChargeUpdateManyWithoutUserInput
@@ -3213,7 +3341,8 @@ input UserUpdateWithoutMessagesDataInput {
   stripeCustomerId: String
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  classrooms: ClassroomUpdateManyWithoutTeacherInput
+  taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   followers: FollowUpdateManyWithoutUser_followedInput
   following: FollowUpdateManyWithoutUser_followingInput
   charges: ChargeUpdateManyWithoutUserInput
@@ -3233,26 +3362,64 @@ input UserUpdateWithoutRefundsDataInput {
   stripeCustomerId: String
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  classrooms: ClassroomUpdateManyWithoutTeacherInput
+  taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   followers: FollowUpdateManyWithoutUser_followedInput
   following: FollowUpdateManyWithoutUser_followingInput
   messages: MessageUpdateManyWithoutSenderInput
   charges: ChargeUpdateManyWithoutUserInput
 }
 
-input UserUpdateWithWhereUniqueNestedInput {
+input UserUpdateWithoutStudying_classroomsDataInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified: String
+  name: String
+  gender: Gender
+  description: String
+  url: String
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileUpdateOneInput
+  video: FileUpdateOneInput
+  taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  followers: FollowUpdateManyWithoutUser_followedInput
+  following: FollowUpdateManyWithoutUser_followingInput
+  messages: MessageUpdateManyWithoutSenderInput
+  charges: ChargeUpdateManyWithoutUserInput
+  refunds: RefundUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutTaught_classroomsDataInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified: String
+  name: String
+  gender: Gender
+  description: String
+  url: String
+  stripeId: String
+  stripeCustomerId: String
+  picture: FileUpdateOneInput
+  video: FileUpdateOneInput
+  studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
+  followers: FollowUpdateManyWithoutUser_followedInput
+  following: FollowUpdateManyWithoutUser_followingInput
+  messages: MessageUpdateManyWithoutSenderInput
+  charges: ChargeUpdateManyWithoutUserInput
+  refunds: RefundUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithWhereUniqueWithoutStudying_classroomsInput {
   where: UserWhereUniqueInput!
-  data: UserUpdateDataInput!
+  data: UserUpdateWithoutStudying_classroomsDataInput!
 }
 
 input UserUpsertWithoutChargesInput {
   update: UserUpdateWithoutChargesDataInput!
   create: UserCreateWithoutChargesInput!
-}
-
-input UserUpsertWithoutClassroomsInput {
-  update: UserUpdateWithoutClassroomsDataInput!
-  create: UserCreateWithoutClassroomsInput!
 }
 
 input UserUpsertWithoutFollowersInput {
@@ -3275,10 +3442,15 @@ input UserUpsertWithoutRefundsInput {
   create: UserCreateWithoutRefundsInput!
 }
 
-input UserUpsertWithWhereUniqueNestedInput {
+input UserUpsertWithoutTaught_classroomsInput {
+  update: UserUpdateWithoutTaught_classroomsDataInput!
+  create: UserCreateWithoutTaught_classroomsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutStudying_classroomsInput {
   where: UserWhereUniqueInput!
-  update: UserUpdateDataInput!
-  create: UserCreateInput!
+  update: UserUpdateWithoutStudying_classroomsDataInput!
+  create: UserCreateWithoutStudying_classroomsInput!
 }
 
 input UserWhereInput {
@@ -3746,9 +3918,12 @@ input UserWhereInput {
   stripeCustomerId_not_ends_with: String
   picture: FileWhereInput
   video: FileWhereInput
-  classrooms_every: ClassroomWhereInput
-  classrooms_some: ClassroomWhereInput
-  classrooms_none: ClassroomWhereInput
+  taught_classrooms_every: ClassroomWhereInput
+  taught_classrooms_some: ClassroomWhereInput
+  taught_classrooms_none: ClassroomWhereInput
+  studying_classrooms_every: ClassroomWhereInput
+  studying_classrooms_some: ClassroomWhereInput
+  studying_classrooms_none: ClassroomWhereInput
   followers_every: FollowWhereInput
   followers_some: FollowWhereInput
   followers_none: FollowWhereInput

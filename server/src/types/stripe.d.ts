@@ -156,6 +156,12 @@ declare module 'stripe' {
         }
       }
 
+      interface IAccountLink {
+        object: string
+        created: number
+        url: string
+      }
+
       interface IAccountCreationOptions extends IAccountUpdateOptions {
         /**
          * The country the account holder resides in or that the business is legally
@@ -5311,6 +5317,14 @@ declare module 'stripe' {
           data: accounts.ICardListOptions,
           response?: IResponseFn<IList<cards.ICard>>,
         ): Promise<IList<cards.ICard>>
+
+        /**
+         * You can use the Create Login Link API to generate a single-use URL that allows 
+         * the user to access the dashboard.
+         */
+        createLoginLink(
+          accId: string
+        ): Promise<accounts.IAccountLink>
       }
 
       class ApplicationFees extends StripeResource {

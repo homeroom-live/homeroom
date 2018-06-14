@@ -3,7 +3,7 @@
 ## database
 
 - [] Classrooms -> Classes
-- [] Should Classroom support multiple teachers out of the box?
+- [] Should Classroom support multiple teachers out of the box? (Yeah, let's add it!)
 - [x] Follow type
   - pro: Subscriptions (notifications)
   - con: New type
