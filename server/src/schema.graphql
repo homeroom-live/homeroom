@@ -52,8 +52,8 @@ type Mutation {
     picture: Upload
     removeFiles: [Json]
   ): User!
-  follow(username: String!): User!
-  unfollow(username: String!): User!
+  follow(username: String!): Viewer
+  unfollow(username: String!): Viewer
   
   # Stripe
   createStripeAccount(code: String!): User!
@@ -161,7 +161,7 @@ type Classroom {
   name: String!
   description: String!
   price: Float!
-  classes: [Class!]!
+  classes: ClassroomClasses!
 
   teacher: User!
   students: ClassroomStudents!
@@ -172,32 +172,28 @@ type ClassroomStudents {
   students: [User!]!
 }
 
-type Class {
-  id: ID! @unique
-  createdAt: DateTime!
-  updatedAt: DateTime!
+type ClassroomClasses {
+  count: Int!
+  classes: [Class!]!
+}
 
-  # Info
+type Class {
+  id: ID!
+
   name: String!
   description: String!
-  picture: String # TODO: move to file
-  price: Float! @default(value: "0")
+  picture: String
+  price: Float!
   startDate: DateTime
 
   # Stream
-  live: Boolean! @default(value: "false")
+  live: Boolean!
   duration: Int
-  video: File @relation(name: "ClassVideo")
+  video: File
 
   # Specs
-  # teachers: [User!]! @relation(name: "UserTaughtClasses")
-  # students: [User!]! @relation(name: "UserClasses")
-  # studentsCount: Int
-  files: [File!]! @relation(name: "ClassFiles")
-  vods: [File!]! @relation(name: "ClassVods")
-  classroom: Classroom! @relation(name: "ClassroomClass")
-  messages: [Message!]! @relation(name: "ClassMessages")
-  # activities: [Activity!]! @relation(name: "ClassActivities")
-  # charges: [Charge!]! @relation(name: "ClassCharges")
-  # refunds: [Refund!]! @relation(name: "ClassRefunds")
+  files: [File!]!
+  vods: File!
+  classroom: Classroom!
+  messages: [Message!]!
 }

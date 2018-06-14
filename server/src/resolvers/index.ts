@@ -10,6 +10,7 @@ import { classes as classesMutations } from './Mutation/classes'
 import { classrooms as classroomsMutations } from './Mutation/classrooms'
 import { messages as messagesMutations } from './Mutation/messages'
 import { refunds as refundsMutations } from './Mutation/refunds'
+import { stripe as stripeMutations } from './Mutation/stripe'
 import { users as usersMutations } from './Mutation/users'
 // Types
 import { Viewer } from './Viewer'
@@ -27,6 +28,7 @@ export const resolvers = {
     ...classroomsMutations,
     ...messagesMutations,
     ...refundsMutations,
+    ...stripeMutations,
     ...usersMutations,
   },
   Viewer,

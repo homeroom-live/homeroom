@@ -116,98 +116,71 @@ export const users = {
     )
   },
 
-  async follow(parent, { username }, ctx, info) {
-    const auth0Id = await parseUserAuth0Id(ctx)
-    await ctx.db.mutation.updateUser({
-      where: { auth0Id },
+  async follow(parent, { username }, ctx: Context, info) {
+    const auth0Id = ctx.user.id
+    const follow = await ctx.db.mutation.createFollow({
       data: {
-        following: {
-          connect: [{ username }],
-        },
+        user_followed: { connect: { username } },
+        user_following: { connect: { auth0Id } },
       },
     })
-    return await ctx.db.mutation.updateUser(
-      {
-        where: { username },
-        data: {
-          followers: {
-            connect: [{ auth0Id }],
-          },
-        },
-      },
-      info,
-    )
+
+    return {}
   },
 
-  async unfollow(parent, { username }, ctx, info) {
-    const auth0Id = await parseUserAuth0Id(ctx)
-    await ctx.db.mutation.updateUser({
-      where: { auth0Id },
-      data: {
-        following: {
-          disconnect: [{ username }],
-        },
-      },
+  async unfollow(parent, { id }, ctx: Context, info) {
+    const follow = await ctx.db.mutation.deleteFollow({
+      where: { id },
     })
-    return await ctx.db.mutation.updateUser(
-      {
-        where: { username },
-        data: {
-          followers: {
-            disconnect: [{ auth0Id }],
-          },
-        },
-      },
-      info,
-    )
+    return {}
   },
 
-  async createStripeAccount(parent, { code }, ctx, info) {
-    const auth0Id = await parseUserAuth0Id(ctx)
-    const { stripe_user_id } = await request.post(
-      'https://connect.stripe.com/oauth/token',
-      {
-        form: {
-          code,
-          grant_type: 'authorization_code',
-          client_id: process.env.STRIPE_ID,
-          client_secret: process.env.STRIPE_SECRET,
-        },
-        json: true,
-      },
-    )
-    return await ctx.db.mutation.updateUser(
-      {
-        where: { auth0Id },
-        data: {
-          stripeId: stripe_user_id,
-        },
-      },
-      info,
-    )
-  },
+  // async createStripeAccount(parent, { code }, ctx, info) {
+  //   const auth0Id = await parseUserAuth0Id(ctx)
+  //   const { stripe_user_id } = await request.post(
+  //     'https://connect.stripe.com/oauth/token',
+  //     {
+  //       form: {
+  //         code,
+  //         grant_type: 'authorization_code',
+  //         client_id: process.env.STRIPE_ID,
+  //         client_secret: process.env.STRIPE_SECRET,
+  //       },
+  //       json: true,
+  //     },
+  //   )
+  //   return await ctx.db.mutation.updateUser(
+  //     {
+  //       where: { auth0Id },
+  //       data: {
+  //         stripeId: stripe_user_id,
+  //       },
+  //     },
+  //     info,
+  //   )
+  // },
 
-  async createStripeCustomer(parent, { token }, ctx, info) {
-    const auth0Id = await parseUserAuth0Id(ctx)
-    const customer = await stripe.customers.create({
-      source: token,
-    })
-    return await ctx.db.mutation.updateUser({
-      where: { auth0Id },
-      data: {
-        stripeCustomerId: customer.id,
-      },
-    })
-  },
+  // async createStripeCustomer(parent, { token }, ctx, info) {
+  //   const auth0Id = await parseUserAuth0Id(ctx)
+  //   const customer = await stripe.customers.create({
+  //     source: token,
+  //   })
+  //   return await ctx.db.mutation.updateUser({
+  //     where: { auth0Id },
+  //     data: {
+  //       stripeCustomerId: customer.id,
+  //     },
+  //   })
+  // },
 
-  async updateStripeCustomer(parent, { token }, ctx, info) {
-    const auth0Id = await parseUserAuth0Id(ctx)
-    const user = await ctx.db.query.user({
-      where: { auth0Id },
-    })
-    await stripe.customers.update(user.stripeCustomerId, {
-      source: token,
-    })
-    return user
-  },
+  // async updateStripeCustomer(parent, { token }, ctx, info) {
+  //   const auth0Id = await parseUserAuth0Id(ctx)
+  //   const user = await ctx.db.query.user({
+  //     where: { auth0Id },
+  //   })
+  //   await stripe.customers.update(user.stripeCustomerId, {
+  //     source: token,
+  //   })
+  //   return user
+  // },
 }
