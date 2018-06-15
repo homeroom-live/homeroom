@@ -1,21 +1,31 @@
 import { Context } from '../../utils'
+import * as s3 from '../../s3'
 
 export const users = {
-  async createUser(parent, { receiveNotifications }, ctx: Context, info) {
-    const username = ''
+  async createUser(
+    parent,
+    { name, gender, bio, receiveNotifications },
+    ctx: Context,
+    info,
+  ) {
+    const { auth0Id, username, email, email_verified } = ctx.user
     const user = await ctx.db.mutation.createUser(
       {
         data: {
-          auth0Id: ctx.user.id,
-          email: ctx.user.email,
-          email_verified: ctx.user.email_verified,
+          auth0Id,
+          username,
+          email,
+          email_verified,
+          name,
+          gender,
+          bio,
           picture: {
             create: {
               name: `${ctx.user.email}-picture`,
               url: ctx.user.picture,
             },
           },
-          username,
+          receiveNotifications,
         },
       },
       info,
@@ -24,19 +34,19 @@ export const users = {
     return {}
   },
 
-  async updateUser(parent, args, ctx, info) {
-    const auth0Id = await parseUserAuth0Id(ctx)
-    const userExists = await ctx.db.exists.User({ auth0Id })
+  async updateUser(parent, args, ctx: Context, info) {
+    const { auth0Id } = ctx.user
+    // const userExists = await ctx.db.exists.User({ auth0Id })
 
-    if (!userExists) {
-      console.error(`User with auth0id "${auth0Id}" doesn't exist.`)
-      return
-    }
+    // if (!userExists) {
+    //   console.error(`User with auth0id "${auth0Id}" doesn't exist.`)
+    //   return
+    // }
 
     return await ctx.db.mutation.updateUser(
       {
-        where: { auth0Id },
         ...args,
+        where: { auth0Id },
       },
       info,
     )
@@ -45,62 +55,75 @@ export const users = {
   async updateUserWithFiles(
     parent,
     { data, video, picture, removeFiles },
-    ctx,
+    ctx: Context,
     info,
   ) {
-    const auth0Id = await parseUserAuth0Id(ctx)
-    const userExists = await ctx.db.exists.User({ auth0Id })
+    const { auth0Id } = ctx.user
+    // const userExists = await ctx.db.exists.User({ auth0Id })
 
-    if (!userExists) {
-      console.error(`User with auth0id "${auth0Id}" doesn't exist.`)
-      return
-    }
-
-    if (video) {
-      const videoFile = await s3.uploadFile(video)
-      await ctx.db.mutation.createFile({
-        data: {
-          ...videoFile,
-          user: {
-            connect: { auth0Id },
-          },
-        },
-      })
-    }
-
-    if (picture) {
-      const pictureFile = await s3.uploadFile(picture)
-      await ctx.db.mutation.createFile({
-        data: {
-          ...pictureFile,
-          userPicture: {
-            connect: { auth0Id },
-          },
-        },
-      })
-    }
-
-    if (removeFiles.length > 0) {
-      await Promise.all(removeFiles.map(s3.removeFile))
-      return await Promise.all(
-        removeFiles.map(file =>
-          ctx.db.mutation.deleteFile(
-            {
-              where: { id: file.id },
-            },
-            info,
-          ),
-        ),
-      )
-    }
+    // if (!userExists) {
+    //   console.error(`User with auth0id "${auth0Id}" doesn't exist.`)
+    //   return
+    // }
+    const videoFile = await s3.uploadFile(video)
+    // if (video) {
+    //   await ctx.db.mutation.updateUser({
+    //     where: { auth0Id },
+    //     data: {
+    //       video: {
+    //         create: {
+    //           ...videoFile,
+    //         },
+    //       },
+    //     },
+    //   })
+    // }
+    const pictureFile = await s3.uploadFile(picture)
+    // if (picture) {
+    //   await ctx.db.mutation.updateUser({
+    //     where: { auth0Id },
+    //     data: {
+    //       picture: {
+    //         create: {
+    //           ...pictureFile,
+    //         },
+    //       },
+    //     },
+    //   })
+    // }
 
     return await ctx.db.mutation.updateUser(
       {
-        data,
         where: { auth0Id },
+        data: {
+          picture: {
+            create: {
+              ...pictureFile,
+            },
+          },
+          video: {
+            create: {
+              ...videoFile,
+            },
+          },
+        },
       },
       info,
     )
+
+    // if (removeFiles.length > 0) {
+    //   await Promise.all(removeFiles.map(s3.removeFile))
+    //   return await Promise.all(
+    //     removeFiles.map(file =>
+    //       ctx.db.mutation.deleteFile(
+    //         {
+    //           where: { id: file.id },
+    //         },
+    //         info,
+    //       ),
+    //     ),
+    //   )
+    // }
   },
 
   async follow(parent, { username }, ctx: Context, info) {

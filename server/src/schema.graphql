@@ -29,7 +29,7 @@ type Query {
   classroom(id: ID!): Classroom # DONE
   # liveClassrooms: [Classroom!]!
 
-  messages(classId: ID!, last: Int): [Message!]! # DONE
+  messages(classId: ID!, last: Int): [Message!] # DONE
   # messages(
   #   classroomId: ID!
   #   where: MessageWhereInput
@@ -43,37 +43,67 @@ type Query {
 }
 
 type Mutation {
-  createUser(receiveNotifications: Boolean!): User
-  updateUser(data: UserUpdateInput!): User!
-  updateUserWithFiles(
-    data: UserUpdateInput!
-    video: Upload
+  createUser(
+    name: String!
+    gender: Gender!
+    bio: String!
     picture: Upload
-    removeFiles: [Json]
-  ): User!
-  follow(username: String!): Viewer
-  unfollow(username: String!): Viewer
-
+    receiveNotifications: Boolean!
+  ): Viewer
+  updateUser(
+    name: String
+    gender: Gender
+    bio: String
+    picture: Upload
+    receiveNotifications: Boolean
+  ): Viewer
+  # updateUserWithFiles(
+  #   data: UserUpdateInput!
+  #   video: Upload
+  #   picture: Upload
+  #   removeFiles: [Json]
+  # ): User!
+  follow(username: String!): Viewer # DONE
+  unfollow(username: String!): Viewer # DONE
   # Stripe
-  createStripeAccount(code: String!): User!
-  createStripeCustomer(token: String!): User!
-  updateStripeCustomer(token: String!): User!
-
+  createStripeAccount(code: String!): Viewer # DONE
+  createStripeCustomer(token: String!): Viewer # DONE
+  updateStripeCustomer(token: String!): Viewer # DONE
   # Classes
-  createClass(data: ClassCreateInput!): Class!
-  updateClass(id: ID!, data: ClassUpdateInput!): Class!
-  deleteClass(id: ID!): Class!
-
+  createClass(
+    classroomId: ID!
+    name: String!
+    description: String!
+    picture: Upload
+    price: Float!
+    schedule: DateTime
+    files: [Upload!]!
+  ): Class! # DONE
+  updateClass(
+    id: ID!
+    name: String
+    description: String
+    picture: Upload
+    price: Float
+    schedule: DateTime
+    files: [Upload!]!
+  ): Class # DONE
+  deleteClass(id: ID!): Class # DONE
+  goLive(classId: ID!): Class # DONE
   # Classroom
-  createClassroom(data: ClassroomCreateInput!): Classroom! # TODO: security
-  updateClassroom(id: ID!, data: ClassroomUpdateInput!): Classroom! # TODO: security
-  joinClassroom(id: ID!): Classroom! # DONE
-  leaveClassroom(id: ID): Classroom! # DONE
-  createMessage(data: MessageCreateInput!): Message!
-
+  createClassroom(name: String!, description: String!, price: Float!): Classroom # DONE
+  updateClassroom(
+    id: ID!
+    name: String
+    description: String
+    price: Float
+  ): Classroom # DONE
+  joinClassroom(id: ID!): Classroom # DONE
+  leaveClassroom(id: ID): Classroom # DONE
+  createMessage(classId: ID!, text: String!): Message! # DONE
+  # Why do we need createCharge
   createCharge(amount: Float!, teacherId: ID!, classId: ID!): Charge!
-  createRefund(classId: ID!): Refund!
-
+  createRefund(chargeId: ID!): Refund # Needs work
   uploadFile(upload: Upload!): File!
   uploadClassFiles(classId: ID!, uploads: [Upload!]!): [File!]!
   uploadClassVideo(classId: ID!, upload: Upload!): File!
@@ -194,7 +224,7 @@ type Class {
   description: String!
   picture: String
   price: Float!
-  startDate: DateTime
+  schedule: DateTime
 
   # Stream
   live: Boolean!

@@ -2,16 +2,16 @@ type User {
   id: ID! @unique
   createdAt: DateTime!
   updatedAt: DateTime!
-
   # Info
   auth0Id: ID! @unique
   username: String! @unique
   email: String! @unique
-  email_verified: String # Shouldn't these be Boolean?
+  email_verified: String
+
   # Meta
   name: String
   gender: Gender!
-  description: String
+  bio: String!
   url: String
   picture: File! @relation(name: "UserPicture")
   video: File @relation(name: "UserVideo")
@@ -70,7 +70,7 @@ type Class {
   description: String!
   picture: String # TODO: move to file
   price: Float! @default(value: "0")
-  startDate: DateTime
+  schedule: DateTime
 
   # Stream
   live: Boolean! @default(value: "false")

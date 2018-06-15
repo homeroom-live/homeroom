@@ -1,8 +1,10 @@
+import * as request from 'request-promise'
 import { stripe as _stripe } from '../../stripe'
+import { Context } from '../../utils'
 
 export const stripe = {
-  async createStripeAccount(parent, { code }, ctx, info) {
-    const auth0Id = await parseUserAuth0Id(ctx)
+  async createStripeAccount(parent, { code }, ctx: Context, info) {
+    const { auth0Id } = ctx.user
     // Why is this implemented so? Couldn't we just use Stripe API
     const { stripe_user_id } = await request.post(
       'https://connect.stripe.com/oauth/token',
@@ -16,38 +18,38 @@ export const stripe = {
         json: true,
       },
     )
-    return await ctx.db.mutation.updateUser(
-      {
-        where: { auth0Id },
-        data: {
-          stripeId: stripe_user_id,
-        },
+    const user = await ctx.db.mutation.updateUser({
+      where: { auth0Id },
+      data: {
+        stripeId: stripe_user_id,
       },
-      info,
-    )
+    })
+
+    return {}
   },
 
-  async createStripeCustomer(parent, { token }, ctx, info) {
-    const auth0Id = await parseUserAuth0Id(ctx)
-    const customer = await stripe.customers.create({
+  async createStripeCustomer(parent, { token }, ctx: Context, info) {
+    const { auth0Id } = ctx.user
+    const customer = await _stripe.customers.create({
       source: token,
     })
-    return await ctx.db.mutation.updateUser({
+    const user = await ctx.db.mutation.updateUser({
       where: { auth0Id },
       data: {
         stripeCustomerId: customer.id,
       },
     })
-  },
 
-  async updateStripeCustomer(parent, { token }, ctx, info) {
-    const auth0Id = await parseUserAuth0Id(ctx)
-    const user = await ctx.db.query.user({
-      where: { auth0Id },
-    })
-    await stripe.customers.update(user.stripeCustomerId, {
-      source: token,
-    })
-    return user
+    return {}
+  },
+  updateStripeCustomer: {
+    fragment: `fragment UserStripeCustomerID on User { stripeCustomerId }`,
+    resolve: async ({ stripeCustomerId }, { token }, ctx: Context, info) => {
+      const { auth0Id } = ctx.user
+      await _stripe.customers.update(stripeCustomerId, {
+        source: token,
+      })
+      return {}
+    },
   },
 }

@@ -14,6 +14,7 @@ export const refunds = {
         },
       },
       orderBy: 'createdAt_DESC',
+      first: 1,
     })
 
     // TODO: calculate refund based on time remaining instead of 100%
@@ -22,19 +23,10 @@ export const refunds = {
       reverse_transfer: true,
     })
 
-    return await ctx.db.mutation.createRefund({
+    return ctx.db.mutation.createRefund({
       data: {
         stripeId: charge.id,
-        class: {
-          connect: {
-            id: classId,
-          },
-        },
-        user: {
-          connect: {
-            auth0Id,
-          },
-        },
+        amount: 0,
         charge: {
           connect: {
             id: charge.id,

@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/matic-zavadlal-03c51f/homeroom-setup/dev
-# timestamp: Thu Jun 14 2018 11:13:31 GMT+0200 (CEST)
+# timestamp: Fri Jun 15 2018 13:53:11 GMT+0200 (CEST)
 
 type AggregateCharge {
   count: Int!
@@ -388,7 +388,7 @@ type Class implements Node {
   description: String!
   picture: String
   price: Float!
-  startDate: DateTime
+  schedule: DateTime
   live: Boolean!
   duration: Int
   video(where: FileWhereInput): File
@@ -413,7 +413,7 @@ input ClassCreateInput {
   description: String!
   picture: String
   price: Float
-  startDate: DateTime
+  schedule: DateTime
   live: Boolean
   duration: Int
   video: FileCreateOneInput
@@ -443,7 +443,7 @@ input ClassCreateWithoutClassroomInput {
   description: String!
   picture: String
   price: Float
-  startDate: DateTime
+  schedule: DateTime
   live: Boolean
   duration: Int
   video: FileCreateOneInput
@@ -457,7 +457,7 @@ input ClassCreateWithoutMessagesInput {
   description: String!
   picture: String
   price: Float
-  startDate: DateTime
+  schedule: DateTime
   live: Boolean
   duration: Int
   video: FileCreateOneInput
@@ -490,8 +490,8 @@ enum ClassOrderByInput {
   picture_DESC
   price_ASC
   price_DESC
-  startDate_ASC
-  startDate_DESC
+  schedule_ASC
+  schedule_DESC
   live_ASC
   live_DESC
   duration_ASC
@@ -506,7 +506,7 @@ type ClassPreviousValues {
   description: String!
   picture: String
   price: Float!
-  startDate: DateTime
+  schedule: DateTime
   live: Boolean!
   duration: Int
 }
@@ -991,7 +991,7 @@ input ClassUpdateDataInput {
   description: String
   picture: String
   price: Float
-  startDate: DateTime
+  schedule: DateTime
   live: Boolean
   duration: Int
   video: FileUpdateOneInput
@@ -1006,7 +1006,7 @@ input ClassUpdateInput {
   description: String
   picture: String
   price: Float
-  startDate: DateTime
+  schedule: DateTime
   live: Boolean
   duration: Int
   video: FileUpdateOneInput
@@ -1046,7 +1046,7 @@ input ClassUpdateWithoutClassroomDataInput {
   description: String
   picture: String
   price: Float
-  startDate: DateTime
+  schedule: DateTime
   live: Boolean
   duration: Int
   video: FileUpdateOneInput
@@ -1060,7 +1060,7 @@ input ClassUpdateWithoutMessagesDataInput {
   description: String
   picture: String
   price: Float
-  startDate: DateTime
+  schedule: DateTime
   live: Boolean
   duration: Int
   video: FileUpdateOneInput
@@ -1325,28 +1325,28 @@ input ClassWhereInput {
 
   """All values greater than or equal the given value."""
   price_gte: Float
-  startDate: DateTime
+  schedule: DateTime
 
   """All values that are not equal to given value."""
-  startDate_not: DateTime
+  schedule_not: DateTime
 
   """All values that are contained in given list."""
-  startDate_in: [DateTime!]
+  schedule_in: [DateTime!]
 
   """All values that are not contained in given list."""
-  startDate_not_in: [DateTime!]
+  schedule_not_in: [DateTime!]
 
   """All values less than the given value."""
-  startDate_lt: DateTime
+  schedule_lt: DateTime
 
   """All values less than or equal the given value."""
-  startDate_lte: DateTime
+  schedule_lte: DateTime
 
   """All values greater than the given value."""
-  startDate_gt: DateTime
+  schedule_gt: DateTime
 
   """All values greater than or equal the given value."""
-  startDate_gte: DateTime
+  schedule_gte: DateTime
   live: Boolean
 
   """All values that are not equal to given value."""
@@ -1394,11 +1394,11 @@ scalar DateTime
 
 type File implements Node {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   secret: String
   contentType: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
   url: String!
 }
 
@@ -1441,27 +1441,27 @@ type FileEdge {
 enum FileOrderByInput {
   id_ASC
   id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   name_ASC
   name_DESC
   secret_ASC
   secret_DESC
   contentType_ASC
   contentType_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
   url_ASC
   url_DESC
 }
 
 type FilePreviousValues {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   secret: String
   contentType: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
   url: String!
 }
 
@@ -1600,6 +1600,50 @@ input FileWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   name: String
 
   """All values that are not equal to given value."""
@@ -1720,50 +1764,6 @@ input FileWhereInput {
 
   """All values not ending with the given string."""
   contentType_not_ends_with: String
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-
-  """All values that are not equal to given value."""
-  updatedAt_not: DateTime
-
-  """All values that are contained in given list."""
-  updatedAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  updatedAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  updatedAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  updatedAt_lte: DateTime
-
-  """All values greater than the given value."""
-  updatedAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  updatedAt_gte: DateTime
   url: String
 
   """All values that are not equal to given value."""
@@ -2507,8 +2507,6 @@ type Refund implements Node {
   stripeId: String!
   amount: Float!
   charge(where: ChargeWhereInput): Charge!
-  class(where: ClassWhereInput): Class!
-  user(where: UserWhereInput): User!
 }
 
 """A connection to a list of items."""
@@ -2525,13 +2523,6 @@ input RefundCreateInput {
   stripeId: String!
   amount: Float!
   charge: ChargeCreateOneWithoutRefundInput!
-  class: ClassCreateOneInput!
-  user: UserCreateOneWithoutRefundsInput!
-}
-
-input RefundCreateManyWithoutUserInput {
-  create: [RefundCreateWithoutUserInput!]
-  connect: [RefundWhereUniqueInput!]
 }
 
 input RefundCreateOneWithoutChargeInput {
@@ -2542,15 +2533,6 @@ input RefundCreateOneWithoutChargeInput {
 input RefundCreateWithoutChargeInput {
   stripeId: String!
   amount: Float!
-  class: ClassCreateOneInput!
-  user: UserCreateOneWithoutRefundsInput!
-}
-
-input RefundCreateWithoutUserInput {
-  stripeId: String!
-  amount: Float!
-  charge: ChargeCreateOneWithoutRefundInput!
-  class: ClassCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -2626,17 +2608,6 @@ input RefundUpdateInput {
   stripeId: String
   amount: Float
   charge: ChargeUpdateOneWithoutRefundInput
-  class: ClassUpdateOneInput
-  user: UserUpdateOneWithoutRefundsInput
-}
-
-input RefundUpdateManyWithoutUserInput {
-  create: [RefundCreateWithoutUserInput!]
-  connect: [RefundWhereUniqueInput!]
-  disconnect: [RefundWhereUniqueInput!]
-  delete: [RefundWhereUniqueInput!]
-  update: [RefundUpdateWithWhereUniqueWithoutUserInput!]
-  upsert: [RefundUpsertWithWhereUniqueWithoutUserInput!]
 }
 
 input RefundUpdateOneWithoutChargeInput {
@@ -2651,31 +2622,11 @@ input RefundUpdateOneWithoutChargeInput {
 input RefundUpdateWithoutChargeDataInput {
   stripeId: String
   amount: Float
-  class: ClassUpdateOneInput
-  user: UserUpdateOneWithoutRefundsInput
-}
-
-input RefundUpdateWithoutUserDataInput {
-  stripeId: String
-  amount: Float
-  charge: ChargeUpdateOneWithoutRefundInput
-  class: ClassUpdateOneInput
-}
-
-input RefundUpdateWithWhereUniqueWithoutUserInput {
-  where: RefundWhereUniqueInput!
-  data: RefundUpdateWithoutUserDataInput!
 }
 
 input RefundUpsertWithoutChargeInput {
   update: RefundUpdateWithoutChargeDataInput!
   create: RefundCreateWithoutChargeInput!
-}
-
-input RefundUpsertWithWhereUniqueWithoutUserInput {
-  where: RefundWhereUniqueInput!
-  update: RefundUpdateWithoutUserDataInput!
-  create: RefundCreateWithoutUserInput!
 }
 
 input RefundWhereInput {
@@ -2834,8 +2785,6 @@ input RefundWhereInput {
   """All values greater than or equal the given value."""
   amount_gte: Float
   charge: ChargeWhereInput
-  class: ClassWhereInput
-  user: UserWhereInput
 }
 
 input RefundWhereUniqueInput {
@@ -2858,13 +2807,13 @@ type User implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  auth0Id: String!
+  auth0Id: ID!
   username: String!
   email: String!
   email_verified: String
   name: String
   gender: Gender!
-  description: String
+  bio: String!
   url: String
   picture(where: FileWhereInput): File!
   video(where: FileWhereInput): File
@@ -2876,7 +2825,7 @@ type User implements Node {
   following(where: FollowWhereInput, orderBy: FollowOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Follow!]
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
   charges(where: ChargeWhereInput, orderBy: ChargeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Charge!]
-  refunds(where: RefundWhereInput, orderBy: RefundOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Refund!]
+  receiveNotifications: Boolean!
 }
 
 """A connection to a list of items."""
@@ -2890,16 +2839,17 @@ type UserConnection {
 }
 
 input UserCreateInput {
-  auth0Id: String!
+  auth0Id: ID!
   username: String!
   email: String!
   email_verified: String
   name: String
   gender: Gender!
-  description: String
+  bio: String!
   url: String
   stripeId: String
   stripeCustomerId: String
+  receiveNotifications: Boolean
   picture: FileCreateOneInput!
   video: FileCreateOneInput
   taught_classrooms: ClassroomCreateManyWithoutTeacherInput
@@ -2908,7 +2858,6 @@ input UserCreateInput {
   following: FollowCreateManyWithoutUser_followingInput
   messages: MessageCreateManyWithoutSenderInput
   charges: ChargeCreateManyWithoutUserInput
-  refunds: RefundCreateManyWithoutUserInput
 }
 
 input UserCreateManyWithoutStudying_classroomsInput {
@@ -2936,27 +2885,23 @@ input UserCreateOneWithoutMessagesInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutRefundsInput {
-  create: UserCreateWithoutRefundsInput
-  connect: UserWhereUniqueInput
-}
-
 input UserCreateOneWithoutTaught_classroomsInput {
   create: UserCreateWithoutTaught_classroomsInput
   connect: UserWhereUniqueInput
 }
 
 input UserCreateWithoutChargesInput {
-  auth0Id: String!
+  auth0Id: ID!
   username: String!
   email: String!
   email_verified: String
   name: String
   gender: Gender!
-  description: String
+  bio: String!
   url: String
   stripeId: String
   stripeCustomerId: String
+  receiveNotifications: Boolean
   picture: FileCreateOneInput!
   video: FileCreateOneInput
   taught_classrooms: ClassroomCreateManyWithoutTeacherInput
@@ -2964,20 +2909,20 @@ input UserCreateWithoutChargesInput {
   followers: FollowCreateManyWithoutUser_followedInput
   following: FollowCreateManyWithoutUser_followingInput
   messages: MessageCreateManyWithoutSenderInput
-  refunds: RefundCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutFollowersInput {
-  auth0Id: String!
+  auth0Id: ID!
   username: String!
   email: String!
   email_verified: String
   name: String
   gender: Gender!
-  description: String
+  bio: String!
   url: String
   stripeId: String
   stripeCustomerId: String
+  receiveNotifications: Boolean
   picture: FileCreateOneInput!
   video: FileCreateOneInput
   taught_classrooms: ClassroomCreateManyWithoutTeacherInput
@@ -2985,20 +2930,20 @@ input UserCreateWithoutFollowersInput {
   following: FollowCreateManyWithoutUser_followingInput
   messages: MessageCreateManyWithoutSenderInput
   charges: ChargeCreateManyWithoutUserInput
-  refunds: RefundCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutFollowingInput {
-  auth0Id: String!
+  auth0Id: ID!
   username: String!
   email: String!
   email_verified: String
   name: String
   gender: Gender!
-  description: String
+  bio: String!
   url: String
   stripeId: String
   stripeCustomerId: String
+  receiveNotifications: Boolean
   picture: FileCreateOneInput!
   video: FileCreateOneInput
   taught_classrooms: ClassroomCreateManyWithoutTeacherInput
@@ -3006,62 +2951,41 @@ input UserCreateWithoutFollowingInput {
   followers: FollowCreateManyWithoutUser_followedInput
   messages: MessageCreateManyWithoutSenderInput
   charges: ChargeCreateManyWithoutUserInput
-  refunds: RefundCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutMessagesInput {
-  auth0Id: String!
+  auth0Id: ID!
   username: String!
   email: String!
   email_verified: String
   name: String
   gender: Gender!
-  description: String
+  bio: String!
   url: String
   stripeId: String
   stripeCustomerId: String
+  receiveNotifications: Boolean
   picture: FileCreateOneInput!
   video: FileCreateOneInput
   taught_classrooms: ClassroomCreateManyWithoutTeacherInput
   studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   followers: FollowCreateManyWithoutUser_followedInput
   following: FollowCreateManyWithoutUser_followingInput
-  charges: ChargeCreateManyWithoutUserInput
-  refunds: RefundCreateManyWithoutUserInput
-}
-
-input UserCreateWithoutRefundsInput {
-  auth0Id: String!
-  username: String!
-  email: String!
-  email_verified: String
-  name: String
-  gender: Gender!
-  description: String
-  url: String
-  stripeId: String
-  stripeCustomerId: String
-  picture: FileCreateOneInput!
-  video: FileCreateOneInput
-  taught_classrooms: ClassroomCreateManyWithoutTeacherInput
-  studying_classrooms: ClassroomCreateManyWithoutStudentsInput
-  followers: FollowCreateManyWithoutUser_followedInput
-  following: FollowCreateManyWithoutUser_followingInput
-  messages: MessageCreateManyWithoutSenderInput
   charges: ChargeCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutStudying_classroomsInput {
-  auth0Id: String!
+  auth0Id: ID!
   username: String!
   email: String!
   email_verified: String
   name: String
   gender: Gender!
-  description: String
+  bio: String!
   url: String
   stripeId: String
   stripeCustomerId: String
+  receiveNotifications: Boolean
   picture: FileCreateOneInput!
   video: FileCreateOneInput
   taught_classrooms: ClassroomCreateManyWithoutTeacherInput
@@ -3069,20 +2993,20 @@ input UserCreateWithoutStudying_classroomsInput {
   following: FollowCreateManyWithoutUser_followingInput
   messages: MessageCreateManyWithoutSenderInput
   charges: ChargeCreateManyWithoutUserInput
-  refunds: RefundCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutTaught_classroomsInput {
-  auth0Id: String!
+  auth0Id: ID!
   username: String!
   email: String!
   email_verified: String
   name: String
   gender: Gender!
-  description: String
+  bio: String!
   url: String
   stripeId: String
   stripeCustomerId: String
+  receiveNotifications: Boolean
   picture: FileCreateOneInput!
   video: FileCreateOneInput
   studying_classrooms: ClassroomCreateManyWithoutStudentsInput
@@ -3090,7 +3014,6 @@ input UserCreateWithoutTaught_classroomsInput {
   following: FollowCreateManyWithoutUser_followingInput
   messages: MessageCreateManyWithoutSenderInput
   charges: ChargeCreateManyWithoutUserInput
-  refunds: RefundCreateManyWithoutUserInput
 }
 
 """An edge in a connection."""
@@ -3121,30 +3044,33 @@ enum UserOrderByInput {
   name_DESC
   gender_ASC
   gender_DESC
-  description_ASC
-  description_DESC
+  bio_ASC
+  bio_DESC
   url_ASC
   url_DESC
   stripeId_ASC
   stripeId_DESC
   stripeCustomerId_ASC
   stripeCustomerId_DESC
+  receiveNotifications_ASC
+  receiveNotifications_DESC
 }
 
 type UserPreviousValues {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  auth0Id: String!
+  auth0Id: ID!
   username: String!
   email: String!
   email_verified: String
   name: String
   gender: Gender!
-  description: String
+  bio: String!
   url: String
   stripeId: String
   stripeCustomerId: String
+  receiveNotifications: Boolean!
 }
 
 type UserSubscriptionPayload {
@@ -3187,16 +3113,17 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateInput {
-  auth0Id: String
+  auth0Id: ID
   username: String
   email: String
   email_verified: String
   name: String
   gender: Gender
-  description: String
+  bio: String
   url: String
   stripeId: String
   stripeCustomerId: String
+  receiveNotifications: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
@@ -3205,7 +3132,6 @@ input UserUpdateInput {
   following: FollowUpdateManyWithoutUser_followingInput
   messages: MessageUpdateManyWithoutSenderInput
   charges: ChargeUpdateManyWithoutUserInput
-  refunds: RefundUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyWithoutStudying_classroomsInput {
@@ -3249,14 +3175,6 @@ input UserUpdateOneWithoutMessagesInput {
   upsert: UserUpsertWithoutMessagesInput
 }
 
-input UserUpdateOneWithoutRefundsInput {
-  create: UserCreateWithoutRefundsInput
-  connect: UserWhereUniqueInput
-  delete: Boolean
-  update: UserUpdateWithoutRefundsDataInput
-  upsert: UserUpsertWithoutRefundsInput
-}
-
 input UserUpdateOneWithoutTaught_classroomsInput {
   create: UserCreateWithoutTaught_classroomsInput
   connect: UserWhereUniqueInput
@@ -3266,16 +3184,17 @@ input UserUpdateOneWithoutTaught_classroomsInput {
 }
 
 input UserUpdateWithoutChargesDataInput {
-  auth0Id: String
+  auth0Id: ID
   username: String
   email: String
   email_verified: String
   name: String
   gender: Gender
-  description: String
+  bio: String
   url: String
   stripeId: String
   stripeCustomerId: String
+  receiveNotifications: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
@@ -3283,20 +3202,20 @@ input UserUpdateWithoutChargesDataInput {
   followers: FollowUpdateManyWithoutUser_followedInput
   following: FollowUpdateManyWithoutUser_followingInput
   messages: MessageUpdateManyWithoutSenderInput
-  refunds: RefundUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutFollowersDataInput {
-  auth0Id: String
+  auth0Id: ID
   username: String
   email: String
   email_verified: String
   name: String
   gender: Gender
-  description: String
+  bio: String
   url: String
   stripeId: String
   stripeCustomerId: String
+  receiveNotifications: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
@@ -3304,20 +3223,20 @@ input UserUpdateWithoutFollowersDataInput {
   following: FollowUpdateManyWithoutUser_followingInput
   messages: MessageUpdateManyWithoutSenderInput
   charges: ChargeUpdateManyWithoutUserInput
-  refunds: RefundUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutFollowingDataInput {
-  auth0Id: String
+  auth0Id: ID
   username: String
   email: String
   email_verified: String
   name: String
   gender: Gender
-  description: String
+  bio: String
   url: String
   stripeId: String
   stripeCustomerId: String
+  receiveNotifications: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
@@ -3325,62 +3244,41 @@ input UserUpdateWithoutFollowingDataInput {
   followers: FollowUpdateManyWithoutUser_followedInput
   messages: MessageUpdateManyWithoutSenderInput
   charges: ChargeUpdateManyWithoutUserInput
-  refunds: RefundUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutMessagesDataInput {
-  auth0Id: String
+  auth0Id: ID
   username: String
   email: String
   email_verified: String
   name: String
   gender: Gender
-  description: String
+  bio: String
   url: String
   stripeId: String
   stripeCustomerId: String
+  receiveNotifications: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
   studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   followers: FollowUpdateManyWithoutUser_followedInput
   following: FollowUpdateManyWithoutUser_followingInput
-  charges: ChargeUpdateManyWithoutUserInput
-  refunds: RefundUpdateManyWithoutUserInput
-}
-
-input UserUpdateWithoutRefundsDataInput {
-  auth0Id: String
-  username: String
-  email: String
-  email_verified: String
-  name: String
-  gender: Gender
-  description: String
-  url: String
-  stripeId: String
-  stripeCustomerId: String
-  picture: FileUpdateOneInput
-  video: FileUpdateOneInput
-  taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
-  studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
-  followers: FollowUpdateManyWithoutUser_followedInput
-  following: FollowUpdateManyWithoutUser_followingInput
-  messages: MessageUpdateManyWithoutSenderInput
   charges: ChargeUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutStudying_classroomsDataInput {
-  auth0Id: String
+  auth0Id: ID
   username: String
   email: String
   email_verified: String
   name: String
   gender: Gender
-  description: String
+  bio: String
   url: String
   stripeId: String
   stripeCustomerId: String
+  receiveNotifications: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   taught_classrooms: ClassroomUpdateManyWithoutTeacherInput
@@ -3388,20 +3286,20 @@ input UserUpdateWithoutStudying_classroomsDataInput {
   following: FollowUpdateManyWithoutUser_followingInput
   messages: MessageUpdateManyWithoutSenderInput
   charges: ChargeUpdateManyWithoutUserInput
-  refunds: RefundUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutTaught_classroomsDataInput {
-  auth0Id: String
+  auth0Id: ID
   username: String
   email: String
   email_verified: String
   name: String
   gender: Gender
-  description: String
+  bio: String
   url: String
   stripeId: String
   stripeCustomerId: String
+  receiveNotifications: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
@@ -3409,7 +3307,6 @@ input UserUpdateWithoutTaught_classroomsDataInput {
   following: FollowUpdateManyWithoutUser_followingInput
   messages: MessageUpdateManyWithoutSenderInput
   charges: ChargeUpdateManyWithoutUserInput
-  refunds: RefundUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithWhereUniqueWithoutStudying_classroomsInput {
@@ -3435,11 +3332,6 @@ input UserUpsertWithoutFollowingInput {
 input UserUpsertWithoutMessagesInput {
   update: UserUpdateWithoutMessagesDataInput!
   create: UserCreateWithoutMessagesInput!
-}
-
-input UserUpsertWithoutRefundsInput {
-  update: UserUpdateWithoutRefundsDataInput!
-  create: UserCreateWithoutRefundsInput!
 }
 
 input UserUpsertWithoutTaught_classroomsInput {
@@ -3546,46 +3438,46 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
-  auth0Id: String
+  auth0Id: ID
 
   """All values that are not equal to given value."""
-  auth0Id_not: String
+  auth0Id_not: ID
 
   """All values that are contained in given list."""
-  auth0Id_in: [String!]
+  auth0Id_in: [ID!]
 
   """All values that are not contained in given list."""
-  auth0Id_not_in: [String!]
+  auth0Id_not_in: [ID!]
 
   """All values less than the given value."""
-  auth0Id_lt: String
+  auth0Id_lt: ID
 
   """All values less than or equal the given value."""
-  auth0Id_lte: String
+  auth0Id_lte: ID
 
   """All values greater than the given value."""
-  auth0Id_gt: String
+  auth0Id_gt: ID
 
   """All values greater than or equal the given value."""
-  auth0Id_gte: String
+  auth0Id_gte: ID
 
   """All values containing the given string."""
-  auth0Id_contains: String
+  auth0Id_contains: ID
 
   """All values not containing the given string."""
-  auth0Id_not_contains: String
+  auth0Id_not_contains: ID
 
   """All values starting with the given string."""
-  auth0Id_starts_with: String
+  auth0Id_starts_with: ID
 
   """All values not starting with the given string."""
-  auth0Id_not_starts_with: String
+  auth0Id_not_starts_with: ID
 
   """All values ending with the given string."""
-  auth0Id_ends_with: String
+  auth0Id_ends_with: ID
 
   """All values not ending with the given string."""
-  auth0Id_not_ends_with: String
+  auth0Id_not_ends_with: ID
   username: String
 
   """All values that are not equal to given value."""
@@ -3756,46 +3648,46 @@ input UserWhereInput {
 
   """All values that are not contained in given list."""
   gender_not_in: [Gender!]
-  description: String
+  bio: String
 
   """All values that are not equal to given value."""
-  description_not: String
+  bio_not: String
 
   """All values that are contained in given list."""
-  description_in: [String!]
+  bio_in: [String!]
 
   """All values that are not contained in given list."""
-  description_not_in: [String!]
+  bio_not_in: [String!]
 
   """All values less than the given value."""
-  description_lt: String
+  bio_lt: String
 
   """All values less than or equal the given value."""
-  description_lte: String
+  bio_lte: String
 
   """All values greater than the given value."""
-  description_gt: String
+  bio_gt: String
 
   """All values greater than or equal the given value."""
-  description_gte: String
+  bio_gte: String
 
   """All values containing the given string."""
-  description_contains: String
+  bio_contains: String
 
   """All values not containing the given string."""
-  description_not_contains: String
+  bio_not_contains: String
 
   """All values starting with the given string."""
-  description_starts_with: String
+  bio_starts_with: String
 
   """All values not starting with the given string."""
-  description_not_starts_with: String
+  bio_not_starts_with: String
 
   """All values ending with the given string."""
-  description_ends_with: String
+  bio_ends_with: String
 
   """All values not ending with the given string."""
-  description_not_ends_with: String
+  bio_not_ends_with: String
   url: String
 
   """All values that are not equal to given value."""
@@ -3916,6 +3808,10 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   stripeCustomerId_not_ends_with: String
+  receiveNotifications: Boolean
+
+  """All values that are not equal to given value."""
+  receiveNotifications_not: Boolean
   picture: FileWhereInput
   video: FileWhereInput
   taught_classrooms_every: ClassroomWhereInput
@@ -3936,14 +3832,11 @@ input UserWhereInput {
   charges_every: ChargeWhereInput
   charges_some: ChargeWhereInput
   charges_none: ChargeWhereInput
-  refunds_every: RefundWhereInput
-  refunds_some: RefundWhereInput
-  refunds_none: RefundWhereInput
 }
 
 input UserWhereUniqueInput {
   id: ID
-  auth0Id: String
+  auth0Id: ID
   username: String
   email: String
   stripeId: String

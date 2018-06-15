@@ -1,36 +1,69 @@
 import { Context } from '../../utils'
 
 export const classes = {
-  async createClass(parent, { data }, ctx: Context, info) {
-    const auth0Id = ctx.user.id
-    return await ctx.db.mutation.createClass(
+  async createClass(
+    parent,
+    { classroomId, name, description, picture, price, schedule, files },
+    ctx: Context,
+    info,
+  ) {
+    const { auth0Id } = ctx.user
+    return ctx.db.mutation.createClass(
       {
         data: {
-          ...data,
-          studentsCount: 0,
-          teachers: {
-            connect: [{ auth0Id }],
-          },
+          classroom: { connect: { id: classroomId } },
+          name,
+          description,
+          picture: '',
+          price,
+          schedule,
+          // files: {
+          //   create: [{}],
+          // },
         },
       },
       info,
     )
   },
 
-  async updateClass(parent, args, ctx: Context, info) {
-    return await ctx.db.mutation.updateClass(
+  async updateClass(
+    parent,
+    { id, name, description, picture, price, schedule, files },
+    ctx: Context,
+    info,
+  ) {
+    return ctx.db.mutation.updateClass(
       {
-        where: { id: args.id },
-        data: args.data,
+        where: { id },
+        data: {
+          name,
+          description,
+          // picture,
+          price,
+          schedule,
+          // files,
+        },
       },
       info,
     )
   },
 
   async deleteClass(parent, { id }, ctx: Context, info) {
-    return await ctx.db.mutation.deleteClass(
+    return ctx.db.mutation.deleteClass(
       {
         where: { id },
+      },
+      info,
+    )
+  },
+
+  async goLive(parent, { id }, ctx: Context, info) {
+    return ctx.db.mutation.updateClass(
+      {
+        where: { id },
+        data: {
+          live: true,
+        },
       },
       info,
     )

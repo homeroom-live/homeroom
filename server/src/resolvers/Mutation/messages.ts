@@ -1,15 +1,14 @@
 import { Context } from '../../utils'
 
 export const messages = {
-  async createMessage(parent, { data }, ctx: Context, info) {
-    const auth0Id = await parseUserAuth0Id(ctx)
+  async createMessage(parent, { classId, text }, ctx: Context, info) {
+    const { auth0Id } = ctx.user
     return await ctx.db.mutation.createMessage(
       {
         data: {
-          ...data,
-          sender: {
-            connect: { auth0Id },
-          },
+          class: { connect: { id: classId } },
+          sender: { connect: { auth0Id } },
+          text,
         },
       },
       info,

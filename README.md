@@ -17,6 +17,10 @@
 - [x] Keep createUser + Viewer requires setup.
 - [x] Query
 - [ ] Mutation
+- [ ] Connect Stripe via Webhooks?
+  - pro: More data, less hacking
+  - con: separated, more lambdas
+  - pro: OSS we could make a BaaS for Stripe (webhooks)
 
 ## www
 
