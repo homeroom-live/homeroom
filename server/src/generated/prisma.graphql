@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/matic-zavadlal-03c51f/homeroom-setup/dev
-# timestamp: Fri Jun 15 2018 13:53:11 GMT+0200 (CEST)
+# timestamp: Fri Jun 15 2018 15:23:37 GMT+0200 (CEST)
 
 type AggregateCharge {
   count: Int!
@@ -386,16 +386,16 @@ type Class implements Node {
   updatedAt: DateTime!
   name: String!
   description: String!
-  picture: String
-  price: Float!
-  schedule: DateTime
-  live: Boolean!
-  duration: Int
+  picture(where: FileWhereInput): File
   video(where: FileWhereInput): File
-  files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File!]
-  vods(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File!]
-  classroom(where: ClassroomWhereInput): Classroom!
+  price: Float!
+  live: Boolean!
+  vod(where: FileWhereInput): File
+  duration: Int
+  schedule: DateTime
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
+  files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File!]
+  classroom(where: ClassroomWhereInput): Classroom!
 }
 
 """A connection to a list of items."""
@@ -411,16 +411,16 @@ type ClassConnection {
 input ClassCreateInput {
   name: String!
   description: String!
-  picture: String
   price: Float
-  schedule: DateTime
   live: Boolean
   duration: Int
+  schedule: DateTime
+  picture: FileCreateOneInput
   video: FileCreateOneInput
-  files: FileCreateManyInput
-  vods: FileCreateManyInput
-  classroom: ClassroomCreateOneWithoutClassesInput!
+  vod: FileCreateOneInput
   messages: MessageCreateManyWithoutClassInput
+  files: FileCreateManyInput
+  classroom: ClassroomCreateOneWithoutClassesInput!
 }
 
 input ClassCreateManyWithoutClassroomInput {
@@ -441,28 +441,28 @@ input ClassCreateOneWithoutMessagesInput {
 input ClassCreateWithoutClassroomInput {
   name: String!
   description: String!
-  picture: String
   price: Float
-  schedule: DateTime
   live: Boolean
   duration: Int
+  schedule: DateTime
+  picture: FileCreateOneInput
   video: FileCreateOneInput
-  files: FileCreateManyInput
-  vods: FileCreateManyInput
+  vod: FileCreateOneInput
   messages: MessageCreateManyWithoutClassInput
+  files: FileCreateManyInput
 }
 
 input ClassCreateWithoutMessagesInput {
   name: String!
   description: String!
-  picture: String
   price: Float
-  schedule: DateTime
   live: Boolean
   duration: Int
+  schedule: DateTime
+  picture: FileCreateOneInput
   video: FileCreateOneInput
+  vod: FileCreateOneInput
   files: FileCreateManyInput
-  vods: FileCreateManyInput
   classroom: ClassroomCreateOneWithoutClassesInput!
 }
 
@@ -486,16 +486,14 @@ enum ClassOrderByInput {
   name_DESC
   description_ASC
   description_DESC
-  picture_ASC
-  picture_DESC
   price_ASC
   price_DESC
-  schedule_ASC
-  schedule_DESC
   live_ASC
   live_DESC
   duration_ASC
   duration_DESC
+  schedule_ASC
+  schedule_DESC
 }
 
 type ClassPreviousValues {
@@ -504,11 +502,10 @@ type ClassPreviousValues {
   updatedAt: DateTime!
   name: String!
   description: String!
-  picture: String
   price: Float!
-  schedule: DateTime
   live: Boolean!
   duration: Int
+  schedule: DateTime
 }
 
 type Classroom implements Node {
@@ -989,31 +986,31 @@ input ClassSubscriptionWhereInput {
 input ClassUpdateDataInput {
   name: String
   description: String
-  picture: String
   price: Float
-  schedule: DateTime
   live: Boolean
   duration: Int
+  schedule: DateTime
+  picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  files: FileUpdateManyInput
-  vods: FileUpdateManyInput
-  classroom: ClassroomUpdateOneWithoutClassesInput
+  vod: FileUpdateOneInput
   messages: MessageUpdateManyWithoutClassInput
+  files: FileUpdateManyInput
+  classroom: ClassroomUpdateOneWithoutClassesInput
 }
 
 input ClassUpdateInput {
   name: String
   description: String
-  picture: String
   price: Float
-  schedule: DateTime
   live: Boolean
   duration: Int
+  schedule: DateTime
+  picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  files: FileUpdateManyInput
-  vods: FileUpdateManyInput
-  classroom: ClassroomUpdateOneWithoutClassesInput
+  vod: FileUpdateOneInput
   messages: MessageUpdateManyWithoutClassInput
+  files: FileUpdateManyInput
+  classroom: ClassroomUpdateOneWithoutClassesInput
 }
 
 input ClassUpdateManyWithoutClassroomInput {
@@ -1044,28 +1041,28 @@ input ClassUpdateOneWithoutMessagesInput {
 input ClassUpdateWithoutClassroomDataInput {
   name: String
   description: String
-  picture: String
   price: Float
-  schedule: DateTime
   live: Boolean
   duration: Int
+  schedule: DateTime
+  picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  files: FileUpdateManyInput
-  vods: FileUpdateManyInput
+  vod: FileUpdateOneInput
   messages: MessageUpdateManyWithoutClassInput
+  files: FileUpdateManyInput
 }
 
 input ClassUpdateWithoutMessagesDataInput {
   name: String
   description: String
-  picture: String
   price: Float
-  schedule: DateTime
   live: Boolean
   duration: Int
+  schedule: DateTime
+  picture: FileUpdateOneInput
   video: FileUpdateOneInput
+  vod: FileUpdateOneInput
   files: FileUpdateManyInput
-  vods: FileUpdateManyInput
   classroom: ClassroomUpdateOneWithoutClassesInput
 }
 
@@ -1263,46 +1260,6 @@ input ClassWhereInput {
 
   """All values not ending with the given string."""
   description_not_ends_with: String
-  picture: String
-
-  """All values that are not equal to given value."""
-  picture_not: String
-
-  """All values that are contained in given list."""
-  picture_in: [String!]
-
-  """All values that are not contained in given list."""
-  picture_not_in: [String!]
-
-  """All values less than the given value."""
-  picture_lt: String
-
-  """All values less than or equal the given value."""
-  picture_lte: String
-
-  """All values greater than the given value."""
-  picture_gt: String
-
-  """All values greater than or equal the given value."""
-  picture_gte: String
-
-  """All values containing the given string."""
-  picture_contains: String
-
-  """All values not containing the given string."""
-  picture_not_contains: String
-
-  """All values starting with the given string."""
-  picture_starts_with: String
-
-  """All values not starting with the given string."""
-  picture_not_starts_with: String
-
-  """All values ending with the given string."""
-  picture_ends_with: String
-
-  """All values not ending with the given string."""
-  picture_not_ends_with: String
   price: Float
 
   """All values that are not equal to given value."""
@@ -1325,28 +1282,6 @@ input ClassWhereInput {
 
   """All values greater than or equal the given value."""
   price_gte: Float
-  schedule: DateTime
-
-  """All values that are not equal to given value."""
-  schedule_not: DateTime
-
-  """All values that are contained in given list."""
-  schedule_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  schedule_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  schedule_lt: DateTime
-
-  """All values less than or equal the given value."""
-  schedule_lte: DateTime
-
-  """All values greater than the given value."""
-  schedule_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  schedule_gte: DateTime
   live: Boolean
 
   """All values that are not equal to given value."""
@@ -1373,17 +1308,38 @@ input ClassWhereInput {
 
   """All values greater than or equal the given value."""
   duration_gte: Int
+  schedule: DateTime
+
+  """All values that are not equal to given value."""
+  schedule_not: DateTime
+
+  """All values that are contained in given list."""
+  schedule_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  schedule_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  schedule_lt: DateTime
+
+  """All values less than or equal the given value."""
+  schedule_lte: DateTime
+
+  """All values greater than the given value."""
+  schedule_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  schedule_gte: DateTime
+  picture: FileWhereInput
   video: FileWhereInput
-  files_every: FileWhereInput
-  files_some: FileWhereInput
-  files_none: FileWhereInput
-  vods_every: FileWhereInput
-  vods_some: FileWhereInput
-  vods_none: FileWhereInput
-  classroom: ClassroomWhereInput
+  vod: FileWhereInput
   messages_every: MessageWhereInput
   messages_some: MessageWhereInput
   messages_none: MessageWhereInput
+  files_every: FileWhereInput
+  files_some: FileWhereInput
+  files_none: FileWhereInput
+  classroom: ClassroomWhereInput
 }
 
 input ClassWhereUniqueInput {
@@ -1399,7 +1355,6 @@ type File implements Node {
   name: String!
   secret: String
   contentType: String
-  url: String!
 }
 
 """A connection to a list of items."""
@@ -1416,7 +1371,6 @@ input FileCreateInput {
   name: String!
   secret: String
   contentType: String
-  url: String!
 }
 
 input FileCreateManyInput {
@@ -1451,8 +1405,6 @@ enum FileOrderByInput {
   secret_DESC
   contentType_ASC
   contentType_DESC
-  url_ASC
-  url_DESC
 }
 
 type FilePreviousValues {
@@ -1462,7 +1414,6 @@ type FilePreviousValues {
   name: String!
   secret: String
   contentType: String
-  url: String!
 }
 
 type FileSubscriptionPayload {
@@ -1508,14 +1459,12 @@ input FileUpdateDataInput {
   name: String
   secret: String
   contentType: String
-  url: String
 }
 
 input FileUpdateInput {
   name: String
   secret: String
   contentType: String
-  url: String
 }
 
 input FileUpdateManyInput {
@@ -1764,52 +1713,11 @@ input FileWhereInput {
 
   """All values not ending with the given string."""
   contentType_not_ends_with: String
-  url: String
-
-  """All values that are not equal to given value."""
-  url_not: String
-
-  """All values that are contained in given list."""
-  url_in: [String!]
-
-  """All values that are not contained in given list."""
-  url_not_in: [String!]
-
-  """All values less than the given value."""
-  url_lt: String
-
-  """All values less than or equal the given value."""
-  url_lte: String
-
-  """All values greater than the given value."""
-  url_gt: String
-
-  """All values greater than or equal the given value."""
-  url_gte: String
-
-  """All values containing the given string."""
-  url_contains: String
-
-  """All values not containing the given string."""
-  url_not_contains: String
-
-  """All values starting with the given string."""
-  url_starts_with: String
-
-  """All values not starting with the given string."""
-  url_not_starts_with: String
-
-  """All values ending with the given string."""
-  url_ends_with: String
-
-  """All values not ending with the given string."""
-  url_not_ends_with: String
 }
 
 input FileWhereUniqueInput {
   id: ID
   secret: String
-  url: String
 }
 
 type Follow implements Node {

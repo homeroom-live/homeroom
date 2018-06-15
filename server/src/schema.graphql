@@ -48,6 +48,7 @@ type Mutation {
     gender: Gender!
     bio: String!
     picture: Upload
+    video: Upload
     receiveNotifications: Boolean!
   ): Viewer
   updateUser(
@@ -55,6 +56,7 @@ type Mutation {
     gender: Gender
     bio: String
     picture: Upload
+    video: Upload
     receiveNotifications: Boolean
   ): Viewer
   # updateUserWithFiles(
@@ -75,6 +77,7 @@ type Mutation {
     name: String!
     description: String!
     picture: Upload
+    video: Upload
     price: Float!
     schedule: DateTime
     files: [Upload!]!
@@ -84,6 +87,7 @@ type Mutation {
     name: String
     description: String
     picture: Upload
+    video: Upload
     price: Float
     schedule: DateTime
     files: [Upload!]!
@@ -100,13 +104,14 @@ type Mutation {
   ): Classroom # DONE
   joinClassroom(id: ID!): Classroom # DONE
   leaveClassroom(id: ID): Classroom # DONE
+  # Message
   createMessage(classId: ID!, text: String!): Message! # DONE
-  # Why do we need createCharge
-  createCharge(amount: Float!, teacherId: ID!, classId: ID!): Charge!
+  createCharge(amount: Float!, teacherId: ID!, classId: ID!): Charge! # Why do we need createCharge
   createRefund(chargeId: ID!): Refund # Needs work
-  uploadFile(upload: Upload!): File!
-  uploadClassFiles(classId: ID!, uploads: [Upload!]!): [File!]!
-  uploadClassVideo(classId: ID!, upload: Upload!): File!
+  # Files
+  # uploadFile(upload: Upload!): File!
+  # uploadClassFiles(classId: ID!, uploads: [Upload!]!): Class
+  # uploadClassVideo(classId: ID!, upload: Upload!): File!
   removeFile(file: FileWhereUniqueInput!): File!
   removeFiles(files: FileUpdateManyWithoutClassInput!): [File!]!
 }
@@ -135,8 +140,8 @@ type User {
   gender: Gender!
   description: String
   url: String
-  picture(where: FileWhereInput): File!
-  video(where: FileWhereInput): File
+  picture: File!
+  video: File
 
   # Stripe
   stripeId: String # Additional resolver
@@ -279,7 +284,7 @@ type File {
   updatedAt: DateTime!
 
   name: String!
-  secret: String
-  contentType: String
+  secret: String!
+  contentType: String!
   url: String!
 }

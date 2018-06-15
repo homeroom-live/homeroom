@@ -18,6 +18,7 @@ import { Subscription } from './Subscription'
 import { ClassMessages } from './ClassMessages'
 import { ClassroomClasses } from './ClassroomClasses'
 import { ClassroomStudents } from './ClassroomStudents'
+import { File } from './File'
 import { User } from './User'
 import { UserCharges } from './UserCharges'
 import { UserFollowers } from './UserFollowers'
@@ -47,6 +48,7 @@ export const resolvers = {
   ClassMessages,
   ClassroomClasses,
   ClassroomStudents,
+  File,
   User,
   UserCharges,
   UserFollowers,

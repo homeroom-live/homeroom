@@ -68,23 +68,25 @@ type Class {
   # Info
   name: String!
   description: String!
-  picture: String # TODO: move to file
   price: Float! @default(value: "0")
-  schedule: DateTime
+  picture: File @relation(name: "ClassPicture")
+  video: File @relation(name: "ClassVideo")
 
   # Stream
-  live: Boolean! @default(value: "false")
+  schedule: DateTime
   duration: Int # in minutes
-  video: File @relation(name: "ClassVideo")
+  live: Boolean! @default(value: "false")
+  vod: File @relation(name: "ClassVods")
+
+  # Extras
+  messages: [Message!]! @relation(name: "ClassMessages")
+  files: [File!]! @relation(name: "ClassFiles")
 
   # Specs
   # teachers: [User!]! @relation(name: "UserTaughtClasses")
   # students: [User!]! @relation(name: "UserClasses")
   # studentsCount: Int
-  files: [File!]! @relation(name: "ClassFiles")
-  vods: [File!]! @relation(name: "ClassVods")
   classroom: Classroom! @relation(name: "ClassroomClass")
-  messages: [Message!]! @relation(name: "ClassMessages")
   # activities: [Activity!]! @relation(name: "ClassActivities")
   # charges: [Charge!]! @relation(name: "ClassCharges")
   # refunds: [Refund!]! @relation(name: "ClassRefunds")
@@ -98,7 +100,7 @@ type File {
   name: String!
   secret: String @unique
   contentType: String
-  url: String! @unique
+  # url: String! @unique
   # TODO: this can all be deleted - one way bindings
   # user: User @relation(name: "UserVideo")
   # userPicture: User @relation(name: "UserPicture")
