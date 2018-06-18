@@ -1,3 +1,4 @@
+import { upload } from 'graphql-middleware-apollo-upload-server'
 import { S3, AWSError } from 'aws-sdk'
 import * as mime from 'mime-types'
 import { v4 as uuid } from 'uuid'
@@ -11,6 +12,7 @@ export interface IUpload {
 }
 
 export interface IFile {
+  name: string
   secret: string
   contentType: string
   url: string
@@ -23,9 +25,9 @@ const s3Client = new S3({
   secretAccessKey: process.env.S3_SECRET,
 })
 
-// Exports
+// Helpers
 
-export async function uploadFile(upload: Promise<IUpload>): Promise<IFile> {
+async function uploadFile(upload: IUpload): Promise<IFile> {
   const { stream, filename, mimetype, encoding } = await upload
   const secret = uuid()
   const contentType = mime.lookup(filename) || undefined
@@ -41,11 +43,18 @@ export async function uploadFile(upload: Promise<IUpload>): Promise<IFile> {
     .promise()
 
   return {
+    name: filename,
     secret,
     contentType,
     url: response.Location,
   }
 }
+
+// Exports
+
+export const apolloUploadMiddleware = upload<IFile>({
+  uploadHandler: uploadFile,
+})
 
 export async function removeFile(
   file: IFile,

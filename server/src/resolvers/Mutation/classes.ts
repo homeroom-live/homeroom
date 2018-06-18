@@ -14,12 +14,27 @@ export const classes = {
           classroom: { connect: { id: classroomId } },
           name,
           description,
-          picture: '',
+          ...(picture
+            ? {
+                picture: {
+                  create: {
+                    name: picture.name,
+                    secret: picture.secret,
+                    contentType: picture.contentType,
+                  },
+                },
+              }
+            : {}),
           price,
           schedule,
-          // files: {
-          //   create: [{}],
-          // },
+          ...(files
+            ? {
+                files: {
+                  create: files,
+                },
+              }
+            : {}),
+          live: false,
         },
       },
       info,

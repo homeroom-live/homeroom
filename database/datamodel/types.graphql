@@ -13,7 +13,7 @@ type User {
   gender: Gender!
   bio: String!
   url: String
-  picture: File! @relation(name: "UserPicture")
+  picture: File @relation(name: "UserPicture")
   video: File @relation(name: "UserVideo")
   # isTeacher: Boolean
 

@@ -30,6 +30,7 @@ import { Viewer } from './Viewer'
 
 export const resolvers = {
   Query: {
+    viewer: () => ({}),
     ...classesQueries,
     ...classroomsQueries,
     ...messagesQueries,

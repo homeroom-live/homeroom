@@ -1,4 +1,4 @@
-# import Class, Classroom, File, Gender from '../schemas/prisma.graphql'
+# import Gender from './generated/prisma.graphql'
 
 scalar Upload
 
@@ -112,8 +112,9 @@ type Mutation {
   # uploadFile(upload: Upload!): File!
   # uploadClassFiles(classId: ID!, uploads: [Upload!]!): Class
   # uploadClassVideo(classId: ID!, upload: Upload!): File!
-  removeFile(file: FileWhereUniqueInput!): File!
-  removeFiles(files: FileUpdateManyWithoutClassInput!): [File!]!
+  # Move to webhooks
+  # removeFile(file: FileWhereUniqueInput!): File!
+  # removeFiles(files: FileUpdateManyWithoutClassInput!): [File!]!
 }
 
 type Subscription {
@@ -227,7 +228,7 @@ type Class {
 
   name: String!
   description: String!
-  picture: String
+  picture: File
   price: Float!
   schedule: DateTime
 
@@ -238,7 +239,7 @@ type Class {
 
   # Specs
   files: [File!]!
-  vods: File!
+  vod: File
   classroom: Classroom!
   messages: ClassMessages!
 }
@@ -259,7 +260,7 @@ type Message {
 }
 
 type Charge {
-  id: ID! @unique
+  id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
 

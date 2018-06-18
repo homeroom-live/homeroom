@@ -21,6 +21,10 @@
   - pro: More data, less hacking
   - con: separated, more lambdas
   - pro: OSS we could make a BaaS for Stripe (webhooks)
+- [ ] Move file remove / file management to Webhook
+  - pro: more transparent
+  - pro: more easily applied to multiple situations.
+  - con: I see no con tbh
 
 ## www
 

@@ -1,7 +1,7 @@
 import { Context } from '../utils'
 
 export const Subscription = {
-  messages: {
+  message: {
     subscribe: async (parent, { classroomId }, ctx: Context, info) => {
       return ctx.db.subscription.message(
         {

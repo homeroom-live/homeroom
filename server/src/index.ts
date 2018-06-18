@@ -3,6 +3,7 @@ import { Prisma } from './generated/prisma'
 import { resolvers, fragmentReplacements } from './resolvers'
 import { permissions } from './permissions'
 import { auth0 } from './auth0'
+import { apolloUploadMiddleware } from './files'
 
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
@@ -20,7 +21,13 @@ const server = new GraphQLServer({
 })
 
 // Express middleware
-server.use(auth0)
+// server.use(auth0)
+// server.use((req, res, next) => {
+//   console.log(req.user)
+//   next()
+// })
+
+server.express.use(auth0)
 
 // Start the server
 server.start(() => console.log(`Server is running on http://localhost:4000`))

@@ -1,5 +1,4 @@
 export const users = {
-  viwer: () => ({}),
   // async me(parent, args, ctx, info) {
   //   const payload = await parseTokenPayload(ctx)
 

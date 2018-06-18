@@ -511,13 +511,13 @@ type Class implements Node {
   updatedAt: DateTime!
   name: String!
   description: String!
+  price: Float!
   picture(where: FileWhereInput): File
   video(where: FileWhereInput): File
-  price: Float!
+  schedule: DateTime
+  duration: Int
   live: Boolean!
   vod(where: FileWhereInput): File
-  duration: Int
-  schedule: DateTime
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
   files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File!]
   classroom(where: ClassroomWhereInput): Classroom!
@@ -537,9 +537,9 @@ input ClassCreateInput {
   name: String!
   description: String!
   price: Float
-  live: Boolean
-  duration: Int
   schedule: DateTime
+  duration: Int
+  live: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
   vod: FileCreateOneInput
@@ -567,9 +567,9 @@ input ClassCreateWithoutClassroomInput {
   name: String!
   description: String!
   price: Float
-  live: Boolean
-  duration: Int
   schedule: DateTime
+  duration: Int
+  live: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
   vod: FileCreateOneInput
@@ -581,9 +581,9 @@ input ClassCreateWithoutMessagesInput {
   name: String!
   description: String!
   price: Float
-  live: Boolean
-  duration: Int
   schedule: DateTime
+  duration: Int
+  live: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
   vod: FileCreateOneInput
@@ -613,12 +613,12 @@ enum ClassOrderByInput {
   description_DESC
   price_ASC
   price_DESC
-  live_ASC
-  live_DESC
-  duration_ASC
-  duration_DESC
   schedule_ASC
   schedule_DESC
+  duration_ASC
+  duration_DESC
+  live_ASC
+  live_DESC
 }
 
 type ClassPreviousValues {
@@ -628,9 +628,9 @@ type ClassPreviousValues {
   name: String!
   description: String!
   price: Float!
-  live: Boolean!
-  duration: Int
   schedule: DateTime
+  duration: Int
+  live: Boolean!
 }
 
 type Classroom implements Node {
@@ -1112,9 +1112,9 @@ input ClassUpdateDataInput {
   name: String
   description: String
   price: Float
-  live: Boolean
-  duration: Int
   schedule: DateTime
+  duration: Int
+  live: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   vod: FileUpdateOneInput
@@ -1127,9 +1127,9 @@ input ClassUpdateInput {
   name: String
   description: String
   price: Float
-  live: Boolean
-  duration: Int
   schedule: DateTime
+  duration: Int
+  live: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   vod: FileUpdateOneInput
@@ -1167,9 +1167,9 @@ input ClassUpdateWithoutClassroomDataInput {
   name: String
   description: String
   price: Float
-  live: Boolean
-  duration: Int
   schedule: DateTime
+  duration: Int
+  live: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   vod: FileUpdateOneInput
@@ -1181,9 +1181,9 @@ input ClassUpdateWithoutMessagesDataInput {
   name: String
   description: String
   price: Float
-  live: Boolean
-  duration: Int
   schedule: DateTime
+  duration: Int
+  live: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   vod: FileUpdateOneInput
@@ -1407,32 +1407,6 @@ input ClassWhereInput {
 
   """All values greater than or equal the given value."""
   price_gte: Float
-  live: Boolean
-
-  """All values that are not equal to given value."""
-  live_not: Boolean
-  duration: Int
-
-  """All values that are not equal to given value."""
-  duration_not: Int
-
-  """All values that are contained in given list."""
-  duration_in: [Int!]
-
-  """All values that are not contained in given list."""
-  duration_not_in: [Int!]
-
-  """All values less than the given value."""
-  duration_lt: Int
-
-  """All values less than or equal the given value."""
-  duration_lte: Int
-
-  """All values greater than the given value."""
-  duration_gt: Int
-
-  """All values greater than or equal the given value."""
-  duration_gte: Int
   schedule: DateTime
 
   """All values that are not equal to given value."""
@@ -1455,6 +1429,32 @@ input ClassWhereInput {
 
   """All values greater than or equal the given value."""
   schedule_gte: DateTime
+  duration: Int
+
+  """All values that are not equal to given value."""
+  duration_not: Int
+
+  """All values that are contained in given list."""
+  duration_in: [Int!]
+
+  """All values that are not contained in given list."""
+  duration_not_in: [Int!]
+
+  """All values less than the given value."""
+  duration_lt: Int
+
+  """All values less than or equal the given value."""
+  duration_lte: Int
+
+  """All values greater than the given value."""
+  duration_gt: Int
+
+  """All values greater than or equal the given value."""
+  duration_gte: Int
+  live: Boolean
+
+  """All values that are not equal to given value."""
+  live_not: Boolean
   picture: FileWhereInput
   video: FileWhereInput
   vod: FileWhereInput
@@ -1604,6 +1604,7 @@ input FileUpdateManyInput {
 input FileUpdateOneInput {
   create: FileCreateInput
   connect: FileWhereUniqueInput
+  disconnect: Boolean
   delete: Boolean
   update: FileUpdateDataInput
   upsert: FileUpsertNestedInput
@@ -2848,7 +2849,7 @@ type User implements Node {
   gender: Gender!
   bio: String!
   url: String
-  picture(where: FileWhereInput): File!
+  picture(where: FileWhereInput): File
   video(where: FileWhereInput): File
   stripeId: String
   stripeCustomerId: String
@@ -2883,7 +2884,7 @@ input UserCreateInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  picture: FileCreateOneInput!
+  picture: FileCreateOneInput
   video: FileCreateOneInput
   taught_classrooms: ClassroomCreateManyWithoutTeacherInput
   studying_classrooms: ClassroomCreateManyWithoutStudentsInput
@@ -2935,7 +2936,7 @@ input UserCreateWithoutChargesInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  picture: FileCreateOneInput!
+  picture: FileCreateOneInput
   video: FileCreateOneInput
   taught_classrooms: ClassroomCreateManyWithoutTeacherInput
   studying_classrooms: ClassroomCreateManyWithoutStudentsInput
@@ -2956,7 +2957,7 @@ input UserCreateWithoutFollowersInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  picture: FileCreateOneInput!
+  picture: FileCreateOneInput
   video: FileCreateOneInput
   taught_classrooms: ClassroomCreateManyWithoutTeacherInput
   studying_classrooms: ClassroomCreateManyWithoutStudentsInput
@@ -2977,7 +2978,7 @@ input UserCreateWithoutFollowingInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  picture: FileCreateOneInput!
+  picture: FileCreateOneInput
   video: FileCreateOneInput
   taught_classrooms: ClassroomCreateManyWithoutTeacherInput
   studying_classrooms: ClassroomCreateManyWithoutStudentsInput
@@ -2998,7 +2999,7 @@ input UserCreateWithoutMessagesInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  picture: FileCreateOneInput!
+  picture: FileCreateOneInput
   video: FileCreateOneInput
   taught_classrooms: ClassroomCreateManyWithoutTeacherInput
   studying_classrooms: ClassroomCreateManyWithoutStudentsInput
@@ -3019,7 +3020,7 @@ input UserCreateWithoutStudying_classroomsInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  picture: FileCreateOneInput!
+  picture: FileCreateOneInput
   video: FileCreateOneInput
   taught_classrooms: ClassroomCreateManyWithoutTeacherInput
   followers: FollowCreateManyWithoutUser_followedInput
@@ -3040,7 +3041,7 @@ input UserCreateWithoutTaught_classroomsInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  picture: FileCreateOneInput!
+  picture: FileCreateOneInput
   video: FileCreateOneInput
   studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   followers: FollowCreateManyWithoutUser_followedInput
@@ -3944,12 +3945,12 @@ export type ClassOrderByInput =   'id_ASC' |
   'description_DESC' |
   'price_ASC' |
   'price_DESC' |
-  'live_ASC' |
-  'live_DESC' |
+  'schedule_ASC' |
+  'schedule_DESC' |
   'duration_ASC' |
   'duration_DESC' |
-  'schedule_ASC' |
-  'schedule_DESC'
+  'live_ASC' |
+  'live_DESC'
 
 export type MessageOrderByInput =   'id_ASC' |
   'id_DESC' |
@@ -4342,7 +4343,7 @@ export interface UserCreateWithoutStudying_classroomsInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  picture: FileCreateOneInput
+  picture?: FileCreateOneInput
   video?: FileCreateOneInput
   taught_classrooms?: ClassroomCreateManyWithoutTeacherInput
   followers?: FollowCreateManyWithoutUser_followedInput
@@ -4437,16 +4438,6 @@ export interface ClassWhereInput {
   price_lte?: Float
   price_gt?: Float
   price_gte?: Float
-  live?: Boolean
-  live_not?: Boolean
-  duration?: Int
-  duration_not?: Int
-  duration_in?: Int[] | Int
-  duration_not_in?: Int[] | Int
-  duration_lt?: Int
-  duration_lte?: Int
-  duration_gt?: Int
-  duration_gte?: Int
   schedule?: DateTime
   schedule_not?: DateTime
   schedule_in?: DateTime[] | DateTime
@@ -4455,6 +4446,16 @@ export interface ClassWhereInput {
   schedule_lte?: DateTime
   schedule_gt?: DateTime
   schedule_gte?: DateTime
+  duration?: Int
+  duration_not?: Int
+  duration_in?: Int[] | Int
+  duration_not_in?: Int[] | Int
+  duration_lt?: Int
+  duration_lte?: Int
+  duration_gt?: Int
+  duration_gte?: Int
+  live?: Boolean
+  live_not?: Boolean
   picture?: FileWhereInput
   video?: FileWhereInput
   vod?: FileWhereInput
@@ -4578,7 +4579,7 @@ export interface UserCreateWithoutFollowersInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  picture: FileCreateOneInput
+  picture?: FileCreateOneInput
   video?: FileCreateOneInput
   taught_classrooms?: ClassroomCreateManyWithoutTeacherInput
   studying_classrooms?: ClassroomCreateManyWithoutStudentsInput
@@ -4636,9 +4637,9 @@ export interface ClassCreateInput {
   name: String
   description: String
   price?: Float
-  live?: Boolean
-  duration?: Int
   schedule?: DateTime
+  duration?: Int
+  live?: Boolean
   picture?: FileCreateOneInput
   video?: FileCreateOneInput
   vod?: FileCreateOneInput
@@ -4721,9 +4722,9 @@ export interface ClassUpdateInput {
   name?: String
   description?: String
   price?: Float
-  live?: Boolean
-  duration?: Int
   schedule?: DateTime
+  duration?: Int
+  live?: Boolean
   picture?: FileUpdateOneInput
   video?: FileUpdateOneInput
   vod?: FileUpdateOneInput
@@ -4754,7 +4755,7 @@ export interface UserCreateWithoutChargesInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  picture: FileCreateOneInput
+  picture?: FileCreateOneInput
   video?: FileCreateOneInput
   taught_classrooms?: ClassroomCreateManyWithoutTeacherInput
   studying_classrooms?: ClassroomCreateManyWithoutStudentsInput
@@ -4831,6 +4832,7 @@ export interface ClassUpsertWithoutMessagesInput {
 export interface FileUpdateOneInput {
   create?: FileCreateInput
   connect?: FileWhereUniqueInput
+  disconnect?: Boolean
   delete?: Boolean
   update?: FileUpdateDataInput
   upsert?: FileUpsertNestedInput
@@ -4926,7 +4928,7 @@ export interface UserCreateInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  picture: FileCreateOneInput
+  picture?: FileCreateOneInput
   video?: FileCreateOneInput
   taught_classrooms?: ClassroomCreateManyWithoutTeacherInput
   studying_classrooms?: ClassroomCreateManyWithoutStudentsInput
@@ -5006,9 +5008,9 @@ export interface ClassCreateWithoutClassroomInput {
   name: String
   description: String
   price?: Float
-  live?: Boolean
-  duration?: Int
   schedule?: DateTime
+  duration?: Int
+  live?: Boolean
   picture?: FileCreateOneInput
   video?: FileCreateOneInput
   vod?: FileCreateOneInput
@@ -5050,7 +5052,7 @@ export interface UserCreateWithoutMessagesInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  picture: FileCreateOneInput
+  picture?: FileCreateOneInput
   video?: FileCreateOneInput
   taught_classrooms?: ClassroomCreateManyWithoutTeacherInput
   studying_classrooms?: ClassroomCreateManyWithoutStudentsInput
@@ -5076,9 +5078,9 @@ export interface ClassUpdateWithoutClassroomDataInput {
   name?: String
   description?: String
   price?: Float
-  live?: Boolean
-  duration?: Int
   schedule?: DateTime
+  duration?: Int
+  live?: Boolean
   picture?: FileUpdateOneInput
   video?: FileUpdateOneInput
   vod?: FileUpdateOneInput
@@ -5098,7 +5100,7 @@ export interface UserCreateWithoutTaught_classroomsInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  picture: FileCreateOneInput
+  picture?: FileCreateOneInput
   video?: FileCreateOneInput
   studying_classrooms?: ClassroomCreateManyWithoutStudentsInput
   followers?: FollowCreateManyWithoutUser_followedInput
@@ -5137,7 +5139,7 @@ export interface UserCreateWithoutFollowingInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  picture: FileCreateOneInput
+  picture?: FileCreateOneInput
   video?: FileCreateOneInput
   taught_classrooms?: ClassroomCreateManyWithoutTeacherInput
   studying_classrooms?: ClassroomCreateManyWithoutStudentsInput
@@ -5168,9 +5170,9 @@ export interface ClassCreateWithoutMessagesInput {
   name: String
   description: String
   price?: Float
-  live?: Boolean
-  duration?: Int
   schedule?: DateTime
+  duration?: Int
+  live?: Boolean
   picture?: FileCreateOneInput
   video?: FileCreateOneInput
   vod?: FileCreateOneInput
@@ -5436,9 +5438,9 @@ export interface ClassUpdateWithoutMessagesDataInput {
   name?: String
   description?: String
   price?: Float
-  live?: Boolean
-  duration?: Int
   schedule?: DateTime
+  duration?: Int
+  live?: Boolean
   picture?: FileUpdateOneInput
   video?: FileUpdateOneInput
   vod?: FileUpdateOneInput
@@ -5789,9 +5791,9 @@ export interface ClassUpdateDataInput {
   name?: String
   description?: String
   price?: Float
-  live?: Boolean
-  duration?: Int
   schedule?: DateTime
+  duration?: Int
+  live?: Boolean
   picture?: FileUpdateOneInput
   video?: FileUpdateOneInput
   vod?: FileUpdateOneInput
@@ -5878,7 +5880,7 @@ export interface User extends Node {
   gender: Gender
   bio: String
   url?: String
-  picture: File
+  picture?: File
   video?: File
   stripeId?: String
   stripeCustomerId?: String
@@ -6167,9 +6169,9 @@ export interface ClassPreviousValues {
   name: String
   description: String
   price: Float
-  live: Boolean
-  duration?: Int
   schedule?: DateTime
+  duration?: Int
+  live: Boolean
 }
 
 export interface AggregateUser {
@@ -6182,13 +6184,13 @@ export interface Class extends Node {
   updatedAt: DateTime
   name: String
   description: String
+  price: Float
   picture?: File
   video?: File
-  price: Float
+  schedule?: DateTime
+  duration?: Int
   live: Boolean
   vod?: File
-  duration?: Int
-  schedule?: DateTime
   messages?: Message[]
   files?: File[]
   classroom: Classroom

@@ -1,15 +1,50 @@
 import * as jwt from 'express-jwt'
-import * as jwksRsa from 'jwks-rsa'
+import * as jwks from 'jwks-rsa'
 
 export const auth0 = jwt({
-  secret: jwksRsa.expressJwtSecret({
+  secret: jwks.expressJwtSecret({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`,
+    jwksUri: 'https://homeroom.auth0.com/.well-known/jwks.json',
   }),
-  audience: '{process.env.AUTH0_TOKEN_AUDIENCE}',
-  issuer: `https://${process.env.AUTH0_TOKEN_ISSUER}/`,
+  audience: 'http://homeroom.live/api',
+  issuer: 'https://homeroom.auth0.com/',
   algorithms: ['RS256'],
   credentialsRequired: false,
+  getToken: req => {
+    let token
+    if (!req.headers || !req.headers.authorization) {
+      return null
+    }
+
+    var parts = req.headers.authorization.split(' ')
+    if (parts.length == 2) {
+      var scheme = parts[0]
+      var credentials = parts[1]
+
+      if (/^Bearer$/i.test(scheme)) {
+        token = credentials
+      } else {
+        throw new Error('foo')
+      }
+    } else {
+      throw new Error('bar')
+    }
+    console.log(token)
+    return token
+  },
 })
+
+// export const auth0 = jwt({
+//   secret: jwks.expressJwtSecret({
+//     cache: true,
+//     rateLimit: true,
+//     jwksRequestsPerMinute: 5,
+//     jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`,
+//   }),
+//   audience: process.env.AUTH0_TOKEN_AUDIENCE,
+//   issuer: `https://${process.env.AUTH0_TOKEN_ISSUER}/`,
+//   algorithms: ['RS256'],
+//   credentialsRequired: false,
+// })
