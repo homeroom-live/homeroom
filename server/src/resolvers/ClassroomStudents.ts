@@ -31,7 +31,7 @@ export const ClassroomStudents = {
   studied_by_viewer: {
     fragment: `fragment ClassroomID on Classroom { id }`,
     resolve: async ({ id }, args, ctx: Context, info) => {
-      const viewerID = ctx.user.id
+      const viewerID = ctx.request.user.sub
       return ctx.db.exists.Classroom({
         id,
         students_some: { auth0Id: viewerID },

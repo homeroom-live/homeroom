@@ -3,10 +3,10 @@ type User {
   createdAt: DateTime!
   updatedAt: DateTime!
   # Info
-  auth0Id: ID! @unique
+  auth0Id: String! @unique
   username: String! @unique
   email: String! @unique
-  email_verified: String
+  email_verified: Boolean! @default(value: false)
 
   # Meta
   name: String

@@ -2841,10 +2841,10 @@ type User implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean!
   name: String
   gender: Gender!
   bio: String!
@@ -2873,10 +2873,10 @@ type UserConnection {
 }
 
 input UserCreateInput {
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender!
   bio: String!
@@ -2925,10 +2925,10 @@ input UserCreateOneWithoutTaught_classroomsInput {
 }
 
 input UserCreateWithoutChargesInput {
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender!
   bio: String!
@@ -2946,10 +2946,10 @@ input UserCreateWithoutChargesInput {
 }
 
 input UserCreateWithoutFollowersInput {
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender!
   bio: String!
@@ -2967,10 +2967,10 @@ input UserCreateWithoutFollowersInput {
 }
 
 input UserCreateWithoutFollowingInput {
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender!
   bio: String!
@@ -2988,10 +2988,10 @@ input UserCreateWithoutFollowingInput {
 }
 
 input UserCreateWithoutMessagesInput {
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender!
   bio: String!
@@ -3009,10 +3009,10 @@ input UserCreateWithoutMessagesInput {
 }
 
 input UserCreateWithoutStudying_classroomsInput {
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender!
   bio: String!
@@ -3030,10 +3030,10 @@ input UserCreateWithoutStudying_classroomsInput {
 }
 
 input UserCreateWithoutTaught_classroomsInput {
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender!
   bio: String!
@@ -3094,10 +3094,10 @@ type UserPreviousValues {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean!
   name: String
   gender: Gender!
   bio: String!
@@ -3147,10 +3147,10 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateInput {
-  auth0Id: ID
+  auth0Id: String
   username: String
   email: String
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender
   bio: String
@@ -3218,10 +3218,10 @@ input UserUpdateOneWithoutTaught_classroomsInput {
 }
 
 input UserUpdateWithoutChargesDataInput {
-  auth0Id: ID
+  auth0Id: String
   username: String
   email: String
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender
   bio: String
@@ -3239,10 +3239,10 @@ input UserUpdateWithoutChargesDataInput {
 }
 
 input UserUpdateWithoutFollowersDataInput {
-  auth0Id: ID
+  auth0Id: String
   username: String
   email: String
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender
   bio: String
@@ -3260,10 +3260,10 @@ input UserUpdateWithoutFollowersDataInput {
 }
 
 input UserUpdateWithoutFollowingDataInput {
-  auth0Id: ID
+  auth0Id: String
   username: String
   email: String
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender
   bio: String
@@ -3281,10 +3281,10 @@ input UserUpdateWithoutFollowingDataInput {
 }
 
 input UserUpdateWithoutMessagesDataInput {
-  auth0Id: ID
+  auth0Id: String
   username: String
   email: String
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender
   bio: String
@@ -3302,10 +3302,10 @@ input UserUpdateWithoutMessagesDataInput {
 }
 
 input UserUpdateWithoutStudying_classroomsDataInput {
-  auth0Id: ID
+  auth0Id: String
   username: String
   email: String
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender
   bio: String
@@ -3323,10 +3323,10 @@ input UserUpdateWithoutStudying_classroomsDataInput {
 }
 
 input UserUpdateWithoutTaught_classroomsDataInput {
-  auth0Id: ID
+  auth0Id: String
   username: String
   email: String
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender
   bio: String
@@ -3472,46 +3472,46 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
-  auth0Id: ID
+  auth0Id: String
 
   """All values that are not equal to given value."""
-  auth0Id_not: ID
+  auth0Id_not: String
 
   """All values that are contained in given list."""
-  auth0Id_in: [ID!]
+  auth0Id_in: [String!]
 
   """All values that are not contained in given list."""
-  auth0Id_not_in: [ID!]
+  auth0Id_not_in: [String!]
 
   """All values less than the given value."""
-  auth0Id_lt: ID
+  auth0Id_lt: String
 
   """All values less than or equal the given value."""
-  auth0Id_lte: ID
+  auth0Id_lte: String
 
   """All values greater than the given value."""
-  auth0Id_gt: ID
+  auth0Id_gt: String
 
   """All values greater than or equal the given value."""
-  auth0Id_gte: ID
+  auth0Id_gte: String
 
   """All values containing the given string."""
-  auth0Id_contains: ID
+  auth0Id_contains: String
 
   """All values not containing the given string."""
-  auth0Id_not_contains: ID
+  auth0Id_not_contains: String
 
   """All values starting with the given string."""
-  auth0Id_starts_with: ID
+  auth0Id_starts_with: String
 
   """All values not starting with the given string."""
-  auth0Id_not_starts_with: ID
+  auth0Id_not_starts_with: String
 
   """All values ending with the given string."""
-  auth0Id_ends_with: ID
+  auth0Id_ends_with: String
 
   """All values not ending with the given string."""
-  auth0Id_not_ends_with: ID
+  auth0Id_not_ends_with: String
   username: String
 
   """All values that are not equal to given value."""
@@ -3592,46 +3592,10 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   email_not_ends_with: String
-  email_verified: String
+  email_verified: Boolean
 
   """All values that are not equal to given value."""
-  email_verified_not: String
-
-  """All values that are contained in given list."""
-  email_verified_in: [String!]
-
-  """All values that are not contained in given list."""
-  email_verified_not_in: [String!]
-
-  """All values less than the given value."""
-  email_verified_lt: String
-
-  """All values less than or equal the given value."""
-  email_verified_lte: String
-
-  """All values greater than the given value."""
-  email_verified_gt: String
-
-  """All values greater than or equal the given value."""
-  email_verified_gte: String
-
-  """All values containing the given string."""
-  email_verified_contains: String
-
-  """All values not containing the given string."""
-  email_verified_not_contains: String
-
-  """All values starting with the given string."""
-  email_verified_starts_with: String
-
-  """All values not starting with the given string."""
-  email_verified_not_starts_with: String
-
-  """All values ending with the given string."""
-  email_verified_ends_with: String
-
-  """All values not ending with the given string."""
-  email_verified_not_ends_with: String
+  email_verified_not: Boolean
   name: String
 
   """All values that are not equal to given value."""
@@ -3870,7 +3834,7 @@ input UserWhereInput {
 
 input UserWhereUniqueInput {
   id: ID
-  auth0Id: ID
+  auth0Id: String
   username: String
   email: String
   stripeId: String
@@ -3978,6 +3942,9 @@ export type MutationType =   'CREATED' |
   'UPDATED' |
   'DELETED'
 
+export type Gender =   'MALE' |
+  'FEMALE'
+
 export type ChargeOrderByInput =   'id_ASC' |
   'id_DESC' |
   'createdAt_ASC' |
@@ -3988,9 +3955,6 @@ export type ChargeOrderByInput =   'id_ASC' |
   'amount_DESC' |
   'stripeId_ASC' |
   'stripeId_DESC'
-
-export type Gender =   'MALE' |
-  'FEMALE'
 
 export type RefundOrderByInput =   'id_ASC' |
   'id_DESC' |
@@ -4043,20 +4007,20 @@ export interface UserWhereInput {
   updatedAt_lte?: DateTime
   updatedAt_gt?: DateTime
   updatedAt_gte?: DateTime
-  auth0Id?: ID_Input
-  auth0Id_not?: ID_Input
-  auth0Id_in?: ID_Input[] | ID_Input
-  auth0Id_not_in?: ID_Input[] | ID_Input
-  auth0Id_lt?: ID_Input
-  auth0Id_lte?: ID_Input
-  auth0Id_gt?: ID_Input
-  auth0Id_gte?: ID_Input
-  auth0Id_contains?: ID_Input
-  auth0Id_not_contains?: ID_Input
-  auth0Id_starts_with?: ID_Input
-  auth0Id_not_starts_with?: ID_Input
-  auth0Id_ends_with?: ID_Input
-  auth0Id_not_ends_with?: ID_Input
+  auth0Id?: String
+  auth0Id_not?: String
+  auth0Id_in?: String[] | String
+  auth0Id_not_in?: String[] | String
+  auth0Id_lt?: String
+  auth0Id_lte?: String
+  auth0Id_gt?: String
+  auth0Id_gte?: String
+  auth0Id_contains?: String
+  auth0Id_not_contains?: String
+  auth0Id_starts_with?: String
+  auth0Id_not_starts_with?: String
+  auth0Id_ends_with?: String
+  auth0Id_not_ends_with?: String
   username?: String
   username_not?: String
   username_in?: String[] | String
@@ -4085,20 +4049,8 @@ export interface UserWhereInput {
   email_not_starts_with?: String
   email_ends_with?: String
   email_not_ends_with?: String
-  email_verified?: String
-  email_verified_not?: String
-  email_verified_in?: String[] | String
-  email_verified_not_in?: String[] | String
-  email_verified_lt?: String
-  email_verified_lte?: String
-  email_verified_gt?: String
-  email_verified_gte?: String
-  email_verified_contains?: String
-  email_verified_not_contains?: String
-  email_verified_starts_with?: String
-  email_verified_not_starts_with?: String
-  email_verified_ends_with?: String
-  email_verified_not_ends_with?: String
+  email_verified?: Boolean
+  email_verified_not?: Boolean
   name?: String
   name_not?: String
   name_in?: String[] | String
@@ -4332,10 +4284,10 @@ export interface ClassroomUpdateWithWhereUniqueWithoutTeacherInput {
 }
 
 export interface UserCreateWithoutStudying_classroomsInput {
-  auth0Id: ID_Input
+  auth0Id: String
   username: String
   email: String
-  email_verified?: String
+  email_verified?: Boolean
   name?: String
   gender: Gender
   bio: String
@@ -4568,10 +4520,10 @@ export interface ClassroomWhereInput {
 }
 
 export interface UserCreateWithoutFollowersInput {
-  auth0Id: ID_Input
+  auth0Id: String
   username: String
   email: String
-  email_verified?: String
+  email_verified?: Boolean
   name?: String
   gender: Gender
   bio: String
@@ -4744,10 +4696,10 @@ export interface FollowUpdateInput {
 }
 
 export interface UserCreateWithoutChargesInput {
-  auth0Id: ID_Input
+  auth0Id: String
   username: String
   email: String
-  email_verified?: String
+  email_verified?: Boolean
   name?: String
   gender: Gender
   bio: String
@@ -4803,10 +4755,10 @@ export interface UserUpsertWithoutFollowingInput {
 }
 
 export interface UserUpdateInput {
-  auth0Id?: ID_Input
+  auth0Id?: String
   username?: String
   email?: String
-  email_verified?: String
+  email_verified?: Boolean
   name?: String
   gender?: Gender
   bio?: String
@@ -4917,10 +4869,10 @@ export interface ChargeWhereInput {
 }
 
 export interface UserCreateInput {
-  auth0Id: ID_Input
+  auth0Id: String
   username: String
   email: String
-  email_verified?: String
+  email_verified?: Boolean
   name?: String
   gender: Gender
   bio: String
@@ -5041,10 +4993,10 @@ export interface ClassUpdateManyWithoutClassroomInput {
 }
 
 export interface UserCreateWithoutMessagesInput {
-  auth0Id: ID_Input
+  auth0Id: String
   username: String
   email: String
-  email_verified?: String
+  email_verified?: Boolean
   name?: String
   gender: Gender
   bio: String
@@ -5089,10 +5041,10 @@ export interface ClassUpdateWithoutClassroomDataInput {
 }
 
 export interface UserCreateWithoutTaught_classroomsInput {
-  auth0Id: ID_Input
+  auth0Id: String
   username: String
   email: String
-  email_verified?: String
+  email_verified?: Boolean
   name?: String
   gender: Gender
   bio: String
@@ -5128,10 +5080,10 @@ export interface MessageUpdateWithWhereUniqueWithoutClassInput {
 }
 
 export interface UserCreateWithoutFollowingInput {
-  auth0Id: ID_Input
+  auth0Id: String
   username: String
   email: String
-  email_verified?: String
+  email_verified?: Boolean
   name?: String
   gender: Gender
   bio: String
@@ -5181,10 +5133,10 @@ export interface ClassCreateWithoutMessagesInput {
 }
 
 export interface UserUpdateWithoutMessagesDataInput {
-  auth0Id?: ID_Input
+  auth0Id?: String
   username?: String
   email?: String
-  email_verified?: String
+  email_verified?: Boolean
   name?: String
   gender?: Gender
   bio?: String
@@ -5271,7 +5223,7 @@ export interface UserUpdateOneWithoutTaught_classroomsInput {
 
 export interface UserWhereUniqueInput {
   id?: ID_Input
-  auth0Id?: ID_Input
+  auth0Id?: String
   username?: String
   email?: String
   stripeId?: String
@@ -5279,10 +5231,10 @@ export interface UserWhereUniqueInput {
 }
 
 export interface UserUpdateWithoutTaught_classroomsDataInput {
-  auth0Id?: ID_Input
+  auth0Id?: String
   username?: String
   email?: String
-  email_verified?: String
+  email_verified?: Boolean
   name?: String
   gender?: Gender
   bio?: String
@@ -5360,10 +5312,10 @@ export interface MessageUpsertWithWhereUniqueWithoutClassInput {
 }
 
 export interface UserUpdateWithoutFollowingDataInput {
-  auth0Id?: ID_Input
+  auth0Id?: String
   username?: String
   email?: String
-  email_verified?: String
+  email_verified?: Boolean
   name?: String
   gender?: Gender
   bio?: String
@@ -5548,10 +5500,10 @@ export interface FileUpdateInput {
 }
 
 export interface UserUpdateWithoutStudying_classroomsDataInput {
-  auth0Id?: ID_Input
+  auth0Id?: String
   username?: String
   email?: String
-  email_verified?: String
+  email_verified?: Boolean
   name?: String
   gender?: Gender
   bio?: String
@@ -5622,10 +5574,10 @@ export interface ClassCreateOneWithoutMessagesInput {
 }
 
 export interface UserUpdateWithoutFollowersDataInput {
-  auth0Id?: ID_Input
+  auth0Id?: String
   username?: String
   email?: String
-  email_verified?: String
+  email_verified?: Boolean
   name?: String
   gender?: Gender
   bio?: String
@@ -5730,10 +5682,10 @@ export interface ChargeUpdateManyWithoutUserInput {
 }
 
 export interface UserUpdateWithoutChargesDataInput {
-  auth0Id?: ID_Input
+  auth0Id?: String
   username?: String
   email?: String
-  email_verified?: String
+  email_verified?: Boolean
   name?: String
   gender?: Gender
   bio?: String
@@ -5872,10 +5824,10 @@ export interface User extends Node {
   id: ID_Output
   createdAt: DateTime
   updatedAt: DateTime
-  auth0Id: ID_Output
+  auth0Id: String
   username: String
   email: String
-  email_verified?: String
+  email_verified: Boolean
   name?: String
   gender: Gender
   bio: String
@@ -6014,10 +5966,10 @@ export interface UserPreviousValues {
   id: ID_Output
   createdAt: DateTime
   updatedAt: DateTime
-  auth0Id: ID_Output
+  auth0Id: String
   username: String
   email: String
-  email_verified?: String
+  email_verified: Boolean
   name?: String
   gender: Gender
   bio: String

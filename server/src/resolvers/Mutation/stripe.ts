@@ -4,7 +4,7 @@ import { Context } from '../../utils'
 
 export const stripe = {
   async createStripeAccount(parent, { code }, ctx: Context, info) {
-    const { auth0Id } = ctx.user
+    const auth0Id = ctx.request.user.sub
     // Why is this implemented so? Couldn't we just use Stripe API
     const { stripe_user_id } = await request.post(
       'https://connect.stripe.com/oauth/token',
@@ -29,7 +29,7 @@ export const stripe = {
   },
 
   async createStripeCustomer(parent, { token }, ctx: Context, info) {
-    const { auth0Id } = ctx.user
+    const auth0Id = ctx.request.user.sub
     const customer = await _stripe.customers.create({
       source: token,
     })
@@ -45,7 +45,7 @@ export const stripe = {
   updateStripeCustomer: {
     fragment: `fragment UserStripeCustomerID on User { stripeCustomerId }`,
     resolve: async ({ stripeCustomerId }, { token }, ctx: Context, info) => {
-      const { auth0Id } = ctx.user
+      const auth0Id = ctx.request.user.sub
       await _stripe.customers.update(stripeCustomerId, {
         source: token,
       })

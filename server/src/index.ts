@@ -21,12 +21,6 @@ const server = new GraphQLServer({
 })
 
 // Express middleware
-// server.use(auth0)
-// server.use((req, res, next) => {
-//   console.log(req.user)
-//   next()
-// })
-
 server.express.use(auth0)
 
 // Start the server

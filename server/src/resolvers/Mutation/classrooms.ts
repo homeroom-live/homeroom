@@ -7,7 +7,7 @@ export const classrooms = {
     ctx: Context,
     info,
   ) {
-    const { auth0Id } = ctx.user
+    const auth0Id = ctx.request.user.sub
     return ctx.db.mutation.createClassroom(
       {
         data: {
@@ -43,13 +43,13 @@ export const classrooms = {
     )
   },
   async joinClassroom(parent, { id }, ctx: Context, info) {
-    const userId = ctx.user.id
+    const auth0Id = ctx.request.user.sub
     return await ctx.db.mutation.updateClassroom(
       {
         where: { id },
         data: {
           students: {
-            connect: { id: userId },
+            connect: { auth0Id },
           },
         },
       },
@@ -57,13 +57,13 @@ export const classrooms = {
     )
   },
   async leaveClassroom(parent, { id }, ctx: Context, info) {
-    const userId = ctx.user.id
+    const auth0Id = ctx.request.user.sub
     return await ctx.db.mutation.updateClassroom(
       {
         where: { id },
         data: {
           students: {
-            disconnect: { id: userId },
+            disconnect: { auth0Id },
           },
         },
       },

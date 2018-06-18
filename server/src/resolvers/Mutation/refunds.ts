@@ -3,7 +3,7 @@ import { stripe } from '../../stripe'
 
 export const refunds = {
   async createRefund(parent, { classId }, ctx: Context, info) {
-    const auth0Id = await ctx.user.id
+    const auth0Id = ctx.request.user.sub
     const [charge] = await ctx.db.query.charges({
       where: {
         user: {

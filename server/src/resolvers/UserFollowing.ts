@@ -30,9 +30,9 @@ export const UserFollowing = {
   following_viewer: {
     fragment: `fragment UserID on User { id }`,
     resolve: async ({ id }, args, ctx: Context, info) => {
-      const viewerId = ctx.user.id
+      const auth0Id = ctx.request.user.sub
       return ctx.db.exists.Follow({
-        user_followed: { auth0Id: viewerId },
+        user_followed: { auth0Id },
         user_following: { id },
       })
     },

@@ -3,16 +3,16 @@ import { Context } from '../../utils'
 export const users = {
   async createUser(
     parent,
-    { name, gender, picture, video, bio, receiveNotifications },
+    { name, picture, video, bio, receiveNotifications },
     ctx: Context,
     info,
   ) {
-    const { auth0Id, username, email, email_verified } = ctx.user
+    const { sub, nickname, gender, email, email_verified } = ctx.request.user
     const user = await ctx.db.mutation.createUser(
       {
         data: {
-          auth0Id,
-          username,
+          auth0Id: sub,
+          username: nickname,
           email,
           email_verified,
           name,
@@ -22,7 +22,7 @@ export const users = {
             ? {
                 picture: {
                   create: {
-                    name: `${ctx.user.email}-picture`,
+                    name: `${ctx.request.user.email}-picture`,
                     secret: picture.secret,
                     contentType: picture.contentType,
                   },
@@ -33,7 +33,7 @@ export const users = {
             ? {
                 video: {
                   create: {
-                    name: `${ctx.user.email}-video`,
+                    name: `${ctx.request.user.email}-video`,
                     secret: video.secret,
                     contentType: video.contentType,
                   },
@@ -46,7 +46,7 @@ export const users = {
       info,
     )
 
-    return {}
+    return user
   },
 
   async updateUser(
@@ -55,7 +55,7 @@ export const users = {
     ctx: Context,
     info,
   ) {
-    const { auth0Id } = ctx.user
+    const auth0Id = ctx.request.user.sub
     // const userExists = await ctx.db.exists.User({ auth0Id })
 
     // if (!userExists) {
@@ -63,7 +63,7 @@ export const users = {
     //   return
     // }
     const user = await ctx.db.mutation.updateUser({
-      where: { auth0Id: ctx.user.id },
+      where: { auth0Id },
       data: {
         name,
         gender,
@@ -71,7 +71,7 @@ export const users = {
           ? {
               picture: {
                 create: {
-                  name: `${ctx.user.email}-picture`,
+                  name: `${ctx.request.user.email}-picture`,
                   secret: picture.secret,
                   contentType: picture.contentType,
                 },
@@ -82,7 +82,7 @@ export const users = {
           ? {
               video: {
                 create: {
-                  name: `${ctx.user.email}-video`,
+                  name: `${ctx.request.user.email}-video`,
                   secret: video.secret,
                   contentType: video.contentType,
                 },
@@ -108,7 +108,7 @@ export const users = {
   //   ctx: Context,
   //   info,
   // ) {
-  //   const { auth0Id } = ctx.user
+  //   const { auth0Id } = ctx.request.user
   // const userExists = await ctx.db.exists.User({ auth0Id })
 
   // if (!userExists) {
@@ -177,7 +177,7 @@ export const users = {
   // },
 
   async follow(parent, { username }, ctx: Context, info) {
-    const auth0Id = ctx.user.id
+    const auth0Id = ctx.request.user.sub
     const follow = await ctx.db.mutation.createFollow({
       data: {
         user_followed: { connect: { username } },

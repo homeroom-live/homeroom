@@ -7,7 +7,7 @@ export const classes = {
     ctx: Context,
     info,
   ) {
-    const { auth0Id } = ctx.user
+    const auth0Id = ctx.request.user.sub
     return ctx.db.mutation.createClass(
       {
         data: {
@@ -85,7 +85,7 @@ export const classes = {
   },
 
   // async joinClass(parent, { id, studentsCount }, ctx: Context, info) {
-  //   const auth0Id = ctx.user.db
+  //   const auth0Id = ctx.request.user.db
   //   return await ctx.db.mutation.updateClass(
   //     {
   //       where: { id },
@@ -101,7 +101,7 @@ export const classes = {
   // },
 
   // async leaveClass(parent, { id, studentsCount }, ctx: Context, info) {
-  //   const auth0Id = ctx.user.id
+  //   const auth0Id = ctx.request.user.id
   //   return await ctx.db.mutation.updateClass(
   //     {
   //       where: { id },

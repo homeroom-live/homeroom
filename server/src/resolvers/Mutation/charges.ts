@@ -14,7 +14,7 @@ export const charges = {
     ctx: Context,
     info,
   ) {
-    const auth0Id = ctx.user.id
+    const auth0Id = ctx.request.user.sub
     const user = await ctx.db.query.user({
       where: { auth0Id },
     })

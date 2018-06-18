@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/matic-zavadlal-03c51f/homeroom-setup/dev
-# timestamp: Mon Jun 18 2018 23:33:52 GMT+0200 (CEST)
+# timestamp: Tue Jun 19 2018 00:56:23 GMT+0200 (CEST)
 
 type AggregateCharge {
   count: Int!
@@ -2716,10 +2716,10 @@ type User implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean!
   name: String
   gender: Gender!
   bio: String!
@@ -2748,10 +2748,10 @@ type UserConnection {
 }
 
 input UserCreateInput {
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender!
   bio: String!
@@ -2800,10 +2800,10 @@ input UserCreateOneWithoutTaught_classroomsInput {
 }
 
 input UserCreateWithoutChargesInput {
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender!
   bio: String!
@@ -2821,10 +2821,10 @@ input UserCreateWithoutChargesInput {
 }
 
 input UserCreateWithoutFollowersInput {
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender!
   bio: String!
@@ -2842,10 +2842,10 @@ input UserCreateWithoutFollowersInput {
 }
 
 input UserCreateWithoutFollowingInput {
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender!
   bio: String!
@@ -2863,10 +2863,10 @@ input UserCreateWithoutFollowingInput {
 }
 
 input UserCreateWithoutMessagesInput {
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender!
   bio: String!
@@ -2884,10 +2884,10 @@ input UserCreateWithoutMessagesInput {
 }
 
 input UserCreateWithoutStudying_classroomsInput {
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender!
   bio: String!
@@ -2905,10 +2905,10 @@ input UserCreateWithoutStudying_classroomsInput {
 }
 
 input UserCreateWithoutTaught_classroomsInput {
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender!
   bio: String!
@@ -2969,10 +2969,10 @@ type UserPreviousValues {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  auth0Id: ID!
+  auth0Id: String!
   username: String!
   email: String!
-  email_verified: String
+  email_verified: Boolean!
   name: String
   gender: Gender!
   bio: String!
@@ -3022,10 +3022,10 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateInput {
-  auth0Id: ID
+  auth0Id: String
   username: String
   email: String
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender
   bio: String
@@ -3093,10 +3093,10 @@ input UserUpdateOneWithoutTaught_classroomsInput {
 }
 
 input UserUpdateWithoutChargesDataInput {
-  auth0Id: ID
+  auth0Id: String
   username: String
   email: String
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender
   bio: String
@@ -3114,10 +3114,10 @@ input UserUpdateWithoutChargesDataInput {
 }
 
 input UserUpdateWithoutFollowersDataInput {
-  auth0Id: ID
+  auth0Id: String
   username: String
   email: String
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender
   bio: String
@@ -3135,10 +3135,10 @@ input UserUpdateWithoutFollowersDataInput {
 }
 
 input UserUpdateWithoutFollowingDataInput {
-  auth0Id: ID
+  auth0Id: String
   username: String
   email: String
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender
   bio: String
@@ -3156,10 +3156,10 @@ input UserUpdateWithoutFollowingDataInput {
 }
 
 input UserUpdateWithoutMessagesDataInput {
-  auth0Id: ID
+  auth0Id: String
   username: String
   email: String
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender
   bio: String
@@ -3177,10 +3177,10 @@ input UserUpdateWithoutMessagesDataInput {
 }
 
 input UserUpdateWithoutStudying_classroomsDataInput {
-  auth0Id: ID
+  auth0Id: String
   username: String
   email: String
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender
   bio: String
@@ -3198,10 +3198,10 @@ input UserUpdateWithoutStudying_classroomsDataInput {
 }
 
 input UserUpdateWithoutTaught_classroomsDataInput {
-  auth0Id: ID
+  auth0Id: String
   username: String
   email: String
-  email_verified: String
+  email_verified: Boolean
   name: String
   gender: Gender
   bio: String
@@ -3347,46 +3347,46 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
-  auth0Id: ID
+  auth0Id: String
 
   """All values that are not equal to given value."""
-  auth0Id_not: ID
+  auth0Id_not: String
 
   """All values that are contained in given list."""
-  auth0Id_in: [ID!]
+  auth0Id_in: [String!]
 
   """All values that are not contained in given list."""
-  auth0Id_not_in: [ID!]
+  auth0Id_not_in: [String!]
 
   """All values less than the given value."""
-  auth0Id_lt: ID
+  auth0Id_lt: String
 
   """All values less than or equal the given value."""
-  auth0Id_lte: ID
+  auth0Id_lte: String
 
   """All values greater than the given value."""
-  auth0Id_gt: ID
+  auth0Id_gt: String
 
   """All values greater than or equal the given value."""
-  auth0Id_gte: ID
+  auth0Id_gte: String
 
   """All values containing the given string."""
-  auth0Id_contains: ID
+  auth0Id_contains: String
 
   """All values not containing the given string."""
-  auth0Id_not_contains: ID
+  auth0Id_not_contains: String
 
   """All values starting with the given string."""
-  auth0Id_starts_with: ID
+  auth0Id_starts_with: String
 
   """All values not starting with the given string."""
-  auth0Id_not_starts_with: ID
+  auth0Id_not_starts_with: String
 
   """All values ending with the given string."""
-  auth0Id_ends_with: ID
+  auth0Id_ends_with: String
 
   """All values not ending with the given string."""
-  auth0Id_not_ends_with: ID
+  auth0Id_not_ends_with: String
   username: String
 
   """All values that are not equal to given value."""
@@ -3467,46 +3467,10 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   email_not_ends_with: String
-  email_verified: String
+  email_verified: Boolean
 
   """All values that are not equal to given value."""
-  email_verified_not: String
-
-  """All values that are contained in given list."""
-  email_verified_in: [String!]
-
-  """All values that are not contained in given list."""
-  email_verified_not_in: [String!]
-
-  """All values less than the given value."""
-  email_verified_lt: String
-
-  """All values less than or equal the given value."""
-  email_verified_lte: String
-
-  """All values greater than the given value."""
-  email_verified_gt: String
-
-  """All values greater than or equal the given value."""
-  email_verified_gte: String
-
-  """All values containing the given string."""
-  email_verified_contains: String
-
-  """All values not containing the given string."""
-  email_verified_not_contains: String
-
-  """All values starting with the given string."""
-  email_verified_starts_with: String
-
-  """All values not starting with the given string."""
-  email_verified_not_starts_with: String
-
-  """All values ending with the given string."""
-  email_verified_ends_with: String
-
-  """All values not ending with the given string."""
-  email_verified_not_ends_with: String
+  email_verified_not: Boolean
   name: String
 
   """All values that are not equal to given value."""
@@ -3745,7 +3709,7 @@ input UserWhereInput {
 
 input UserWhereUniqueInput {
   id: ID
-  auth0Id: ID
+  auth0Id: String
   username: String
   email: String
   stripeId: String
