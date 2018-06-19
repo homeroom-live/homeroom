@@ -5,6 +5,9 @@ const isAuthenticated = rule()(async (parent, args, ctx, info) => {
   return true
 })
 
-export const permissions = shield({
-  Query: isAuthenticated,
-})
+export const permissions = shield(
+  {
+    Query: isAuthenticated,
+  },
+  { debug: process.env.NODE_ENV !== 'production' },
+)

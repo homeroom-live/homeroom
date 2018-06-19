@@ -8,7 +8,7 @@ import { apolloUploadMiddleware } from './files'
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
-  middlewares: [permissions],
+  middlewares: [permissions, apolloUploadMiddleware],
   context: req => ({
     ...req,
     db: new Prisma({
@@ -21,7 +21,7 @@ const server = new GraphQLServer({
 })
 
 // Express middleware
-server.express.use(auth0)
+server.use(auth0)
 
 // Start the server
 server.start(() => console.log(`Server is running on http://localhost:4000`))

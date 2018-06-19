@@ -9,7 +9,7 @@ export interface Auth0User {
   name: string
   nickname: string
   picture: string
-  gender: Gender
+  gender: string
   email: string
   email_verified: boolean
 }
