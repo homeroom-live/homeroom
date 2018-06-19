@@ -1,5 +1,18 @@
 import * as jwt from 'express-jwt'
 import * as jwks from 'jwks-rsa'
+import { Gender } from './generated/prisma'
+
+export interface Auth0User {
+  sub: string
+  given_name: string
+  family_name: string
+  name: string
+  nickname: string
+  picture: string
+  gender: Gender
+  email: string
+  email_verified: boolean
+}
 
 // export const auth0 = jwt({
 //   secret: jwks.expressJwtSecret({

@@ -22,7 +22,7 @@ export const users = {
             ? {
                 picture: {
                   create: {
-                    name: `${ctx.request.user.email}-picture`,
+                    name: `${email}-picture`,
                     secret: picture.secret,
                     contentType: picture.contentType,
                   },
@@ -33,7 +33,7 @@ export const users = {
             ? {
                 video: {
                   create: {
-                    name: `${ctx.request.user.email}-video`,
+                    name: `${email}-video`,
                     secret: video.secret,
                     contentType: video.contentType,
                   },

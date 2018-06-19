@@ -1,21 +1,9 @@
+import { Request } from 'express'
 import { Prisma } from './generated/prisma'
-
-export interface User {
-  sub: string
-  given_name: string
-  family_name: string
-  name: string
-  nickname: string
-  picture: string
-  gender: string
-  email: string
-  email_verified: boolean
-}
 
 export interface Context {
   db: Prisma
-  user?: User
-  request: any
+  request: Request
 }
 
 // { app_metadata: { isFirstLogin: true },
