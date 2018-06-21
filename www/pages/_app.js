@@ -1,7 +1,23 @@
-import App, { Container } from 'next/app'
 import React from 'react'
+import App, { Container } from 'next/app'
+import getConfig from 'next/config'
 
-export default class MyApp extends App {
+import { ApolloProvider } from 'react-apollo'
+import { StripeProvider } from 'react-stripe-elements'
+
+import { withApollo } from '../hocs/withApollo'
+
+// Config
+
+const { publicRuntimeConfig } = getConfig()
+
+// Layout
+
+class Layout extends App {
+  state = {
+    stripe: null,
+  }
+
   static async getInitialProps({ Component, router, ctx }) {
     let pageProps = {}
 
@@ -12,12 +28,24 @@ export default class MyApp extends App {
     return { pageProps }
   }
 
+  componentDidMount() {
+    this.setState({
+      stripe: window.Stripe(publicRuntimeConfig.stripeId),
+    })
+  }
+
   render() {
-    const { Component, pageProps } = this.props
+    const { Component, pageProps, apolloClient } = this.props
     return (
       <Container>
-        <Component {...pageProps} />
+        <ApolloProvider client={apolloClient}>
+          <StripeProvider stripe={this.state.stripe}>
+            <Component {...pageProps} />
+          </StripeProvider>
+        </ApolloProvider>
       </Container>
     )
   }
 }
+
+export default withApollo(Layout)

@@ -19,14 +19,14 @@ export default class MyDocument extends Document {
     return (
       <html>
         <Head>
+          <title>Homeroom.live – Livestreaming for Education</title>
+
           <meta charSet="utf-8" />
           <meta
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
           />
           <meta name="theme-color" content="#424B54" />
-
-          <link rel="manifest" href="/static/manifest.json" />
           <meta
             name="description"
             content="Join the first livestreaming platform built for education."
@@ -36,44 +36,17 @@ export default class MyDocument extends Document {
             content="livestream, video, live-stream, education, learn, teach, social video, live stream"
           />
 
+          <link rel="manifest" href="/static/manifest.json" />
           <link rel="icon" type="image/png" href="/static/favicon.png" />
-
-          <title>Homeroom.live – Livestreaming for Education</title>
-
-          <script
-            src="https://cdn.ravenjs.com/3.22.3/raven.min.js"
-            crossOrigin="anonymous"
-          />
-
-          <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=UA-114308012-1"
-          />
-          {/* <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag() {
-              dataLayer.push(arguments);
-            }
-            gtag('js', new Date());
-
-            gtag('config', 'UA-114308012-1');
-          </script> */}
-
-          {/* <script type="text/javascript">(function(o){var b="https://api.autopilothq.com/anywhere/",t="e83b7e72b7164c7b99f5fd243ccb6b33fb99eca00e4046898f6c978de67a1185",a=window.AutopilotAnywhere={_runQueue:[],run:function(){this._runQueue.push(arguments);}},c=encodeURIComponent,s="SCRIPT",d=document,l=d.getElementsByTagName(s)[0],p="t="+c(d.title||"")+"&u="+c(d.location.href||"")+"&r="+c(d.referrer||""),j="text/javascript",z,y;if(!window.Autopilot) window.Autopilot=a;if(o.app) p="devmode=true&"+p;z=function(src,asy){var e=d.createElement(s);e.src=src;e.type=j;e.async=asy;l.parentNode.insertBefore(e,l);};y=function(){z(b+t+'?'+p,true);};if(window.attachEvent){window.attachEvent("onload",y);}else{window.addEventListener("load",y,false);}})({"app":true});</script> */}
-
-          <meta
-            name="google-site-verification"
-            content="ZQl-Elg-3aCuBTLPWZkdTMplUU8j9M1_Sx_iSQTt340"
-          />
-          <meta property="fb:app_id" content="1941090022811723" />
-
           <link rel="stylesheet" href="/_next/static/style.css" />
+
+          <script id="stripe-js" src="https://js.stripe.com/v3/" async />
+
           <style dangerouslySetInnerHTML={{ __html: this.props.css }} />
         </Head>
         <body className="custom_class">
           <Main />
           <NextScript />
-          {/* <script src="https://js.stripe.com/v3/" /> */}
         </body>
       </html>
     )
