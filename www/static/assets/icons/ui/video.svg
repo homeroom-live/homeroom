@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/ui/video</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="UI-Components-(Symbols)" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icons/ui/video" fill="#424B54" fill-rule="nonzero">
+            <g id="icon-video" transform="translate(0.000000, 3.000000)">
+                <path d="M14,3.38 L18.55,1.11 C18.8595182,0.954030755 19.2277279,0.96945474 19.5231178,1.15076307 C19.8185078,1.33207141 19.9989511,1.65340679 20,2 L20,12 C20.002433,12.3483719 19.8233852,12.672901 19.5273872,12.8566239 C19.2313893,13.0403468 18.8611094,13.0567797 18.55,12.9 L14,10.61 L14,12 C14,13.1045695 13.1045695,14 12,14 L2,14 C0.8954305,14 0,13.1045695 0,12 L0,2 C0,0.9 0.9,0 2,0 L12,0 C13.1045695,0 14,0.8954305 14,2 L14,3.38 Z M14,5.62 L14,8.38 L18,10.38 L18,3.62 L14,5.62 Z M12,12 L12,2 L2,2 L2,12 L12,12 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

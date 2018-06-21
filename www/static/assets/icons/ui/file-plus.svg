@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/ui/file-plus</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="UI-Components-(Symbols)" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icons/ui/file-plus" fill="#A0A5A9" fill-rule="nonzero">
+            <g id="icon-file-plus" transform="translate(2.000000, 0.000000)">
+                <path d="M2,0 L11,0 C11.2637693,0.00375704786 11.5153695,0.111585736 11.7,0.3 L15.7,4.3 C15.8884143,4.48463046 15.996243,4.73623073 16,5 L16,18 C16,19.1045695 15.1045695,20 14,20 L2,20 C0.8954305,20 0,19.1045695 0,18 L0,2 C0,0.9 0.9,0 2,0 Z M11,2.41 L11,5 L13.59,5 L11,2.41 Z M14,7 L11,7 C9.8954305,7 9,6.1045695 9,5 L9,2 L2,2 L2,18 L14,18 L14,7 Z M9,11 L11,11 C11.5522847,11 12,11.4477153 12,12 C12,12.5522847 11.5522847,13 11,13 L9,13 L9,15 C9,15.5522847 8.55228475,16 8,16 C7.44771525,16 7,15.5522847 7,15 L7,13 L5,13 C4.44771525,13 4,12.5522847 4,12 C4,11.4477153 4.44771525,11 5,11 L7,11 L7,9 C7,8.44771525 7.44771525,8 8,8 C8.55228475,8 9,8.44771525 9,9 L9,11 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

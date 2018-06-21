@@ -29,6 +29,7 @@
 ## www
 
 - [ ] Helmet + SEO
-- [ ] NextJS
+- [x] NextJS
+- [ ] Renamed Homeroom page to Explore - I feel like it better portrays its prupose.
 
 ## stream

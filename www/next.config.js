@@ -1,11 +1,5 @@
-const withTypescript = require('@zeit/next-typescript')
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const withPlugins = require('next-compose-plugins')
+const withImages = require('next-images')
+const withCSS = require('@zeit/next-css')
 
-module.exports = withTypescript({
-  webpack(config, options) {
-    // Do not run type checking twice:
-    if (options.isServer) config.plugins.push(new ForkTsCheckerWebpackPlugin())
-
-    return config
-  },
-})
+module.exports = withPlugins([withCSS, withImages])

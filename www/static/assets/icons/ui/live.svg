@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="16px" viewBox="0 0 50 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/ui/live</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="UI-Components-(Symbols)" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icons/ui/live">
+            <g id="tag/live">
+                <rect id="Rectangle-11" fill="#70BF8E" x="0" y="0" width="50" height="16" rx="2"></rect>
+                <text id="LIVE" font-family="TTNorms-Medium, TT Norms" font-size="10" font-weight="400" letter-spacing="1.21000004" fill="#FFFFFF">
+                    <tspan x="11.8599999" y="12">LIV</tspan>
+                    <tspan x="31.5900001" y="12">E</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>
