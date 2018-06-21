@@ -1,23 +1,18 @@
 import React from 'react'
-import { Container, Row, Col } from 'reactstrap'
+import Link from 'next/link'
+import { Row, Col } from 'reactstrap'
 
-import FlexRow from 'components/FlexRow'
-import FlexCol from 'components/FlexCol'
-import Text from 'components/Text'
-import Logo from 'components/Logo'
-import Icon from 'components/Icon'
-import { LinkExternal } from 'components/Link'
-import CTAButtons from './CTAButtons'
+import { FlexRow } from '../components/FlexRow'
+import { FlexCol } from '../components/FlexCol'
+import { Icon } from '../components/Icon'
+import { Text } from '../components/Text'
+import { Logo } from '../components/Logo'
 
-import spacing from 'styles/spacing'
-import colors from 'styles/colors'
-import iconTwitter from 'assets/icons/ui/twitter.svg'
-import iconFacebook from 'assets/icons/ui/facebook.svg'
+import { spacing } from '../utils/spacing'
+import { colors } from '../utils/colors'
 
-const ctaRowStyles = {
-  padding: `${spacing.xlarge} ${spacing.medium}`,
-  background: colors.grayLightest,
-}
+import iconTwitter from '../static/assets/icons/ui/twitter.svg'
+import iconFacebook from '../static/assets/icons/ui/facebook.svg'
 
 const footerRowStyles = {
   padding: `${spacing.xlarge} ${spacing.medium}`,
@@ -57,61 +52,28 @@ const emailStyles = {
   },
 }
 
-class FooterRow extends React.Component {
-  render() {
-    return (
-      <Container fluid>
-        <Row style={ctaRowStyles}>
-          <Col md={{ size: 6, offset: 3 }}>
-            <FlexCol css={{ textAlign: 'center' }}>
-              <Text size="small" weight="bold" color="gray">
-                What are you waiting for?
-              </Text>
-              <Text size="large" weight="bold">
-                Start sharing your knowledge for profit in 5 minutes
-              </Text>
+export const Footer = () => (
+  <Row style={footerRowStyles}>
+    <Col md={{ size: 6, offset: 3 }}>
+      <FlexRow css={footerContentRowStyles}>
+        <Logo css={logoStyles} />
 
-              <CTAButtons
-                css={{ justifyContent: 'center', marginTop: spacing.large }}
-              />
-            </FlexCol>
-          </Col>
-        </Row>
+        <FlexCol css={{ flex: 0 }}>
+          <FlexRow css={iconRowStyles}>
+            <Link href="https://twitter.com/homeroom_live">
+              <Icon src={iconTwitter} />
+            </Link>
 
-        <Row style={footerRowStyles}>
-          <Col md={{ size: 6, offset: 3 }}>
-            <FlexRow css={footerContentRowStyles}>
-              <Logo css={logoStyles} />
+            <Link href="https://www.facebook.com/Homeroom-216487308907825">
+              <Icon src={iconFacebook} />
+            </Link>
+          </FlexRow>
 
-              <FlexCol css={{ flex: 0 }}>
-                <FlexRow css={iconRowStyles}>
-                  <LinkExternal
-                    href="https://twitter.com/homeroom_live"
-                    css={{ display: 'block', width: '40px' }}
-                    target="_blank"
-                  >
-                    <Icon src={iconTwitter} />
-                  </LinkExternal>
-
-                  <LinkExternal
-                    href="https://www.facebook.com/Homeroom-216487308907825"
-                    css={{ display: 'block' }}
-                    target="_blank"
-                  >
-                    <Icon src={iconFacebook} />
-                  </LinkExternal>
-                </FlexRow>
-
-                <Text size="medium" weight="bold" css={emailStyles}>
-                  team@homeroom.live
-                </Text>
-              </FlexCol>
-            </FlexRow>
-          </Col>
-        </Row>
-      </Container>
-    )
-  }
-}
-
-export default FooterRow
+          <Text size="medium" weight="bold" css={emailStyles}>
+            team@homeroom.live
+          </Text>
+        </FlexCol>
+      </FlexRow>
+    </Col>
+  </Row>
+)

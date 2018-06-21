@@ -1,13 +1,13 @@
 import React from 'react'
 
-class Login extends React.Component {
+class Signup extends React.Component {
   static async getInitialProps(ctx) {
     return {}
   }
 
   render() {
-    return <>Login</>
+    return <>Signup</>
   }
 }
 
-export default Login
+export default Signup

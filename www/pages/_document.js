@@ -40,7 +40,7 @@ export default class MyDocument extends Document {
           <link rel="icon" type="image/png" href="/static/favicon.png" />
           <link rel="stylesheet" href="/_next/static/style.css" />
 
-          <script id="stripe-js" src="https://js.stripe.com/v3/" async />
+          <script id="stripe-js" src="https://js.stripe.com/v3/" />
 
           <style dangerouslySetInnerHTML={{ __html: this.props.css }} />
         </Head>

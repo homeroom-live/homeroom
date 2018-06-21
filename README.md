@@ -33,5 +33,6 @@
 - [ ] Renamed Homeroom page to Explore - I feel like it better portrays its prupose.
 - [ ] Enforced Signup?
 - [ ] SEO Apollo pattern. Current idea is to add `seo` or something which would get Helmet data but would still require Signup once opened.
+- [ ] `withApollo` - component specific?
 
 ## stream

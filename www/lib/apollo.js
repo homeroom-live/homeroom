@@ -3,13 +3,14 @@ import getConfig from 'next/config'
 import { ApolloClient } from 'apollo-client'
 import { ApolloLink, from } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
-import { createHttpLink } from 'apollo-link-http'
 import { createUploadLink } from 'apollo-upload-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { onError } from 'apollo-link-error'
+import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { getMainDefinition } from 'apollo-utilities'
 
 import fetch from 'isomorphic-unfetch'
+import ws from 'isomorphic-ws'
 
 // Config
 
@@ -26,11 +27,6 @@ let apolloClient = null
 // Apollo
 
 function create(initialState, { getToken }) {
-  const httpLink = createHttpLink({
-    uri: publicRuntimeConfig.prismaEndpoint,
-    credentials: 'same-origin',
-  })
-
   const authLink = new ApolloLink((operation, forward) => {
     const token = getToken()
 
@@ -49,12 +45,15 @@ function create(initialState, { getToken }) {
     credentials: 'same-origin',
   })
 
-  const wsLink = new WebSocketLink({
-    uri: publicRuntimeConfig.prismaWsEndpoint,
-    options: {
+  const subscriptionsClient = new SubscriptionClient(
+    publicRuntimeConfig.prismaWsEndpoint,
+    {
       reconnect: true,
     },
-  })
+    ws,
+  )
+
+  const wsLink = new WebSocketLink(subscriptionsClient)
 
   const endpointLinks = ApolloLink.split(
     ({ query }) => {
@@ -83,7 +82,7 @@ function create(initialState, { getToken }) {
   return new ApolloClient({
     connectToDevTools: process.browser,
     ssrMode: !process.browser,
-    link: from([authLink, errorLink, endpointLinks, httpLink]),
+    link: from([authLink, errorLink, endpointLinks]),
     cache: new InMemoryCache().restore(initialState),
   })
 }
