@@ -27,19 +27,6 @@ let apolloClient = null
 // Apollo
 
 function create(initialState, { getToken }) {
-  const authLink = new ApolloLink((operation, forward) => {
-    const token = getToken()
-
-    operation.setContext((_, { headers }) => ({
-      headers: {
-        ...headers,
-        authorization: token ? `Bearer ${token}` : null,
-      },
-    }))
-
-    return forward(operation)
-  })
-
   const uploadLink = createUploadLink({
     uri: publicRuntimeConfig.prismaEndpoint,
     credentials: 'same-origin',
@@ -54,6 +41,19 @@ function create(initialState, { getToken }) {
   )
 
   const wsLink = new WebSocketLink(subscriptionsClient)
+
+  const authLink = new ApolloLink((operation, forward) => {
+    const token = getToken()
+
+    operation.setContext(({ headers = {} }) => ({
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : null,
+      },
+    }))
+
+    return forward(operation)
+  })
 
   const endpointLinks = ApolloLink.split(
     ({ query }) => {

@@ -6,6 +6,7 @@ import { Container } from 'reactstrap'
 
 // Sections
 
+import { Navigation } from '../sections/navigation'
 import { Hero } from '../sections/homeroom/hero'
 import { About } from '../sections/homeroom/about'
 import { Testimonials } from '../sections/homeroom/testimonials'
@@ -22,6 +23,7 @@ class Homeroom extends React.Component {
   render() {
     return (
       <>
+        <Navigation transparent />
         <Container>
           <Hero />
           <About />

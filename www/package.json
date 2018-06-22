@@ -23,6 +23,7 @@
     "glamor": "^2.20.40",
     "glamorous": "^4.13.1",
     "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
     "isomorphic-unfetch": "^2.0.0",
     "isomorphic-ws": "^4.0.1",
     "next": "^6.0.3",
