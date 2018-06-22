@@ -1,4 +1,7 @@
 import React from 'react'
+import Link from 'next/link'
+import { Query } from 'react-apollo'
+import gql from 'graphql-tag'
 import glamorous from 'glamorous'
 
 import {
@@ -8,11 +11,11 @@ import {
   DropdownItem,
 } from 'reactstrap'
 
-import Thumbnail from 'components/Thumbnail'
+import { Thumbnail } from '../Thumbnail'
 
-import spacing from 'styles/spacing'
-import colors from 'styles/colors'
-import typography from 'styles/typography'
+import { spacing } from '../../utils/spacing'
+import { colors } from '../../utils/colors'
+import * as typography from '../../utils/typography'
 
 const toggleStyles = {
   padding: 0,
@@ -39,41 +42,49 @@ const Item = glamorous(DropdownItem)({
   },
 })
 
-class UserDropdown extends React.Component {
-  static fragments = {
-    user: gql`
-      fragment UserDropdownUser on User {
-        id
-        picture {
-          id
-          url
+// GraphQL
+
+const viewerDropdownQuery = gql`
+  query {
+    viewer {
+      user {
+        name
+      }
+    }
+  }
+`
+
+// User
+
+export const UserDropdown = () => (
+  <Query query={viewerDropdownQuery}>
+    {({ networkStatus, data }) => {
+      switch (networkStatus) {
+        case 8: {
+          return (
+            <UncontrolledDropdown style={{ display: 'flex' }}>
+              <DropdownToggle style={toggleStyles}>
+                <Thumbnail src={data.viewer.user.picture.url} size="regular" />
+              </DropdownToggle>
+
+              <DropdownMenu>
+                <Link href="/profile/about">
+                  <Item>Profile</Item>
+                </Link>
+
+                <Item>
+                  <Link href="/logout">
+                    <a>Logout</a>
+                  </Link>
+                </Item>
+              </DropdownMenu>
+            </UncontrolledDropdown>
+          )
+        }
+        default: {
+          return <div>FFF</div>
         }
       }
-    `,
-  }
-
-  static propTypes = {
-    user: propType(UserDropdown.fragments.user).isRequired,
-  }
-
-  render() {
-    const { user } = this.props
-    return (
-      <UncontrolledDropdown style={{ display: 'flex' }}>
-        <DropdownToggle style={toggleStyles}>
-          <Thumbnail src={user.picture.url} size="regular" />
-        </DropdownToggle>
-
-        <DropdownMenu>
-          <LinkContainer to="/profile/about">
-            <Item>Profile</Item>
-          </LinkContainer>
-
-          <Item onClick={logout}>Logout</Item>
-        </DropdownMenu>
-      </UncontrolledDropdown>
-    )
-  }
-}
-
-export default UserDropdown
+    }}
+  </Query>
+)

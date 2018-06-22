@@ -9,7 +9,7 @@ import { Navbar, NavbarBrand } from 'reactstrap'
 import { FlexRow } from '../components/FlexRow'
 import { Logo } from '../components/Logo'
 import { Icon } from '../components/Icon'
-// import { UserDropdown } from '../components/UserDropdown'
+import { UserDropdown } from '../components/UserDropdown'
 
 import { colors } from '../utils/colors'
 import { spacing } from '../utils/spacing'
@@ -60,7 +60,7 @@ const viewer = gql`
 // Navigation
 
 export const Navigation = ({ transparent }) => (
-  <Query query={viewer} skip>
+  <Query query={viewer} errorPolicy="ignore">
     {({ loading, data, error }) => (
       <Navbar
         style={transparent ? navbarStyles.transparent : navbarStyles.default}
@@ -72,7 +72,9 @@ export const Navigation = ({ transparent }) => (
             </NavbarBrand>
           </Link>
 
-          <Link to="/browse">Browse</Link>
+          <Link href="/explore">
+            <a>Explore</a>
+          </Link>
 
           {!loading && data.viewer && <Link href="/dashboard">Dashboard</Link>}
         </FlexRow>
@@ -81,8 +83,7 @@ export const Navigation = ({ transparent }) => (
             <Icon src={iconHelpWhite} css={iconStyles} />
           </Link>
 
-          {/* {!loading && data.viewer && <UserDropdown user={data.viewer.user} />} */}
-
+          {!loading && data.viewer && <UserDropdown user={data.viewer.user} />}
           {!loading && !data.viewer && <Link href="/">Login</Link>}
         </FlexRow>
       </Navbar>
