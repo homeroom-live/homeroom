@@ -1,5 +1,5 @@
 import React from 'react'
-import nookies from 'nookies'
+import * as nookies from 'nookies'
 import { getDataFromTree } from 'react-apollo'
 import Head from 'next/head'
 
