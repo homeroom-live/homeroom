@@ -1,10 +1,12 @@
 import React from 'react'
-import nookies from 'nookies'
+import * as nookies from 'nookies'
 
 import { redirect } from '../lib/redirect'
 
 class Logout extends React.Component {
   static async getInitialProps(ctx) {
+    await ctx.apolloClient.resetStore()
+
     // Delete cookie and redirect
     nookies.destroyCookie(ctx, 'token')
     redirect(ctx, '/')

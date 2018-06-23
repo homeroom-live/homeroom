@@ -16,7 +16,7 @@ export const withApollo = App =>
       const apollo = initApollo(
         {},
         {
-          getToken: () => nookies.get(ctx).token,
+          getToken: () => nookies.parseCookies(ctx).token,
         },
       )
 

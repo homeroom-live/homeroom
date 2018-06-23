@@ -35,10 +35,14 @@ export const Invite = ({ css }) => (
 
         <FlexRow css={ctaRowStyles}>
           <Link href="/signup">
-            <Button theme="primary">Become a Teacher</Button>
+            <a>
+              <Button theme="primary">Become a Teacher</Button>
+            </a>
           </Link>
           <Link href="/explore">
-            <Button theme="secondary">Browse Classes</Button>
+            <a>
+              <Button theme="secondary">Browse Classes</Button>
+            </a>
           </Link>
         </FlexRow>
       </FlexCol>

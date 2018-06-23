@@ -76,15 +76,27 @@ export const Navigation = ({ transparent }) => (
             <a>Explore</a>
           </Link>
 
-          {!loading && data.viewer && <Link href="/dashboard">Dashboard</Link>}
+          {!loading &&
+            data.viewer && (
+              <Link href="/dashboard">
+                <a>Dashboard</a>
+              </Link>
+            )}
         </FlexRow>
         <FlexRow css={{ flex: 0, alignItems: 'center' }}>
           <Link href="mailto:team@homeroom.live">
-            <Icon src={iconHelpWhite} css={iconStyles} />
+            <a>
+              <Icon src={iconHelpWhite} css={iconStyles} />
+            </a>
           </Link>
 
           {!loading && data.viewer && <UserDropdown user={data.viewer.user} />}
-          {!loading && !data.viewer && <Link href="/">Login</Link>}
+          {!loading &&
+            !data.viewer && (
+              <Link href="/">
+                <a>Login</a>
+              </Link>
+            )}
         </FlexRow>
       </Navbar>
     )}
