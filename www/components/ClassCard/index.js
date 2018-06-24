@@ -18,7 +18,7 @@ import noVideo from '../../static/assets/images/no-video.jpg'
 
 // Icons
 
-import editIcon from '../../static/assets/icons/ui/edit.svg'
+// import editIcon from '../../static/assets/icons/ui/edit.svg'
 import liveIcon from '../../static/assets/icons/ui/live.svg'
 import userGrayIcon from '../../static/assets/icons/ui/user-gray.svg'
 import clockGrayIcon from '../../static/assets/icons/ui/clock-gray.svg'
@@ -28,17 +28,17 @@ import calendarGrayIcon from '../../static/assets/icons/ui/calendar-gray.svg'
 
 import { spacing } from '../../utils/spacing'
 
-const editIconStyles = {
-  position: 'absolute',
-  right: '-30px',
-  top: 0,
-  height: '20px',
-  padding: 0,
-  opacity: '0.5',
-  ':hover': {
-    opacity: 1,
-  },
-}
+// const editIconStyles = {
+//   position: 'absolute',
+//   right: '-30px',
+//   top: 0,
+//   height: '20px',
+//   padding: 0,
+//   opacity: '0.5',
+//   ':hover': {
+//     opacity: 1,
+//   },
+// }
 
 const iconStyles = {
   height: '16px',
@@ -122,7 +122,7 @@ export const ClassCard = ({
           css={{ marginRight: '20px' }}
         >
           <Icon src={userGrayIcon} css={iconStyles} />
-          {studentsCount || viewers || 0}
+          0
         </Text>
 
         <Text
@@ -132,7 +132,7 @@ export const ClassCard = ({
           css={{ marginRight: '20px' }}
         >
           <Icon src={calendarGrayIcon} css={iconStyles} />
-          {moment(startDate).format('M/D/YY')}
+          {moment(schedule).format('M/D/YY')}
         </Text>
 
         <Text
@@ -142,23 +142,21 @@ export const ClassCard = ({
           css={{ marginRight: '20px' }}
         >
           <Icon src={clockGrayIcon} css={iconStyles} />
-          {moment(startDate)
+          {moment(schedule)
             .tz('America/New_York')
             .format('LT z')}
         </Text>
       </FlexRow>
 
-      {teachers.map(teacher => (
-        <LinkContainer key={teacher.id} to={`/${teacher.username}/profile`}>
-          <Text
-            size="small"
-            weight="bold"
-            css={{ margin: 0, width: 'fit-content' }}
-          >
-            {teacher.name}
-          </Text>
-        </LinkContainer>
-      ))}
+      <Link href={`/user/${teacher.username}`}>
+        <Text
+          size="small"
+          weight="bold"
+          css={{ margin: 0, width: 'fit-content' }}
+        >
+          {teacher.name}
+        </Text>
+      </Link>
     </FlexCol>
   </ListItem>
 )
