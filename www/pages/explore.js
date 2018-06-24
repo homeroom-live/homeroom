@@ -3,6 +3,7 @@ import React from 'react'
 // Sections
 
 import { Navigation } from '../sections/navigation'
+import { Classes } from '../sections/explore/classes'
 
 // Explore
 
@@ -15,6 +16,7 @@ class Explore extends React.Component {
     return (
       <>
         <Navigation />
+        <Classes />
       </>
     )
   }

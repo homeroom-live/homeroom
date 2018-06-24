@@ -36,5 +36,8 @@
 - [ ] `withApollo` - component specific?
 - [ ] Setup section in Signup. Basic rights, termsofuse, agreement, notifications. I feel like it's nice intro. Might be to overwhelming. Seems like a must to make smooth signup process.
 - [ ] Email verificaiton before completing setup?
+- [ ] ClassCard implementation.
+- [ ] How should we indicate active page in Explore?
+- [ ] Improve selection in Explore - CODE.
 
 ## stream
