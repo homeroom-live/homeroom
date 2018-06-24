@@ -13,6 +13,22 @@ export const permissions = shield(
       classroom: allow,
       messages: allow,
     },
+    Viewer: {
+      user: rules.isAuthenticated,
+      requiresSetup: rules.isAuthenticated,
+    },
+    LiveClasses: {
+      classes: allow,
+      count: allow,
+    },
+    RecordedClasses: {
+      classes: allow,
+      count: allow,
+    },
+    UpcomingClasses: {
+      classes: allow,
+      count: allow,
+    },
     Mutation: {
       createUser: rules.isAuthenticated,
       updateUser: rules.isAuthenticated,
@@ -35,10 +51,6 @@ export const permissions = shield(
     },
     Subscription: {
       message: allow,
-    },
-    Viewer: {
-      user: rules.isAuthenticated,
-      requiresSetup: rules.isAuthenticated,
     },
     User: {
       id: allow,

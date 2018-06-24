@@ -9,14 +9,7 @@ export const classes = {
       info,
     )
   },
-  async liveClasses(parent, args, ctx: Context, info) {
-    return ctx.db.query.classes(
-      {
-        where: {
-          live: true,
-        },
-      },
-      info,
-    )
-  },
+  liveClasses: () => ({}),
+  recordedClasses: () => ({}),
+  upcomingClasses: () => ({}),
 }

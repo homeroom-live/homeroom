@@ -25,7 +25,10 @@ type Query {
   #   first: Int
   #   last: Int
   # ): [Class!]!
-  liveClasses: [Class!]! # DONE
+  liveClasses: LiveClasses! # DONE
+  upcomingClasses: UpcomingClasses!
+  recordedClasses: RecordedClasses!
+
   classroom(id: ID!): Classroom # DONE
   # liveClassrooms: [Classroom!]!
 
@@ -40,6 +43,26 @@ type Query {
   #   first: Int
   #   last: Int
   # ): [Message]!
+}
+
+type Viewer {
+  user: User
+  requiresSetup: Boolean!
+}
+
+type LiveClasses {
+  classes(first: Int, skip: Int): [Class!]!
+  count: Int!
+}
+
+type RecordedClasses {
+  classes(first: Int, skip: Int): [Class!]!
+  count(first: Int, skip: Int): Int!
+}
+
+type UpcomingClasses {
+  classes(first: Int, skip: Int): [Class!]!
+  count: Int!
 }
 
 type Mutation {
@@ -117,13 +140,6 @@ type Mutation {
 
 type Subscription {
   message(classroomId: ID!): MessageSubscriptionPayload
-}
-
-# Payloads
-
-type Viewer {
-  user: User
-  requiresSetup: Boolean!
 }
 
 # Types

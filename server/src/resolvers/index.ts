@@ -27,6 +27,9 @@ import { UserRefunds } from './UserRefunds'
 import { UserStudyingClassrooms } from './UserStudyingClassrooms'
 import { UserTaughtClassrooms } from './UserTaughtClassrooms'
 import { Viewer } from './Viewer'
+import { LiveClasses } from './LiveClasses'
+import { UpcomingClasses } from './UpcomingClasses'
+import { RecordedClasses } from './RecordedClasses'
 
 export const resolvers = {
   Query: {
@@ -36,6 +39,10 @@ export const resolvers = {
     ...messagesQueries,
     ...usersQueries,
   },
+  Viewer,
+  LiveClasses,
+  UpcomingClasses,
+  RecordedClasses,
   Mutation: {
     ...chargesMutations,
     ...classesMutations,
@@ -57,7 +64,6 @@ export const resolvers = {
   UserRefunds,
   UserStudyingClassrooms,
   UserTaughtClassrooms,
-  Viewer,
 }
 
 export const fragmentReplacements = extractFragmentReplacements(resolvers)
