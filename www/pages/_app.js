@@ -1,15 +1,42 @@
 import React from 'react'
 import App, { Container } from 'next/app'
+import Router from 'next/router'
 import getConfig from 'next/config'
+import nprogress from 'nprogress'
 
 import { ApolloProvider } from 'react-apollo'
 import { StripeProvider } from 'react-stripe-elements'
 
+// HOCs
+
 import { withApollo } from '../hocs/withApollo'
+
+// Styles
+
+import '../static/nprogress.css'
 
 // Config
 
 const { publicRuntimeConfig } = getConfig()
+
+// NProgress
+
+let progress
+
+const stopProgress = () => {
+  clearTimeout(progress)
+  nprogress.done()
+}
+
+const startProgress = () => {
+  progress = setTimeout(nprogress.start, 200)
+}
+
+Router.onRouteChangeStart = startProgress
+Router.onHashChangeStart = startProgress
+Router.onRouteChangeComplete = stopProgress
+Router.onRouteChangeError = stopProgress
+Router.onHashChangeComplete = stopProgress
 
 // Layout
 
