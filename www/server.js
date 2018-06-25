@@ -14,12 +14,6 @@ app.prepare().then(() => {
 
   server.use(compression())
 
-  // Routes
-
-  server.get('/explore/:classes', (req, res) => {
-    return app.render(req, res, `/explore`, { selection: req.params.classes })
-  })
-
   server.get('*', (req, res) => {
     return handle(req, res)
   })

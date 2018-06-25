@@ -42,7 +42,7 @@ export const Classes = ({ query }) => (
           )
         }
         default: {
-          return <Loading />
+          return null
         }
       }
     }}

@@ -56,16 +56,20 @@ const { publicRuntimeConfig } = getConfig()
 
 // Navigation
 
-const NavigationItem = ({ href, icon, label }) => (
+const NavigationItem = ({ label, icon, href, identifier, activePage }) => (
   <Link href={href} passHref>
-    <NavButton theme="dark" activeStyle={activeDarkStyle}>
+    <NavButton
+      theme="dark"
+      activeStyle={activeDarkStyle}
+      className={identifier === activePage ? 'active' : ''}
+    >
       <Icon src={icon} css={iconStyles} />
       {label}
     </NavButton>
   </Link>
 )
 
-export const SideNavigation = ({ children }) => (
+export const SideNavigation = ({ children, activePage }) => (
   <Container fluid style={{ width: '100%', padding: 0, margin: 0 }}>
     <Row style={{ display: 'flex' }}>
       <Col sm={{ size: 12 }} md={{ size: 3 }} lg={{ size: 2 }}>
@@ -83,11 +87,15 @@ export const SideNavigation = ({ children }) => (
                         label="My Classes"
                         icon={iconFile}
                         href="/dashboard"
+                        identifier="classes"
+                        activePage={activePage}
                       />
                       <NavigationItem
                         label="Classrooms"
                         icon={iconVideo}
                         href="/dashboard/classrooms"
+                        identifier="classrooms"
+                        activePage={activePage}
                       />
                       <NavigationItem
                         label="Strip Account"
@@ -97,11 +105,15 @@ export const SideNavigation = ({ children }) => (
                             ? data.viewer.user.stripeURL
                             : publicRuntimeConfig.stripeSignupURL
                         }
+                        identifier="stripe"
+                        activePage={activePage}
                       />
                       <NavigationItem
                         label="How to Stream"
                         icon={iconHelp}
                         href="/dashboard/howtostream"
+                        identifier="howtostream"
+                        activePage={activePage}
                       />
                     </>
                   )

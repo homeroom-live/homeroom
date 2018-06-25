@@ -47,6 +47,7 @@ const viewerDropdownQuery = gql`
   query {
     viewer {
       user {
+        id
         name
       }
     }
@@ -74,14 +75,22 @@ export class UserDropdown extends React.Component {
 
                   <DropdownMenu>
                     <Link href="/me">
-                      <Item>Profile</Item>
+                      <Item>
+                        <a>Profile</a>
+                      </Item>
                     </Link>
 
-                    <Item>
-                      <Link href="/logout">
+                    <Link href="/dashboard">
+                      <Item>
+                        <a>Dashboard</a>
+                      </Item>
+                    </Link>
+
+                    <Link href="/logout">
+                      <Item>
                         <a>Logout</a>
-                      </Link>
-                    </Item>
+                      </Item>
+                    </Link>
                   </DropdownMenu>
                 </UncontrolledDropdown>
               )

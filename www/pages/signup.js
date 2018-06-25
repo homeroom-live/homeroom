@@ -29,6 +29,8 @@ class Signup extends React.Component {
       return redirect(ctx, buildAuthorizeURL({ nonce: 'homeroom' }))
     }
 
+    await ctx.apolloClient.cache.reset()
+
     const res = await ctx.apolloClient.query({
       query: viewer,
     })

@@ -9,7 +9,7 @@ import { Footer } from '../../sections/footer'
 
 // Dashboard
 
-class Dashboard extends React.Component {
+class DashboardHowToStream extends React.Component {
   static async getInitialProps(ctx) {
     return {}
   }
@@ -18,7 +18,7 @@ class Dashboard extends React.Component {
     return (
       <>
         <Navigation />
-        <SideNavigation>
+        <SideNavigation activePage="howtostream">
           <HowToStream />
         </SideNavigation>
         <Footer />
@@ -27,4 +27,4 @@ class Dashboard extends React.Component {
   }
 }
 
-export default Dashboard
+export default DashboardHowToStream

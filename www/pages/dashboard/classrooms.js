@@ -8,7 +8,7 @@ import { Footer } from '../../sections/footer'
 
 // Classrooms
 
-class Classrooms extends React.Component {
+class DashboardClassrooms extends React.Component {
   static async getInitialProps(ctx) {
     return {}
   }
@@ -17,11 +17,11 @@ class Classrooms extends React.Component {
     return (
       <>
         <Navigation />
-        <SideNavigation>foo</SideNavigation>
+        <SideNavigation activePage="classrooms">foo</SideNavigation>
         <Footer />
       </>
     )
   }
 }
 
-export default Classrooms
+export default DashboardClassrooms

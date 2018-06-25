@@ -68,29 +68,9 @@ export const Navigation = ({ transparent }) => (
         </NavbarBrand>
       </Link>
 
-      <Link href="/explore" prefetch>
+      <Link href="/explore">
         <a>Explore</a>
       </Link>
-      <Query query={viewer} errorPolicy="ignore" notifyOnNetworkStatusChange>
-        {({ networkStatus, data }) => {
-          switch (networkStatus) {
-            case 7: {
-              if (data.viewer) {
-                return (
-                  <Link href="/dashboard">
-                    <a>Dashboard</a>
-                  </Link>
-                )
-              } else {
-                return null
-              }
-            }
-            default: {
-              return null
-            }
-          }
-        }}
-      </Query>
     </FlexRow>
     <FlexRow css={{ flex: 0, alignItems: 'center' }}>
       <Link href="mailto:team@homeroom.live">

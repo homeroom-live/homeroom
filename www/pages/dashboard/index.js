@@ -17,7 +17,7 @@ class Dashboard extends React.Component {
     return (
       <>
         <Navigation />
-        <SideNavigation>foo</SideNavigation>
+        <SideNavigation activePage="classes">foo</SideNavigation>
         <Footer />
       </>
     )
