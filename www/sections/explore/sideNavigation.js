@@ -29,40 +29,21 @@ const buttonStyles = {
   paddingBottom: spacing.regular,
 }
 
-// Types
-
-const types = [
-  {
-    name: 'For you',
-    icon: iconFile,
-    href: '/explore',
-    identifier: 'suggestions',
-  },
-  {
-    name: 'Live',
-    icon: iconClock,
-    href: '/explore/live',
-    identifier: 'live',
-  },
-  {
-    name: 'Recorded',
-    icon: iconVideo,
-    href: '/explore/recorded',
-    identifier: 'recorded',
-  },
-  {
-    name: 'Upcoming',
-    icon: iconGraphBar,
-    href: '/explore/upcoming',
-    identifier: 'upcoming',
-  },
-]
-
-const isActive = (type, active) => type.identifier === active
-
 // Navigation
 
-export const SideNavigation = ({ children, active }) => (
+const NavigationItem = ({ label, icon, href, identifier, activePage }) => (
+  <Link key={identifier} href={href} prefetch passHref>
+    <NavButton
+      css={buttonStyles}
+      className={identifier === activePage ? 'active' : ''}
+    >
+      <Icon src={icon} css={iconStyles} />
+      {label}
+    </NavButton>
+  </Link>
+)
+
+export const SideNavigation = ({ children, activePage }) => (
   <Container>
     <Row style={{ marginTop: spacing.medium }}>
       <Col
@@ -72,17 +53,34 @@ export const SideNavigation = ({ children, active }) => (
         style={{ marginBottom: spacing.medium }}
       >
         <FlexCol>
-          {types.map(type => (
-            <Link key={type.identifier} href={type.href} prefetch passHref>
-              <NavButton
-                css={buttonStyles}
-                className={isActive(type, active) ? 'active' : ''}
-              >
-                <Icon src={type.icon} css={iconStyles} />
-                {type.name}
-              </NavButton>
-            </Link>
-          ))}
+          <NavigationItem
+            label="For you"
+            icon={iconFile}
+            href="/explore"
+            identifier="suggestions"
+            activePage={activePage}
+          />
+          <NavigationItem
+            label="Live Classes"
+            icon={iconClock}
+            href="/explore/live"
+            identifier="live"
+            activePage={activePage}
+          />
+          <NavigationItem
+            label="Recorded videos"
+            icon={iconVideo}
+            href="/explore/recorded"
+            identifier="recorded"
+            activePage={activePage}
+          />
+          <NavigationItem
+            label="Upcoming sessions"
+            icon={iconGraphBar}
+            href="/explore/upcoming"
+            identifier="upcoming"
+            activePage={activePage}
+          />
         </FlexCol>
       </Col>
       <Col sm={{ size: 12 }} md={{ size: 8 }} lg={{ size: 9 }}>

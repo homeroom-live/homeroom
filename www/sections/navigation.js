@@ -62,24 +62,31 @@ const viewer = gql`
 export const Navigation = ({ transparent }) => (
   <Navbar style={transparent ? navbarStyles.transparent : navbarStyles.default}>
     <FlexRow css={{ alignItems: 'center', flex: 1 }}>
-      <Link href="/">
+      <Link href="/" prefetch passHref>
         <NavbarBrand>
           <Logo />
         </NavbarBrand>
       </Link>
 
-      <Link href="/explore">
+      <Link href="/explore" prefetch>
         <a>Explore</a>
       </Link>
       <Query query={viewer} errorPolicy="ignore" notifyOnNetworkStatusChange>
         {({ networkStatus, data }) => {
           switch (networkStatus) {
             case 7: {
-              return (
-                <Link href="/dashboard">
-                  <a>Dashboard</a>
-                </Link>
-              )
+              if (data.viewer) {
+                return (
+                  <Link href="/dashboard">
+                    <a>Dashboard</a>
+                  </Link>
+                )
+              } else {
+                return null
+              }
+            }
+            default: {
+              return null
             }
           }
         }}
