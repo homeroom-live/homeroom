@@ -100,18 +100,14 @@ export const Navigation = ({ transparent }) => (
                 return <UserDropdown user={data.viewer.user} />
               } else {
                 return (
-                  <Link href="/">
+                  <Link href="/signup">
                     <a>Login</a>
                   </Link>
                 )
               }
             }
             default: {
-              return (
-                <Link href="/">
-                  <a>Login</a>
-                </Link>
-              )
+              return null
             }
           }
         }}

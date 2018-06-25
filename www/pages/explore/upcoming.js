@@ -17,9 +17,12 @@ class Upcoming extends React.Component {
 
   query = gql`
     query {
-      classes: liveClasses {
-        id
-        name
+      classes: upcomingClasses {
+        count
+        classes(first: 10) {
+          id
+          name
+        }
       }
     }
   `

@@ -1,7 +1,7 @@
 {
   "git.ignoreLimitWarning": true,
   "eslint.enable": true,
-  "files.exclude": {
+  "files.watcherExclude": {
     "**/.git": true,
     "**/.svn": true,
     "**/.hg": true,

@@ -17,9 +17,12 @@ class Recorded extends React.Component {
 
   query = gql`
     query {
-      classes: liveClasses {
-        id
-        name
+      classes: recordedClasses {
+        count
+        classes(first: 10) {
+          id
+          name
+        }
       }
     }
   `

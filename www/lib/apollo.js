@@ -45,12 +45,14 @@ function create(initialState, { getToken }) {
   const authLink = new ApolloLink((operation, forward) => {
     const token = getToken()
 
-    operation.setContext(({ headers = {} }) => ({
-      headers: {
-        ...headers,
-        authorization: token ? `Bearer ${token}` : null,
-      },
-    }))
+    if (token) {
+      operation.setContext(({ headers = {} }) => ({
+        headers: {
+          ...headers,
+          authorization: `Bearer ${token}`,
+        },
+      }))
+    }
 
     return forward(operation)
   })

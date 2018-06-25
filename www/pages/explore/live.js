@@ -18,8 +18,11 @@ class Live extends React.Component {
   query = gql`
     query {
       classes: liveClasses {
-        id
-        name
+        count
+        classes(first: 10) {
+          id
+          name
+        }
       }
     }
   `

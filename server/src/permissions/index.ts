@@ -6,7 +6,7 @@ import * as rules from './rules'
 export const permissions = shield(
   {
     Query: {
-      viewer: allow,
+      viewer: rules.isAuthenticated,
       user: allow,
       class: allow,
       liveClasses: allow,

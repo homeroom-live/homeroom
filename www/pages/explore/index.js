@@ -17,9 +17,9 @@ class Suggestions extends React.Component {
 
   query = gql`
     query {
-      classes: liveClasses {
+      classes: allClasses {
         count
-        classes {
+        classes(first: 10) {
           id
           name
         }
