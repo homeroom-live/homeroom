@@ -27,6 +27,7 @@ import { UserRefunds } from './UserRefunds'
 import { UserStudyingClassrooms } from './UserStudyingClassrooms'
 import { UserTaughtClassrooms } from './UserTaughtClassrooms'
 import { Viewer } from './Viewer'
+import { AllClasses } from './AllClasses'
 import { LiveClasses } from './LiveClasses'
 import { UpcomingClasses } from './UpcomingClasses'
 import { RecordedClasses } from './RecordedClasses'
@@ -40,6 +41,7 @@ export const resolvers = {
     ...usersQueries,
   },
   Viewer,
+  AllClasses,
   LiveClasses,
   UpcomingClasses,
   RecordedClasses,

@@ -12,7 +12,7 @@ type Query {
   # userDefaultCard: Json
   # userStats(username: String): Json
   # userStripeUrl: String
-
+  # Class
   class(id: ID!): Class # DONE
   # myClasses(first: Int): [Class!]!
   # myTaughtClasses(first: Int): [Class!]!
@@ -25,10 +25,11 @@ type Query {
   #   first: Int
   #   last: Int
   # ): [Class!]!
+  allClasses: AllClasses!
   liveClasses: LiveClasses! # DONE
-  upcomingClasses: UpcomingClasses!
-  recordedClasses: RecordedClasses!
-
+  upcomingClasses: UpcomingClasses! # DONE
+  recordedClasses: RecordedClasses! # DONE
+  # Classroom
   classroom(id: ID!): Classroom # DONE
   # liveClassrooms: [Classroom!]!
 
@@ -48,6 +49,11 @@ type Query {
 type Viewer {
   user: User
   requiresSetup: Boolean!
+}
+
+type AllClasses {
+  classes(first: Int, skip: Int): [Class!]!
+  count: Int!
 }
 
 type LiveClasses {

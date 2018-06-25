@@ -17,6 +17,10 @@ export const permissions = shield(
       user: rules.isAuthenticated,
       requiresSetup: rules.isAuthenticated,
     },
+    AllClasses: {
+      classes: allow,
+      count: allow,
+    },
     LiveClasses: {
       classes: allow,
       count: allow,

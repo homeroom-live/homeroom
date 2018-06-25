@@ -9,6 +9,7 @@ export const classes = {
       info,
     )
   },
+  allClasses: () => ({}),
   liveClasses: () => ({}),
   recordedClasses: () => ({}),
   upcomingClasses: () => ({}),
