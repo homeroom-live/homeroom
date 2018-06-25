@@ -39,5 +39,6 @@
 - [ ] ClassCard implementation.
 - [ ] How should we indicate active page in Explore?
 - [ ] Improve selection in Explore - CODE.
+- [ ] Explore/Suggestions should be a combination of feed and upcoming classes. Very personalised experience. Not just list of saved classes.
 
 ## stream

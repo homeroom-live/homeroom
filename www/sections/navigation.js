@@ -60,45 +60,62 @@ const viewer = gql`
 // Navigation
 
 export const Navigation = ({ transparent }) => (
-  <Query query={viewer} errorPolicy="ignore">
-    {({ loading, data, error }) => (
-      <Navbar
-        style={transparent ? navbarStyles.transparent : navbarStyles.default}
-      >
-        <FlexRow css={{ alignItems: 'center', flex: 1 }}>
-          <Link href="/">
-            <NavbarBrand>
-              <Logo />
-            </NavbarBrand>
-          </Link>
+  <Navbar style={transparent ? navbarStyles.transparent : navbarStyles.default}>
+    <FlexRow css={{ alignItems: 'center', flex: 1 }}>
+      <Link href="/">
+        <NavbarBrand>
+          <Logo />
+        </NavbarBrand>
+      </Link>
 
-          <Link href="/explore">
-            <a>Explore</a>
-          </Link>
+      <Link href="/explore">
+        <a>Explore</a>
+      </Link>
+      <Query query={viewer} errorPolicy="ignore" notifyOnNetworkStatusChange>
+        {({ networkStatus, data }) => {
+          switch (networkStatus) {
+            case 7: {
+              return (
+                <Link href="/dashboard">
+                  <a>Dashboard</a>
+                </Link>
+              )
+            }
+          }
+        }}
+      </Query>
+    </FlexRow>
+    <FlexRow css={{ flex: 0, alignItems: 'center' }}>
+      <Link href="mailto:team@homeroom.live">
+        <a>
+          <Icon src={iconHelpWhite} css={iconStyles} />
+        </a>
+      </Link>
 
-          {!loading &&
-            data.viewer && (
-              <Link href="/dashboard">
-                <a>Dashboard</a>
-              </Link>
-            )}
-        </FlexRow>
-        <FlexRow css={{ flex: 0, alignItems: 'center' }}>
-          <Link href="mailto:team@homeroom.live">
-            <a>
-              <Icon src={iconHelpWhite} css={iconStyles} />
-            </a>
-          </Link>
-
-          {!loading && data.viewer && <UserDropdown user={data.viewer.user} />}
-          {!loading &&
-            !data.viewer && (
-              <Link href="/">
-                <a>Login</a>
-              </Link>
-            )}
-        </FlexRow>
-      </Navbar>
-    )}
-  </Query>
+      <Query query={viewer} errorPolicy="ignore" notifyOnNetworkStatusChange>
+        {({ networkStatus, data }) => {
+          switch (networkStatus) {
+            case 7: {
+              if (data.viewer) {
+                return <UserDropdown user={data.viewer.user} />
+              } else {
+                return (
+                  <Link href="/">
+                    <a>Login</a>
+                  </Link>
+                )
+              }
+            }
+            default: {
+              return (
+                <Link href="/">
+                  <a>Login</a>
+                </Link>
+              )
+            }
+          }
+        }}
+      </Query>
+    </FlexRow>
+  </Navbar>
 )

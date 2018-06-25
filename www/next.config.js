@@ -17,5 +17,9 @@ module.exports = withPlugins([withCSS, withImages], {
     stripeKey: process.env.STRIPE_KEY,
     stripeId: process.env.STRIPE_ID,
     stripeCallback: process.env.STRIPE_CALLBACK,
+    stripeSignupURL:
+      `https://connect.stripe.com/express/oauth/authorize` +
+      `?redirect_uri=${process.env.STRIPE_CALLBACK}` +
+      `&client_id=${process.env.STRIPE_ID}`,
   },
 })

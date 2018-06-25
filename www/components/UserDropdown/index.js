@@ -1,8 +1,8 @@
 import React from 'react'
+import glamorous from 'glamorous'
 import Link from 'next/link'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
-import glamorous from 'glamorous'
 
 import {
   UncontrolledDropdown,
@@ -10,8 +10,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap'
-
-import { Thumbnail } from '../Thumbnail'
+// import { Thumbnail } from '../Thumbnail'
 
 import { spacing } from '../../utils/spacing'
 import { colors } from '../../utils/colors'
@@ -56,35 +55,43 @@ const viewerDropdownQuery = gql`
 
 // User
 
-export const UserDropdown = () => (
-  <Query query={viewerDropdownQuery}>
-    {({ networkStatus, data }) => {
-      switch (networkStatus) {
-        case 8: {
-          return (
-            <UncontrolledDropdown style={{ display: 'flex' }}>
-              <DropdownToggle style={toggleStyles}>
-                <Thumbnail src={data.viewer.user.picture.url} size="regular" />
-              </DropdownToggle>
+export class UserDropdown extends React.Component {
+  render() {
+    return (
+      <Query query={viewerDropdownQuery}>
+        {({ networkStatus, data }) => {
+          switch (networkStatus) {
+            case 7: {
+              return (
+                <UncontrolledDropdown style={{ display: 'flex' }}>
+                  <DropdownToggle style={toggleStyles}>
+                    ABC
+                    {/* <Thumbnail
+                      src={data.viewer.user.picture.url}
+                      size="regular"
+                    /> */}
+                  </DropdownToggle>
 
-              <DropdownMenu>
-                <Link href="/profile/about">
-                  <Item>Profile</Item>
-                </Link>
+                  <DropdownMenu>
+                    <Link href="/me">
+                      <Item>Profile</Item>
+                    </Link>
 
-                <Item>
-                  <Link href="/logout">
-                    <a>Logout</a>
-                  </Link>
-                </Item>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-          )
-        }
-        default: {
-          return <div>FFF</div>
-        }
-      }
-    }}
-  </Query>
-)
+                    <Item>
+                      <Link href="/logout">
+                        <a>Logout</a>
+                      </Link>
+                    </Item>
+                  </DropdownMenu>
+                </UncontrolledDropdown>
+              )
+            }
+            default: {
+              return <></>
+            }
+          }
+        }}
+      </Query>
+    )
+  }
+}

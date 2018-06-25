@@ -1,5 +1,4 @@
 import Link from 'next/link'
-// import { LinkContainer as BsLinkContainer } from 'react-router-bootstrap'
 import glamorous from 'glamorous'
 import { darken } from 'polished'
 
