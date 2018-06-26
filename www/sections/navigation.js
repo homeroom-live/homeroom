@@ -49,6 +49,7 @@ const viewer = gql`
   query {
     viewer {
       user {
+        id
         picture {
           url
         }
@@ -79,7 +80,12 @@ export const Navigation = ({ transparent }) => (
         </a>
       </Link>
 
-      <Query query={viewer} errorPolicy="ignore" notifyOnNetworkStatusChange>
+      <Query
+        query={viewer}
+        fetchPolicy="network-only"
+        errorPolicy="ignore"
+        notifyOnNetworkStatusChange
+      >
         {({ networkStatus, data }) => {
           switch (networkStatus) {
             case 7: {

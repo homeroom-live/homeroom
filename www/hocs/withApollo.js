@@ -7,24 +7,24 @@ import { initApollo } from '../lib/apollo'
 
 export const withApollo = App =>
   class WithData extends React.Component {
-    static async getInitialProps(ctx) {
+    static async getInitialProps(props) {
       const {
         Component,
         router,
         ctx: { res },
-      } = ctx
+      } = props
       const apollo = initApollo(
         {},
         {
-          getToken: () => nookies.parseCookies(ctx).token,
+          getToken: () => nookies.parseCookies(props.ctx).token,
         },
       )
 
-      ctx.ctx.apolloClient = apollo
+      props.ctx.apolloClient = apollo
 
       let composedInitialProps = {}
       if (App.getInitialProps) {
-        composedInitialProps = await App.getInitialProps(ctx)
+        composedInitialProps = await App.getInitialProps(props)
       }
 
       if (res && res.finished) {

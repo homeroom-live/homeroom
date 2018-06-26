@@ -44,6 +44,7 @@ const stripeAccountUrl = gql`
   query {
     viewer {
       user {
+        id
         stripeURL
       }
     }
@@ -98,10 +99,10 @@ export const SideNavigation = ({ children, activePage }) => (
                         activePage={activePage}
                       />
                       <NavigationItem
-                        label="Strip Account"
+                        label="Stripe Account"
                         icon={iconCurrencyDollarWhite}
                         href={
-                          data.viewer.user
+                          data.viewer.user.stripeURL
                             ? data.viewer.user.stripeURL
                             : publicRuntimeConfig.stripeSignupURL
                         }

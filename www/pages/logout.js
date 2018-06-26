@@ -5,7 +5,8 @@ import { redirect } from '../lib/redirect'
 
 class Logout extends React.Component {
   static async getInitialProps(ctx) {
-    await ctx.apolloClient.cache.reset()
+    // await ctx.apolloClient.cache.reset()
+    await ctx.apolloClient.resetStore()
 
     // Delete cookie and redirect
     nookies.destroyCookie(ctx, 'token')

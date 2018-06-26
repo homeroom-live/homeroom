@@ -13,8 +13,15 @@ class Callback extends React.Component {
     const token = parseHash({
       hash: window.location.hash,
     })
-    nookies.setCookie({}, 'token', token)
-    redirect({}, '/signup')
+
+    if (token) {
+      nookies.setCookie({}, 'token', token, {
+        maxAge: 60 * 60 * 24 * 7,
+        path: '/',
+      })
+    }
+
+    redirect({}, '/explore')
   }
 
   render() {

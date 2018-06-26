@@ -7,13 +7,18 @@ import { buildAuthorizeURL } from '../lib/auth0'
 
 // Sections
 
+import { Navigation } from '../sections/navigation'
 import { Setup } from '../sections/signup/setup'
+import { Footer } from '../sections/footer'
 
 // Queries
 
 const viewer = gql`
   query {
     viewer {
+      user {
+        id
+      }
       requiresSetup
     }
   }
@@ -29,7 +34,8 @@ class Signup extends React.Component {
       return redirect(ctx, buildAuthorizeURL({ nonce: 'homeroom' }))
     }
 
-    await ctx.apolloClient.cache.reset()
+    // await ctx.apolloClient.cache.reset()
+    await ctx.apolloClient.resetStore()
 
     const res = await ctx.apolloClient.query({
       query: viewer,
@@ -37,15 +43,17 @@ class Signup extends React.Component {
 
     if (!res.data.viewer.requiresSetup) {
       return redirect(ctx, '/explore')
+    } else {
+      return {}
     }
-
-    return {}
   }
 
   render() {
     return (
       <>
+        <Navigation />
         <Setup />
+        <Footer />
       </>
     )
   }
