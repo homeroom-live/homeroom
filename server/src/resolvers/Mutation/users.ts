@@ -14,6 +14,10 @@ function normalizeGender(gender: string): Gender {
   }
 }
 
+function getFirstClassroomDescription(name: string): string {
+  return `Welcome to live classrooms by ${name}`
+}
+
 // Resolvers
 
 export const users = {
@@ -55,6 +59,13 @@ export const users = {
               },
             }
           : {}),
+        taught_classrooms: {
+          create: {
+            name,
+            description: getFirstClassroomDescription(name),
+            price: 0,
+          },
+        },
         receiveNotifications,
       },
     })

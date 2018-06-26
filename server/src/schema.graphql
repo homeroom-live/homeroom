@@ -107,7 +107,7 @@ type Mutation {
     video: Upload
     price: Float!
     schedule: DateTime
-    files: [Upload!]!
+    files: [Upload!]
   ): Class! # DONE
   updateClass(
     id: ID!
@@ -117,7 +117,7 @@ type Mutation {
     video: Upload
     price: Float
     schedule: DateTime
-    files: [Upload!]!
+    files: [Upload!]
   ): Class # DONE
   deleteClass(id: ID!): Class # DONE
   goLive(classId: ID!): Class # DONE

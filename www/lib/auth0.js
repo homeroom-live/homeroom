@@ -11,6 +11,7 @@ const auth0Client = new auth0.WebAuth({
   clientID: publicRuntimeConfig.auth0ClientId,
   redirectUri: publicRuntimeConfig.auth0RedirectUrl,
   responseType: 'token id_token',
+  scope: 'openid profile email',
 })
 
 // Exports

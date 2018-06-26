@@ -5,8 +5,22 @@ import gql from 'graphql-tag'
 // GraphQL
 
 const createClass = gql`
-  mutation CreateClass() {
-
+  mutation CreateClass(
+    $classroomId: ID!
+    $name: String!
+    $description: String!
+    $files: [Upload!]
+    $price: Float!
+  ) {
+    createClass(
+      classroomId: $classroomId
+      name: $name
+      description: $description
+      files: $files
+      price: $price
+    ) {
+      id
+    }
   }
 `
 
