@@ -1,6 +1,6 @@
 import { Context } from '../utils'
 
-export const UserTaughtClassrooms = {
+export const UserTeachingClassrooms = {
   classrooms: {
     fragment: `fragment UserID on User { id }`,
     resolve: async ({ id }, args, ctx: Context, info) => {

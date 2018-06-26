@@ -173,7 +173,7 @@ type User {
   refunds: UserRefunds!
 
   # Teacher
-  taught_classrooms: UserTaughtClassrooms! # Additional resolver
+  teaching_classrooms: UserTeachingClassrooms! # Additional resolver
   studying_classrooms: UserStudyingClassrooms! # Additional resolver
   # Social
   followers: UserFollowers! # Additional resolver
@@ -191,7 +191,7 @@ type UserRefunds {
   count: Int!
 }
 
-type UserTaughtClassrooms {
+type UserTeachingClassrooms {
   classrooms: [Classroom!]!
   count: Int!
 }

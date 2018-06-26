@@ -23,7 +23,7 @@ type User {
 
   # classes: [Class!]! @relation(name: "UserClasses")
   # taughtClasses: [Class!]! @relation(name: "UserTaughtClasses")
-  taught_classrooms: [Classroom!]! @relation(name: "ClassroomTeacher")
+  teaching_classrooms: [Classroom!]! @relation(name: "ClassroomTeacher")
   studying_classrooms: [Classroom!]! @relation(name: "ClassroomStudent")
 
   followers: [Follow!]! @relation(name: "UserFollowed")
@@ -76,7 +76,7 @@ type Class {
   schedule: DateTime
   duration: Int # in minutes
   live: Boolean! @default(value: "false")
-  vod: File @relation(name: "ClassVods")
+  vod: File @relation(name: "ClassVod")
 
   # Extras
   messages: [Message!]! @relation(name: "ClassMessages")
@@ -105,7 +105,7 @@ type File {
   # user: User @relation(name: "UserVideo")
   # userPicture: User @relation(name: "UserPicture")
   # class: Class @relation(name: "ClassFiles")
-  # classVod: Class @relation(name: "ClassVods")
+  # classVod: Class @relation(name: "ClassVod")
   # classVideo: Class @relation(name: "ClassVideo")
 }
 

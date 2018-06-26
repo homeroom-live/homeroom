@@ -25,7 +25,7 @@ import { UserFollowers } from './UserFollowers'
 import { UserFollowing } from './UserFollowing'
 import { UserRefunds } from './UserRefunds'
 import { UserStudyingClassrooms } from './UserStudyingClassrooms'
-import { UserTaughtClassrooms } from './UserTaughtClassrooms'
+import { UserTeachingClassrooms } from './UserTeachingClassrooms'
 import { Viewer } from './Viewer'
 import { AllClasses } from './AllClasses'
 import { LiveClasses } from './LiveClasses'
@@ -65,7 +65,7 @@ export const resolvers = {
   UserFollowing,
   UserRefunds,
   UserStudyingClassrooms,
-  UserTaughtClassrooms,
+  UserTeachingClassrooms,
 }
 
 export const fragmentReplacements = extractFragmentReplacements(resolvers)
