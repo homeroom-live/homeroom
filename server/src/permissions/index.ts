@@ -87,7 +87,7 @@ export const permissions = shield(
       refunds: allow,
       count: allow,
     },
-    UserTaughtClassrooms: {
+    UserTeachingClassrooms: {
       classrooms: allow,
       count: allow,
     },
