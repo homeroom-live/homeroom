@@ -59,7 +59,7 @@ export const users = {
               },
             }
           : {}),
-        taught_classrooms: {
+        teaching_classrooms: {
           create: {
             name,
             description: getFirstClassroomDescription(name),

@@ -73,7 +73,7 @@ export const permissions = shield(
       defaultCard: allow,
       charges: allow,
       refunds: allow,
-      taught_classrooms: allow,
+      teaching_classrooms: allow,
       studying_classrooms: allow,
       followers: allow,
       following: allow,
