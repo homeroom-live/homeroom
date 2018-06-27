@@ -59,8 +59,7 @@
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-react": "^7.9.1",
     "eslint-plugin-standard": "^3.1.0",
-    "prettier": "^1.13.5",
-    "webpack": "^4.12.2"
+    "prettier": "^1.13.5"
   },
   "license": "MIT"
 }
