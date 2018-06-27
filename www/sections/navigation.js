@@ -1,8 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
+import { withRouter } from 'next/router'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import { Navbar, NavbarBrand } from 'reactstrap'
+import glamorous from 'glamorous'
 
 // Components
 
@@ -13,6 +15,7 @@ import { UserDropdown } from '../components/UserDropdown'
 
 import { colors } from '../utils/colors'
 import { spacing } from '../utils/spacing'
+import { fontSize, fontWeight } from '../utils/typography'
 
 import iconHelpWhite from '../static/assets/icons/ui/help-white.svg'
 
@@ -43,6 +46,25 @@ const iconStyles = {
   },
 }
 
+const linkActiveStyles = {
+  color: colors.white,
+  opacity: 1,
+  textDecoration: 'none',
+}
+
+const NavbarLink = glamorous.a(
+  {
+    margin: `0 ${spacing.small}`,
+    fontSize: fontSize.small,
+    fontWeight: fontWeight.bold,
+    color: colors.white,
+    opacity: 0.75,
+    ':hover': linkActiveStyles,
+    ':focus': linkActiveStyles,
+  },
+  ({ href, pathname }) => (href === pathname ? linkActiveStyles : {}),
+)
+
 // Queries
 
 const viewer = gql`
@@ -60,7 +82,7 @@ const viewer = gql`
 
 // Navigation
 
-export const Navigation = ({ transparent }) => (
+const NavigationComponent = ({ transparent, router }) => (
   <Navbar style={transparent ? navbarStyles.transparent : navbarStyles.default}>
     <FlexRow css={{ alignItems: 'center', flex: 1 }}>
       <Link href="/" prefetch passHref>
@@ -68,9 +90,8 @@ export const Navigation = ({ transparent }) => (
           <Logo />
         </NavbarBrand>
       </Link>
-
-      <Link href="/explore">
-        <a>Explore</a>
+      <Link href="/explore" passHref>
+        <NavbarLink pathname={router.pathname}>Explore</NavbarLink>
       </Link>
     </FlexRow>
     <FlexRow css={{ flex: 0, alignItems: 'center' }}>
@@ -108,3 +129,5 @@ export const Navigation = ({ transparent }) => (
     </FlexRow>
   </Navbar>
 )
+
+export const Navigation = withRouter(NavigationComponent)
