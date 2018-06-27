@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 // Sections
 
@@ -6,22 +6,22 @@ import { Navigation } from '../../../sections/navigation'
 import { SideNavigation } from '../../../sections/dashboard/sideNavigation'
 import { Footer } from '../../../sections/footer'
 
-// Class
+// Classrooms
 
-class Class extends React.Component {
+class Classroom extends React.Component {
   static async getInitialProps(ctx) {
     return {}
   }
 
   render() {
     return (
-      <Fragment>
+      <>
         <Navigation />
-        <SideNavigation activePage="class">foo</SideNavigation>
+        <SideNavigation activePage="classroom">foo</SideNavigation>
         <Footer />
-      </Fragment>
+      </>
     )
   }
 }
 
-export default Class
+export default Classroom

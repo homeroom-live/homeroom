@@ -88,14 +88,14 @@ export const SideNavigation = ({ children, activePage }) => (
                         label="My Classes"
                         icon={iconFile}
                         href="/dashboard"
-                        identifier="classes"
+                        identifier="class"
                         activePage={activePage}
                       />
                       <NavigationItem
                         label="Classrooms"
                         icon={iconVideo}
                         href="/dashboard/classrooms"
-                        identifier="classrooms"
+                        identifier="classroom"
                         activePage={activePage}
                       />
                       <NavigationItem

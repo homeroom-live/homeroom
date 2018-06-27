@@ -4,12 +4,13 @@ import React, { Fragment } from 'react'
 
 import { Navigation } from '../../../sections/navigation'
 import { SideNavigation } from '../../../sections/dashboard/sideNavigation'
+import { ClassroomForm } from '../../../sections/dashboard/classroomForm'
 import { Footer } from '../../../sections/footer'
 
-// Class
+// New Classroom
 
-class Class extends React.Component {
-  static async getInitialProps(ctx) {
+class NewClassroom extends React.Component {
+  static async getInitialProps() {
     return {}
   }
 
@@ -17,11 +18,13 @@ class Class extends React.Component {
     return (
       <Fragment>
         <Navigation />
-        <SideNavigation activePage="class">foo</SideNavigation>
+        <SideNavigation activePage="class">
+          <ClassroomForm />
+        </SideNavigation>
         <Footer />
       </Fragment>
     )
   }
 }
 
-export default Class
+export default NewClassroom

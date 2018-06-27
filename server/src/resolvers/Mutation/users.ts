@@ -14,7 +14,11 @@ function normalizeGender(gender: string): Gender {
   }
 }
 
-function getFirstClassroomDescription(name: string): string {
+function generateClassroomName(name: string): string {
+  return `${name}'s Classroom`
+}
+
+function generateClassroomDescription(name: string): string {
   return `Welcome to live classrooms by ${name}`
 }
 
@@ -61,8 +65,8 @@ export const users = {
           : {}),
         teaching_classrooms: {
           create: {
-            name,
-            description: getFirstClassroomDescription(name),
+            name: generateClassroomName(name),
+            description: generateClassroomDescription(name),
             price: 0,
           },
         },

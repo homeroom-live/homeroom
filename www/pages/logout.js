@@ -11,6 +11,12 @@ class Logout extends React.Component {
     // Delete cookie and redirect
     nookies.destroyCookie(ctx, 'token')
     redirect(ctx, '/')
+
+    return {}
+  }
+
+  render() {
+    return null
   }
 }
 

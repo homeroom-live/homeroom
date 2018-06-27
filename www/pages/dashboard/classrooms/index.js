@@ -1,7 +1,7 @@
 import React from 'react'
 import { redirect } from '../../../lib/redirect'
 
-class Classes extends React.Component {
+class Classrooms extends React.Component {
   static async getInitialProps(ctx) {
     redirect(ctx, '/dashboard')
   }
@@ -11,4 +11,4 @@ class Classes extends React.Component {
   }
 }
 
-export default Classes
+export default Classrooms
