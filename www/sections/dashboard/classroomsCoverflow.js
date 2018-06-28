@@ -39,7 +39,27 @@ const classroomsQuery = gql`
 
 // Classrooms And Classes
 
-const Class = () => <div>foo</div>
+const Class = ({ id, name, description, price, picture }) => (
+  <div>
+    <header>
+      <div>Hero should be seen here (picture)</div>
+      <h3>{name}</h3>
+    </header>
+    <main>
+      <p>{description}</p>
+      <div>{price}</div>
+      <div>
+        <Link
+          href={`/dashboard/classes/class?classId=${id}`}
+          as={`/dashboard/classes/class/${id}`}
+          prefetch
+        >
+          <a>See more</a>
+        </Link>
+      </div>
+    </main>
+  </div>
+)
 
 const Classroom = ({ id, name, numberOfClasses, classes }) => (
   <div>
@@ -48,6 +68,7 @@ const Classroom = ({ id, name, numberOfClasses, classes }) => (
       <Link
         href={`/dashboard/classes/new?classroomId=${id}`}
         as={`/dashboard/classes/new/${id}`}
+        prefetch
       >
         <a>New class</a>
       </Link>
@@ -57,15 +78,17 @@ const Classroom = ({ id, name, numberOfClasses, classes }) => (
       {classes.map(_class => (
         <Class
           key={_class.id}
+          id={_class.id}
           name={_class.name}
-          picture={_class.picture.url}
+          description={_class.description}
+          // picture={_class.picture.url}
         />
       ))}
     </div>
   </div>
 )
 
-export const ClassroomsAndClasses = () => (
+export const ClassroomsCoverflow = () => (
   <Query query={classroomsQuery} notifyOnNetworkStatusChange>
     {({ networkStatus, data }) => {
       switch (networkStatus) {
@@ -74,15 +97,23 @@ export const ClassroomsAndClasses = () => (
 
           return (
             <Fragment>
-              {user.teaching_classrooms.classrooms.map(classroom => (
-                <Classroom
-                  key={classroom.id}
-                  id={classroom.id}
-                  name={classroom.name}
-                  numberOfClasses={classroom.classes.count}
-                  classes={classroom.classes.classes}
-                />
-              ))}
+              <header>
+                <h2>Classrooms {user.teaching_classrooms.count}</h2>
+                <Link href="/dashboard/classrooms/new">
+                  <a>New classroom</a>
+                </Link>
+              </header>
+              <main>
+                {user.teaching_classrooms.classrooms.map(classroom => (
+                  <Classroom
+                    key={classroom.id}
+                    id={classroom.id}
+                    name={classroom.name}
+                    numberOfClasses={classroom.classes.count}
+                    classes={classroom.classes.classes}
+                  />
+                ))}
+              </main>
             </Fragment>
           )
         }

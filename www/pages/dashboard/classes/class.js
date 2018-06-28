@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react'
 
+import { redirect } from '../../../lib/redirect'
+
 // Sections
 
 import { Navigation } from '../../../sections/navigation'
@@ -10,7 +12,11 @@ import { Footer } from '../../../sections/footer'
 
 class Class extends React.Component {
   static async getInitialProps(ctx) {
-    return {}
+    if (!ctx.query.classId) {
+      return redirect(ctx, '/dashboard/classes')
+    } else {
+      return {}
+    }
   }
 
   render() {

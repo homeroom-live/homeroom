@@ -4,7 +4,7 @@ import React from 'react'
 
 import { Navigation } from '../../sections/navigation'
 import { SideNavigation } from '../../sections/dashboard/sideNavigation'
-import { ClassroomsAndClasses } from '../../sections/dashboard/classroomsAndClasses'
+import { ClassroomsCoverflow } from '../../sections/dashboard/classroomsCoverflow'
 import { Footer } from '../../sections/footer'
 
 // Dashboard
@@ -19,7 +19,7 @@ class Dashboard extends React.Component {
       <>
         <Navigation />
         <SideNavigation activePage="classes">
-          <ClassroomsAndClasses />
+          <ClassroomsCoverflow />
         </SideNavigation>
         <Footer />
       </>
