@@ -36,4 +36,22 @@ export const User = {
       }
     },
   },
+  charges: {
+    resolve: parent => parent,
+  },
+  refunds: {
+    resolve: parent => parent,
+  },
+  teaching_classrooms: {
+    resolve: parent => parent,
+  },
+  studying_classrooms: {
+    resolve: parent => parent,
+  },
+  followers: {
+    resolve: parent => parent,
+  },
+  following: {
+    resolve: parent => parent,
+  },
 }

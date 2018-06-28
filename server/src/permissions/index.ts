@@ -77,7 +77,7 @@ export const permissions = shield(
       studying_classrooms: allow,
       followers: allow,
       following: allow,
-      messages: allow,
+      // messages: allow,
     },
     UserCharges: {
       charges: allow,

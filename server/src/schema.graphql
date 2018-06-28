@@ -178,7 +178,7 @@ type User {
   # Social
   followers: UserFollowers! # Additional resolver
   following: UserFollowing! # Additional resolver
-  messages: [Message!]
+  # messages: [Message!]
 }
 
 type UserCharges {

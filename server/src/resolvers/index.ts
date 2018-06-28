@@ -15,7 +15,9 @@ import { users as usersMutations } from './Mutation/users'
 // Subscriptions
 import { Subscription } from './Subscription'
 // Types
+import { Class } from './Class'
 import { ClassMessages } from './ClassMessages'
+import { Classroom } from './Classroom'
 import { ClassroomClasses } from './ClassroomClasses'
 import { ClassroomStudents } from './ClassroomStudents'
 import { File } from './File'
@@ -55,7 +57,9 @@ export const resolvers = {
     ...usersMutations,
   },
   Subscription,
+  Class,
   ClassMessages,
+  Classroom,
   ClassroomClasses,
   ClassroomStudents,
   File,
