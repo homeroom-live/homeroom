@@ -39,57 +39,11 @@ export default class MyDocument extends Document {
           <link rel="manifest" href="/static/manifest.json" />
           <link rel="icon" type="image/png" href="/static/favicon.png" />
           <link rel="stylesheet" href="/_next/static/style.css" />
+          <link rel="stylesheet" href="/static/index.css" />
 
           <script id="stripe-js" src="https://js.stripe.com/v3/" />
-
           <style dangerouslySetInnerHTML={{ __html: this.props.css }} />
         </Head>
-        <style jsx global>
-          {`
-            @font-face {
-              font-family: 'TTNorms';
-              src: url('../static/assets/fonts/TypeType - TTNorms-Light.otf')
-                format('opentype');
-              font-weight: 100;
-            }
-
-            @font-face {
-              font-family: 'TTNorms';
-              src: url('../static/assets/fonts/TypeType - TTNorms-Regular.otf')
-                format('opentype');
-              font-weight: 300;
-            }
-
-            @font-face {
-              font-family: 'TTNorms';
-              src: url('../static/assets/fonts/TypeType - TTNorms-Medium.otf')
-                format('opentype');
-              font-weight: 500;
-            }
-
-            @font-face {
-              font-family: 'TTNorms';
-              src: url('../static/assets/fonts/TypeType - TTNorms-Bold.otf')
-                format('opentype');
-              font-weight: 700;
-            }
-
-            @font-face {
-              font-family: 'TTNorms';
-              src: url('../static/assets/fonts/TypeType - TTNorms-Black.otf')
-                format('opentype');
-              font-weight: 900;
-            }
-
-            body {
-              margin: 0;
-              padding: 0;
-              font-family: 'TTNorms', sans-serif !important;
-              -webkit-font-smoothing: antialiased;
-              -moz-osx-font-smoothing: grayscale;
-            }
-          `}
-        </style>
 
         <body className="custom_class">
           <Main />
