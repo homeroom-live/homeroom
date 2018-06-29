@@ -1,75 +1,59 @@
 import { extractFragmentReplacements } from 'prisma-binding'
-// Query
+// Query ---------------------------------------------------------------------
 import { classes as classesQueries } from './Query/classes'
 import { classrooms as classroomsQueries } from './Query/classrooms'
-import { messages as messagesQueries } from './Query/messages'
 import { users as usersQueries } from './Query/users'
-// Mutation
-import { charges as chargesMutations } from './Mutation/charges'
-import { classes as classesMutations } from './Mutation/classes'
-import { classrooms as classroomsMutations } from './Mutation/classrooms'
-import { messages as messagesMutations } from './Mutation/messages'
-import { refunds as refundsMutations } from './Mutation/refunds'
-import { stripe as stripeMutations } from './Mutation/stripe'
+// Mutation ------------------------------------------------------------------
 import { users as usersMutations } from './Mutation/users'
-// Subscriptions
-import { Subscription } from './Subscription'
-// Types
-import { Class } from './Class'
-import { ClassMessages } from './ClassMessages'
-import { Classroom } from './Classroom'
-import { ClassroomClasses } from './ClassroomClasses'
-import { ClassroomStudents } from './ClassroomStudents'
-import { File } from './File'
-import { User } from './User'
-import { UserCharges } from './UserCharges'
-import { UserFollowers } from './UserFollowers'
-import { UserFollowing } from './UserFollowing'
-import { UserRefunds } from './UserRefunds'
-import { UserStudyingClassrooms } from './UserStudyingClassrooms'
-import { UserTeachingClassrooms } from './UserTeachingClassrooms'
+import { stripe as stripeMutations } from './Mutation/stripe'
+import { classrooms as classroomsMutations } from './Mutation/classrooms'
+import { classes as classesMutations } from './Mutation/classes'
+import { messages as messagesMutations } from './Mutation/messages'
+import { charges as chargesMutations } from './Mutation/charges'
+import { refunds as refundsMutations } from './Mutation/refunds'
+// Types ---------------------------------------------------------------------
+// Viewer
 import { Viewer } from './Viewer'
-import { AllClasses } from './AllClasses'
-import { LiveClasses } from './LiveClasses'
-import { UpcomingClasses } from './UpcomingClasses'
-import { RecordedClasses } from './RecordedClasses'
+// User
+import { User } from './User'
+import { UserEdge } from './UserEdge'
+// Classroom
+import { Classroom } from './Classroom'
+import { ClassroomEdge } from './ClassroomEdge'
+// Class
+import { Class } from './Class'
+// Message
+import { MessageEdge } from './MessageEdge'
+// File
+import { File } from './File'
+// Picture
+import { Picture } from './Picture'
 
 export const resolvers = {
   Query: {
     viewer: () => ({}),
-    ...classesQueries,
-    ...classroomsQueries,
-    ...messagesQueries,
     ...usersQueries,
+    ...classroomsQueries,
+    ...classesQueries,
+  },
+  Mutation: {
+    ...usersMutations,
+    ...stripeMutations,
+    ...classroomsMutations,
+    ...classesMutations,
+    ...messagesMutations,
+    ...chargesMutations,
+    ...refundsMutations,
   },
   Viewer,
-  AllClasses,
-  LiveClasses,
-  UpcomingClasses,
-  RecordedClasses,
-  Mutation: {
-    ...chargesMutations,
-    ...classesMutations,
-    ...classroomsMutations,
-    ...messagesMutations,
-    ...refundsMutations,
-    ...stripeMutations,
-    ...usersMutations,
-  },
-  Subscription,
-  Class,
-  ClassMessages,
-  Classroom,
-  ClassroomClasses,
-  ClassroomStudents,
-  File,
   User,
-  UserCharges,
-  UserFollowers,
-  UserFollowing,
-  UserRefunds,
-  UserStudyingClassrooms,
-  UserTeachingClassrooms,
+  UserEdge,
+  Classroom,
+  ClassroomEdge,
+  Class,
+  MessageEdge,
+  File,
+  Picture,
 }
 
 export const fragmentReplacements = extractFragmentReplacements(resolvers)

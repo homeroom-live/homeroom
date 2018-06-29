@@ -3,6 +3,17 @@ import { stripe } from '../stripe'
 import { ICard } from 'stripe'
 
 export const User = {
+  stripeURL: {
+    fragment: `fragment UserStripeID on User { stripeId }`,
+    resolve: async ({ stripeId }, args, ctx: Context, info) => {
+      try {
+        const res = await stripe.accounts.createLoginLink(stripeId)
+        return res.url
+      } catch (err) {
+        return null
+      }
+    },
+  },
   defaultCard: {
     fragment: `fragment UserDefaultCard on User { stripeCustomerId }`,
     resolve: async ({ stripeCustomerId }, args, ctx: Context, info) => {
@@ -25,33 +36,138 @@ export const User = {
       }
     },
   },
-  stripeURL: {
-    fragment: `fragment UserStripeID on User { stripeId }`,
-    resolve: async ({ stripeId }, args, ctx: Context, info) => {
-      try {
-        const res = await stripe.accounts.createLoginLink(stripeId)
-        return res.url
-      } catch (err) {
-        return null
-      }
+  chargesConnection: {
+    fragment: `fragment UserID on User { id }`,
+    resolve: async (
+      { id },
+      { after, before, first, last },
+      ctx: Context,
+      info,
+    ) => {
+      return ctx.db.query.chargesConnection(
+        {
+          where: {
+            user: { id },
+          },
+          after,
+          before,
+          first,
+          last,
+        },
+        info,
+      )
     },
   },
-  charges: {
-    resolve: parent => parent,
+  refundsConnection: {
+    fragment: `fragment UserID on User { id }`,
+    resolve: async (
+      { id },
+      { after, before, first, last },
+      ctx: Context,
+      info,
+    ) => {
+      return ctx.db.query.refundsConnection(
+        {
+          where: {
+            charge: {
+              user: { id },
+            },
+          },
+          after,
+          before,
+          first,
+          last,
+        },
+        info,
+      )
+    },
   },
-  refunds: {
-    resolve: parent => parent,
+  teachingClassroomsConnection: {
+    fragment: `fragment UserID on User { id }`,
+    resolve: async (
+      { id },
+      { after, before, first, last },
+      ctx: Context,
+      info,
+    ) => {
+      return ctx.db.query.classroomsConnection(
+        {
+          where: {
+            teacher: { id },
+          },
+          after,
+          before,
+          first,
+          last,
+        },
+        info,
+      )
+    },
   },
-  teaching_classrooms: {
-    resolve: parent => parent,
+  studyingClassroomsConnection: {
+    fragment: `fragment UserID on User { id }`,
+    resolve: async (
+      { id },
+      { after, before, first, last },
+      ctx: Context,
+      info,
+    ) => {
+      return ctx.db.query.classroomsConnection(
+        {
+          where: {
+            students_some: { id },
+          },
+          after,
+          before,
+          first,
+          last,
+        },
+        info,
+      )
+    },
   },
-  studying_classrooms: {
-    resolve: parent => parent,
+  followersConnection: {
+    fragment: `fragment UserID on User { id }`,
+    resolve: async (
+      { id },
+      { after, before, first, last },
+      ctx: Context,
+      info,
+    ) => {
+      return ctx.db.query.followsConnection(
+        {
+          where: {
+            user_followed: { id },
+          },
+          after,
+          before,
+          first,
+          last,
+        },
+        info,
+      )
+    },
   },
-  followers: {
-    resolve: parent => parent,
-  },
-  following: {
-    resolve: parent => parent,
+  followingConnection: {
+    fragment: `fragment UserID on User { id }`,
+    resolve: async (
+      { id },
+      { after, before, first, last },
+      ctx: Context,
+      info,
+    ) => {
+      return ctx.db.query.followsConnection(
+        {
+          where: {
+            user_following: { id },
+          },
+          after,
+          before,
+          first,
+          last,
+        },
+        info,
+      )
+    },
   },
 }

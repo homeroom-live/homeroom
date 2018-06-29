@@ -26,6 +26,7 @@
   - pro: more easily applied to multiple situations.
   - con: I see no con tbh
   - -> We should implement this!
+- [ ] File handling (deleting files)
 
 ## www
 

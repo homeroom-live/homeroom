@@ -9,16 +9,4 @@ export const classrooms = {
       info,
     )
   },
-
-  // async liveClassrooms(parent, args, ctx: Context, info) {
-  //   return await ctx.db.query.classrooms(
-  //     {
-  //       where: {
-  //         live: true,
-  //       },
-  //       orderBy: 'viewers_DESC',
-  //     },
-  //     info,
-  //   )
-  // },
 }

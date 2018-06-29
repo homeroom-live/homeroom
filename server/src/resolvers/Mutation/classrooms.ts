@@ -42,6 +42,9 @@ export const classrooms = {
       info,
     )
   },
+  async deleteClassroom(parent, { id }, ctx: Context, info) {
+    return ctx.db.mutation.deleteClassroom({ where: { id } }, info)
+  },
   async joinClassroom(parent, { id }, ctx: Context, info) {
     const auth0Id = ctx.request.user.sub
     return await ctx.db.mutation.updateClassroom(

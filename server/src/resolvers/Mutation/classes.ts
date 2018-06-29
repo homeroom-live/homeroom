@@ -83,36 +83,4 @@ export const classes = {
       info,
     )
   },
-
-  // async joinClass(parent, { id, studentsCount }, ctx: Context, info) {
-  //   const auth0Id = ctx.request.user.db
-  //   return await ctx.db.mutation.updateClass(
-  //     {
-  //       where: { id },
-  //       data: {
-  //         // studentsCount: studentsCount + 1,
-  //         students: {
-  //           connect: [{ auth0Id }],
-  //         },
-  //       },
-  //     },
-  //     info,
-  //   )
-  // },
-
-  // async leaveClass(parent, { id, studentsCount }, ctx: Context, info) {
-  //   const auth0Id = ctx.request.user.id
-  //   return await ctx.db.mutation.updateClass(
-  //     {
-  //       where: { id },
-  //       data: {
-  //         // studentsCount: studentsCount - 1,
-  //         students: {
-  //           disconnect: [{ auth0Id }],
-  //         },
-  //       },
-  //     },
-  //     info,
-  //   )
-  // },
 }

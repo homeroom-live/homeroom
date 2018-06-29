@@ -8,7 +8,7 @@ import { apolloUploadMiddleware } from './files'
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
-  middlewares: [permissions, apolloUploadMiddleware],
+  middlewares: [apolloUploadMiddleware],
   context: req => ({
     ...req,
     db: new Prisma({
