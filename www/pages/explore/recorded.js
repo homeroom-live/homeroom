@@ -17,11 +17,16 @@ class Recorded extends React.Component {
 
   query = gql`
     query {
-      classes: recordedClasses {
-        count
-        classes(first: 10) {
-          id
-          name
+      classes: recordedClasses(first: 10) {
+        edges {
+          node {
+            id
+            name
+            description
+          }
+        }
+        aggregate {
+          count
         }
       }
     }

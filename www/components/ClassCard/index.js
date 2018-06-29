@@ -88,94 +88,67 @@ const liveIconStyles = {
 
 // ClassCard
 
-export class ClassCard extends React.Component {
-  static fragment = gql`
-    fragment ClassCard on Class {
-      id
-      name
-      description
-      schedule
-    }
-  `
+export const ClassCard = ({ data }) => (
+  <ListItem css={containerMobileStyles}>
+    <FlexCol css={{ flex: 0 }}>
+      {data.name}
+      {/* {live && <Icon src={liveIcon} css={liveIconStyles} />}
+      {video && video.url ? (
+        <Video src={video ? video.url : ''} />
+      ) : (
+        <Image src={noVideo} />
+      )} */}
+    </FlexCol>
+    {/*
+    <FlexCol css={classMetaStyles}>
+      <Text weight="bold" size="medium" css={titleStyles}>
+        <span style={{ marginRight: 'auto' }}>{name}</span>
+        <Price value={price || 'free'} css={{ marginLeft: spacing.regular }} />
+      </Text>
 
-  render() {
-    const {
-      id,
-      name,
-      description,
-      video,
-      price,
-      duration,
-      schedule,
-      teacher,
-      live,
-    } = this.props
+      <FlexRow css={{ marginTop: spacing.xsmall }}>
+        <Text
+          size="small"
+          color="grayDarker"
+          weight="bold"
+          css={{ marginRight: '20px' }}
+        >
+          <Icon src={userGrayIcon} css={iconStyles} />
+          0
+        </Text>
 
-    return (
-      <ListItem css={containerMobileStyles}>
-        <FlexCol css={{ flex: 0 }}>
-          {live && <Icon src={liveIcon} css={liveIconStyles} />}
-          {video && video.url ? (
-            <Video src={video ? video.url : ''} />
-          ) : (
-            <Image src={noVideo} />
-          )}
-        </FlexCol>
+        <Text
+          size="small"
+          color="grayDarker"
+          weight="bold"
+          css={{ marginRight: '20px' }}
+        >
+          <Icon src={calendarGrayIcon} css={iconStyles} />
+          {moment(schedule).format('M/D/YY')}
+        </Text>
 
-        <FlexCol css={classMetaStyles}>
-          <Text weight="bold" size="medium" css={titleStyles}>
-            <span style={{ marginRight: 'auto' }}>{name}</span>
-            <Price
-              value={price || 'free'}
-              css={{ marginLeft: spacing.regular }}
-            />
-          </Text>
+        <Text
+          size="small"
+          color="grayDarker"
+          weight="bold"
+          css={{ marginRight: '20px' }}
+        >
+          <Icon src={clockGrayIcon} css={iconStyles} />
+          {moment(schedule)
+            .tz('America/New_York')
+            .format('LT z')}
+        </Text>
+      </FlexRow>
 
-          <FlexRow css={{ marginTop: spacing.xsmall }}>
-            <Text
-              size="small"
-              color="grayDarker"
-              weight="bold"
-              css={{ marginRight: '20px' }}
-            >
-              <Icon src={userGrayIcon} css={iconStyles} />
-              0
-            </Text>
-
-            <Text
-              size="small"
-              color="grayDarker"
-              weight="bold"
-              css={{ marginRight: '20px' }}
-            >
-              <Icon src={calendarGrayIcon} css={iconStyles} />
-              {moment(schedule).format('M/D/YY')}
-            </Text>
-
-            <Text
-              size="small"
-              color="grayDarker"
-              weight="bold"
-              css={{ marginRight: '20px' }}
-            >
-              <Icon src={clockGrayIcon} css={iconStyles} />
-              {moment(schedule)
-                .tz('America/New_York')
-                .format('LT z')}
-            </Text>
-          </FlexRow>
-
-          <Link href={`/user/${teacher.username}`}>
-            <Text
-              size="small"
-              weight="bold"
-              css={{ margin: 0, width: 'fit-content' }}
-            >
-              {teacher.name}
-            </Text>
-          </Link>
-        </FlexCol>
-      </ListItem>
-    )
-  }
-}
+      <Link href={`/user/${teacher.username}`}>
+        <Text
+          size="small"
+          weight="bold"
+          css={{ margin: 0, width: 'fit-content' }}
+        >
+          {teacher.name}
+        </Text>
+      </Link>
+    </FlexCol> */}
+  </ListItem>
+)

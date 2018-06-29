@@ -28,11 +28,11 @@ export const Classes = ({ query }) => (
         case 7: {
           return (
             <FlexCol css={{ marginBottom: spacing.xlarge }}>
-              {data.classes.classes.map(_class => (
-                <ClassCard key={_class.id} data={_class} />
+              {data.classes.edges.map(({ node }) => (
+                <ClassCard key={node.id} data={node} />
               ))}
 
-              {data.classes.count === 0 && (
+              {data.classes.aggregate.count === 0 && (
                 <EmptyState
                   icon={iconBuildingGray}
                   text={'No classes found... for now!'}

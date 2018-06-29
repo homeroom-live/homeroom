@@ -17,11 +17,16 @@ class Suggestions extends React.Component {
 
   query = gql`
     query {
-      classes: allClasses {
-        count
-        classes(first: 10) {
-          id
-          name
+      classes: allClasses(first: 10) {
+        edges {
+          node {
+            id
+            name
+            description
+          }
+        }
+        aggregate {
+          count
         }
       }
     }

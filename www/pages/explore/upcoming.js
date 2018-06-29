@@ -17,11 +17,16 @@ class Upcoming extends React.Component {
 
   query = gql`
     query {
-      classes: upcomingClasses {
-        count
-        classes(first: 10) {
-          id
-          name
+      classes: upcomingClasses(first: 10) {
+        edges {
+          node {
+            id
+            name
+            description
+          }
+        }
+        aggregate {
+          count
         }
       }
     }

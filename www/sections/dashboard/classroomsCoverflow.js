@@ -12,23 +12,39 @@ const classroomsQuery = gql`
     viewer {
       user {
         id
-        teaching_classrooms {
-          count
-          classrooms {
-            id
-            name
-            classes {
-              count
-              classes {
-                id
-                name
-                picture {
-                  url
+        teachingClassroomsConnection {
+          aggregate {
+            count
+          }
+          edges {
+            node {
+              id
+              name
+              classesConnection {
+                aggregate {
+                  count
+                }
+                edges {
+                  node {
+                    id
+                    name
+                    picture {
+                      url
+                    }
+                  }
                 }
               }
-            }
-            students {
-              count
+              studentsConnection {
+                aggregate {
+                  count
+                }
+                edges {
+                  node {
+                    id
+                    name
+                  }
+                }
+              }
             }
           }
         }
@@ -50,7 +66,10 @@ const Class = ({ id, name, description, price, picture }) => (
       <div>{price}</div>
       <div>
         <Link
-          href={`/dashboard/classes/class?classId=${id}`}
+          href={{
+            pathname: `/dashboard/classes/class`,
+            query: { classId: id },
+          }}
           as={`/dashboard/classes/class/${id}`}
           prefetch
         >
@@ -75,12 +94,12 @@ const Classroom = ({ id, name, numberOfClasses, classes }) => (
     </header>
     <div>
       <label>Classes: {numberOfClasses}</label>
-      {classes.map(_class => (
+      {classes.map(({ node }) => (
         <Class
-          key={_class.id}
-          id={_class.id}
-          name={_class.name}
-          description={_class.description}
+          key={node.id}
+          id={node.id}
+          name={node.name}
+          description={node.description}
           // picture={_class.picture.url}
         />
       ))}
@@ -98,19 +117,21 @@ export const ClassroomsCoverflow = () => (
           return (
             <Fragment>
               <header>
-                <h2>Classrooms {user.teaching_classrooms.count}</h2>
+                <h2>
+                  Classrooms {user.teachingClassroomsConnection.aggregate.count}
+                </h2>
                 <Link href="/dashboard/classrooms/new">
                   <a>New classroom</a>
                 </Link>
               </header>
               <main>
-                {user.teaching_classrooms.classrooms.map(classroom => (
+                {user.teachingClassroomsConnection.edges.map(({ node }) => (
                   <Classroom
-                    key={classroom.id}
-                    id={classroom.id}
-                    name={classroom.name}
-                    numberOfClasses={classroom.classes.count}
-                    classes={classroom.classes.classes}
+                    key={node.id}
+                    id={node.id}
+                    name={node.name}
+                    numberOfClasses={node.classesConnection.aggregate.count}
+                    classes={node.classesConnection.edges}
                   />
                 ))}
               </main>

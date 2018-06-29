@@ -17,11 +17,16 @@ class Live extends React.Component {
 
   query = gql`
     query {
-      classes: liveClasses {
-        count
-        classes(first: 10) {
-          id
-          name
+      classes: liveClasses(first: 10) {
+        edges {
+          node {
+            id
+            name
+            description
+          }
+        }
+        aggregate {
+          count
         }
       }
     }

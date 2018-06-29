@@ -342,7 +342,7 @@ type ClassroomStudentsConnection {
 type ClassroomClassesConnection {
   pageInfo: PageInfo!
   edges: [ClassEdge!]!
-  aggregateClass: AggregateClass!
+  aggregate: AggregateClass!
 }
 
 type UserTeachingClassroomsConnection {

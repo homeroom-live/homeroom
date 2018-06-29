@@ -28,6 +28,12 @@ app.prepare().then(() => {
     })
   })
 
+  server.get('/dashboard/classrooms/classroom/:classroomId', (req, res) => {
+    return app.render(req, res, '/dashboard/classrooms/classroom', {
+      classroomId: req.params.classroomId,
+    })
+  })
+
   server.get('*', (req, res) => {
     return handle(req, res)
   })

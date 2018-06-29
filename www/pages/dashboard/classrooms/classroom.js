@@ -4,6 +4,7 @@ import React from 'react'
 
 import { Navigation } from '../../../sections/navigation'
 import { SideNavigation } from '../../../sections/dashboard/sideNavigation'
+import { ClassroomInformation } from '../../../sections/dashboard/classroomInformation'
 import { Footer } from '../../../sections/footer'
 
 // Classrooms
@@ -17,7 +18,9 @@ class Classroom extends React.Component {
     return (
       <>
         <Navigation />
-        <SideNavigation activePage="classroom">foo</SideNavigation>
+        <SideNavigation activePage="classroom">
+          <ClassroomInformation />
+        </SideNavigation>
         <Footer />
       </>
     )
