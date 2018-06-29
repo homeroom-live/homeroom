@@ -251,8 +251,6 @@ type Charge {
 type Refund {
   id: ID!
   createdAt: DateTime!
-  updatedAt: DateTime!
-
   amount: Float!
   charge: Charge!
 }
@@ -361,7 +359,7 @@ type UserStudyingClassroomsConnection {
 
 type ClassroomEdge {
   node: Classroom!
-  studied_by_viewer: Boolean!
+  studied_by_viewer: Boolean! # TODO
   cursor: String!
 }
 
@@ -396,7 +394,7 @@ type UserRefundsConnection {
 
 type RefundEdge {
   cursor: String!
-  node: Charge!
+  node: Refund!
 }
 
 type AggregateRefund {
@@ -413,7 +411,7 @@ type ClassMessagesConnection {
 
 type MessageEdge {
   cursor: String!
-  is_viewer_message: Boolean!
+  is_viewer_message: Boolean! # TODO
   node: Message!
 }
 
