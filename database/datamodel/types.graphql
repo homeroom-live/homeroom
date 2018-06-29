@@ -79,7 +79,7 @@ type Class {
   vod: File @relation(name: "ClassVod")
 
   # Extras
-  messages: [Message!]! @relation(name: "ClassMessages")
+  messages: [Message!]! @relation(name: "ClassMessage")
   files: [File!]! @relation(name: "ClassFiles")
 
   # Specs
@@ -116,7 +116,7 @@ type Message {
 
   text: String!
   sender: User! @relation(name: "UserMessages")
-  class: Class! @relation(name: "ClassMessages")
+  class: Class! @relation(name: "ClassMessage")
 }
 
 type Charge {

@@ -6,6 +6,7 @@ import { redirect } from '../../../lib/redirect'
 
 import { Navigation } from '../../../sections/navigation'
 import { SideNavigation } from '../../../sections/dashboard/sideNavigation'
+import { ClassInformation } from '../../../sections/dashboard/classInformation'
 import { Footer } from '../../../sections/footer'
 
 // Class
@@ -23,7 +24,9 @@ class Class extends React.Component {
     return (
       <Fragment>
         <Navigation />
-        <SideNavigation activePage="class">foo</SideNavigation>
+        <SideNavigation activePage="class">
+          <ClassInformation />
+        </SideNavigation>
         <Footer />
       </Fragment>
     )
