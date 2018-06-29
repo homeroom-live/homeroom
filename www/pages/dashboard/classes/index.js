@@ -1,13 +1,29 @@
 import React from 'react'
-import { redirect } from '../../../lib/redirect'
+
+// Sections
+
+import { Navigation } from '../../../sections/navigation'
+import { SideNavigation } from '../../../sections/dashboard/sideNavigation'
+import { ClassroomsCoverflow } from '../../../sections/dashboard/classroomsCoverflow'
+import { Footer } from '../../../sections/footer'
+
+// Classes
 
 class Classes extends React.Component {
   static async getInitialProps(ctx) {
-    redirect(ctx, '/dashboard')
+    return {}
   }
 
   render() {
-    return null
+    return (
+      <>
+        <Navigation />
+        <SideNavigation activePage="classes">
+          <ClassroomsCoverflow />
+        </SideNavigation>
+        <Footer />
+      </>
+    )
   }
 }
 
