@@ -2,16 +2,16 @@ import React from 'react'
 import Dropzone from 'react-dropzone'
 import glamorous from 'glamorous'
 
-import { FlexCol } from '../FlexCol'
-import { Icon } from '../Icon'
-import { Text } from '../Text'
-import { Thumbnail } from '../Thumbnail'
+import { FlexCol } from 'components/FlexCol'
+import { Icon } from 'components/Icon'
+import { Text } from 'components/Text'
+import { Thumbnail } from 'components/Thumbnail'
 
-import { colors, shadow } from '../../utils/colors'
-import { spacing } from '../../utils/spacing'
+import { colors, shadow } from 'utils/colors'
+import { spacing } from 'utils/spacing'
 
-import iconCameraGray from '../../static/assets/icons/ui/camera-gray.svg'
-import iconXWhite from '../../static/assets/icons/ui/x-circle-white.svg'
+import iconCameraGray from 'static/assets/icons/ui/camera-gray.svg'
+import iconXWhite from 'static/assets/icons/ui/x-circle-white.svg'
 
 const DropzoneWrapper = glamorous(Dropzone)({
   display: 'flex',
