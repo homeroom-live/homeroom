@@ -35,8 +35,8 @@ class Live extends React.Component {
   render() {
     return (
       <>
-        <Navigation />
-        <SideNavigation active="live">
+        <Navigation activePage="explore" />
+        <SideNavigation activeSection="live">
           <Classes query={this.query} />
         </SideNavigation>
         <Footer />

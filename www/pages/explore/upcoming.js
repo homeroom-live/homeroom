@@ -35,8 +35,8 @@ class Upcoming extends React.Component {
   render() {
     return (
       <>
-        <Navigation />
-        <SideNavigation active="upcoming">
+        <Navigation activePage="explore" />
+        <SideNavigation activeSection="upcoming">
           <Classes query={this.query} />
         </SideNavigation>
         <Footer />

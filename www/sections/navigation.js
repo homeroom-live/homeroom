@@ -1,6 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import { withRouter } from 'next/router'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import { Navbar, NavbarBrand } from 'reactstrap'
@@ -62,7 +61,14 @@ const NavbarLink = glamorous.a(
     ':hover': linkActiveStyles,
     ':focus': linkActiveStyles,
   },
-  ({ href, pathname }) => (href === pathname ? linkActiveStyles : {}),
+  ({ active }) => (active ? linkActiveStyles : null),
+  // ({ href, pathname }) => (href === pathname ? linkActiveStyles : {}),
+)
+
+const NavigationLink = ({ label, href, identifier, activePage }) => (
+  <Link href={href} passHref>
+    <NavbarLink active={activePage === identifier}>{label}</NavbarLink>
+  </Link>
 )
 
 // Queries
@@ -82,7 +88,7 @@ const viewer = gql`
 
 // Navigation
 
-const NavigationComponent = ({ transparent, router }) => (
+export const Navigation = ({ transparent, activePage }) => (
   <Navbar style={transparent ? navbarStyles.transparent : navbarStyles.default}>
     <FlexRow css={{ alignItems: 'center', flex: 1 }}>
       <Link href="/" prefetch passHref>
@@ -90,9 +96,12 @@ const NavigationComponent = ({ transparent, router }) => (
           <Logo />
         </NavbarBrand>
       </Link>
-      <Link href="/explore" passHref>
-        <NavbarLink pathname={router.pathname}>Explore</NavbarLink>
-      </Link>
+      <NavigationLink
+        href="/explore"
+        identifier="explore"
+        label="Explore"
+        activePage={activePage}
+      />
     </FlexRow>
     <FlexRow css={{ flex: 0, alignItems: 'center' }}>
       <Link href="mailto:team@homeroom.live">
@@ -129,5 +138,3 @@ const NavigationComponent = ({ transparent, router }) => (
     </FlexRow>
   </Navbar>
 )
-
-export const Navigation = withRouter(NavigationComponent)

@@ -35,8 +35,8 @@ class Recorded extends React.Component {
   render() {
     return (
       <>
-        <Navigation />
-        <SideNavigation active="recorded">
+        <Navigation activePage="explore" />
+        <SideNavigation activeSection="recorded">
           <Classes query={this.query} />
         </SideNavigation>
         <Footer />

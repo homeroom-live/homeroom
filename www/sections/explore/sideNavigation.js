@@ -31,19 +31,16 @@ const buttonStyles = {
 
 // Navigation
 
-const NavigationItem = ({ label, icon, href, identifier, activePage }) => (
+const NavigationItem = ({ label, icon, href, identifier, activeSection }) => (
   <Link key={identifier} href={href} prefetch passHref>
-    <NavButton
-      css={buttonStyles}
-      className={identifier === activePage ? 'active' : ''}
-    >
+    <NavButton css={buttonStyles} active={activeSection === identifier}>
       <Icon src={icon} css={iconStyles} />
       {label}
     </NavButton>
   </Link>
 )
 
-export const SideNavigation = ({ children, activePage }) => (
+export const SideNavigation = ({ children, activeSection }) => (
   <Container>
     <Row style={{ marginTop: spacing.medium }}>
       <Col
@@ -58,28 +55,28 @@ export const SideNavigation = ({ children, activePage }) => (
             icon={iconFile}
             href="/explore"
             identifier="suggestions"
-            activePage={activePage}
+            activeSection={activeSection}
           />
           <NavigationItem
             label="Live Classes"
             icon={iconClock}
             href="/explore/live"
             identifier="live"
-            activePage={activePage}
+            activeSection={activeSection}
           />
           <NavigationItem
             label="Recorded videos"
             icon={iconVideo}
             href="/explore/recorded"
             identifier="recorded"
-            activePage={activePage}
+            activeSection={activeSection}
           />
           <NavigationItem
             label="Upcoming sessions"
             icon={iconGraphBar}
             href="/explore/upcoming"
             identifier="upcoming"
-            activePage={activePage}
+            activeSection={activeSection}
           />
         </FlexCol>
       </Col>

@@ -59,6 +59,7 @@ export const NavButton = glamorous.a(
     ':hover': activeStyle,
     ':focus': activeStyle,
   },
+  ({ active }) => (active ? activeStyle : null),
   ({ theme }) => themes[theme],
   ({ disabled }) => {
     return !disabled
