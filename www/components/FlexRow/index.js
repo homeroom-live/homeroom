@@ -1,6 +1,6 @@
-import glamorous from 'glamorous'
+import styled from 'styled-components'
 
-export const FlexRow = glamorous.div({
-  display: 'flex',
-  width: '100%',
-})
+export const FlexRow = styled.div`
+  display: flex;
+  width: 100%;
+`

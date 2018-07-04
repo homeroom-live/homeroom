@@ -57,9 +57,10 @@ export class ImagePicker extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     return (
       <FlexCol>
-        {!this.props.image && (
+        {!this.props.value && (
           <DropzoneWrapper
             multiple={false}
             onDrop={this.props.onChange}
@@ -81,7 +82,7 @@ export class ImagePicker extends React.Component {
           </DropzoneWrapper>
         )}
 
-        {this.props.image && (
+        {this.props.value && (
           <ImageContainer>
             <Thumbnail
               size={this.props.size || 'xlarge'}
@@ -90,7 +91,7 @@ export class ImagePicker extends React.Component {
             <Icon
               src={iconXWhite}
               css={iconStyles}
-              onClick={this.props.handleRemoveClick(this.props.value.id)}
+              onClick={this.props.onRemove}
             />
           </ImageContainer>
         )}

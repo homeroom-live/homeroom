@@ -12,12 +12,7 @@ import { Footer } from 'sections/footer'
 
 class Classroom extends React.Component {
   static async getInitialProps(ctx) {
-    console.log(ctx)
-    if (!ctx.query.classroomId) {
-      return redirect(ctx, '/explore')
-    } else {
-      return {}
-    }
+    return {}
   }
 
   render() {

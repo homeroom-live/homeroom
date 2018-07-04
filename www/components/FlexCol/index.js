@@ -1,7 +1,7 @@
-import glamorous from 'glamorous'
+import styled from 'styled-components'
 
-export const FlexCol = glamorous.div({
-  display: 'flex',
-  flexDirection: 'column',
-  width: '100%',
-})
+export const FlexCol = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`

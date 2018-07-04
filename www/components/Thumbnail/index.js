@@ -1,4 +1,4 @@
-import glamorous from 'glamorous'
+import styled from 'styled-components'
 
 const sizes = {
   xsmall: '14px',
@@ -9,13 +9,9 @@ const sizes = {
   xlarge: '144px',
 }
 
-export const Thumbnail = glamorous.img(
-  {
-    borderRadius: '4px',
-  },
-  ({ size }) => ({
-    height: sizes[size || sizes.regular],
-    minWidth: sizes[size || sizes.regular],
-    maxWidth: sizes[size || sizes.regular],
-  }),
-)
+export const Thumbnail = styled.img`
+  border-radius: 50%;
+  height: ${props => sizes[props.size || 'regular']};
+  max-height: ${props => sizes[props.size || 'regular']};
+  max-height: ${props => sizes[props.size || 'regular']};
+`

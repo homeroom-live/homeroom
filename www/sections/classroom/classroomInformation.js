@@ -3,11 +3,16 @@ import Link from 'next/link'
 import { withRouter } from 'next/router'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
+import styled from 'styled-components'
 
 // Components
 
+import { FlexCol } from 'components/FlexCol'
+import { FlexRow } from 'components/FlexRow'
+// import { Thumbnail } from 'components/Thumbnail'
 import { Loading } from 'components/Loading'
 import { STATUS } from 'utils/constants'
+import { shadow } from 'utils/colors'
 
 // GraphQL
 
@@ -17,6 +22,15 @@ const classroomQuery = gql`
       id
       name
       description
+      teacher {
+        id
+        name
+        url
+        picture {
+          id
+          url
+        }
+      }
       classesConnection {
         aggregate {
           count
@@ -30,6 +44,10 @@ const classroomQuery = gql`
       }
     }
   }
+`
+
+const ClassroomHeader = styled(FlexRow)`
+  ${shadow()};
 `
 
 // Classroom Information
@@ -46,12 +64,19 @@ export const ClassroomInformation = withRouter(({ router }) => (
           return <Loading />
         }
         case STATUS.READY: {
+          console.log(data)
           return (
-            <Fragment>
-              <header>
+            <FlexCol className="container">
+              <ClassroomHeader>
+                {/* 
+                <Thumbnail
+                  src={data.classroom.teacher.picture.url}
+                  size="medium"
+                />
+                */}
                 <h2>{data.classroom.name}</h2>
                 <p>{data.classroom.description}</p>
-              </header>
+              </ClassroomHeader>
               <div>
                 <h4>
                   Classes: {data.classroom.classesConnection.aggregate.count}
@@ -86,7 +111,7 @@ export const ClassroomInformation = withRouter(({ router }) => (
                   </tbody>
                 </table>
               </div>
-            </Fragment>
+            </FlexCol>
           )
         }
         default: {
