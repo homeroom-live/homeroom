@@ -1,42 +1,25 @@
 @font-face {
-  font-family: 'TTNorms';
-  src: url('/static/assets/fonts/TypeType - TTNorms-Light.otf')
-    format('opentype');
-  font-weight: 100;
-}
-
-@font-face {
-  font-family: 'TTNorms';
-  src: url('/static/assets/fonts/TypeType - TTNorms-Regular.otf')
-    format('opentype');
+  font-family: 'SofiaPro';
+  src: url('/static/assets/fonts/Sofia Pro Regular.otf') format('opentype');
   font-weight: 300;
 }
 
 @font-face {
-  font-family: 'TTNorms';
-  src: url('/static/assets/fonts/TypeType - TTNorms-Medium.otf')
-    format('opentype');
+  font-family: 'SofiaPro';
+  src: url('/static/assets/fonts/Sofia Pro Medium.otf') format('opentype');
   font-weight: 500;
 }
 
 @font-face {
-  font-family: 'TTNorms';
-  src: url('/static/assets/fonts/TypeType - TTNorms-Bold.otf')
-    format('opentype');
+  font-family: 'SofiaPro';
+  src: url('/static/assets/fonts/Sofia Pro Bold.otf') format('opentype');
   font-weight: 700;
-}
-
-@font-face {
-  font-family: 'TTNorms';
-  src: url('/static/assets/fonts/TypeType - TTNorms-Black.otf')
-    format('opentype');
-  font-weight: 900;
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: 'TTNorms', sans-serif;
+  font-family: 'SofiaPro', 'TTNorms', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
