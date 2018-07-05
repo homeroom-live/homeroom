@@ -1,6 +1,6 @@
 # homeroom
 
-[![Homeroom](https://github.com/homeroom-live/homeroom/raw/master/media/homeroom.png?sanitize=true)](https://homeroom.live)
+[![Homeroom](https://github.com/homeroom-live/homeroom/raw/master/media/homeroom.png?sanitize=true =400x)](https://homeroom.live)
 
 Homeroom is a learning platform where anyone can share something they are good at.
 
