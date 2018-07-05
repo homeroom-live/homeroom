@@ -33,6 +33,11 @@ export const shadow = () => `
   }
 `
 
+export const outline = () => `
+  border-radius: 4px;
+  border: 1px solid ${colors.grayLighter};
+`
+
 export const shadowGreen = {
   boxShadow: colors.shadowGreen,
   borderRadius: '4px',

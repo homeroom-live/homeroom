@@ -6,7 +6,7 @@ import { Query, Mutation } from 'react-apollo'
 // Components
 
 import { Container } from 'reactstrap'
-import { Heading } from '../../components/Heading'
+import { Header } from '../../components/Header'
 import { Label } from '../../components/Label'
 import { Loading } from '../../components/Loading'
 import { ImagePicker } from '../../components/ImagePicker'
@@ -108,7 +108,7 @@ export class Edit extends React.Component {
               } else {
                 return (
                   <Container>
-                    <Heading text="We only need a few last details" />
+                    <Header>We only need a few last details</Header>
                     <Label>
                       Your name:
                       <input

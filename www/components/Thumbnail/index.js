@@ -6,12 +6,13 @@ const sizes = {
   regular: '32px',
   medium: '48px',
   large: '72px',
-  xlarge: '144px',
+  xlarge: '96px',
+  xxlarge: '144px',
 }
 
 export const Thumbnail = styled.img`
   border-radius: 50%;
   height: ${props => sizes[props.size || 'regular']};
   max-height: ${props => sizes[props.size || 'regular']};
-  max-height: ${props => sizes[props.size || 'regular']};
+  max-width: ${props => sizes[props.size || 'regular']};
 `
