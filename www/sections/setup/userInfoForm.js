@@ -33,9 +33,9 @@ const createUser = gql`
   }
 `
 
-// Setup
+// UserInfoForm
 
-export class Setup extends React.Component {
+export class UserInfoForm extends React.Component {
   state = {
     name: '',
     bio: '',

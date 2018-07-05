@@ -6,6 +6,10 @@ import { parseHash } from 'lib/auth0'
 
 class Callback extends React.Component {
   static async getInitialProps(ctx) {
+    // Removes all existing Query results from cache
+    await ctx.apolloClient.resetStore()
+    // await ctx.apolloClient.cache.reset()
+
     return {}
   }
 
@@ -25,7 +29,7 @@ class Callback extends React.Component {
   }
 
   render() {
-    return <></>
+    return null
   }
 }
 

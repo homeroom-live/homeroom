@@ -18,18 +18,18 @@ const viewerQuery = gql`
 
 // Wrapper
 
-export const withSetup = ComposedComponent =>
-  class WithSetup extends React.Component {
+export const withLogin = ComposedComponent =>
+  class WithLogin extends React.Component {
     static async getInitialProps(ctx) {
       const res = await ctx.apolloClient.query({
         query: viewerQuery,
         errorPolicy: 'ignore',
       })
 
-      console.log('setup', { res })
+      console.log('login', { res })
 
-      if (res.data.viewer.requiresSetup) {
-        return redirect(ctx, '/setup')
+      if (!res.data.viewer) {
+        return redirect(ctx, '/signup')
       }
 
       let composedInitialProps = {}

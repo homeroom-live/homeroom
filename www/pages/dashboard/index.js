@@ -7,6 +7,11 @@ import { SideNavigation } from 'sections/dashboard/sideNavigation'
 import { ClassroomsCoverflow } from 'sections/dashboard/classroomsCoverflow'
 import { Footer } from 'sections/footer'
 
+// HOCs
+
+import { withLogin } from 'hocs/withLogin'
+import { withSetup } from 'hocs/withSetup'
+
 // Dashboard
 
 class Dashboard extends React.Component {
@@ -27,4 +32,4 @@ class Dashboard extends React.Component {
   }
 }
 
-export default Dashboard
+export default withLogin(withSetup(Dashboard))
