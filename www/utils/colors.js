@@ -21,21 +21,22 @@ export const colors = {
   // shadow: 'rgba(50,50,93,.0980392) 0 15px 35px, rgba(0,0,0,.0666667) 0 5px 15px',
 }
 
-export const shadow = {
-  borderRadius: '4px',
-  border: `1px solid ${colors.grayLighter}`,
-  transition: 'all 0.2s ease-in',
+export const shadow = () => `
+  border-radius: 4px;
+  border: 1px solid ${colors.grayLighter};
+  transition: all 0.2s ease-in;
+  &:hover,
+  &:focus {
+    outline: none;
+    box-shadow: ${colors.shadowActive};
+    transform: translateY(-2px);
+  }
+`
 
-  ':hover': {
-    boxShadow: colors.shadowActive,
-    transform: 'translateY(-2px)',
-  },
-  ':focus': {
-    outline: 'none',
-    boxShadow: colors.shadowActive,
-    transform: 'translateY(-2px)',
-  },
-}
+export const outline = () => `
+  border-radius: 4px;
+  border: 1px solid ${colors.grayLighter};
+`
 
 export const shadowGreen = {
   boxShadow: colors.shadowGreen,

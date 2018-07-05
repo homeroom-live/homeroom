@@ -39,11 +39,12 @@ export default class MyDocument extends Document {
           <link rel="manifest" href="/static/manifest.json" />
           <link rel="icon" type="image/png" href="/static/favicon.png" />
           <link rel="stylesheet" href="/_next/static/style.css" />
+          <link rel="stylesheet" href="/static/index.css" />
 
           <script id="stripe-js" src="https://js.stripe.com/v3/" />
-
           <style dangerouslySetInnerHTML={{ __html: this.props.css }} />
         </Head>
+
         <body className="custom_class">
           <Main />
           <NextScript />

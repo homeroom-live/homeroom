@@ -2,16 +2,16 @@ import React from 'react'
 import Dropzone from 'react-dropzone'
 import glamorous from 'glamorous'
 
-import { FlexCol } from '../FlexCol'
-import { Icon } from '../Icon'
-import { Text } from '../Text'
-import { Thumbnail } from '../Thumbnail'
+import { FlexCol } from 'components/FlexCol'
+import { Icon } from 'components/Icon'
+import { Text } from 'components/Text'
+import { Thumbnail } from 'components/Thumbnail'
 
-import { colors, shadow } from '../../utils/colors'
-import { spacing } from '../../utils/spacing'
+import { colors, shadow } from 'utils/colors'
+import { spacing } from 'utils/spacing'
 
-import iconCameraGray from '../../static/assets/icons/ui/camera-gray.svg'
-import iconXWhite from '../../static/assets/icons/ui/x-circle-white.svg'
+import iconCameraGray from 'static/assets/icons/ui/camera-gray.svg'
+import iconXWhite from 'static/assets/icons/ui/x-circle-white.svg'
 
 const DropzoneWrapper = glamorous(Dropzone)({
   display: 'flex',
@@ -57,9 +57,10 @@ export class ImagePicker extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     return (
       <FlexCol>
-        {!this.props.image && (
+        {!this.props.value && (
           <DropzoneWrapper
             multiple={false}
             onDrop={this.props.onChange}
@@ -81,7 +82,7 @@ export class ImagePicker extends React.Component {
           </DropzoneWrapper>
         )}
 
-        {this.props.image && (
+        {this.props.value && (
           <ImageContainer>
             <Thumbnail
               size={this.props.size || 'xlarge'}
@@ -90,7 +91,7 @@ export class ImagePicker extends React.Component {
             <Icon
               src={iconXWhite}
               css={iconStyles}
-              onClick={this.props.handleRemoveClick(this.props.value.id)}
+              onClick={this.props.onRemove}
             />
           </ImageContainer>
         )}

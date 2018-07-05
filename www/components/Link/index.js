@@ -1,21 +1,25 @@
-import Link from 'next/link'
-import glamorous from 'glamorous'
+import NextLink from 'next/link'
+import styled from 'styled-components'
 import { darken } from 'polished'
 
-import { colors } from '../../utils/colors'
+import { colors } from 'utils/colors'
+import { fontSize, fontWeight } from 'utils/typography'
 
-const activeStyle = { color: darken(0.1, colors.primary) }
+const StyledLink = styled.a`
+  color: ${colors.primary};
+  font-size: ${props => fontSize[props.size || 'regular']};
+  font-weight: ${props => fontWeight[props.weight || 'regular']};
 
-export const LinkStyles = {
-  color: colors.primary,
+  transition: all 0.2s ease-out;
+  &:hover,
+  &:focus,
+  &:active {
+    color: ${darken(0.1, colors.primary)};
+  }
+`
 
-  transition: 'all 0.2s ease-out',
-  ':hover': activeStyle,
-  ':focus': activeStyle,
-  ':active': activeStyle,
-}
-
-// export const LinkInternal = glamorous(Link)(LinkStyles)
-// export const LinkExternal = glamorous.a(LinkStyles)
-// export const LinkContainer = glamorous(BsLinkContainer)(LinkStyles)
-// export const LinkButton = glamorous.span(LinkStyles)
+export const Link = ({ href, children, ...props }) => (
+  <NextLink prefetch href={href} passHref>
+    <StyledLink {...props}>{children}</StyledLink>
+  </NextLink>
+)

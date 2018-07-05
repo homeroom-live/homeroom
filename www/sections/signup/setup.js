@@ -6,7 +6,7 @@ import { Mutation } from 'react-apollo'
 // Components
 
 import { Container } from 'reactstrap'
-import { Heading } from '../../components/Heading'
+import { Header } from '../../components/Header'
 import { Loading } from '../../components/Loading'
 import { ImagePicker } from '../../components/ImagePicker'
 
@@ -95,7 +95,7 @@ export class Setup extends React.Component {
           } else {
             return (
               <Container>
-                <Heading text="We only need a few last details" />
+                <Header>We only need a few last details</Header>
                 <label>Your name:</label>
                 <input
                   type="text"

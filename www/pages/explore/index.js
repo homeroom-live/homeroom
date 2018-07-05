@@ -35,8 +35,8 @@ class Suggestions extends React.Component {
   render() {
     return (
       <>
-        <Navigation />
-        <SideNavigation active="suggestions">
+        <Navigation activePage="explore" />
+        <SideNavigation activeSection="suggestions">
           <Classes query={this.query} />
         </SideNavigation>
         <Footer />

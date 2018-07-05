@@ -2,7 +2,7 @@ import React from 'react'
 import glamorous from 'glamorous'
 import Linkify from 'react-linkify'
 
-import { LinkStyles } from '../Link'
+// import { LinkStyles } from '../Link'
 
 import { colors } from '../../utils/colors'
 import { spacing } from '../../utils/spacing'
@@ -36,7 +36,7 @@ export const Text = props => (
   <Linkify
     properties={{
       target: '_blank',
-      style: LinkStyles,
+      // style: LinkStyles,
     }}
   >
     <P {...props}>{props.children}</P>

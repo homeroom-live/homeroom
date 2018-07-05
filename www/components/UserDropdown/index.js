@@ -74,7 +74,7 @@ export class UserDropdown extends React.Component {
                   </DropdownToggle>
 
                   <DropdownMenu>
-                    <Link href="/me">
+                    <Link href="/profile">
                       <Item>
                         <a>Profile</a>
                       </Item>
