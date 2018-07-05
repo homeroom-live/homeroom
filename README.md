@@ -1,6 +1,6 @@
-# homeroom
+# homeroom 🧠
 
-[![Homeroom](https://github.com/homeroom-live/homeroom/raw/master/media/homeroom.png?sanitize=true =400x)](https://homeroom.live)
+<p align="center"><img src="media/homeroom.png" width="300" /></p>
 
 Homeroom is a learning platform where anyone can share something they are good at.
 
