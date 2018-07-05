@@ -2,15 +2,14 @@ import NextLink from 'next/link'
 import styled from 'styled-components'
 import { darken } from 'polished'
 
-import { colors } from 'utils/colors'
-import { fontSize, fontWeight } from 'utils/typography'
+import { colors, fontSizes, fontWeights, transition } from 'utils/theme'
 
-const StyledLink = styled.a`
+export const StyledLink = styled.a`
   color: ${colors.primary};
-  font-size: ${props => fontSize[props.size || 'regular']};
-  font-weight: ${props => fontWeight[props.weight || 'regular']};
+  font-size: ${props => fontSizes[props.size || 'regular']};
+  font-weight: ${props => fontWeights[props.weight || 'regular']};
 
-  transition: all 0.2s ease-out;
+  transition: ${transition};
   &:hover,
   &:focus,
   &:active {

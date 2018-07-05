@@ -1,10 +1,9 @@
 import React from 'react'
 import onClickOutside from 'react-onclickoutside'
-import { Query } from 'react-apollo'
-import gql from 'graphql-tag'
 import styled from 'styled-components'
 
 import { Icon } from 'components/Icon'
+import { Thumbnail } from 'components/Thumbnail'
 import {
   spacing,
   fontSizes,
@@ -21,7 +20,7 @@ export const DropdownContainer = styled.div`
 const DropdownOptions = styled.ul`
   position: absolute;
   right: 0;
-  min-width: 192px;
+  min-width: 160px;
   padding: 0;
   margin-top: ${spacing.small};
   outline: none;
@@ -32,14 +31,19 @@ const DropdownOptions = styled.ul`
 `
 export const DropdownOption = styled.li`
   padding: ${spacing.regular};
+  color: ${colors.secondary};
+  font-size: ${fontSizes.small};
+  font-weight: ${fontWeights.bold};
   background: ${colors.white};
   border-radius: ${borderRadius};
   cursor: pointer;
   transition: ${transition};
+  opacity: ${opacity};
   &:hover,
   &:focus,
   &:active {
-    background: ${colors.grayLightest};
+    opacity: 1;
+    background: ${colors.grayLighter};
   }
 `
 const ToggleContainer = styled.div`
@@ -53,7 +57,10 @@ const ToggleContainer = styled.div`
   }
 `
 const ToggleIcon = styled(Icon)`
-  margin-right: ${spacing.small};
+  margin-right: ${props => (props.margin ? spacing.small : 0)};
+`
+const ToggleImage = styled(Thumbnail)`
+  margin-right: ${props => (props.margin ? spacing.small : 0)};
 `
 const ToggleLabel = styled.p`
   font-size: ${fontSizes.small};
@@ -61,16 +68,17 @@ const ToggleLabel = styled.p`
   color: ${colors.white};
   margin: 0;
 `
-const DropdownToggle = ({ label, icon, active, onClick }) => (
+const DropdownToggle = ({ label, icon, image, active, onClick }) => (
   <ToggleContainer onClick={onClick} active={active}>
-    {icon && <ToggleIcon src={icon} />}
+    {image && <ToggleImage src={image} margin={icon || label} />}
+    {icon && <ToggleIcon src={icon} margin={label} />}
     {label && <ToggleLabel>{label}</ToggleLabel>}
   </ToggleContainer>
 )
 
 class _Dropdown extends React.Component {
   state = {
-    open: true,
+    open: false,
   }
 
   handleClickOutside = e => {
@@ -82,12 +90,13 @@ class _Dropdown extends React.Component {
   }
 
   render() {
-    const { label, icon, children } = this.props
+    const { label, icon, image, children } = this.props
     return (
       <DropdownContainer>
         <DropdownToggle
           label={label}
           icon={icon}
+          image={image}
           active={this.state.open}
           onClick={this.handleClickInside}
         />

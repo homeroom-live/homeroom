@@ -1,75 +1,85 @@
 import React from 'react'
-import Link from 'next/link'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
-import { Navbar, NavbarBrand } from 'reactstrap'
-import glamorous from 'glamorous'
+import styled from 'styled-components'
+
+import { STATUS } from 'utils/constants'
+import { colors, spacing, fontSizes, fontWeights, opacity } from 'utils/theme'
+
+import logoLight from 'static/assets/images/logos/logo-light.svg'
+import iconHelpWhite from 'static/assets/icons/ui/help-white.svg'
 
 // Components
 
-import { FlexRow } from '../components/FlexRow'
-import { Logo } from '../components/Logo'
-import { Icon } from '../components/Icon'
-import { UserDropdown } from '../components/UserDropdown'
+import { FlexRow } from 'components/FlexRow'
+import { Icon } from 'components/Icon'
+import { Link } from 'components/Link'
+import { Dropdown, DropdownOption } from 'components/Dropdown'
 
-import { colors } from '../utils/colors'
-import { spacing } from '../utils/spacing'
-import { fontSize, fontWeight } from '../utils/typography'
-
-import iconHelpWhite from '../static/assets/icons/ui/help-white.svg'
-
-const navbarStyles = {
-  default: {
-    flexWrap: 'nowrap',
-    padding: spacing.regular,
-    background: colors.black,
-    borderBottom: `4px solid ${colors.primary}`,
-  },
-  transparent: {
-    flexWrap: 'nowrap',
-    padding: spacing.regular,
-    zIndex: 1,
-  },
-}
-
-const iconStyles = {
-  marginRight: spacing.small,
-  opacity: 0.7,
-  ':hover': {
-    opacity: 1,
-  },
-
-  '@media(max-width: 992px)': {
-    padding: 0,
-    marginTop: '6px',
-  },
-}
-
-const linkActiveStyles = {
-  color: colors.white,
-  opacity: 1,
-  textDecoration: 'none',
-}
-
-const NavbarLink = glamorous.a(
-  {
-    margin: `0 ${spacing.small}`,
-    fontSize: fontSize.small,
-    fontWeight: fontWeight.bold,
-    color: colors.white,
-    opacity: 0.75,
-    ':hover': linkActiveStyles,
-    ':focus': linkActiveStyles,
-  },
-  ({ active }) => (active ? linkActiveStyles : null),
-  // ({ href, pathname }) => (href === pathname ? linkActiveStyles : {}),
-)
-
-const NavigationLink = ({ label, href, identifier, activePage }) => (
-  <Link href={href} passHref>
-    <NavbarLink active={activePage === identifier}>{label}</NavbarLink>
-  </Link>
-)
+const Navbar = styled.nav`
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  padding: ${spacing.regular};
+  background: ${({ transparent }) =>
+    transparent ? 'transparent' : colors.black};
+  border-bottom: ${({ transparent }) =>
+    transparent ? 'none' : `4px solid ${colors.primary}`};
+  z-index: 1;
+`
+const NavLeft = styled(FlexRow)`
+  flex: 1;
+  align-items: center;
+  height: 100%;
+`
+const Logo = styled.img`
+  height: 24px;
+  margin-right: ${spacing.regular};
+`
+const ImageLinkContainer = styled.span`
+  display: flex;
+`
+const activeLinkStyles = color => `
+  color: ${color};
+  opacity: 1;
+  text-decoration: none;
+`
+const NavLink = color => styled(Link)`
+  font-size: ${fontSizes.small};
+  font-weight: ${fontWeights.bold};
+  color: ${color};
+  white-space: nowrap;
+  text-decoration: none;
+  opacity: ${opacity};
+  &:hover,
+  &:focus {
+    ${activeLinkStyles(color)};
+  }
+  ${({ active }) => (active ? activeLinkStyles(color) : null)};
+`
+const NavLinkWhite = NavLink(colors.white)
+const NavLinkGreen = NavLink(colors.primary)
+const NavRight = styled(FlexRow)`
+  flex: 0;
+  align-items: center;
+  height: 100%;
+`
+const HelpIcon = styled(Icon)`
+  margin-right: ${spacing.regular};
+  opacity: ${opacity};
+  padding: 0;
+  &:hover {
+    opacity: 1;
+  }
+`
+const DropdownLink = styled(Link)`
+  text-decoration: none;
+  &:hover,
+  &:focus,
+  &:active {
+    text-decoration: none;
+  }
+`
 
 // Queries
 
@@ -89,27 +99,24 @@ const viewer = gql`
 // Navigation
 
 export const Navigation = ({ transparent, activePage }) => (
-  <Navbar style={transparent ? navbarStyles.transparent : navbarStyles.default}>
-    <FlexRow css={{ alignItems: 'center', flex: 1 }}>
-      <Link href="/" prefetch passHref>
-        <NavbarBrand>
-          <Logo />
-        </NavbarBrand>
+  <Navbar transparent={false && transparent}>
+    <NavLeft css={{ alignItems: 'center', flex: 1 }}>
+      <Link href="/" prefetch>
+        <ImageLinkContainer>
+          <Logo src={logoLight} />
+        </ImageLinkContainer>
       </Link>
-      <NavigationLink
-        href="/explore"
-        identifier="explore"
-        label="Explore"
-        activePage={activePage}
-      />
-    </FlexRow>
-    <FlexRow css={{ flex: 0, alignItems: 'center' }}>
-      <Link href="mailto:team@homeroom.live">
-        <a>
-          <Icon src={iconHelpWhite} css={iconStyles} />
-        </a>
-      </Link>
+      <NavLinkWhite href="/explore" active={activePage === 'explore'}>
+        Explore
+      </NavLinkWhite>
+    </NavLeft>
 
+    <NavRight>
+      <Link href="mailto:team@homeroom.live">
+        <ImageLinkContainer>
+          <HelpIcon src={iconHelpWhite} />
+        </ImageLinkContainer>
+      </Link>
       <Query
         query={viewer}
         fetchPolicy="network-only"
@@ -118,23 +125,38 @@ export const Navigation = ({ transparent, activePage }) => (
       >
         {({ networkStatus, data }) => {
           switch (networkStatus) {
-            case 7: {
+            case STATUS.READY: {
               if (data.viewer) {
-                return <UserDropdown user={data.viewer.user} />
-              } else {
                 return (
-                  <Link href="/signup">
-                    <a>Login</a>
-                  </Link>
+                  <Dropdown
+                    // image={data.viewer.user.picture.url}
+                    image="https://janecanblogdotcom.files.wordpress.com/2014/09/ashley-square-profile.jpg"
+                  >
+                    <DropdownLink href="/profile">
+                      <DropdownOption>Profile</DropdownOption>
+                    </DropdownLink>
+                    <DropdownLink href="/dashboard">
+                      <DropdownOption>Dashboard</DropdownOption>
+                    </DropdownLink>
+                    <DropdownLink href="/logout">
+                      <DropdownOption>Logout</DropdownOption>
+                    </DropdownLink>
+                  </Dropdown>
                 )
+              } else {
+                return <NavLinkGreen href="/signup">Get Started</NavLinkGreen>
               }
             }
+
+            case STATUS.LOADING:
+              return <NavLinkGreen href="/signup">Get Started</NavLinkGreen>
+
             default: {
               return null
             }
           }
         }}
       </Query>
-    </FlexRow>
+    </NavRight>
   </Navbar>
 )
