@@ -10,24 +10,24 @@ export interface Query {
     messages: <T = Message[]>(args: { where?: MessageWhereInput, orderBy?: MessageOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     charges: <T = Charge[]>(args: { where?: ChargeWhereInput, orderBy?: ChargeOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     refunds: <T = Refund[]>(args: { where?: RefundWhereInput, orderBy?: RefundOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    files: <T = File[]>(args: { where?: FileWhereInput, orderBy?: FileOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     classes: <T = Class[]>(args: { where?: ClassWhereInput, orderBy?: ClassOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    files: <T = File[]>(args: { where?: FileWhereInput, orderBy?: FileOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     user: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     follow: <T = Follow | null>(args: { where: FollowWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     classroom: <T = Classroom | null>(args: { where: ClassroomWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     message: <T = Message | null>(args: { where: MessageWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     charge: <T = Charge | null>(args: { where: ChargeWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     refund: <T = Refund | null>(args: { where: RefundWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    file: <T = File | null>(args: { where: FileWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     class: <T = Class | null>(args: { where: ClassWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    file: <T = File | null>(args: { where: FileWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     usersConnection: <T = UserConnection>(args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     followsConnection: <T = FollowConnection>(args: { where?: FollowWhereInput, orderBy?: FollowOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     classroomsConnection: <T = ClassroomConnection>(args: { where?: ClassroomWhereInput, orderBy?: ClassroomOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     messagesConnection: <T = MessageConnection>(args: { where?: MessageWhereInput, orderBy?: MessageOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     chargesConnection: <T = ChargeConnection>(args: { where?: ChargeWhereInput, orderBy?: ChargeOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     refundsConnection: <T = RefundConnection>(args: { where?: RefundWhereInput, orderBy?: RefundOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    filesConnection: <T = FileConnection>(args: { where?: FileWhereInput, orderBy?: FileOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     classesConnection: <T = ClassConnection>(args: { where?: ClassWhereInput, orderBy?: ClassOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    filesConnection: <T = FileConnection>(args: { where?: FileWhereInput, orderBy?: FileOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     node: <T = Node | null>(args: { id: ID_Output }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
   }
 
@@ -38,48 +38,48 @@ export interface Mutation {
     createMessage: <T = Message>(args: { data: MessageCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     createCharge: <T = Charge>(args: { data: ChargeCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     createRefund: <T = Refund>(args: { data: RefundCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    createFile: <T = File>(args: { data: FileCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     createClass: <T = Class>(args: { data: ClassCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createFile: <T = File>(args: { data: FileCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateUser: <T = User | null>(args: { data: UserUpdateInput, where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateFollow: <T = Follow | null>(args: { data: FollowUpdateInput, where: FollowWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateClassroom: <T = Classroom | null>(args: { data: ClassroomUpdateInput, where: ClassroomWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateMessage: <T = Message | null>(args: { data: MessageUpdateInput, where: MessageWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateCharge: <T = Charge | null>(args: { data: ChargeUpdateInput, where: ChargeWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateRefund: <T = Refund | null>(args: { data: RefundUpdateInput, where: RefundWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateFile: <T = File | null>(args: { data: FileUpdateInput, where: FileWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateClass: <T = Class | null>(args: { data: ClassUpdateInput, where: ClassWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateFile: <T = File | null>(args: { data: FileUpdateInput, where: FileWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteUser: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteFollow: <T = Follow | null>(args: { where: FollowWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteClassroom: <T = Classroom | null>(args: { where: ClassroomWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteMessage: <T = Message | null>(args: { where: MessageWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteCharge: <T = Charge | null>(args: { where: ChargeWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteRefund: <T = Refund | null>(args: { where: RefundWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteFile: <T = File | null>(args: { where: FileWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteClass: <T = Class | null>(args: { where: ClassWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteFile: <T = File | null>(args: { where: FileWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertUser: <T = User>(args: { where: UserWhereUniqueInput, create: UserCreateInput, update: UserUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertFollow: <T = Follow>(args: { where: FollowWhereUniqueInput, create: FollowCreateInput, update: FollowUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertClassroom: <T = Classroom>(args: { where: ClassroomWhereUniqueInput, create: ClassroomCreateInput, update: ClassroomUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertMessage: <T = Message>(args: { where: MessageWhereUniqueInput, create: MessageCreateInput, update: MessageUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertCharge: <T = Charge>(args: { where: ChargeWhereUniqueInput, create: ChargeCreateInput, update: ChargeUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertRefund: <T = Refund>(args: { where: RefundWhereUniqueInput, create: RefundCreateInput, update: RefundUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    upsertFile: <T = File>(args: { where: FileWhereUniqueInput, create: FileCreateInput, update: FileUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertClass: <T = Class>(args: { where: ClassWhereUniqueInput, create: ClassCreateInput, update: ClassUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertFile: <T = File>(args: { where: FileWhereUniqueInput, create: FileCreateInput, update: FileUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyUsers: <T = BatchPayload>(args: { data: UserUpdateInput, where?: UserWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyFollows: <T = BatchPayload>(args: { data: FollowUpdateInput, where?: FollowWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyClassrooms: <T = BatchPayload>(args: { data: ClassroomUpdateInput, where?: ClassroomWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyMessages: <T = BatchPayload>(args: { data: MessageUpdateInput, where?: MessageWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyCharges: <T = BatchPayload>(args: { data: ChargeUpdateInput, where?: ChargeWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyRefunds: <T = BatchPayload>(args: { data: RefundUpdateInput, where?: RefundWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateManyFiles: <T = BatchPayload>(args: { data: FileUpdateInput, where?: FileWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyClasses: <T = BatchPayload>(args: { data: ClassUpdateInput, where?: ClassWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyFiles: <T = BatchPayload>(args: { data: FileUpdateInput, where?: FileWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyUsers: <T = BatchPayload>(args: { where?: UserWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyFollows: <T = BatchPayload>(args: { where?: FollowWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyClassrooms: <T = BatchPayload>(args: { where?: ClassroomWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyMessages: <T = BatchPayload>(args: { where?: MessageWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyCharges: <T = BatchPayload>(args: { where?: ChargeWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyRefunds: <T = BatchPayload>(args: { where?: RefundWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyFiles: <T = BatchPayload>(args: { where?: FileWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyClasses: <T = BatchPayload>(args: { where?: ClassWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
+    deleteManyClasses: <T = BatchPayload>(args: { where?: ClassWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyFiles: <T = BatchPayload>(args: { where?: FileWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
   }
 
 export interface Subscription {
@@ -89,8 +89,8 @@ export interface Subscription {
     message: <T = MessageSubscriptionPayload | null>(args: { where?: MessageSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
     charge: <T = ChargeSubscriptionPayload | null>(args: { where?: ChargeSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
     refund: <T = RefundSubscriptionPayload | null>(args: { where?: RefundSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
-    file: <T = FileSubscriptionPayload | null>(args: { where?: FileSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
-    class: <T = ClassSubscriptionPayload | null>(args: { where?: ClassSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> 
+    class: <T = ClassSubscriptionPayload | null>(args: { where?: ClassSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    file: <T = FileSubscriptionPayload | null>(args: { where?: FileSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> 
   }
 
 export interface Exists {
@@ -100,8 +100,8 @@ export interface Exists {
   Message: (where?: MessageWhereInput) => Promise<boolean>
   Charge: (where?: ChargeWhereInput) => Promise<boolean>
   Refund: (where?: RefundWhereInput) => Promise<boolean>
-  File: (where?: FileWhereInput) => Promise<boolean>
   Class: (where?: ClassWhereInput) => Promise<boolean>
+  File: (where?: FileWhereInput) => Promise<boolean>
 }
 
 export interface Prisma {
@@ -1481,8 +1481,8 @@ type File implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
-  secret: String
-  contentType: String
+  secret: String!
+  contentType: String!
 }
 
 """A connection to a list of items."""
@@ -1497,8 +1497,8 @@ type FileConnection {
 
 input FileCreateInput {
   name: String!
-  secret: String
-  contentType: String
+  secret: String!
+  contentType: String!
 }
 
 input FileCreateManyInput {
@@ -1540,8 +1540,8 @@ type FilePreviousValues {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
-  secret: String
-  contentType: String
+  secret: String!
+  contentType: String!
 }
 
 type FileSubscriptionPayload {
@@ -1842,24 +1842,24 @@ input FileWhereInput {
 
   """All values not ending with the given string."""
   contentType_not_ends_with: String
-  _MagicalBackRelation_ClassFiles_every: ClassWhereInput
-  _MagicalBackRelation_ClassFiles_some: ClassWhereInput
-  _MagicalBackRelation_ClassFiles_none: ClassWhereInput
-  _MagicalBackRelation_UserVideo_every: UserWhereInput
-  _MagicalBackRelation_UserVideo_some: UserWhereInput
-  _MagicalBackRelation_UserVideo_none: UserWhereInput
-  _MagicalBackRelation_UserPicture_every: UserWhereInput
-  _MagicalBackRelation_UserPicture_some: UserWhereInput
-  _MagicalBackRelation_UserPicture_none: UserWhereInput
-  _MagicalBackRelation_ClassVideo_every: ClassWhereInput
-  _MagicalBackRelation_ClassVideo_some: ClassWhereInput
-  _MagicalBackRelation_ClassVideo_none: ClassWhereInput
   _MagicalBackRelation_ClassVod_every: ClassWhereInput
   _MagicalBackRelation_ClassVod_some: ClassWhereInput
   _MagicalBackRelation_ClassVod_none: ClassWhereInput
   _MagicalBackRelation_ClassPicture_every: ClassWhereInput
   _MagicalBackRelation_ClassPicture_some: ClassWhereInput
   _MagicalBackRelation_ClassPicture_none: ClassWhereInput
+  _MagicalBackRelation_ClassFiles_every: ClassWhereInput
+  _MagicalBackRelation_ClassFiles_some: ClassWhereInput
+  _MagicalBackRelation_ClassFiles_none: ClassWhereInput
+  _MagicalBackRelation_UserPicture_every: UserWhereInput
+  _MagicalBackRelation_UserPicture_some: UserWhereInput
+  _MagicalBackRelation_UserPicture_none: UserWhereInput
+  _MagicalBackRelation_UserVideo_every: UserWhereInput
+  _MagicalBackRelation_UserVideo_some: UserWhereInput
+  _MagicalBackRelation_UserVideo_none: UserWhereInput
+  _MagicalBackRelation_ClassVideo_every: ClassWhereInput
+  _MagicalBackRelation_ClassVideo_some: ClassWhereInput
+  _MagicalBackRelation_ClassVideo_none: ClassWhereInput
 }
 
 input FileWhereUniqueInput {
@@ -2451,48 +2451,48 @@ type Mutation {
   createMessage(data: MessageCreateInput!): Message!
   createCharge(data: ChargeCreateInput!): Charge!
   createRefund(data: RefundCreateInput!): Refund!
-  createFile(data: FileCreateInput!): File!
   createClass(data: ClassCreateInput!): Class!
+  createFile(data: FileCreateInput!): File!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateFollow(data: FollowUpdateInput!, where: FollowWhereUniqueInput!): Follow
   updateClassroom(data: ClassroomUpdateInput!, where: ClassroomWhereUniqueInput!): Classroom
   updateMessage(data: MessageUpdateInput!, where: MessageWhereUniqueInput!): Message
   updateCharge(data: ChargeUpdateInput!, where: ChargeWhereUniqueInput!): Charge
   updateRefund(data: RefundUpdateInput!, where: RefundWhereUniqueInput!): Refund
-  updateFile(data: FileUpdateInput!, where: FileWhereUniqueInput!): File
   updateClass(data: ClassUpdateInput!, where: ClassWhereUniqueInput!): Class
+  updateFile(data: FileUpdateInput!, where: FileWhereUniqueInput!): File
   deleteUser(where: UserWhereUniqueInput!): User
   deleteFollow(where: FollowWhereUniqueInput!): Follow
   deleteClassroom(where: ClassroomWhereUniqueInput!): Classroom
   deleteMessage(where: MessageWhereUniqueInput!): Message
   deleteCharge(where: ChargeWhereUniqueInput!): Charge
   deleteRefund(where: RefundWhereUniqueInput!): Refund
-  deleteFile(where: FileWhereUniqueInput!): File
   deleteClass(where: ClassWhereUniqueInput!): Class
+  deleteFile(where: FileWhereUniqueInput!): File
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertFollow(where: FollowWhereUniqueInput!, create: FollowCreateInput!, update: FollowUpdateInput!): Follow!
   upsertClassroom(where: ClassroomWhereUniqueInput!, create: ClassroomCreateInput!, update: ClassroomUpdateInput!): Classroom!
   upsertMessage(where: MessageWhereUniqueInput!, create: MessageCreateInput!, update: MessageUpdateInput!): Message!
   upsertCharge(where: ChargeWhereUniqueInput!, create: ChargeCreateInput!, update: ChargeUpdateInput!): Charge!
   upsertRefund(where: RefundWhereUniqueInput!, create: RefundCreateInput!, update: RefundUpdateInput!): Refund!
-  upsertFile(where: FileWhereUniqueInput!, create: FileCreateInput!, update: FileUpdateInput!): File!
   upsertClass(where: ClassWhereUniqueInput!, create: ClassCreateInput!, update: ClassUpdateInput!): Class!
+  upsertFile(where: FileWhereUniqueInput!, create: FileCreateInput!, update: FileUpdateInput!): File!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   updateManyFollows(data: FollowUpdateInput!, where: FollowWhereInput): BatchPayload!
   updateManyClassrooms(data: ClassroomUpdateInput!, where: ClassroomWhereInput): BatchPayload!
   updateManyMessages(data: MessageUpdateInput!, where: MessageWhereInput): BatchPayload!
   updateManyCharges(data: ChargeUpdateInput!, where: ChargeWhereInput): BatchPayload!
   updateManyRefunds(data: RefundUpdateInput!, where: RefundWhereInput): BatchPayload!
-  updateManyFiles(data: FileUpdateInput!, where: FileWhereInput): BatchPayload!
   updateManyClasses(data: ClassUpdateInput!, where: ClassWhereInput): BatchPayload!
+  updateManyFiles(data: FileUpdateInput!, where: FileWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyFollows(where: FollowWhereInput): BatchPayload!
   deleteManyClassrooms(where: ClassroomWhereInput): BatchPayload!
   deleteManyMessages(where: MessageWhereInput): BatchPayload!
   deleteManyCharges(where: ChargeWhereInput): BatchPayload!
   deleteManyRefunds(where: RefundWhereInput): BatchPayload!
-  deleteManyFiles(where: FileWhereInput): BatchPayload!
   deleteManyClasses(where: ClassWhereInput): BatchPayload!
+  deleteManyFiles(where: FileWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -2529,24 +2529,24 @@ type Query {
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message]!
   charges(where: ChargeWhereInput, orderBy: ChargeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Charge]!
   refunds(where: RefundWhereInput, orderBy: RefundOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Refund]!
-  files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File]!
   classes(where: ClassWhereInput, orderBy: ClassOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Class]!
+  files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File]!
   user(where: UserWhereUniqueInput!): User
   follow(where: FollowWhereUniqueInput!): Follow
   classroom(where: ClassroomWhereUniqueInput!): Classroom
   message(where: MessageWhereUniqueInput!): Message
   charge(where: ChargeWhereUniqueInput!): Charge
   refund(where: RefundWhereUniqueInput!): Refund
-  file(where: FileWhereUniqueInput!): File
   class(where: ClassWhereUniqueInput!): Class
+  file(where: FileWhereUniqueInput!): File
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   followsConnection(where: FollowWhereInput, orderBy: FollowOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FollowConnection!
   classroomsConnection(where: ClassroomWhereInput, orderBy: ClassroomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClassroomConnection!
   messagesConnection(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MessageConnection!
   chargesConnection(where: ChargeWhereInput, orderBy: ChargeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChargeConnection!
   refundsConnection(where: RefundWhereInput, orderBy: RefundOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RefundConnection!
-  filesConnection(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FileConnection!
   classesConnection(where: ClassWhereInput, orderBy: ClassOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClassConnection!
+  filesConnection(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FileConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -2854,8 +2854,8 @@ type Subscription {
   message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
   charge(where: ChargeSubscriptionWhereInput): ChargeSubscriptionPayload
   refund(where: RefundSubscriptionWhereInput): RefundSubscriptionPayload
-  file(where: FileSubscriptionWhereInput): FileSubscriptionPayload
   class(where: ClassSubscriptionWhereInput): ClassSubscriptionPayload
+  file(where: FileSubscriptionWhereInput): FileSubscriptionPayload
 }
 
 type User implements Node {
@@ -4555,19 +4555,10 @@ export interface ChargeCreateManyWithoutUserInput {
   connect?: ChargeWhereUniqueInput[] | ChargeWhereUniqueInput
 }
 
-export interface ClassUpdateInput {
+export interface FileUpdateInput {
   name?: String
-  description?: String
-  price?: Float
-  schedule?: DateTime
-  duration?: Int
-  live?: Boolean
-  picture?: FileUpdateOneInput
-  video?: FileUpdateOneInput
-  vod?: FileUpdateOneInput
-  messages?: MessageUpdateManyWithoutClassInput
-  files?: FileUpdateManyInput
-  classroom?: ClassroomUpdateOneWithoutClassesInput
+  secret?: String
+  contentType?: String
 }
 
 export interface ChargeCreateWithoutUserInput {
@@ -4625,8 +4616,9 @@ export interface RefundCreateWithoutChargeInput {
   amount: Float
 }
 
-export interface ClassWhereUniqueInput {
+export interface FileWhereUniqueInput {
   id?: ID_Input
+  secret?: String
 }
 
 export interface FollowCreateInput {
@@ -4968,8 +4960,8 @@ export interface ClassroomWhereInput {
 
 export interface FileCreateInput {
   name: String
-  secret?: String
-  contentType?: String
+  secret: String
+  contentType: String
 }
 
 export interface ClassroomCreateWithoutTeacherInput {
@@ -5191,15 +5183,15 @@ export interface ClassroomUpdateManyWithoutStudentsInput {
   upsert?: ClassroomUpsertWithWhereUniqueWithoutStudentsInput[] | ClassroomUpsertWithWhereUniqueWithoutStudentsInput
 }
 
-export interface FileSubscriptionWhereInput {
-  AND?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput
-  OR?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput
-  NOT?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput
+export interface ClassSubscriptionWhereInput {
+  AND?: ClassSubscriptionWhereInput[] | ClassSubscriptionWhereInput
+  OR?: ClassSubscriptionWhereInput[] | ClassSubscriptionWhereInput
+  NOT?: ClassSubscriptionWhereInput[] | ClassSubscriptionWhereInput
   mutation_in?: MutationType[] | MutationType
   updatedFields_contains?: String
   updatedFields_contains_every?: String[] | String
   updatedFields_contains_some?: String[] | String
-  node?: FileWhereInput
+  node?: ClassWhereInput
 }
 
 export interface ClassroomUpdateWithWhereUniqueWithoutStudentsInput {
@@ -5505,10 +5497,19 @@ export interface ClassroomUpdateWithoutClassesDataInput {
   students?: UserUpdateManyWithoutStudying_classroomsInput
 }
 
-export interface FileUpdateInput {
+export interface ClassUpdateInput {
   name?: String
-  secret?: String
-  contentType?: String
+  description?: String
+  price?: Float
+  schedule?: DateTime
+  duration?: Int
+  live?: Boolean
+  picture?: FileUpdateOneInput
+  video?: FileUpdateOneInput
+  vod?: FileUpdateOneInput
+  messages?: MessageUpdateManyWithoutClassInput
+  files?: FileUpdateManyInput
+  classroom?: ClassroomUpdateOneWithoutClassesInput
 }
 
 export interface UserUpdateManyWithoutStudying_classroomsInput {
@@ -5520,9 +5521,8 @@ export interface UserUpdateManyWithoutStudying_classroomsInput {
   upsert?: UserUpsertWithWhereUniqueWithoutStudying_classroomsInput[] | UserUpsertWithWhereUniqueWithoutStudying_classroomsInput
 }
 
-export interface FileWhereUniqueInput {
+export interface ClassWhereUniqueInput {
   id?: ID_Input
-  secret?: String
 }
 
 export interface UserUpdateWithWhereUniqueWithoutStudying_classroomsInput {
@@ -5709,24 +5709,24 @@ export interface FileWhereInput {
   contentType_not_starts_with?: String
   contentType_ends_with?: String
   contentType_not_ends_with?: String
-  _MagicalBackRelation_ClassFiles_every?: ClassWhereInput
-  _MagicalBackRelation_ClassFiles_some?: ClassWhereInput
-  _MagicalBackRelation_ClassFiles_none?: ClassWhereInput
-  _MagicalBackRelation_UserVideo_every?: UserWhereInput
-  _MagicalBackRelation_UserVideo_some?: UserWhereInput
-  _MagicalBackRelation_UserVideo_none?: UserWhereInput
-  _MagicalBackRelation_UserPicture_every?: UserWhereInput
-  _MagicalBackRelation_UserPicture_some?: UserWhereInput
-  _MagicalBackRelation_UserPicture_none?: UserWhereInput
-  _MagicalBackRelation_ClassVideo_every?: ClassWhereInput
-  _MagicalBackRelation_ClassVideo_some?: ClassWhereInput
-  _MagicalBackRelation_ClassVideo_none?: ClassWhereInput
   _MagicalBackRelation_ClassVod_every?: ClassWhereInput
   _MagicalBackRelation_ClassVod_some?: ClassWhereInput
   _MagicalBackRelation_ClassVod_none?: ClassWhereInput
   _MagicalBackRelation_ClassPicture_every?: ClassWhereInput
   _MagicalBackRelation_ClassPicture_some?: ClassWhereInput
   _MagicalBackRelation_ClassPicture_none?: ClassWhereInput
+  _MagicalBackRelation_ClassFiles_every?: ClassWhereInput
+  _MagicalBackRelation_ClassFiles_some?: ClassWhereInput
+  _MagicalBackRelation_ClassFiles_none?: ClassWhereInput
+  _MagicalBackRelation_UserPicture_every?: UserWhereInput
+  _MagicalBackRelation_UserPicture_some?: UserWhereInput
+  _MagicalBackRelation_UserPicture_none?: UserWhereInput
+  _MagicalBackRelation_UserVideo_every?: UserWhereInput
+  _MagicalBackRelation_UserVideo_some?: UserWhereInput
+  _MagicalBackRelation_UserVideo_none?: UserWhereInput
+  _MagicalBackRelation_ClassVideo_every?: ClassWhereInput
+  _MagicalBackRelation_ClassVideo_some?: ClassWhereInput
+  _MagicalBackRelation_ClassVideo_none?: ClassWhereInput
 }
 
 export interface ChargeUpdateManyWithoutUserInput {
@@ -5824,15 +5824,15 @@ export interface ClassroomWhereUniqueInput {
   id?: ID_Input
 }
 
-export interface ClassSubscriptionWhereInput {
-  AND?: ClassSubscriptionWhereInput[] | ClassSubscriptionWhereInput
-  OR?: ClassSubscriptionWhereInput[] | ClassSubscriptionWhereInput
-  NOT?: ClassSubscriptionWhereInput[] | ClassSubscriptionWhereInput
+export interface FileSubscriptionWhereInput {
+  AND?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput
+  OR?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput
+  NOT?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput
   mutation_in?: MutationType[] | MutationType
   updatedFields_contains?: String
   updatedFields_contains_every?: String[] | String
   updatedFields_contains_some?: String[] | String
-  node?: ClassWhereInput
+  node?: FileWhereInput
 }
 
 /*
@@ -5843,16 +5843,13 @@ export interface Node {
   id: ID_Output
 }
 
-export interface ClassPreviousValues {
+export interface FilePreviousValues {
   id: ID_Output
   createdAt: DateTime
   updatedAt: DateTime
   name: String
-  description: String
-  price: Float
-  schedule?: DateTime
-  duration?: Int
-  live: Boolean
+  secret: String
+  contentType: String
 }
 
 export interface Charge extends Node {
@@ -5899,8 +5896,8 @@ export interface BatchPayload {
  * An edge in a connection.
 
  */
-export interface ClassEdge {
-  node: Class
+export interface FileEdge {
+  node: File
   cursor: String
 }
 
@@ -5921,11 +5918,11 @@ export interface RefundPreviousValues {
   amount: Float
 }
 
-export interface AggregateClass {
+export interface AggregateFile {
   count: Int
 }
 
-export interface AggregateFile {
+export interface AggregateClass {
   count: Int
 }
 
@@ -5933,10 +5930,10 @@ export interface AggregateFile {
  * A connection to a list of items.
 
  */
-export interface ClassConnection {
+export interface FileConnection {
   pageInfo: PageInfo
-  edges: ClassEdge[]
-  aggregate: AggregateClass
+  edges: FileEdge[]
+  aggregate: AggregateFile
 }
 
 export interface AggregateRefund {
@@ -5947,8 +5944,8 @@ export interface AggregateRefund {
  * An edge in a connection.
 
  */
-export interface FileEdge {
-  node: File
+export interface ClassEdge {
+  node: Class
   cursor: String
 }
 
@@ -5967,8 +5964,8 @@ export interface File extends Node {
   createdAt: DateTime
   updatedAt: DateTime
   name: String
-  secret?: String
-  contentType?: String
+  secret: String
+  contentType: String
 }
 
 /*
@@ -5980,13 +5977,16 @@ export interface ChargeEdge {
   cursor: String
 }
 
-export interface FilePreviousValues {
+export interface ClassPreviousValues {
   id: ID_Output
   createdAt: DateTime
   updatedAt: DateTime
   name: String
-  secret?: String
-  contentType?: String
+  description: String
+  price: Float
+  schedule?: DateTime
+  duration?: Int
+  live: Boolean
 }
 
 export interface AggregateMessage {
@@ -6110,10 +6110,10 @@ export interface ClassroomSubscriptionPayload {
  * A connection to a list of items.
 
  */
-export interface FileConnection {
+export interface ClassConnection {
   pageInfo: PageInfo
-  edges: FileEdge[]
-  aggregate: AggregateFile
+  edges: ClassEdge[]
+  aggregate: AggregateClass
 }
 
 export interface ClassroomPreviousValues {
@@ -6129,11 +6129,11 @@ export interface AggregateCharge {
   count: Int
 }
 
-export interface FileSubscriptionPayload {
+export interface ClassSubscriptionPayload {
   mutation: MutationType
-  node?: File
+  node?: Class
   updatedFields?: String[]
-  previousValues?: FilePreviousValues
+  previousValues?: ClassPreviousValues
 }
 
 /*
@@ -6191,11 +6191,11 @@ export interface Class extends Node {
   classroom: Classroom
 }
 
-export interface ClassSubscriptionPayload {
+export interface FileSubscriptionPayload {
   mutation: MutationType
-  node?: Class
+  node?: File
   updatedFields?: String[]
-  previousValues?: ClassPreviousValues
+  previousValues?: FilePreviousValues
 }
 
 /*
