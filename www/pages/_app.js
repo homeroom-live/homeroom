@@ -9,11 +9,11 @@ import { StripeProvider } from 'react-stripe-elements'
 
 // HOCs
 
-import { withApollo } from '../hocs/withApollo'
+import { withApollo } from 'hocs/withApollo'
 
 // Styles
 
-import '../static/nprogress.css'
+import 'static/nprogress.css'
 
 // Config
 

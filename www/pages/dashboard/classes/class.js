@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react'
 
-import { redirect } from '../../../lib/redirect'
+import { redirect } from 'lib/redirect'
 
 // Sections
 
-import { Navigation } from '../../../sections/navigation'
-import { SideNavigation } from '../../../sections/dashboard/sideNavigation'
-import { ClassInformation } from '../../../sections/dashboard/classInformation'
-import { Footer } from '../../../sections/footer'
+import { Navigation } from 'sections/navigation'
+import { SideNavigation } from 'sections/dashboard/sideNavigation'
+import { ClassInformation } from 'sections/dashboard/classInformation'
+import { Footer } from 'sections/footer'
 
 // Class
 

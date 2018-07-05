@@ -1,7 +1,5 @@
 import React, { Fragment } from 'react'
 
-import { redirect } from 'lib/redirect'
-
 // Sections
 
 import { ClassroomInformation } from 'sections/classroom/classroomInformation'

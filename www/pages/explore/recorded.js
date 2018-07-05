@@ -3,10 +3,10 @@ import gql from 'graphql-tag'
 
 // Sections
 
-import { Navigation } from '../../sections/navigation'
-import { SideNavigation } from '../../sections/explore/sideNavigation'
-import { Classes } from '../../sections/explore/classes'
-import { Footer } from '../../sections/footer'
+import { Navigation } from 'sections/navigation'
+import { SideNavigation } from 'sections/explore/sideNavigation'
+import { Classes } from 'sections/explore/classes'
+import { Footer } from 'sections/footer'
 
 // Explore
 

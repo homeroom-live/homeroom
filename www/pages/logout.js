@@ -1,7 +1,7 @@
 import React from 'react'
 import * as nookies from 'nookies'
 
-import { redirect } from '../lib/redirect'
+import { redirect } from 'lib/redirect'
 
 class Logout extends React.Component {
   static async getInitialProps(ctx) {

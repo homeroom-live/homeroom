@@ -2,10 +2,10 @@ import React, { Fragment } from 'react'
 
 // Sections
 
-import { Navigation } from '../../../sections/navigation'
-import { SideNavigation } from '../../../sections/dashboard/sideNavigation'
-import { ClassroomForm } from '../../../sections/dashboard/classroomForm'
-import { Footer } from '../../../sections/footer'
+import { Navigation } from 'sections/navigation'
+import { SideNavigation } from 'sections/dashboard/sideNavigation'
+import { ClassroomForm } from 'sections/dashboard/classroomForm'
+import { Footer } from 'sections/footer'
 
 // New Classroom
 

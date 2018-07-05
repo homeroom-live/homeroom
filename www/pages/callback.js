@@ -1,8 +1,8 @@
 import React from 'react'
 import * as nookies from 'nookies'
 
-import { redirect } from '../lib/redirect'
-import { parseHash } from '../lib/auth0'
+import { redirect } from 'lib/redirect'
+import { parseHash } from 'lib/auth0'
 
 class Callback extends React.Component {
   static async getInitialProps(ctx) {

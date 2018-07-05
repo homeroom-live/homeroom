@@ -2,14 +2,14 @@ import React from 'react'
 import * as nookies from 'nookies'
 import gql from 'graphql-tag'
 
-import { redirect } from '../lib/redirect'
-import { buildAuthorizeURL } from '../lib/auth0'
+import { redirect } from 'lib/redirect'
+import { buildAuthorizeURL } from 'lib/auth0'
 
 // Sections
 
-import { Navigation } from '../sections/navigation'
-import { Setup } from '../sections/signup/setup'
-import { Footer } from '../sections/footer'
+import { Navigation } from 'sections/navigation'
+import { Setup } from 'sections/signup/setup'
+import { Footer } from 'sections/footer'
 
 // Queries
 

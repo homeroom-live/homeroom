@@ -16,6 +16,12 @@ app.prepare().then(() => {
 
   // Routes
 
+  server.get('/classroom/:classroomId', (req, res) => {
+    return app.render(req, res, '/classroom', {
+      classroomId: req.params.classroomId,
+    })
+  })
+
   server.get('/dashboard/classes/new/:classroomId', (req, res) => {
     return app.render(req, res, '/dashboard/classes/new', {
       classroomId: req.params.classroomId,
@@ -30,12 +36,6 @@ app.prepare().then(() => {
 
   server.get('/dashboard/classrooms/classroom/:classroomId', (req, res) => {
     return app.render(req, res, '/dashboard/classrooms/classroom', {
-      classroomId: req.params.classroomId,
-    })
-  })
-
-  server.get('/classroom/:classroomId', (req, res) => {
-    return app.render(req, res, '/classroom', {
       classroomId: req.params.classroomId,
     })
   })

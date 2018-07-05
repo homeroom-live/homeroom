@@ -2,10 +2,10 @@ import React from 'react'
 
 // Sections
 
-import { Navigation } from '../../sections/navigation'
-import { SideNavigation } from '../../sections/dashboard/sideNavigation'
-import { HowToStream } from '../../sections/dashboard/howToStream'
-import { Footer } from '../../sections/footer'
+import { Navigation } from 'sections/navigation'
+import { SideNavigation } from 'sections/dashboard/sideNavigation'
+import { HowToStream } from 'sections/dashboard/howToStream'
+import { Footer } from 'sections/footer'
 
 // Dashboard
 

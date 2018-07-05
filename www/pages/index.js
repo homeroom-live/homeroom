@@ -6,12 +6,12 @@ import { Container } from 'reactstrap'
 
 // Sections
 
-import { Navigation } from '../sections/navigation'
-import { Hero } from '../sections/homeroom/hero'
-import { About } from '../sections/homeroom/about'
-import { Testimonials } from '../sections/homeroom/testimonials'
-import { Invite } from '../sections/homeroom/invite'
-import { Footer } from '../sections/footer'
+import { Navigation } from 'sections/navigation'
+import { Hero } from 'sections/homeroom/hero'
+import { About } from 'sections/homeroom/about'
+import { Testimonials } from 'sections/homeroom/testimonials'
+import { Invite } from 'sections/homeroom/invite'
+import { Footer } from 'sections/footer'
 
 // Homeroom
 
