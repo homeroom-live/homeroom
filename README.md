@@ -1,54 +1,35 @@
 # homeroom
 
-## database
+[![Homeroom](https://github.com/homeroom-live/homeroom/raw/master/media/homeroom.png?sanitize=true)](https://homeroom.live)
 
-- [x] Classrooms -> Classes
-- [ ] Should Classroom support multiple teachers out of the box? (Yeah, let's add it!)
-- [x] Follow type
-  - pro: Subscriptions (notifications)
-  - con: New type
-  - pro: easier count
+Homeroom is a learning platform where anyone can share something they are good at.
 
-## server
+Our main goal is to let anyone be able to present their ideas and connect with their followers in a more intimiate way.
 
-- [x] Move Auth0 to Express middleware?
-- [x] Prioritise Apollo Server Upload -> Will refactor stream upload.
-- [x] Siltently check every time user connects and create new one? -> User setup is better.
-- [x] Keep createUser + Viewer requires setup.
-- [x] Query
-- [x] Mutation
-- [ ] Connect Stripe via Webhooks?
-  - pro: More data, less hacking
-  - con: separated, more lambdas
-  - pro: OSS we could make a BaaS for Stripe (webhooks)
-- [ ] Move file remove / file management to Webhook
-  - pro: more transparent
-  - pro: more easily applied to multiple situations.
-  - con: I see no con tbh
-  - -> We should implement this!
-- [ ] File handling (deleting files)
+The core of our platform is a classroom which is a meeting point for all the students and teachers working on specific project.
 
-## www
+## Server
 
-- [ ] Helmet + SEO
-- [x] NextJS
-- [x] Renamed Homeroom page to Explore - I feel like it better portrays its prupose. Cool!
-- [x] Enforced Signup? -> NO!
-- [x] SEO Apollo pattern. Current idea is to add `seo` or something which would get Helmet data but would still require Signup once opened. - You don't need that, just set errorPolicy to ignore whenever requesting `viewer` to prevent unpredicted crashes. Data is still loaded as expected.
-- [x] `withApollo` - component specific? -> This is an antipattern.
-- [x] Setup section in Signup. Basic rights, termsofuse, agreement, notifications. I feel like it's nice intro. Might be to overwhelming. Seems like a must to make smooth signup process. -> Yes!
-- [ ] Email verificaiton before completing setup? -> Yes!
-- [ ] ClassCard implementation.
-- [x] How should we indicate active page in Explore? -> Logan + Bulma
-- [ ] Improve selection in Explore - CODE.
-- [ ] Explore/Suggestions should be a combination of feed and upcoming classes. Very personalised experience. Not just list of saved classes.
-- [x] ShowChat should be css toggled - mobile, desktop. We will adopt Bulma anyway.
-- [ ] Should we remove Video from Classes? It kind of doesn't make sense to have it there anymore...
+### Development setup
 
-## Styling
+```bash
+yarn
+yarn dev
+```
 
-- [ ] Setup site - intro page for users.
-- [ ] ClassCard still needs implementation.
-- [ ] FilePicker, ImagePicker, VideoPicker -> This should all be very distinct components with different styles as well.
+## Webpage
 
-## stream
+```bash
+yarn
+yarn dev
+```
+
+## Streaming
+
+```bash
+todo
+```
+
+## License
+
+By Matic and Logan

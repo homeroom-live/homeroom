@@ -20,7 +20,7 @@
     "express-jwt": "^5.3.1",
     "graphql-middleware-apollo-upload-server": "^1.0.4",
     "graphql-shield": "^2.2.5",
-    "graphql-yoga": "^1.14.10",
+    "graphql-yoga": "^1.14.12",
     "jsonwebtoken": "8.2.2",
     "jwks-rsa": "^1.2.1",
     "prisma-binding": "2.0.2",
