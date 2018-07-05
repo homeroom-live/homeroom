@@ -1,6 +1,6 @@
 import { Context } from '../utils'
 
-export const ClassroomEdge = {
+export const ClassroomStudentsConnection = {
   studied_by_viewer: {
     fragment: `fragment ClassroomID on Classroom { id }`,
     resolve: async ({ id }, args, ctx: Context, info) => {

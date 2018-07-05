@@ -276,19 +276,19 @@ type Picture {
 type UserFollowersConnection {
   pageInfo: PageInfo!
   followers: [UserEdge!]!
+  followed_by_viewer: Boolean!
   aggregate: AggregateUser!
 }
 
 type UserFollowingConnection {
   pageInfo: PageInfo!
   following: [UserEdge!]!
+  following_viewer: Boolean!
   aggregate: AggregateUser!
 }
 
 type UserEdge {
   cursor: String!
-  followed_by_viewer: Boolean! # TODO
-  following_viewer: Boolean! # TODO
   node: User!
 }
 
@@ -336,6 +336,7 @@ type AggregateClass {
 type ClassroomStudentsConnection {
   pageInfo: PageInfo!
   edges: [UserEdge!]!
+  studied_by_viewer: Boolean!
   aggregate: AggregateUser!
 }
 
@@ -359,7 +360,6 @@ type UserStudyingClassroomsConnection {
 
 type ClassroomEdge {
   node: Classroom!
-  studied_by_viewer: Boolean! # TODO
   cursor: String!
 }
 

@@ -16,10 +16,11 @@ import { refunds as refundsMutations } from './Mutation/refunds'
 import { Viewer } from './Viewer'
 // User
 import { User } from './User'
-import { UserEdge } from './UserEdge'
+import { UserFollowersConnection } from './UserFollowersConnection'
+import { UserFollowingConnection } from './UserFollowingConnection'
 // Classroom
 import { Classroom } from './Classroom'
-import { ClassroomEdge } from './ClassroomEdge'
+import { ClassroomStudentsConnection } from './ClassroomStudentsConnection'
 // Class
 import { Class } from './Class'
 // Message
@@ -47,9 +48,10 @@ export const resolvers = {
   },
   Viewer,
   User,
-  UserEdge,
+  UserFollowersConnection,
+  UserFollowingConnection,
   Classroom,
-  ClassroomEdge,
+  ClassroomStudentsConnection,
   Class,
   MessageEdge,
   File,
