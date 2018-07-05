@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
 // Components
 
-import { Container } from 'reactstrap'
+// import { Container } from 'reactstrap'
 
 // Sections
 
@@ -22,18 +22,18 @@ class Homeroom extends React.Component {
 
   render() {
     return (
-      <>
+      <div>
         <Navigation transparent />
-        <Container>
+        <div>
           <Hero />
           <About />
-          <Testimonials />
-        </Container>
-        <Container fluid>
+          {/*<Testimonials />*/}
+        </div>
+        <div>
           <Invite />
-        </Container>
+        </div>
         <Footer />
-      </>
+      </div>
     )
   }
 }

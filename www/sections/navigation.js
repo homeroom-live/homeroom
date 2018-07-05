@@ -17,9 +17,11 @@ import { Link } from 'components/Link'
 import { Dropdown, DropdownOption } from 'components/Dropdown'
 
 const Navbar = styled.nav`
+  position: relative;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
+  min-height: 32px; // prevent Navbar from changing height on load
   padding: ${spacing.regular};
   background: ${({ transparent }) =>
     transparent ? 'transparent' : colors.black};
@@ -80,6 +82,13 @@ const DropdownLink = styled(Link)`
     text-decoration: none;
   }
 `
+const LoadingPlaceholder = styled.span`
+  display: block;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  background: ${colors.grayDarkest};
+`
 
 // Queries
 
@@ -99,7 +108,7 @@ const viewer = gql`
 // Navigation
 
 export const Navigation = ({ transparent, activePage }) => (
-  <Navbar transparent={false && transparent}>
+  <Navbar transparent={transparent}>
     <NavLeft css={{ alignItems: 'center', flex: 1 }}>
       <Link href="/" prefetch>
         <ImageLinkContainer>
@@ -149,7 +158,7 @@ export const Navigation = ({ transparent, activePage }) => (
             }
 
             case STATUS.LOADING:
-              return <NavLinkGreen href="/signup">Get Started</NavLinkGreen>
+              return <LoadingPlaceholder />
 
             default: {
               return null

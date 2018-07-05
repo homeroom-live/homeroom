@@ -1,44 +1,34 @@
 import React from 'react'
-import glamorous from 'glamorous'
+import styled from 'styled-components'
 import Linkify from 'react-linkify'
 
-// import { LinkStyles } from '../Link'
+import { StyledLink } from 'components/Link'
 
-import { colors } from '../../utils/colors'
-import { spacing } from '../../utils/spacing'
-import * as typography from '../../utils/typography'
+import {
+  colors,
+  spacing,
+  fontSizes,
+  fontWeights,
+  transition,
+} from 'utils/theme'
 
-const P = glamorous.p(
-  {
-    color: colors.secondary,
-    transition: 'all 0.25s ease-out',
-    lineHeight: 1.4,
-    whiteSpace: 'pre-wrap',
-  },
-  ({ color }) => ({
-    color: colors[color || colors.secondary],
-  }),
-  ({ size }) => ({
-    fontSize: typography.fontSize[size || 'regular'],
-  }),
-  ({ weight }) => ({
-    fontWeight: typography.fontWeight[weight || 'regular'],
-  }),
-  ({ margin }) => ({
-    margin: margin || `0 0 ${spacing.xsmall}`,
-  }),
-  ({ width }) => ({
-    width: width === 'article' ? '510px' : '100%',
-  }),
-)
+const P = styled.p`
+  line-height: 1.3;
+  white-space: pre-wrap;
+  transition: ${transition};
+  color: ${props => (props.color ? colors[props.color] : colors.secondary)};
+  font-size: ${props =>
+    props.size ? fontSizes[props.size] : fontSizes.regular};
+  font-weight: ${props =>
+    props.weight ? fontWeights[props.weight] : fontWeights.regular};
+  margin: ${props => props.margin || `0 0 ${spacing.xsmall}`};
+  width: 100%;
+`
 
-export const Text = props => (
-  <Linkify
-    properties={{
-      target: '_blank',
-      // style: LinkStyles,
-    }}
-  >
+const StyledLinkify = StyledLink.withComponent(Linkify)
+
+export const Text = ({ children, ...props }) => (
+  <StyledLinkify target="_blank">
     <P {...props}>{props.children}</P>
-  </Linkify>
+  </StyledLinkify>
 )

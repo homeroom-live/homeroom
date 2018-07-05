@@ -1,9 +1,9 @@
 import glamorous from 'glamorous'
 
-import { theme } from '../../utils/theme'
-import { colors, shadow } from '../../utils/colors'
-import * as typography from '../../utils/typography'
-import { spacing, button, borderRadius } from '../../utils/spacing'
+import { transition } from 'utils/theme'
+import { colors, shadow } from 'utils/colors'
+import * as typography from 'utils/typography'
+import { spacing, button, borderRadius } from 'utils/spacing'
 
 export const activeStyle = {
   zIndex: 1,
@@ -53,7 +53,7 @@ export const NavButton = glamorous.a(
     borderRadius: borderRadius,
     border: '1px solid transparent',
     position: 'relative',
-    transition: theme.transition,
+    transition: transition,
     opacity: 0.7,
 
     ':hover': activeStyle,

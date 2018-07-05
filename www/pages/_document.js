@@ -1,25 +1,23 @@
 import Document, { Head, Main, NextScript } from 'next/document'
 import React from 'react'
-import { renderStatic } from 'glamor/server'
+import { ServerStyleSheet } from 'styled-components'
 // import { Helmet } from 'react-helmet' // TODO
-
-import 'bootstrap/dist/css/bootstrap.min.css'
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx) {
-    const page = ctx.renderPage()
-    const styles = renderStatic(() => page.html || page.errorHtml)
-
-    const initialProps = await Document.getInitialProps(ctx)
-
-    return { ...initialProps, ...page, ...styles }
+    const sheet = new ServerStyleSheet()
+    const page = ctx.renderPage(App => props =>
+      sheet.collectStyles(<App {...props} />),
+    )
+    const styles = sheet.getStyleElement()
+    return { ...page, styles }
   }
 
   render() {
     return (
       <html>
         <Head>
-          <title>Homeroom.live – Livestreaming for Education</title>
+          <title>Homeroom – Livestreaming for Education</title>
 
           <meta charSet="utf-8" />
           <meta
@@ -40,12 +38,12 @@ export default class MyDocument extends Document {
           <link rel="icon" type="image/png" href="/static/favicon.png" />
           <link rel="stylesheet" href="/_next/static/style.css" />
           <link rel="stylesheet" href="/static/index.css" />
+          {this.props.styles}
 
           <script id="stripe-js" src="https://js.stripe.com/v3/" />
-          <style dangerouslySetInnerHTML={{ __html: this.props.css }} />
         </Head>
 
-        <body className="custom_class">
+        <body>
           <Main />
           <NextScript />
         </body>

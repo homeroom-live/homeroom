@@ -1,18 +1,19 @@
 import React from 'react'
 import Link from 'next/link'
-import { Row, Col } from 'reactstrap'
+import styled from 'styled-components'
+// import { Row, Col } from 'reactstrap'
 
-import { FlexRow } from '../components/FlexRow'
-import { FlexCol } from '../components/FlexCol'
-import { Icon } from '../components/Icon'
-import { Text } from '../components/Text'
-import { Logo } from '../components/Logo'
+import { FlexRow } from 'components/FlexRow'
+import { FlexCol } from 'components/FlexCol'
+import { Icon } from 'components/Icon'
+import { Text } from 'components/Text'
 
 import { spacing } from '../utils/spacing'
-import { colors } from '../utils/colors'
+import { colors } from 'utils/colors'
 
-import iconTwitter from '../static/assets/icons/ui/twitter.svg'
-import iconFacebook from '../static/assets/icons/ui/facebook.svg'
+import logoLight from 'static/assets/images/logos/logo-light.svg'
+import iconTwitter from 'static/assets/icons/ui/twitter.svg'
+import iconFacebook from 'static/assets/icons/ui/facebook.svg'
 
 const footerRowStyles = {
   padding: `${spacing.xlarge} ${spacing.medium}`,
@@ -28,14 +29,14 @@ const footerContentRowStyles = {
   },
 }
 
-const logoStyles = {
-  height: '36px',
-  marginBottom: '6px',
-  marginRight: spacing.large,
-  '@media(max-width: 992px)': {
-    margin: `${spacing.regular} 0`,
-  },
-}
+// const Logo = styled`
+//   height: 36px;
+//   margin-bottom: ${spacing.xsmall};
+//   margin-right: ${spacing.large};
+//   @media(max-width: 992px) {
+//     margin: ${spacing.regular} 0;
+//   }
+// `
 
 const iconRowStyles = {
   justifyContent: 'flex-start',
@@ -52,28 +53,27 @@ const emailStyles = {
   },
 }
 
-export const Footer = () => (
-  <Row style={footerRowStyles}>
-    <Col md={{ size: 6, offset: 3 }}>
-      <FlexRow css={footerContentRowStyles}>
-        <Logo css={logoStyles} />
+export const Footer = () => <div />
+// <Row style={footerRowStyles}>
+//   <Col md={{ size: 6, offset: 3 }}>
+//     <FlexRow css={footerContentRowStyles}>
+//       <Logo src={logoLight} />
 
-        <FlexCol css={{ flex: 0 }}>
-          <FlexRow css={iconRowStyles}>
-            <Link href="https://twitter.com/homeroom_live">
-              <Icon src={iconTwitter} />
-            </Link>
+//       <FlexCol css={{ flex: 0 }}>
+//         <FlexRow css={iconRowStyles}>
+//           <Link href="https://twitter.com/homeroom_live">
+//             <Icon src={iconTwitter} />
+//           </Link>
 
-            <Link href="https://www.facebook.com/Homeroom-216487308907825">
-              <Icon src={iconFacebook} />
-            </Link>
-          </FlexRow>
+//           <Link href="https://www.facebook.com/Homeroom-216487308907825">
+//             <Icon src={iconFacebook} />
+//           </Link>
+//         </FlexRow>
 
-          <Text size="medium" weight="bold" css={emailStyles}>
-            team@homeroom.live
-          </Text>
-        </FlexCol>
-      </FlexRow>
-    </Col>
-  </Row>
-)
+//         <Text size="medium" weight="bold" css={emailStyles}>
+//           team@homeroom.live
+//         </Text>
+//       </FlexCol>
+//     </FlexRow>
+//   </Col>
+// </Row>
