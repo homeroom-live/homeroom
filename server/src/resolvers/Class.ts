@@ -25,4 +25,28 @@ export const Class = {
       )
     },
   },
+  filesConnection: {
+    fragment: `fragment ClassID on Class { id }`,
+    resolve: async (
+      { id },
+      { after, before, first, last },
+      ctx: Context,
+      info,
+    ) => {
+      return ctx.db.query.filesConnection(
+        {
+          where: {
+            class: {
+              id,
+            },
+          },
+          after,
+          before,
+          first,
+          last,
+        },
+        info,
+      )
+    },
+  },
 }

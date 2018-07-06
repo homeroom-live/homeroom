@@ -172,7 +172,11 @@ export const permissions = shield(
       live: allow,
       duration: allow,
       video: allow,
-      files: allow,
+      filesConnection: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        or(rules.isClassOwner, rules.isClassStudent),
+      ),
       vod: and(
         rules.isUserAuthenticated,
         rules.isUserSetup,

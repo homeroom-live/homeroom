@@ -217,7 +217,12 @@ type Class {
   video: File
 
   # Specs
-  files: [File!]!
+  filesConnection(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ClassFilesConnection!
   vod: File
   classroom: Classroom!
 
@@ -416,6 +421,23 @@ type MessageEdge {
 }
 
 type AggregateMessage {
+  count: Int!
+}
+
+# Files
+
+type ClassFilesConnection {
+  pageInfo: PageInfo!
+  edges: [FileEdge!]!
+  aggregate: AggregateFile!
+}
+
+type FileEdge {
+  cursor: String!
+  node: Message!
+}
+
+type AggregateFile {
   count: Int!
 }
 

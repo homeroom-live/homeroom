@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/matic-zavadlal-03c51f/homeroom-database/dev
-# timestamp: Fri Jul 06 2018 16:02:38 GMT+0200 (CEST)
+# timestamp: Fri Jul 06 2018 17:10:04 GMT+0200 (CEST)
 
 type AggregateCharge {
   count: Int!
@@ -435,7 +435,7 @@ input ClassCreateInput {
   video: FileCreateOneInput
   vod: FileCreateOneInput
   messages: MessageCreateManyWithoutClassInput
-  files: FileCreateManyInput
+  files: FileCreateManyWithoutClassInput
   classroom: ClassroomCreateOneWithoutClassesInput!
 }
 
@@ -446,6 +446,11 @@ input ClassCreateManyWithoutClassroomInput {
 
 input ClassCreateOneInput {
   create: ClassCreateInput
+  connect: ClassWhereUniqueInput
+}
+
+input ClassCreateOneWithoutFilesInput {
+  create: ClassCreateWithoutFilesInput
   connect: ClassWhereUniqueInput
 }
 
@@ -466,7 +471,22 @@ input ClassCreateWithoutClassroomInput {
   video: FileCreateOneInput
   vod: FileCreateOneInput
   messages: MessageCreateManyWithoutClassInput
-  files: FileCreateManyInput
+  files: FileCreateManyWithoutClassInput
+}
+
+input ClassCreateWithoutFilesInput {
+  name: String!
+  description: String!
+  price: Float
+  schedule: DateTime
+  duration: Int
+  live: Boolean
+  archived: Boolean
+  picture: FileCreateOneInput
+  video: FileCreateOneInput
+  vod: FileCreateOneInput
+  messages: MessageCreateManyWithoutClassInput
+  classroom: ClassroomCreateOneWithoutClassesInput!
 }
 
 input ClassCreateWithoutMessagesInput {
@@ -480,7 +500,7 @@ input ClassCreateWithoutMessagesInput {
   picture: FileCreateOneInput
   video: FileCreateOneInput
   vod: FileCreateOneInput
-  files: FileCreateManyInput
+  files: FileCreateManyWithoutClassInput
   classroom: ClassroomCreateOneWithoutClassesInput!
 }
 
@@ -1032,7 +1052,7 @@ input ClassUpdateDataInput {
   video: FileUpdateOneInput
   vod: FileUpdateOneInput
   messages: MessageUpdateManyWithoutClassInput
-  files: FileUpdateManyInput
+  files: FileUpdateManyWithoutClassInput
   classroom: ClassroomUpdateOneWithoutClassesInput
 }
 
@@ -1048,7 +1068,7 @@ input ClassUpdateInput {
   video: FileUpdateOneInput
   vod: FileUpdateOneInput
   messages: MessageUpdateManyWithoutClassInput
-  files: FileUpdateManyInput
+  files: FileUpdateManyWithoutClassInput
   classroom: ClassroomUpdateOneWithoutClassesInput
 }
 
@@ -1067,6 +1087,15 @@ input ClassUpdateOneInput {
   delete: Boolean
   update: ClassUpdateDataInput
   upsert: ClassUpsertNestedInput
+}
+
+input ClassUpdateOneWithoutFilesInput {
+  create: ClassCreateWithoutFilesInput
+  connect: ClassWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: ClassUpdateWithoutFilesDataInput
+  upsert: ClassUpsertWithoutFilesInput
 }
 
 input ClassUpdateOneWithoutMessagesInput {
@@ -1089,7 +1118,22 @@ input ClassUpdateWithoutClassroomDataInput {
   video: FileUpdateOneInput
   vod: FileUpdateOneInput
   messages: MessageUpdateManyWithoutClassInput
-  files: FileUpdateManyInput
+  files: FileUpdateManyWithoutClassInput
+}
+
+input ClassUpdateWithoutFilesDataInput {
+  name: String
+  description: String
+  price: Float
+  schedule: DateTime
+  duration: Int
+  live: Boolean
+  archived: Boolean
+  picture: FileUpdateOneInput
+  video: FileUpdateOneInput
+  vod: FileUpdateOneInput
+  messages: MessageUpdateManyWithoutClassInput
+  classroom: ClassroomUpdateOneWithoutClassesInput
 }
 
 input ClassUpdateWithoutMessagesDataInput {
@@ -1103,7 +1147,7 @@ input ClassUpdateWithoutMessagesDataInput {
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   vod: FileUpdateOneInput
-  files: FileUpdateManyInput
+  files: FileUpdateManyWithoutClassInput
   classroom: ClassroomUpdateOneWithoutClassesInput
 }
 
@@ -1115,6 +1159,11 @@ input ClassUpdateWithWhereUniqueWithoutClassroomInput {
 input ClassUpsertNestedInput {
   update: ClassUpdateDataInput!
   create: ClassCreateInput!
+}
+
+input ClassUpsertWithoutFilesInput {
+  update: ClassUpdateWithoutFilesDataInput!
+  create: ClassCreateWithoutFilesInput!
 }
 
 input ClassUpsertWithoutMessagesInput {
@@ -1403,6 +1452,7 @@ type File implements Node {
   name: String!
   secret: String!
   contentType: String!
+  class(where: ClassWhereInput): Class
   archived: Boolean!
 }
 
@@ -1421,16 +1471,24 @@ input FileCreateInput {
   secret: String!
   contentType: String!
   archived: Boolean
+  class: ClassCreateOneWithoutFilesInput
 }
 
-input FileCreateManyInput {
-  create: [FileCreateInput!]
+input FileCreateManyWithoutClassInput {
+  create: [FileCreateWithoutClassInput!]
   connect: [FileWhereUniqueInput!]
 }
 
 input FileCreateOneInput {
   create: FileCreateInput
   connect: FileWhereUniqueInput
+}
+
+input FileCreateWithoutClassInput {
+  name: String!
+  secret: String!
+  contentType: String!
+  archived: Boolean
 }
 
 """An edge in a connection."""
@@ -1513,6 +1571,7 @@ input FileUpdateDataInput {
   secret: String
   contentType: String
   archived: Boolean
+  class: ClassUpdateOneWithoutFilesInput
 }
 
 input FileUpdateInput {
@@ -1520,15 +1579,16 @@ input FileUpdateInput {
   secret: String
   contentType: String
   archived: Boolean
+  class: ClassUpdateOneWithoutFilesInput
 }
 
-input FileUpdateManyInput {
-  create: [FileCreateInput!]
+input FileUpdateManyWithoutClassInput {
+  create: [FileCreateWithoutClassInput!]
   connect: [FileWhereUniqueInput!]
   disconnect: [FileWhereUniqueInput!]
   delete: [FileWhereUniqueInput!]
-  update: [FileUpdateWithWhereUniqueNestedInput!]
-  upsert: [FileUpsertWithWhereUniqueNestedInput!]
+  update: [FileUpdateWithWhereUniqueWithoutClassInput!]
+  upsert: [FileUpsertWithWhereUniqueWithoutClassInput!]
 }
 
 input FileUpdateOneInput {
@@ -1540,9 +1600,16 @@ input FileUpdateOneInput {
   upsert: FileUpsertNestedInput
 }
 
-input FileUpdateWithWhereUniqueNestedInput {
+input FileUpdateWithoutClassDataInput {
+  name: String
+  secret: String
+  contentType: String
+  archived: Boolean
+}
+
+input FileUpdateWithWhereUniqueWithoutClassInput {
   where: FileWhereUniqueInput!
-  data: FileUpdateDataInput!
+  data: FileUpdateWithoutClassDataInput!
 }
 
 input FileUpsertNestedInput {
@@ -1550,10 +1617,10 @@ input FileUpsertNestedInput {
   create: FileCreateInput!
 }
 
-input FileUpsertWithWhereUniqueNestedInput {
+input FileUpsertWithWhereUniqueWithoutClassInput {
   where: FileWhereUniqueInput!
-  update: FileUpdateDataInput!
-  create: FileCreateInput!
+  update: FileUpdateWithoutClassDataInput!
+  create: FileCreateWithoutClassInput!
 }
 
 input FileWhereInput {
@@ -1773,15 +1840,13 @@ input FileWhereInput {
 
   """All values that are not equal to given value."""
   archived_not: Boolean
+  class: ClassWhereInput
   _MagicalBackRelation_ClassVod_every: ClassWhereInput
   _MagicalBackRelation_ClassVod_some: ClassWhereInput
   _MagicalBackRelation_ClassVod_none: ClassWhereInput
   _MagicalBackRelation_ClassPicture_every: ClassWhereInput
   _MagicalBackRelation_ClassPicture_some: ClassWhereInput
   _MagicalBackRelation_ClassPicture_none: ClassWhereInput
-  _MagicalBackRelation_ClassFiles_every: ClassWhereInput
-  _MagicalBackRelation_ClassFiles_some: ClassWhereInput
-  _MagicalBackRelation_ClassFiles_none: ClassWhereInput
   _MagicalBackRelation_UserPicture_every: UserWhereInput
   _MagicalBackRelation_UserPicture_some: UserWhereInput
   _MagicalBackRelation_UserPicture_none: UserWhereInput

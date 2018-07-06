@@ -89,7 +89,7 @@ type Class {
 
   # Extras
   messages: [Message!]! @relation(name: "ClassMessage", onDelete: CASCADE)
-  files: [File!]! @relation(name: "ClassFiles", onDelete: CASCADE)
+  files: [File!]! @relation(name: "ClassFile", onDelete: CASCADE)
 
   # Specs
   # teachers: [User!]! @relation(name: "UserTaughtClasses")
@@ -112,6 +112,9 @@ type File {
   name: String!
   secret: String! @unique
   contentType: String!
+
+  # Connections
+  class: Class @relation(name: "ClassFile", onDelete: SET_NULL)
 
   # System
   archived: Boolean! @default(value: "false")
