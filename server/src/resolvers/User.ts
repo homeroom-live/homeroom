@@ -48,7 +48,7 @@ export const User = {
         {
           where: {
             user: { id },
-            archieved: false,
+            archived: false,
           },
           after,
           before,
@@ -73,7 +73,7 @@ export const User = {
             charge: {
               user: { id },
             },
-            archieved: false,
+            archived: false,
           },
           after,
           before,
@@ -96,7 +96,7 @@ export const User = {
         {
           where: {
             teacher: { id },
-            archieved: false,
+            archived: false,
           },
           after,
           before,
@@ -119,7 +119,7 @@ export const User = {
         {
           where: {
             students_some: { id },
-            archieved: false,
+            archived: false,
           },
           after,
           before,
@@ -143,7 +143,7 @@ export const User = {
           where: {
             user_followed: { id },
             user_following: {
-              archieved: false,
+              archived: false,
             },
           },
           after,
@@ -170,7 +170,7 @@ export const User = {
               id,
             },
             user_followed: {
-              archieved: false,
+              archived: false,
             },
           },
           after,

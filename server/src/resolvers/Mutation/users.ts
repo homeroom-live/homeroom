@@ -122,7 +122,7 @@ export const users = {
       {
         where: { auth0Id },
         data: {
-          archieved: true,
+          archived: true,
         },
       },
       info,

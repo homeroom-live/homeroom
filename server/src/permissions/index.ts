@@ -1,4 +1,4 @@
-import { shield, allow } from 'graphql-shield'
+import { shield, allow, and, or, not } from 'graphql-shield'
 import * as rules from './rules'
 
 // Permissions
@@ -6,40 +6,74 @@ import * as rules from './rules'
 export const permissions = shield(
   {
     Query: {
-      viewer: rules.isAuthenticated,
-      user: allow,
-      classroom: allow,
-      class: allow,
+      viewer: rules.isUserAuthenticated,
+      user: rules.userExists,
+      classroom: rules.classroomExists,
+      class: rules.classExists,
       allClasses: allow,
       liveClasses: allow,
       upcomingClasses: allow,
       recordedClasses: allow,
     },
     Mutation: {
-      createUser: rules.isAuthenticated,
-      updateUser: rules.isAuthenticated,
-      deleteUser: allow,
-      follow: allow,
-      unfollow: allow,
-      createStripeAccount: allow,
-      createStripeCustomer: allow,
-      updateStripeCustomer: allow,
-      createClassroom: allow,
-      updateClassroom: allow,
-      deleteClassroom: allow,
-      joinClassroom: allow,
+      createUser: and(rules.isUserAuthenticated, not(rules.isUserSetup)),
+      updateUser: and(rules.isUserAuthenticated, rules.isUserSetup),
+      deleteUser: and(rules.isUserAuthenticated, rules.isUserSetup),
+      follow: and(rules.isUserAuthenticated, rules.isUserSetup),
+      unfollow: and(rules.isUserAuthenticated, rules.isUserSetup),
+      createStripeAccount: and(rules.isUserAuthenticated, rules.isUserSetup),
+      createStripeCustomer: and(rules.isUserAuthenticated, rules.isUserSetup),
+      updateStripeCustomer: and(rules.isUserAuthenticated, rules.isUserSetup),
+      createClassroom: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        rules.isClassroomOwner,
+      ),
+      updateClassroom: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        rules.isClassroomOwner,
+      ),
+      deleteClassroom: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        rules.isClassroomOwner,
+      ),
+      joinClassroom: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        rules.classroomExists,
+      ),
       leaveClassroom: allow,
-      createClass: allow,
-      updateClass: allow,
-      deleteClass: allow,
-      goLive: allow,
-      createMessage: allow,
-      createCharge: allow,
-      createRefund: allow,
+      createClass: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        rules.classroomExists,
+        rules.isClassroomOwner,
+      ),
+      updateClass: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        rules.classExists,
+      ),
+      deleteClass: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        rules.classExists,
+      ),
+      goLive: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        rules.classExists,
+        rules.isClassOwner,
+      ),
+      createMessage: and(rules.isUserAuthenticated, rules.isUserSetup),
+      createCharge: and(rules.isUserAuthenticated, rules.isUserSetup),
+      createRefund: and(rules.isUserAuthenticated, rules.isUserSetup),
     },
     Viewer: {
-      user: rules.isAuthenticated,
-      requiresSetup: rules.isAuthenticated,
+      user: rules.isUserSetup,
+      requiresSetup: rules.isUserAuthenticated,
     },
     User: {
       id: allow,
@@ -52,22 +86,58 @@ export const permissions = shield(
       url: allow,
       picture: allow,
       video: allow,
-      stripeId: allow,
-      stripeCustomerId: allow,
-      stripeURL: allow,
-      defaultCard: allow,
-      chargesConnection: allow,
-      refundsConnection: allow,
+      stripeId: and(rules.isUserAuthenticated, rules.isUserSetup, rules.isSelf),
+      stripeCustomerId: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        rules.isSelf,
+      ),
+      stripeURL: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        rules.isSelf,
+      ),
+      defaultCard: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        rules.isSelf,
+      ),
+      chargesConnection: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        rules.isSelf,
+      ),
+      refundsConnection: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        rules.isSelf,
+      ),
       teachingClassroomsConnection: allow,
-      studyingClassroomsConnection: allow,
+      studyingClassroomsConnection: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        rules.isSelf,
+      ),
       followersConnection: allow,
       followingConnection: allow,
     },
-    DefaultCard: {
-      last4: allow,
-      expMonth: allow,
-      expYear: allow,
-      brand: allow,
+    UserFollowersConnection: {
+      pageInfo: allow,
+      // TODO: double nesting
+      edges: and(rules.isUserAuthenticated, rules.isUserSetup, rules.isSelf),
+      followed_by_viewer: and(rules.isUserAuthenticated, rules.isUserSetup),
+      aggregate: allow,
+    },
+    UserFollowingConnection: {
+      pageInfo: allow,
+      // TODO: double nesting, that could be problematic
+      edges: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        or(rules.isSelf, rules.isUserFriend),
+      ),
+      following_viewer: and(rules.isUserAuthenticated, rules.isUserSetup),
+      aggregate: allow,
     },
     Classroom: {
       id: allow,
@@ -76,7 +146,21 @@ export const permissions = shield(
       price: allow,
       classesConnection: allow,
       teacher: allow,
-      studentsConnection: allow,
+      studentsConnection: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        or(rules.isClassroomOwner, rules.isClassroomStudent),
+      ),
+    },
+    ClassroomClassesConnection: {
+      pageInfo: allow,
+      // TODO: double nesting
+      edges: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        or(rules.isClassroomOwner, rules.isClassroomStudent),
+      ),
+      aggregate: allow,
     },
     Class: {
       id: allow,
@@ -89,9 +173,26 @@ export const permissions = shield(
       duration: allow,
       video: allow,
       files: allow,
-      vod: allow,
+      vod: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        or(rules.isClassOwner, rules.isClassStudent),
+      ),
       classroom: allow,
-      messagesConnection: allow,
+      messagesConnection: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        or(rules.isClassroomOwner, rules.isClassStudent),
+      ),
+    },
+    ClassMessagesConnection: {
+      pageInfo: allow,
+      edges: allow,
+      aggregate: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        rules.isClassroomOwner,
+      ),
     },
     Message: {
       id: allow,
@@ -113,18 +214,8 @@ export const permissions = shield(
       amount: allow,
       charge: allow,
     },
-    File: {
-      id: allow,
-      name: allow,
-      contentType: allow,
-      url: allow,
-    },
-    Picture: {
-      id: allow,
-      name: allow,
-      contentType: allow,
-      url: allow,
-    },
+    File: rules.fileExists,
+    Picture: rules.fileExists,
   },
   { debug: process.env.NODE_ENV !== 'production' },
 )

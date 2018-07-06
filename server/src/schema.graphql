@@ -275,14 +275,14 @@ type Picture {
 
 type UserFollowersConnection {
   pageInfo: PageInfo!
-  followers: [UserEdge!]!
+  edges: [UserEdge!]!
   followed_by_viewer: Boolean!
   aggregate: AggregateUser!
 }
 
 type UserFollowingConnection {
   pageInfo: PageInfo!
-  following: [UserEdge!]!
+  edges: [UserEdge!]!
   following_viewer: Boolean!
   aggregate: AggregateUser!
 }

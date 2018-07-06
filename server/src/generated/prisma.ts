@@ -172,7 +172,7 @@ type Charge implements Node {
   class(where: ClassWhereInput): Class!
   user(where: UserWhereInput): User!
   refund(where: RefundWhereInput): Refund
-  archieved: Boolean!
+  archived: Boolean!
 }
 
 """A connection to a list of items."""
@@ -188,7 +188,7 @@ type ChargeConnection {
 input ChargeCreateInput {
   amount: Float!
   stripeId: String!
-  archieved: Boolean
+  archived: Boolean
   class: ClassCreateOneInput!
   user: UserCreateOneWithoutChargesInput!
   refund: RefundCreateOneWithoutChargeInput
@@ -207,7 +207,7 @@ input ChargeCreateOneWithoutRefundInput {
 input ChargeCreateWithoutRefundInput {
   amount: Float!
   stripeId: String!
-  archieved: Boolean
+  archived: Boolean
   class: ClassCreateOneInput!
   user: UserCreateOneWithoutChargesInput!
 }
@@ -215,7 +215,7 @@ input ChargeCreateWithoutRefundInput {
 input ChargeCreateWithoutUserInput {
   amount: Float!
   stripeId: String!
-  archieved: Boolean
+  archived: Boolean
   class: ClassCreateOneInput!
   refund: RefundCreateOneWithoutChargeInput
 }
@@ -240,8 +240,8 @@ enum ChargeOrderByInput {
   amount_DESC
   stripeId_ASC
   stripeId_DESC
-  archieved_ASC
-  archieved_DESC
+  archived_ASC
+  archived_DESC
 }
 
 type ChargePreviousValues {
@@ -250,7 +250,7 @@ type ChargePreviousValues {
   updatedAt: DateTime!
   amount: Float!
   stripeId: String!
-  archieved: Boolean!
+  archived: Boolean!
 }
 
 type ChargeSubscriptionPayload {
@@ -295,7 +295,7 @@ input ChargeSubscriptionWhereInput {
 input ChargeUpdateInput {
   amount: Float
   stripeId: String
-  archieved: Boolean
+  archived: Boolean
   class: ClassUpdateOneInput
   user: UserUpdateOneWithoutChargesInput
   refund: RefundUpdateOneWithoutChargeInput
@@ -321,7 +321,7 @@ input ChargeUpdateOneWithoutRefundInput {
 input ChargeUpdateWithoutRefundDataInput {
   amount: Float
   stripeId: String
-  archieved: Boolean
+  archived: Boolean
   class: ClassUpdateOneInput
   user: UserUpdateOneWithoutChargesInput
 }
@@ -329,7 +329,7 @@ input ChargeUpdateWithoutRefundDataInput {
 input ChargeUpdateWithoutUserDataInput {
   amount: Float
   stripeId: String
-  archieved: Boolean
+  archived: Boolean
   class: ClassUpdateOneInput
   refund: RefundUpdateOneWithoutChargeInput
 }
@@ -505,10 +505,10 @@ input ChargeWhereInput {
 
   """All values not ending with the given string."""
   stripeId_not_ends_with: String
-  archieved: Boolean
+  archived: Boolean
 
   """All values that are not equal to given value."""
-  archieved_not: Boolean
+  archived_not: Boolean
   class: ClassWhereInput
   user: UserWhereInput
   refund: RefundWhereInput
@@ -535,7 +535,7 @@ type Class implements Node {
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
   files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File!]
   classroom(where: ClassroomWhereInput): Classroom!
-  archieved: Boolean!
+  archived: Boolean!
 }
 
 """A connection to a list of items."""
@@ -555,7 +555,7 @@ input ClassCreateInput {
   schedule: DateTime
   duration: Int
   live: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
   vod: FileCreateOneInput
@@ -586,7 +586,7 @@ input ClassCreateWithoutClassroomInput {
   schedule: DateTime
   duration: Int
   live: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
   vod: FileCreateOneInput
@@ -601,7 +601,7 @@ input ClassCreateWithoutMessagesInput {
   schedule: DateTime
   duration: Int
   live: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
   vod: FileCreateOneInput
@@ -637,8 +637,8 @@ enum ClassOrderByInput {
   duration_DESC
   live_ASC
   live_DESC
-  archieved_ASC
-  archieved_DESC
+  archived_ASC
+  archived_DESC
 }
 
 type ClassPreviousValues {
@@ -651,7 +651,7 @@ type ClassPreviousValues {
   schedule: DateTime
   duration: Int
   live: Boolean!
-  archieved: Boolean!
+  archived: Boolean!
 }
 
 type Classroom implements Node {
@@ -664,7 +664,7 @@ type Classroom implements Node {
   classes(where: ClassWhereInput, orderBy: ClassOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Class!]
   teacher(where: UserWhereInput): User!
   students(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
-  archieved: Boolean!
+  archived: Boolean!
 }
 
 """A connection to a list of items."""
@@ -681,7 +681,7 @@ input ClassroomCreateInput {
   name: String!
   description: String!
   price: Float!
-  archieved: Boolean
+  archived: Boolean
   classes: ClassCreateManyWithoutClassroomInput
   teacher: UserCreateOneWithoutTeaching_classroomsInput!
   students: UserCreateManyWithoutStudying_classroomsInput
@@ -706,7 +706,7 @@ input ClassroomCreateWithoutClassesInput {
   name: String!
   description: String!
   price: Float!
-  archieved: Boolean
+  archived: Boolean
   teacher: UserCreateOneWithoutTeaching_classroomsInput!
   students: UserCreateManyWithoutStudying_classroomsInput
 }
@@ -715,7 +715,7 @@ input ClassroomCreateWithoutStudentsInput {
   name: String!
   description: String!
   price: Float!
-  archieved: Boolean
+  archived: Boolean
   classes: ClassCreateManyWithoutClassroomInput
   teacher: UserCreateOneWithoutTeaching_classroomsInput!
 }
@@ -724,7 +724,7 @@ input ClassroomCreateWithoutTeacherInput {
   name: String!
   description: String!
   price: Float!
-  archieved: Boolean
+  archived: Boolean
   classes: ClassCreateManyWithoutClassroomInput
   students: UserCreateManyWithoutStudying_classroomsInput
 }
@@ -751,8 +751,8 @@ enum ClassroomOrderByInput {
   description_DESC
   price_ASC
   price_DESC
-  archieved_ASC
-  archieved_DESC
+  archived_ASC
+  archived_DESC
 }
 
 type ClassroomPreviousValues {
@@ -762,7 +762,7 @@ type ClassroomPreviousValues {
   name: String!
   description: String!
   price: Float!
-  archieved: Boolean!
+  archived: Boolean!
 }
 
 type ClassroomSubscriptionPayload {
@@ -808,7 +808,7 @@ input ClassroomUpdateInput {
   name: String
   description: String
   price: Float
-  archieved: Boolean
+  archived: Boolean
   classes: ClassUpdateManyWithoutClassroomInput
   teacher: UserUpdateOneWithoutTeaching_classroomsInput
   students: UserUpdateManyWithoutStudying_classroomsInput
@@ -844,7 +844,7 @@ input ClassroomUpdateWithoutClassesDataInput {
   name: String
   description: String
   price: Float
-  archieved: Boolean
+  archived: Boolean
   teacher: UserUpdateOneWithoutTeaching_classroomsInput
   students: UserUpdateManyWithoutStudying_classroomsInput
 }
@@ -853,7 +853,7 @@ input ClassroomUpdateWithoutStudentsDataInput {
   name: String
   description: String
   price: Float
-  archieved: Boolean
+  archived: Boolean
   classes: ClassUpdateManyWithoutClassroomInput
   teacher: UserUpdateOneWithoutTeaching_classroomsInput
 }
@@ -862,7 +862,7 @@ input ClassroomUpdateWithoutTeacherDataInput {
   name: String
   description: String
   price: Float
-  archieved: Boolean
+  archived: Boolean
   classes: ClassUpdateManyWithoutClassroomInput
   students: UserUpdateManyWithoutStudying_classroomsInput
 }
@@ -1089,10 +1089,10 @@ input ClassroomWhereInput {
 
   """All values greater than or equal the given value."""
   price_gte: Float
-  archieved: Boolean
+  archived: Boolean
 
   """All values that are not equal to given value."""
-  archieved_not: Boolean
+  archived_not: Boolean
   classes_every: ClassWhereInput
   classes_some: ClassWhereInput
   classes_none: ClassWhereInput
@@ -1152,7 +1152,7 @@ input ClassUpdateDataInput {
   schedule: DateTime
   duration: Int
   live: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   vod: FileUpdateOneInput
@@ -1168,7 +1168,7 @@ input ClassUpdateInput {
   schedule: DateTime
   duration: Int
   live: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   vod: FileUpdateOneInput
@@ -1209,7 +1209,7 @@ input ClassUpdateWithoutClassroomDataInput {
   schedule: DateTime
   duration: Int
   live: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   vod: FileUpdateOneInput
@@ -1224,7 +1224,7 @@ input ClassUpdateWithoutMessagesDataInput {
   schedule: DateTime
   duration: Int
   live: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   vod: FileUpdateOneInput
@@ -1496,10 +1496,10 @@ input ClassWhereInput {
 
   """All values that are not equal to given value."""
   live_not: Boolean
-  archieved: Boolean
+  archived: Boolean
 
   """All values that are not equal to given value."""
-  archieved_not: Boolean
+  archived_not: Boolean
   picture: FileWhereInput
   video: FileWhereInput
   vod: FileWhereInput
@@ -1528,7 +1528,7 @@ type File implements Node {
   name: String!
   secret: String!
   contentType: String!
-  archieved: Boolean!
+  archived: Boolean!
 }
 
 """A connection to a list of items."""
@@ -1545,7 +1545,7 @@ input FileCreateInput {
   name: String!
   secret: String!
   contentType: String!
-  archieved: Boolean
+  archived: Boolean
 }
 
 input FileCreateManyInput {
@@ -1580,8 +1580,8 @@ enum FileOrderByInput {
   secret_DESC
   contentType_ASC
   contentType_DESC
-  archieved_ASC
-  archieved_DESC
+  archived_ASC
+  archived_DESC
 }
 
 type FilePreviousValues {
@@ -1591,7 +1591,7 @@ type FilePreviousValues {
   name: String!
   secret: String!
   contentType: String!
-  archieved: Boolean!
+  archived: Boolean!
 }
 
 type FileSubscriptionPayload {
@@ -1637,14 +1637,14 @@ input FileUpdateDataInput {
   name: String
   secret: String
   contentType: String
-  archieved: Boolean
+  archived: Boolean
 }
 
 input FileUpdateInput {
   name: String
   secret: String
   contentType: String
-  archieved: Boolean
+  archived: Boolean
 }
 
 input FileUpdateManyInput {
@@ -1894,10 +1894,10 @@ input FileWhereInput {
 
   """All values not ending with the given string."""
   contentType_not_ends_with: String
-  archieved: Boolean
+  archived: Boolean
 
   """All values that are not equal to given value."""
-  archieved_not: Boolean
+  archived_not: Boolean
   _MagicalBackRelation_ClassVod_every: ClassWhereInput
   _MagicalBackRelation_ClassVod_some: ClassWhereInput
   _MagicalBackRelation_ClassVod_none: ClassWhereInput
@@ -2199,7 +2199,7 @@ type Message implements Node {
   text: String!
   sender(where: UserWhereInput): User!
   class(where: ClassWhereInput): Class!
-  archieved: Boolean!
+  archived: Boolean!
 }
 
 """A connection to a list of items."""
@@ -2214,7 +2214,7 @@ type MessageConnection {
 
 input MessageCreateInput {
   text: String!
-  archieved: Boolean
+  archived: Boolean
   sender: UserCreateOneWithoutMessagesInput!
   class: ClassCreateOneWithoutMessagesInput!
 }
@@ -2231,13 +2231,13 @@ input MessageCreateManyWithoutSenderInput {
 
 input MessageCreateWithoutClassInput {
   text: String!
-  archieved: Boolean
+  archived: Boolean
   sender: UserCreateOneWithoutMessagesInput!
 }
 
 input MessageCreateWithoutSenderInput {
   text: String!
-  archieved: Boolean
+  archived: Boolean
   class: ClassCreateOneWithoutMessagesInput!
 }
 
@@ -2259,8 +2259,8 @@ enum MessageOrderByInput {
   updatedAt_DESC
   text_ASC
   text_DESC
-  archieved_ASC
-  archieved_DESC
+  archived_ASC
+  archived_DESC
 }
 
 type MessagePreviousValues {
@@ -2268,7 +2268,7 @@ type MessagePreviousValues {
   createdAt: DateTime!
   updatedAt: DateTime!
   text: String!
-  archieved: Boolean!
+  archived: Boolean!
 }
 
 type MessageSubscriptionPayload {
@@ -2312,7 +2312,7 @@ input MessageSubscriptionWhereInput {
 
 input MessageUpdateInput {
   text: String
-  archieved: Boolean
+  archived: Boolean
   sender: UserUpdateOneWithoutMessagesInput
   class: ClassUpdateOneWithoutMessagesInput
 }
@@ -2337,13 +2337,13 @@ input MessageUpdateManyWithoutSenderInput {
 
 input MessageUpdateWithoutClassDataInput {
   text: String
-  archieved: Boolean
+  archived: Boolean
   sender: UserUpdateOneWithoutMessagesInput
 }
 
 input MessageUpdateWithoutSenderDataInput {
   text: String
-  archieved: Boolean
+  archived: Boolean
   class: ClassUpdateOneWithoutMessagesInput
 }
 
@@ -2502,10 +2502,10 @@ input MessageWhereInput {
 
   """All values not ending with the given string."""
   text_not_ends_with: String
-  archieved: Boolean
+  archived: Boolean
 
   """All values that are not equal to given value."""
-  archieved_not: Boolean
+  archived_not: Boolean
   sender: UserWhereInput
   class: ClassWhereInput
 }
@@ -2632,7 +2632,7 @@ type Refund implements Node {
   stripeId: String!
   amount: Float!
   charge(where: ChargeWhereInput): Charge!
-  archieved: Boolean!
+  archived: Boolean!
 }
 
 """A connection to a list of items."""
@@ -2648,7 +2648,7 @@ type RefundConnection {
 input RefundCreateInput {
   stripeId: String!
   amount: Float!
-  archieved: Boolean
+  archived: Boolean
   charge: ChargeCreateOneWithoutRefundInput!
 }
 
@@ -2660,7 +2660,7 @@ input RefundCreateOneWithoutChargeInput {
 input RefundCreateWithoutChargeInput {
   stripeId: String!
   amount: Float!
-  archieved: Boolean
+  archived: Boolean
 }
 
 """An edge in a connection."""
@@ -2683,8 +2683,8 @@ enum RefundOrderByInput {
   stripeId_DESC
   amount_ASC
   amount_DESC
-  archieved_ASC
-  archieved_DESC
+  archived_ASC
+  archived_DESC
 }
 
 type RefundPreviousValues {
@@ -2693,7 +2693,7 @@ type RefundPreviousValues {
   updatedAt: DateTime!
   stripeId: String!
   amount: Float!
-  archieved: Boolean!
+  archived: Boolean!
 }
 
 type RefundSubscriptionPayload {
@@ -2738,7 +2738,7 @@ input RefundSubscriptionWhereInput {
 input RefundUpdateInput {
   stripeId: String
   amount: Float
-  archieved: Boolean
+  archived: Boolean
   charge: ChargeUpdateOneWithoutRefundInput
 }
 
@@ -2754,7 +2754,7 @@ input RefundUpdateOneWithoutChargeInput {
 input RefundUpdateWithoutChargeDataInput {
   stripeId: String
   amount: Float
-  archieved: Boolean
+  archived: Boolean
 }
 
 input RefundUpsertWithoutChargeInput {
@@ -2917,10 +2917,10 @@ input RefundWhereInput {
 
   """All values greater than or equal the given value."""
   amount_gte: Float
-  archieved: Boolean
+  archived: Boolean
 
   """All values that are not equal to given value."""
-  archieved_not: Boolean
+  archived_not: Boolean
   charge: ChargeWhereInput
 }
 
@@ -2963,7 +2963,7 @@ type User implements Node {
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
   charges(where: ChargeWhereInput, orderBy: ChargeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Charge!]
   receiveNotifications: Boolean!
-  archieved: Boolean!
+  archived: Boolean!
 }
 
 """A connection to a list of items."""
@@ -2988,7 +2988,7 @@ input UserCreateInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
   teaching_classrooms: ClassroomCreateManyWithoutTeacherInput
@@ -3041,7 +3041,7 @@ input UserCreateWithoutChargesInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
   teaching_classrooms: ClassroomCreateManyWithoutTeacherInput
@@ -3063,7 +3063,7 @@ input UserCreateWithoutFollowersInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
   teaching_classrooms: ClassroomCreateManyWithoutTeacherInput
@@ -3085,7 +3085,7 @@ input UserCreateWithoutFollowingInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
   teaching_classrooms: ClassroomCreateManyWithoutTeacherInput
@@ -3107,7 +3107,7 @@ input UserCreateWithoutMessagesInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
   teaching_classrooms: ClassroomCreateManyWithoutTeacherInput
@@ -3129,7 +3129,7 @@ input UserCreateWithoutStudying_classroomsInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
   teaching_classrooms: ClassroomCreateManyWithoutTeacherInput
@@ -3151,7 +3151,7 @@ input UserCreateWithoutTeaching_classroomsInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
   studying_classrooms: ClassroomCreateManyWithoutStudentsInput
@@ -3199,8 +3199,8 @@ enum UserOrderByInput {
   stripeCustomerId_DESC
   receiveNotifications_ASC
   receiveNotifications_DESC
-  archieved_ASC
-  archieved_DESC
+  archived_ASC
+  archived_DESC
 }
 
 type UserPreviousValues {
@@ -3218,7 +3218,7 @@ type UserPreviousValues {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean!
-  archieved: Boolean!
+  archived: Boolean!
 }
 
 type UserSubscriptionPayload {
@@ -3272,7 +3272,7 @@ input UserUpdateInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   teaching_classrooms: ClassroomUpdateManyWithoutTeacherInput
@@ -3344,7 +3344,7 @@ input UserUpdateWithoutChargesDataInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   teaching_classrooms: ClassroomUpdateManyWithoutTeacherInput
@@ -3366,7 +3366,7 @@ input UserUpdateWithoutFollowersDataInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   teaching_classrooms: ClassroomUpdateManyWithoutTeacherInput
@@ -3388,7 +3388,7 @@ input UserUpdateWithoutFollowingDataInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   teaching_classrooms: ClassroomUpdateManyWithoutTeacherInput
@@ -3410,7 +3410,7 @@ input UserUpdateWithoutMessagesDataInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   teaching_classrooms: ClassroomUpdateManyWithoutTeacherInput
@@ -3432,7 +3432,7 @@ input UserUpdateWithoutStudying_classroomsDataInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   teaching_classrooms: ClassroomUpdateManyWithoutTeacherInput
@@ -3454,7 +3454,7 @@ input UserUpdateWithoutTeaching_classroomsDataInput {
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
-  archieved: Boolean
+  archived: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
   studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
@@ -3931,10 +3931,10 @@ input UserWhereInput {
 
   """All values that are not equal to given value."""
   receiveNotifications_not: Boolean
-  archieved: Boolean
+  archived: Boolean
 
   """All values that are not equal to given value."""
-  archieved_not: Boolean
+  archived_not: Boolean
   picture: FileWhereInput
   video: FileWhereInput
   teaching_classrooms_every: ClassroomWhereInput
@@ -4008,8 +4008,8 @@ export type UserOrderByInput =   'id_ASC' |
   'stripeCustomerId_DESC' |
   'receiveNotifications_ASC' |
   'receiveNotifications_DESC' |
-  'archieved_ASC' |
-  'archieved_DESC'
+  'archived_ASC' |
+  'archived_DESC'
 
 export type ClassroomOrderByInput =   'id_ASC' |
   'id_DESC' |
@@ -4023,8 +4023,8 @@ export type ClassroomOrderByInput =   'id_ASC' |
   'description_DESC' |
   'price_ASC' |
   'price_DESC' |
-  'archieved_ASC' |
-  'archieved_DESC'
+  'archived_ASC' |
+  'archived_DESC'
 
 export type ClassOrderByInput =   'id_ASC' |
   'id_DESC' |
@@ -4044,8 +4044,8 @@ export type ClassOrderByInput =   'id_ASC' |
   'duration_DESC' |
   'live_ASC' |
   'live_DESC' |
-  'archieved_ASC' |
-  'archieved_DESC'
+  'archived_ASC' |
+  'archived_DESC'
 
 export type MessageOrderByInput =   'id_ASC' |
   'id_DESC' |
@@ -4055,8 +4055,8 @@ export type MessageOrderByInput =   'id_ASC' |
   'updatedAt_DESC' |
   'text_ASC' |
   'text_DESC' |
-  'archieved_ASC' |
-  'archieved_DESC'
+  'archived_ASC' |
+  'archived_DESC'
 
 export type FileOrderByInput =   'id_ASC' |
   'id_DESC' |
@@ -4070,8 +4070,8 @@ export type FileOrderByInput =   'id_ASC' |
   'secret_DESC' |
   'contentType_ASC' |
   'contentType_DESC' |
-  'archieved_ASC' |
-  'archieved_DESC'
+  'archived_ASC' |
+  'archived_DESC'
 
 export type MutationType =   'CREATED' |
   'UPDATED' |
@@ -4090,8 +4090,8 @@ export type ChargeOrderByInput =   'id_ASC' |
   'amount_DESC' |
   'stripeId_ASC' |
   'stripeId_DESC' |
-  'archieved_ASC' |
-  'archieved_DESC'
+  'archived_ASC' |
+  'archived_DESC'
 
 export type RefundOrderByInput =   'id_ASC' |
   'id_DESC' |
@@ -4103,13 +4103,13 @@ export type RefundOrderByInput =   'id_ASC' |
   'stripeId_DESC' |
   'amount_ASC' |
   'amount_DESC' |
-  'archieved_ASC' |
-  'archieved_DESC'
+  'archived_ASC' |
+  'archived_DESC'
 
 export interface RefundCreateInput {
   stripeId: String
   amount: Float
-  archieved?: Boolean
+  archived?: Boolean
   charge: ChargeCreateOneWithoutRefundInput
 }
 
@@ -4267,8 +4267,8 @@ export interface UserWhereInput {
   stripeCustomerId_not_ends_with?: String
   receiveNotifications?: Boolean
   receiveNotifications_not?: Boolean
-  archieved?: Boolean
-  archieved_not?: Boolean
+  archived?: Boolean
+  archived_not?: Boolean
   picture?: FileWhereInput
   video?: FileWhereInput
   teaching_classrooms_every?: ClassroomWhereInput
@@ -4352,8 +4352,8 @@ export interface ChargeWhereInput {
   stripeId_not_starts_with?: String
   stripeId_ends_with?: String
   stripeId_not_ends_with?: String
-  archieved?: Boolean
-  archieved_not?: Boolean
+  archived?: Boolean
+  archived_not?: Boolean
   class?: ClassWhereInput
   user?: UserWhereInput
   refund?: RefundWhereInput
@@ -4410,7 +4410,7 @@ export interface ClassroomCreateWithoutClassesInput {
   name: String
   description: String
   price: Float
-  archieved?: Boolean
+  archived?: Boolean
   teacher: UserCreateOneWithoutTeaching_classroomsInput
   students?: UserCreateManyWithoutStudying_classroomsInput
 }
@@ -4418,7 +4418,7 @@ export interface ClassroomCreateWithoutClassesInput {
 export interface RefundUpdateWithoutChargeDataInput {
   stripeId?: String
   amount?: Float
-  archieved?: Boolean
+  archived?: Boolean
 }
 
 export interface UserCreateManyWithoutStudying_classroomsInput {
@@ -4443,7 +4443,7 @@ export interface UserCreateWithoutStudying_classroomsInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileCreateOneInput
   video?: FileCreateOneInput
   teaching_classrooms?: ClassroomCreateManyWithoutTeacherInput
@@ -4501,8 +4501,8 @@ export interface MessageWhereInput {
   text_not_starts_with?: String
   text_ends_with?: String
   text_not_ends_with?: String
-  archieved?: Boolean
-  archieved_not?: Boolean
+  archived?: Boolean
+  archived_not?: Boolean
   sender?: UserWhereInput
   class?: ClassWhereInput
 }
@@ -4631,8 +4631,8 @@ export interface ClassWhereInput {
   duration_gte?: Int
   live?: Boolean
   live_not?: Boolean
-  archieved?: Boolean
-  archieved_not?: Boolean
+  archived?: Boolean
+  archived_not?: Boolean
   picture?: FileWhereInput
   video?: FileWhereInput
   vod?: FileWhereInput
@@ -4660,7 +4660,7 @@ export interface UserCreateWithoutFollowersInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileCreateOneInput
   video?: FileCreateOneInput
   teaching_classrooms?: ClassroomCreateManyWithoutTeacherInput
@@ -4690,13 +4690,13 @@ export interface FileUpdateInput {
   name?: String
   secret?: String
   contentType?: String
-  archieved?: Boolean
+  archived?: Boolean
 }
 
 export interface ChargeCreateWithoutUserInput {
   amount: Float
   stripeId: String
-  archieved?: Boolean
+  archived?: Boolean
   class: ClassCreateOneInput
   refund?: RefundCreateOneWithoutChargeInput
 }
@@ -4722,7 +4722,7 @@ export interface ClassCreateInput {
   schedule?: DateTime
   duration?: Int
   live?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileCreateOneInput
   video?: FileCreateOneInput
   vod?: FileCreateOneInput
@@ -4748,7 +4748,7 @@ export interface RefundWhereUniqueInput {
 export interface RefundCreateWithoutChargeInput {
   stripeId: String
   amount: Float
-  archieved?: Boolean
+  archived?: Boolean
 }
 
 export interface FileWhereUniqueInput {
@@ -4773,7 +4773,7 @@ export interface ClassroomCreateInput {
   name: String
   description: String
   price: Float
-  archieved?: Boolean
+  archived?: Boolean
   classes?: ClassCreateManyWithoutClassroomInput
   teacher: UserCreateOneWithoutTeaching_classroomsInput
   students?: UserCreateManyWithoutStudying_classroomsInput
@@ -4786,7 +4786,7 @@ export interface UserUpsertWithoutChargesInput {
 
 export interface MessageCreateInput {
   text: String
-  archieved?: Boolean
+  archived?: Boolean
   sender: UserCreateOneWithoutMessagesInput
   class: ClassCreateOneWithoutMessagesInput
 }
@@ -4802,7 +4802,7 @@ export interface UserUpdateOneWithoutChargesInput {
 export interface ChargeCreateInput {
   amount: Float
   stripeId: String
-  archieved?: Boolean
+  archived?: Boolean
   class: ClassCreateOneInput
   user: UserCreateOneWithoutChargesInput
   refund?: RefundCreateOneWithoutChargeInput
@@ -4810,7 +4810,7 @@ export interface ChargeCreateInput {
 
 export interface MessageUpdateInput {
   text?: String
-  archieved?: Boolean
+  archived?: Boolean
   sender?: UserUpdateOneWithoutMessagesInput
   class?: ClassUpdateOneWithoutMessagesInput
 }
@@ -4837,7 +4837,7 @@ export interface UserCreateWithoutChargesInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileCreateOneInput
   video?: FileCreateOneInput
   teaching_classrooms?: ClassroomCreateManyWithoutTeacherInput
@@ -4876,7 +4876,7 @@ export interface UserUpsertWithoutTeaching_classroomsInput {
 export interface ChargeCreateWithoutRefundInput {
   amount: Float
   stripeId: String
-  archieved?: Boolean
+  archived?: Boolean
   class: ClassCreateOneInput
   user: UserCreateOneWithoutChargesInput
 }
@@ -4898,7 +4898,7 @@ export interface UserUpdateInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileUpdateOneInput
   video?: FileUpdateOneInput
   teaching_classrooms?: ClassroomUpdateManyWithoutTeacherInput
@@ -4933,7 +4933,7 @@ export interface FileUpdateDataInput {
   name?: String
   secret?: String
   contentType?: String
-  archieved?: Boolean
+  archived?: Boolean
 }
 
 export interface UserUpsertWithoutFollowersInput {
@@ -4997,8 +4997,8 @@ export interface RefundWhereInput {
   amount_lte?: Float
   amount_gt?: Float
   amount_gte?: Float
-  archieved?: Boolean
-  archieved_not?: Boolean
+  archived?: Boolean
+  archived_not?: Boolean
   charge?: ChargeWhereInput
 }
 
@@ -5014,7 +5014,7 @@ export interface UserCreateInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileCreateOneInput
   video?: FileCreateOneInput
   teaching_classrooms?: ClassroomCreateManyWithoutTeacherInput
@@ -5095,8 +5095,8 @@ export interface ClassroomWhereInput {
   price_lte?: Float
   price_gt?: Float
   price_gte?: Float
-  archieved?: Boolean
-  archieved_not?: Boolean
+  archived?: Boolean
+  archived_not?: Boolean
   classes_every?: ClassWhereInput
   classes_some?: ClassWhereInput
   classes_none?: ClassWhereInput
@@ -5110,14 +5110,14 @@ export interface FileCreateInput {
   name: String
   secret: String
   contentType: String
-  archieved?: Boolean
+  archived?: Boolean
 }
 
 export interface ClassroomCreateWithoutTeacherInput {
   name: String
   description: String
   price: Float
-  archieved?: Boolean
+  archived?: Boolean
   classes?: ClassCreateManyWithoutClassroomInput
   students?: UserCreateManyWithoutStudying_classroomsInput
 }
@@ -5129,7 +5129,7 @@ export interface ClassCreateWithoutClassroomInput {
   schedule?: DateTime
   duration?: Int
   live?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileCreateOneInput
   video?: FileCreateOneInput
   vod?: FileCreateOneInput
@@ -5141,14 +5141,14 @@ export interface ClassroomUpdateWithoutTeacherDataInput {
   name?: String
   description?: String
   price?: Float
-  archieved?: Boolean
+  archived?: Boolean
   classes?: ClassUpdateManyWithoutClassroomInput
   students?: UserUpdateManyWithoutStudying_classroomsInput
 }
 
 export interface MessageCreateWithoutClassInput {
   text: String
-  archieved?: Boolean
+  archived?: Boolean
   sender: UserCreateOneWithoutMessagesInput
 }
 
@@ -5173,7 +5173,7 @@ export interface UserCreateWithoutMessagesInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileCreateOneInput
   video?: FileCreateOneInput
   teaching_classrooms?: ClassroomCreateManyWithoutTeacherInput
@@ -5192,7 +5192,7 @@ export interface ClassroomCreateWithoutStudentsInput {
   name: String
   description: String
   price: Float
-  archieved?: Boolean
+  archived?: Boolean
   classes?: ClassCreateManyWithoutClassroomInput
   teacher: UserCreateOneWithoutTeaching_classroomsInput
 }
@@ -5204,7 +5204,7 @@ export interface ClassUpdateWithoutClassroomDataInput {
   schedule?: DateTime
   duration?: Int
   live?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileUpdateOneInput
   video?: FileUpdateOneInput
   vod?: FileUpdateOneInput
@@ -5224,7 +5224,7 @@ export interface UserCreateWithoutTeaching_classroomsInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileCreateOneInput
   video?: FileCreateOneInput
   studying_classrooms?: ClassroomCreateManyWithoutStudentsInput
@@ -5264,7 +5264,7 @@ export interface UserCreateWithoutFollowingInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileCreateOneInput
   video?: FileCreateOneInput
   teaching_classrooms?: ClassroomCreateManyWithoutTeacherInput
@@ -5276,13 +5276,13 @@ export interface UserCreateWithoutFollowingInput {
 
 export interface MessageUpdateWithoutClassDataInput {
   text?: String
-  archieved?: Boolean
+  archived?: Boolean
   sender?: UserUpdateOneWithoutMessagesInput
 }
 
 export interface MessageCreateWithoutSenderInput {
   text: String
-  archieved?: Boolean
+  archived?: Boolean
   class: ClassCreateOneWithoutMessagesInput
 }
 
@@ -5301,7 +5301,7 @@ export interface ClassCreateWithoutMessagesInput {
   schedule?: DateTime
   duration?: Int
   live?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileCreateOneInput
   video?: FileCreateOneInput
   vod?: FileCreateOneInput
@@ -5321,7 +5321,7 @@ export interface UserUpdateWithoutMessagesDataInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileUpdateOneInput
   video?: FileUpdateOneInput
   teaching_classrooms?: ClassroomUpdateManyWithoutTeacherInput
@@ -5376,7 +5376,7 @@ export interface ClassroomUpdateWithoutStudentsDataInput {
   name?: String
   description?: String
   price?: Float
-  archieved?: Boolean
+  archived?: Boolean
   classes?: ClassUpdateManyWithoutClassroomInput
   teacher?: UserUpdateOneWithoutTeaching_classroomsInput
 }
@@ -5421,7 +5421,7 @@ export interface UserUpdateWithoutTeaching_classroomsDataInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileUpdateOneInput
   video?: FileUpdateOneInput
   studying_classrooms?: ClassroomUpdateManyWithoutStudentsInput
@@ -5448,7 +5448,7 @@ export interface FollowUpdateManyWithoutUser_followedInput {
 export interface ChargeUpdateWithoutRefundDataInput {
   amount?: Float
   stripeId?: String
-  archieved?: Boolean
+  archived?: Boolean
   class?: ClassUpdateOneInput
   user?: UserUpdateOneWithoutChargesInput
 }
@@ -5470,7 +5470,7 @@ export interface UserUpdateWithoutChargesDataInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileUpdateOneInput
   video?: FileUpdateOneInput
   teaching_classrooms?: ClassroomUpdateManyWithoutTeacherInput
@@ -5488,7 +5488,7 @@ export interface ClassroomUpdateInput {
   name?: String
   description?: String
   price?: Float
-  archieved?: Boolean
+  archived?: Boolean
   classes?: ClassUpdateManyWithoutClassroomInput
   teacher?: UserUpdateOneWithoutTeaching_classroomsInput
   students?: UserUpdateManyWithoutStudying_classroomsInput
@@ -5520,7 +5520,7 @@ export interface UserUpdateWithoutFollowingDataInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileUpdateOneInput
   video?: FileUpdateOneInput
   teaching_classrooms?: ClassroomUpdateManyWithoutTeacherInput
@@ -5563,7 +5563,7 @@ export interface ChargeUpsertWithWhereUniqueWithoutUserInput {
 
 export interface MessageUpdateWithoutSenderDataInput {
   text?: String
-  archieved?: Boolean
+  archived?: Boolean
   class?: ClassUpdateOneWithoutMessagesInput
 }
 
@@ -5592,7 +5592,7 @@ export interface ClassUpdateWithoutMessagesDataInput {
   schedule?: DateTime
   duration?: Int
   live?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileUpdateOneInput
   video?: FileUpdateOneInput
   vod?: FileUpdateOneInput
@@ -5663,7 +5663,7 @@ export interface ClassroomUpdateWithoutClassesDataInput {
   name?: String
   description?: String
   price?: Float
-  archieved?: Boolean
+  archived?: Boolean
   teacher?: UserUpdateOneWithoutTeaching_classroomsInput
   students?: UserUpdateManyWithoutStudying_classroomsInput
 }
@@ -5675,7 +5675,7 @@ export interface ClassUpdateInput {
   schedule?: DateTime
   duration?: Int
   live?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileUpdateOneInput
   video?: FileUpdateOneInput
   vod?: FileUpdateOneInput
@@ -5705,7 +5705,7 @@ export interface UserUpdateWithWhereUniqueWithoutStudying_classroomsInput {
 export interface ChargeUpdateInput {
   amount?: Float
   stripeId?: String
-  archieved?: Boolean
+  archived?: Boolean
   class?: ClassUpdateOneInput
   user?: UserUpdateOneWithoutChargesInput
   refund?: RefundUpdateOneWithoutChargeInput
@@ -5723,7 +5723,7 @@ export interface UserUpdateWithoutStudying_classroomsDataInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileUpdateOneInput
   video?: FileUpdateOneInput
   teaching_classrooms?: ClassroomUpdateManyWithoutTeacherInput
@@ -5798,7 +5798,7 @@ export interface UserUpdateWithoutFollowersDataInput {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileUpdateOneInput
   video?: FileUpdateOneInput
   teaching_classrooms?: ClassroomUpdateManyWithoutTeacherInput
@@ -5884,8 +5884,8 @@ export interface FileWhereInput {
   contentType_not_starts_with?: String
   contentType_ends_with?: String
   contentType_not_ends_with?: String
-  archieved?: Boolean
-  archieved_not?: Boolean
+  archived?: Boolean
+  archived_not?: Boolean
   _MagicalBackRelation_ClassVod_every?: ClassWhereInput
   _MagicalBackRelation_ClassVod_some?: ClassWhereInput
   _MagicalBackRelation_ClassVod_none?: ClassWhereInput
@@ -5918,7 +5918,7 @@ export interface ChargeUpdateManyWithoutUserInput {
 export interface RefundUpdateInput {
   stripeId?: String
   amount?: Float
-  archieved?: Boolean
+  archived?: Boolean
   charge?: ChargeUpdateOneWithoutRefundInput
 }
 
@@ -5936,7 +5936,7 @@ export interface MessageUpsertWithWhereUniqueWithoutSenderInput {
 export interface ChargeUpdateWithoutUserDataInput {
   amount?: Float
   stripeId?: String
-  archieved?: Boolean
+  archived?: Boolean
   class?: ClassUpdateOneInput
   refund?: RefundUpdateOneWithoutChargeInput
 }
@@ -5967,7 +5967,7 @@ export interface ClassUpdateDataInput {
   schedule?: DateTime
   duration?: Int
   live?: Boolean
-  archieved?: Boolean
+  archived?: Boolean
   picture?: FileUpdateOneInput
   video?: FileUpdateOneInput
   vod?: FileUpdateOneInput
@@ -6030,7 +6030,7 @@ export interface FilePreviousValues {
   name: String
   secret: String
   contentType: String
-  archieved: Boolean
+  archived: Boolean
 }
 
 export interface Charge extends Node {
@@ -6042,7 +6042,7 @@ export interface Charge extends Node {
   class: Class
   user: User
   refund?: Refund
-  archieved: Boolean
+  archived: Boolean
 }
 
 export interface User extends Node {
@@ -6068,7 +6068,7 @@ export interface User extends Node {
   messages?: Message[]
   charges?: Charge[]
   receiveNotifications: Boolean
-  archieved: Boolean
+  archived: Boolean
 }
 
 export interface BatchPayload {
@@ -6091,7 +6091,7 @@ export interface Refund extends Node {
   stripeId: String
   amount: Float
   charge: Charge
-  archieved: Boolean
+  archived: Boolean
 }
 
 export interface RefundPreviousValues {
@@ -6100,7 +6100,7 @@ export interface RefundPreviousValues {
   updatedAt: DateTime
   stripeId: String
   amount: Float
-  archieved: Boolean
+  archived: Boolean
 }
 
 export interface AggregateFile {
@@ -6151,7 +6151,7 @@ export interface File extends Node {
   name: String
   secret: String
   contentType: String
-  archieved: Boolean
+  archived: Boolean
 }
 
 /*
@@ -6173,7 +6173,7 @@ export interface ClassPreviousValues {
   schedule?: DateTime
   duration?: Int
   live: Boolean
-  archieved: Boolean
+  archived: Boolean
 }
 
 export interface AggregateMessage {
@@ -6212,7 +6212,7 @@ export interface UserPreviousValues {
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications: Boolean
-  archieved: Boolean
+  archived: Boolean
 }
 
 /*
@@ -6275,7 +6275,7 @@ export interface Message extends Node {
   text: String
   sender: User
   class: Class
-  archieved: Boolean
+  archived: Boolean
 }
 
 /*
@@ -6312,7 +6312,7 @@ export interface ClassroomPreviousValues {
   name: String
   description: String
   price: Float
-  archieved: Boolean
+  archived: Boolean
 }
 
 export interface AggregateCharge {
@@ -6357,7 +6357,7 @@ export interface MessagePreviousValues {
   createdAt: DateTime
   updatedAt: DateTime
   text: String
-  archieved: Boolean
+  archived: Boolean
 }
 
 export interface AggregateUser {
@@ -6380,7 +6380,7 @@ export interface Class extends Node {
   messages?: Message[]
   files?: File[]
   classroom: Classroom
-  archieved: Boolean
+  archived: Boolean
 }
 
 export interface FileSubscriptionPayload {
@@ -6417,7 +6417,7 @@ export interface Classroom extends Node {
   classes?: Class[]
   teacher: User
   students?: User[]
-  archieved: Boolean
+  archived: Boolean
 }
 
 export interface ChargePreviousValues {
@@ -6426,7 +6426,7 @@ export interface ChargePreviousValues {
   updatedAt: DateTime
   amount: Float
   stripeId: String
-  archieved: Boolean
+  archived: Boolean
 }
 
 export interface ChargeSubscriptionPayload {

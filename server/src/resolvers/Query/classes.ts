@@ -22,7 +22,7 @@ export const classes = {
         first,
         last,
         where: {
-          archieved: false,
+          archived: false,
         },
       },
       info,
@@ -38,7 +38,7 @@ export const classes = {
       {
         where: {
           live: true,
-          archieved: false,
+          archived: false,
         },
         after,
         before,
@@ -59,7 +59,7 @@ export const classes = {
         where: {
           live: false,
           schedule_lt: new Date(),
-          archieved: false,
+          archived: false,
         },
         after,
         before,
@@ -79,7 +79,7 @@ export const classes = {
       {
         where: {
           schedule_gt: new Date(),
-          archieved: false,
+          archived: false,
         },
         after,
         before,

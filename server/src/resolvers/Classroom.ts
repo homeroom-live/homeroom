@@ -13,7 +13,7 @@ export const Classroom = {
         {
           where: {
             classroom: { id },
-            archieved: false,
+            archived: false,
           },
           after,
           before,
@@ -38,7 +38,7 @@ export const Classroom = {
             studying_classrooms_some: {
               id,
             },
-            archieved: false,
+            archived: false,
           },
           after,
           before,

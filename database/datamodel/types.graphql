@@ -40,7 +40,7 @@ type User {
   receiveNotifications: Boolean! @default(value: "true")
 
   # System
-  archieved: Boolean! @default(value: "false")
+  archived: Boolean! @default(value: "false")
 }
 
 type Follow {
@@ -66,7 +66,7 @@ type Classroom {
   students: [User!]! @relation(name: "ClassroomStudent", onDelete: SET_NULL)
 
   # System
-  archieved: Boolean! @default(value: "false")
+  archived: Boolean! @default(value: "false")
 }
 
 type Class {
@@ -101,7 +101,7 @@ type Class {
   # refunds: [Refund!]! @relation(name: "ClassRefunds")
 
   # System
-  archieved: Boolean! @default(value: "false")
+  archived: Boolean! @default(value: "false")
 }
 
 type File {
@@ -114,7 +114,7 @@ type File {
   contentType: String!
 
   # System
-  archieved: Boolean! @default(value: "false")
+  archived: Boolean! @default(value: "false")
 }
 
 type Message {
@@ -129,7 +129,7 @@ type Message {
   # response: Response @relation(name: "MessageResponse", onDelete: CASCADE)
 
   # System
-  archieved: Boolean! @default(value: "false")
+  archived: Boolean! @default(value: "false")
 }
 
 # type Response {
@@ -140,7 +140,7 @@ type Message {
 #   time: Int!
 
 # # System
-#   archieved: Boolean! @default(value: "false")
+#   archived: Boolean! @default(value: "false")
 # }
 
 type Charge {
@@ -157,7 +157,7 @@ type Charge {
   refund: Refund @relation(name: "ChargeRefund", onDelete: CASCADE)
 
   # System
-  archieved: Boolean! @default(value: "false")
+  archived: Boolean! @default(value: "false")
 }
 
 type Refund {
@@ -173,7 +173,7 @@ type Refund {
   # user: User! @relation(name: "UserRefunds")
 
   # System
-  archieved: Boolean! @default(value: "false")
+  archived: Boolean! @default(value: "false")
 }
 
 #

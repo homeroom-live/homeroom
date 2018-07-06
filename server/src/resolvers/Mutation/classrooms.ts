@@ -47,7 +47,7 @@ export const classrooms = {
       {
         where: { id },
         data: {
-          archieved: true,
+          archived: true,
         },
       },
       info,

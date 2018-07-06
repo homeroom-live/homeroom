@@ -68,7 +68,7 @@ export const classes = {
       {
         where: { id },
         data: {
-          archieved: true,
+          archived: true,
         },
       },
       info,
