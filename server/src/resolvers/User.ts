@@ -48,6 +48,7 @@ export const User = {
         {
           where: {
             user: { id },
+            archieved: false,
           },
           after,
           before,
@@ -72,6 +73,7 @@ export const User = {
             charge: {
               user: { id },
             },
+            archieved: false,
           },
           after,
           before,
@@ -94,6 +96,7 @@ export const User = {
         {
           where: {
             teacher: { id },
+            archieved: false,
           },
           after,
           before,
@@ -116,6 +119,7 @@ export const User = {
         {
           where: {
             students_some: { id },
+            archieved: false,
           },
           after,
           before,
@@ -138,6 +142,9 @@ export const User = {
         {
           where: {
             user_followed: { id },
+            user_following: {
+              archieved: false,
+            },
           },
           after,
           before,
@@ -159,7 +166,12 @@ export const User = {
       return ctx.db.query.followsConnection(
         {
           where: {
-            user_following: { id },
+            user_following: {
+              id,
+            },
+            user_followed: {
+              archieved: false,
+            },
           },
           after,
           before,

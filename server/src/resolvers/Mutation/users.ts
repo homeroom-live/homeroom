@@ -118,7 +118,15 @@ export const users = {
   },
   async deleteUser(parent, args, ctx: Context, info) {
     const auth0Id = ctx.request.user.sub
-    return ctx.db.mutation.deleteUser({ where: { auth0Id } }, info)
+    return ctx.db.mutation.updateUser(
+      {
+        where: { auth0Id },
+        data: {
+          archieved: true,
+        },
+      },
+      info,
+    )
   },
   async follow(parent, { username }, ctx: Context, info) {
     const auth0Id = ctx.request.user.sub

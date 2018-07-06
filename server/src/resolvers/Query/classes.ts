@@ -15,7 +15,18 @@ export const classes = {
     ctx: Context,
     info,
   ) => {
-    return ctx.db.query.classesConnection({ after, before, first, last }, info)
+    return ctx.db.query.classesConnection(
+      {
+        after,
+        before,
+        first,
+        last,
+        where: {
+          archieved: false,
+        },
+      },
+      info,
+    )
   },
   liveClasses: async (
     parent,
@@ -24,7 +35,16 @@ export const classes = {
     info,
   ) => {
     return ctx.db.query.classesConnection(
-      { where: { live: true }, after, before, first, last },
+      {
+        where: {
+          live: true,
+          archieved: false,
+        },
+        after,
+        before,
+        first,
+        last,
+      },
       info,
     )
   },
@@ -39,6 +59,7 @@ export const classes = {
         where: {
           live: false,
           schedule_lt: new Date(),
+          archieved: false,
         },
         after,
         before,
@@ -58,6 +79,7 @@ export const classes = {
       {
         where: {
           schedule_gt: new Date(),
+          archieved: false,
         },
         after,
         before,

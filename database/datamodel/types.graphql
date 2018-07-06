@@ -38,6 +38,9 @@ type User {
 
   # Settings
   receiveNotifications: Boolean! @default(value: "true")
+
+  # System
+  archieved: Boolean! @default(value: "false")
 }
 
 type Follow {
@@ -61,6 +64,9 @@ type Classroom {
 
   teacher: User! @relation(name: "ClassroomTeacher", onDelete: SET_NULL)
   students: [User!]! @relation(name: "ClassroomStudent", onDelete: SET_NULL)
+
+  # System
+  archieved: Boolean! @default(value: "false")
 }
 
 type Class {
@@ -93,6 +99,9 @@ type Class {
   # activities: [Activity!]! @relation(name: "ClassActivities")
   # charges: [Charge!]! @relation(name: "ClassCharges")
   # refunds: [Refund!]! @relation(name: "ClassRefunds")
+
+  # System
+  archieved: Boolean! @default(value: "false")
 }
 
 type File {
@@ -103,6 +112,9 @@ type File {
   name: String!
   secret: String! @unique
   contentType: String!
+
+  # System
+  archieved: Boolean! @default(value: "false")
 }
 
 type Message {
@@ -115,6 +127,9 @@ type Message {
   class: Class! @relation(name: "ClassMessage", onDelete: SET_NULL)
 
   # response: Response @relation(name: "MessageResponse", onDelete: CASCADE)
+
+  # System
+  archieved: Boolean! @default(value: "false")
 }
 
 # type Response {
@@ -123,6 +138,9 @@ type Message {
 #   updatedAt: DateTime!
 
 #   time: Int!
+
+# # System
+#   archieved: Boolean! @default(value: "false")
 # }
 
 type Charge {
@@ -137,6 +155,9 @@ type Charge {
   user: User! @relation(name: "UserCharges", onDelete: SET_NULL)
 
   refund: Refund @relation(name: "ChargeRefund", onDelete: CASCADE)
+
+  # System
+  archieved: Boolean! @default(value: "false")
 }
 
 type Refund {
@@ -150,6 +171,9 @@ type Refund {
   # TODO: some of this can be omitted
   # class: Class! @relation(name: "ClassRefunds")
   # user: User! @relation(name: "UserRefunds")
+
+  # System
+  archieved: Boolean! @default(value: "false")
 }
 
 #

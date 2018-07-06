@@ -64,9 +64,12 @@ export const classes = {
   },
 
   async deleteClass(parent, { id }, ctx: Context, info) {
-    return ctx.db.mutation.deleteClass(
+    return ctx.db.mutation.updateClass(
       {
         where: { id },
+        data: {
+          archieved: true,
+        },
       },
       info,
     )
