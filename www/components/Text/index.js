@@ -28,7 +28,7 @@ const P = styled.p`
 const StyledLinkify = StyledLink.withComponent(Linkify)
 
 export const Text = ({ children, ...props }) => (
-  <StyledLinkify target="_blank">
-    <P {...props}>{props.children}</P>
+  <StyledLinkify target="_blank" {...props}>
+    <P {...props}>{children}</P>
   </StyledLinkify>
 )

@@ -29,9 +29,7 @@ class Homeroom extends React.Component {
           <About />
           {/*<Testimonials />*/}
         </div>
-        <div>
-          <Invite />
-        </div>
+        <div>{/*<Invite />*/}</div>
         <Footer />
       </div>
     )

@@ -11,9 +11,9 @@ export const spacing = {
   regular: '15px',
   medium: '30px',
   large: '45px',
-  xlarge: '90px',
-  xxlarge: '135px',
-  xxxlarge: '256px',
+  xlarge: '60px',
+  xxlarge: '120px',
+  xxxlarge: '240px',
 }
 
 export const borderRadius = '4px'
