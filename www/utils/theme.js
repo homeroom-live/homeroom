@@ -18,7 +18,7 @@ export const spacing = {
 
 export const borderRadius = '4px'
 
-const NAVBAR_HEIGHT = '74px'
+const NAVBAR_HEIGHT = '66px'
 export const HEIGHT_MINUS_NAVBAR = `calc(100vh - ${NAVBAR_HEIGHT})`
 
 // Colors

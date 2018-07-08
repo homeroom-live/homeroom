@@ -25,8 +25,8 @@ import iconTwitter from 'static/assets/icons/ui/twitter.svg'
 const FooterContainer = styled.footer`
   display: flex;
   align-items: center;
-  border-top: 1px solid ${colors.grayLighter};
   padding: ${spacing.xlarge} ${spacing.small};
+  border-top: 1px solid ${colors.grayLighter};
 `
 const FooterNav = styled.nav`
   display: flex;

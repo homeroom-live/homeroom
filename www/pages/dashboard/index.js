@@ -23,7 +23,7 @@ class Dashboard extends React.Component {
     return (
       <>
         <Navigation />
-        <SideNavigation activePage="classes">
+        <SideNavigation activePage="classrooms">
           <ClassroomsCoverflow />
         </SideNavigation>
         <Footer />
