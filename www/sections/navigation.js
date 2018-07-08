@@ -47,14 +47,14 @@ const activeLinkStyles = color => `
   text-decoration: none;
 `
 const NavLink = color => styled(Link)`
+  margin: 0 ${spacing.small};
   font-size: ${fontSizes.small};
   font-weight: ${fontWeights.bold};
   color: ${color};
   white-space: nowrap;
   text-decoration: none;
   opacity: ${opacity};
-  &:hover,
-  &:focus {
+  &:hover {
     ${activeLinkStyles(color)};
   }
   ${({ active }) => (active ? activeLinkStyles(color) : null)};
@@ -118,6 +118,9 @@ export const Navigation = ({ transparent, activePage }) => (
       <NavLinkWhite href="/explore" active={activePage === 'explore'}>
         Explore
       </NavLinkWhite>
+      <NavLinkWhite href="/dashboard" active={activePage === 'dashboard'}>
+        Teach
+      </NavLinkWhite>
     </NavLeft>
 
     <NavRight>
@@ -137,8 +140,7 @@ export const Navigation = ({ transparent, activePage }) => (
             case STATUS.READY: {
               if (data.viewer) {
                 return (
-                  <Dropdown
-                    // image={data.viewer.user.picture.url}
+                  <Dropdown // image={data.viewer.user.picture.url}
                     image="https://janecanblogdotcom.files.wordpress.com/2014/09/ashley-square-profile.jpg"
                   >
                     <DropdownLink href="/profile">

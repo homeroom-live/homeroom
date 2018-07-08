@@ -3,9 +3,10 @@ import { darken } from 'polished'
 
 import {
   colors,
-  shadow,
+  spacing,
   fontWeights,
   fontSizes,
+  fontFamily,
   borderRadius,
   transition,
 } from 'utils/theme'
@@ -16,8 +17,10 @@ const themes = {
       background: ${colors.primary};
       border-color: ${colors.primary};
       &:hover {
-        border-color: ${darken(0.1, colors.primary)},
-        background: ${darken(0.1, colors.primary)},
+        border-color: ${darken(0.1, colors.primary)};
+        background: ${darken(0.1, colors.primary)};
+        box-shadow: ${colors.shadowActive};
+        transform: translateY(-2px);
       }
   `,
   // primary: {
@@ -64,14 +67,19 @@ const themes = {
 }
 
 export const Button = styled.button`
+  display: flex;
+  align-items: center;
   position: relative;
-  padding: 8px 24px;
+  padding: ${spacing.small} ${spacing.regular};
   outline: none;
   border-radius: ${borderRadius};
   border: 1px solid transparent;
   color: ${colors.secondary};
+  font-size: ${fontSizes.small};
   font-weight: ${fontWeights.bold};
+  font-family: ${fontFamily};
   white-space: nowrap;
+  text-decoration: none;
   cursor: pointer;
   transition: ${transition};
   ${props => (props.color ? themes[props.color]() : themes.primary())};

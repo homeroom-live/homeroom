@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import getConfig from 'next/config'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -9,7 +9,6 @@ import { lighten } from 'polished'
 
 import { FlexCol } from 'components/FlexCol'
 import { Icon } from 'components/Icon'
-import { NavButton, activeDarkStyle } from 'components/NavButton'
 import { Loading } from 'components/Loading'
 import { Link } from 'components/Link'
 import { Container } from 'components/Container'
@@ -17,37 +16,15 @@ import { Container } from 'components/Container'
 
 // Icons
 
-import iconVideo from 'static/assets/icons/ui/video-light.svg'
-import iconFile from 'static/assets/icons/ui/file-light.svg'
-import iconHelp from 'static/assets/icons/ui/help-white.svg'
+import iconVideoWhite from 'static/assets/icons/ui/video-white.svg'
+import iconHomeWhite from 'static/assets/icons/ui/home-white.svg'
 import iconCurrencyDollarWhite from 'static/assets/icons/ui/currency-dollar-white.svg'
 
 // Styles
 
-import {
-  spacing,
-  colors,
-  fontSizes,
-  fontWeights,
-  opacity,
-  HEIGHT_MINUS_NAVBAR,
-} from 'utils/theme'
-// import { colors } from 'utils/colors'
+import { spacing, colors, opacity, HEIGHT_MINUS_NAVBAR } from 'utils/theme'
 
-const styles = {
-  height: '100%',
-  minHeight: HEIGHT_MINUS_NAVBAR,
-  marginRight: 'auto',
-  paddingTop: spacing.medium,
-  background: colors.grayDarkest,
-}
-
-const iconStyles = {
-  padding: 0,
-  paddingRight: spacing.small,
-}
-
-// Queryies
+// Queries
 
 const stripeAccountUrl = gql`
   query {
@@ -64,35 +41,17 @@ const stripeAccountUrl = gql`
 
 const { publicRuntimeConfig } = getConfig()
 
-// Navigation
-
-const NavigationItem = ({ label, icon, href, identifier, activePage }) => (
-  <Link href={href} passHref>
-    <NavButton
-      theme="dark"
-      activeStyle={activeDarkStyle}
-      className={identifier === activePage ? 'active' : ''}
-    >
-      <Icon src={icon} css={iconStyles} />
-      {label}
-    </NavButton>
-  </Link>
-)
-
-// const activeSideNavLinkStyles = `
-
-// `
-// min-height: ${HEIGHT_MINUS_NAVBAR};
 const SideNav = styled(FlexCol)`
-  height: ${HEIGHT_MINUS_NAVBAR};
+  min-height: ${HEIGHT_MINUS_NAVBAR};
   width: 250px;
   padding: ${spacing.medium} 0;
   background: ${colors.grayDarkest};
 `
 const activeSideNavLinkStyles = () => `
   opacity: 1;
-    color: ${colors.white};
-    background: ${lighten(0.1, colors.grayDarkest)};
+  color: ${colors.white};
+  background: ${lighten(0.1, colors.grayDarkest)};
+  text-decoration: none;
 `
 const SideNavLink = styled(Link)`
   display: flex;
@@ -101,8 +60,7 @@ const SideNavLink = styled(Link)`
   white-space: nowrap;
   text-decoration: none;
   opacity: ${opacity};
-  &:hover,
-  &:focus {
+  &:hover {
     ${activeSideNavLinkStyles()};
   }
   ${({ active }) => (active ? activeSideNavLinkStyles() : null)};
@@ -112,7 +70,7 @@ const SideNavIcon = styled(Icon)`
   margin-top: -2px;
 `
 
-export const SideNavigation = ({ children, activePage }) => (
+export const SideNavigation = ({ children, activeSection }) => (
   <Container fluid>
     <Query query={stripeAccountUrl} notifyOnNetworkStatusChange>
       {({ networkStatus, data }) => {
@@ -127,19 +85,19 @@ export const SideNavigation = ({ children, activePage }) => (
                   size="small"
                   weight="bold"
                   href="/dashboard"
-                  active={activePage === 'classrooms'}
+                  active={activeSection === ''}
                 >
-                  <SideNavIcon src={iconFile} />
+                  <SideNavIcon src={iconHomeWhite} />
                   Classrooms
                 </SideNavLink>
                 <SideNavLink
                   size="small"
                   weight="bold"
                   href="/dashboard"
-                  active={activePage === 'stream'}
+                  active={activeSection === 'stream'}
                 >
-                  <SideNavIcon src={iconVideo} />
-                  Streaming
+                  <SideNavIcon src={iconVideoWhite} />
+                  Live
                 </SideNavLink>
                 <SideNavLink
                   size="small"
@@ -149,7 +107,7 @@ export const SideNavigation = ({ children, activePage }) => (
                       ? data.viewer.user.stripeURL
                       : publicRuntimeConfig.stripeSignupURL
                   }
-                  active={activePage === 'stripe'}
+                  active={activeSection === 'stripe'}
                 >
                   <SideNavIcon src={iconCurrencyDollarWhite} />
                   Stripe Account
@@ -163,6 +121,6 @@ export const SideNavigation = ({ children, activePage }) => (
         }
       }}
     </Query>
-    <FlexCol>{children}</FlexCol>
+    <Fragment>{children}</Fragment>
   </Container>
 )

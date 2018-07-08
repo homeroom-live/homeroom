@@ -1,7 +1,21 @@
 import React, { Fragment } from 'react'
-import Link from 'next/link'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
+import styled from 'styled-components'
+
+import { FlexCol } from 'components/FlexCol'
+import { FlexRow } from 'components/FlexRow'
+import { Header } from 'components/Header'
+import { Link } from 'components/Link'
+import { TextStyle } from 'components/TextStyle'
+import { Icon } from 'components/Icon'
+import { Thumbnail } from 'components/Thumbnail'
+import { Button } from 'components/Button'
+import { Text } from 'components/Text'
+
+import iconHome from 'static/assets/icons/ui/home.svg'
+import iconPlusCircleWhite from 'static/assets/icons/ui/plus-circle-white.svg'
+import { colors, spacing, outline, shadow } from 'utils/theme'
 
 // Components
 
@@ -53,6 +67,47 @@ const classroomsQuery = gql`
   }
 `
 
+const ClassroomsCol = styled(FlexCol)`
+  margin: ${spacing.medium};
+`
+const ClassroomsHeader = styled.header`
+  display: flex;
+  align-items: center;
+  padding: ${spacing.regular};
+  ${outline()};
+`
+const ClassroomsIcon = styled(Icon)`
+  margin-top: -4px;
+  margin-right: ${spacing.small};
+`
+const NewLink = styled(Link)`
+  margin-left: auto;
+`
+const NewIcon = styled(Icon)`
+  margin-top: -2px;
+  margin-right: ${spacing.xsmall};
+`
+
+const ClassroomContainer = styled(FlexCol)`
+  ${outline()};
+  margin-top: ${spacing.regular};
+`
+const ClassroomHeader = styled(FlexRow)`
+  padding: ${spacing.regular};
+  border-bottom: 1px solid ${colors.grayLighter};
+`
+const ClassroomMeta = styled(FlexRow)``
+const ClassroomTitle = styled(Header)`
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+`
+const ClassroomThumbnail = styled(Thumbnail)`
+  margin-right: ${spacing.regular};
+  cursor: pointer;
+`
+
 // Classrooms And Classes
 
 const Class = ({ id, name, description, price, picture }) => (
@@ -81,17 +136,41 @@ const Class = ({ id, name, description, price, picture }) => (
 )
 
 const Classroom = ({ id, name, numberOfClasses, classes }) => (
-  <div>
-    <header>
-      <h2>{name}</h2>
-      <Link
+  <ClassroomContainer>
+    <ClassroomHeader>
+      <ClassroomMeta>
+        <Link href={`/dashboard/classrooms/${id}`}>
+          <ClassroomThumbnail
+            size="large"
+            src="http://www.bistiproofpage.com/wp-content/uploads/2018/04/cute-profile-pics-for-whatsapp-images.png"
+          />
+        </Link>
+        <FlexCol>
+          <Link href="USER_PROFILE">
+            <TextStyle size="small" weight="bold">
+              Name of Teachers
+            </TextStyle>
+          </Link>
+          <Link href={`/dashboard/classrooms/${id}`}>
+            <ClassroomTitle>{name}</ClassroomTitle>
+          </Link>
+          <Text size="small" color="gray" weight="bold">
+            XXXXX Subscribers – {numberOfClasses} Classes
+          </Text>
+        </FlexCol>
+      </ClassroomMeta>
+
+      <NewLink
         href={`/dashboard/classes/new?classroomId=${id}`}
         as={`/dashboard/classes/new/${id}`}
         prefetch
       >
-        <a>New class</a>
-      </Link>
-    </header>
+        <Button color="primary">
+          <NewIcon src={iconPlusCircleWhite} />
+          New Class
+        </Button>
+      </NewLink>
+    </ClassroomHeader>
     <div>
       <label>Classes: {numberOfClasses}</label>
       {classes.map(({ node }) => (
@@ -104,7 +183,7 @@ const Classroom = ({ id, name, numberOfClasses, classes }) => (
         />
       ))}
     </div>
-  </div>
+  </ClassroomContainer>
 )
 
 export const ClassroomsCoverflow = () => (
@@ -115,15 +194,23 @@ export const ClassroomsCoverflow = () => (
           const user = data.viewer.user
 
           return (
-            <Fragment>
-              <header>
-                <h2>
-                  Classrooms {user.teachingClassroomsConnection.aggregate.count}
-                </h2>
-                <Link href="/dashboard/classrooms/new">
-                  <a>New classroom</a>
-                </Link>
-              </header>
+            <ClassroomsCol>
+              <ClassroomsHeader>
+                <ClassroomsIcon src={iconHome} />
+                <Header size="medium">
+                  Classrooms{' '}
+                  <TextStyle color="gray">
+                    {user.teachingClassroomsConnection.aggregate.count}
+                  </TextStyle>
+                </Header>
+                <NewLink href="/dashboard/classrooms/new">
+                  <Button color="primary">
+                    <NewIcon src={iconPlusCircleWhite} />
+                    New classroom
+                  </Button>
+                </NewLink>
+              </ClassroomsHeader>
+
               <main>
                 {user.teachingClassroomsConnection.edges.map(({ node }) => (
                   <Classroom
@@ -135,7 +222,7 @@ export const ClassroomsCoverflow = () => (
                   />
                 ))}
               </main>
-            </Fragment>
+            </ClassroomsCol>
           )
         }
         default: {

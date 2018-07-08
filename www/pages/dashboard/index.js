@@ -22,8 +22,8 @@ class Dashboard extends React.Component {
   render() {
     return (
       <>
-        <Navigation />
-        <SideNavigation activePage="classrooms">
+        <Navigation activePage="dashboard" />
+        <SideNavigation activeSection="">
           <ClassroomsCoverflow />
         </SideNavigation>
         <Footer />

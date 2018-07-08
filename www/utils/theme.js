@@ -73,6 +73,8 @@ export const shadowGreen = {
   ':focus': { transform: 'translateY(-2px)' },
 }
 
+export const fontFamily = 'SofiaPro, TTNorms, sans-serif'
+
 export const fontSizes = {
   xxsmall: '10px',
   xsmall: '12px',

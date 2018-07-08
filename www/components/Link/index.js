@@ -5,14 +5,14 @@ import { darken } from 'polished'
 import { colors, fontSizes, fontWeights, transition } from 'utils/theme'
 
 export const StyledLink = styled.a`
+  text-decoration: none;
   color: ${colors.primary};
   font-size: ${props => fontSizes[props.size || 'regular']};
   font-weight: ${props => fontWeights[props.weight || 'regular']};
 
   transition: ${transition};
-  &:hover,
-  &:focus,
-  &:active {
+  &:hover {
+    text-decoration: underline;
     color: ${darken(0.1, colors.primary)};
   }
 `

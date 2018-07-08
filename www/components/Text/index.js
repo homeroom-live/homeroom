@@ -2,8 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import Linkify from 'react-linkify'
 
-import { StyledLink } from 'components/Link'
-
 import {
   colors,
   spacing,
@@ -25,10 +23,8 @@ const P = styled.p`
   width: 100%;
 `
 
-const StyledLinkify = StyledLink.withComponent(Linkify)
-
 export const Text = ({ children, ...props }) => (
-  <StyledLinkify target="_blank" {...props}>
+  <Linkify target="_blank" {...props}>
     <P {...props}>{children}</P>
-  </StyledLinkify>
+  </Linkify>
 )

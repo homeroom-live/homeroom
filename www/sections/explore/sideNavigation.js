@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Container, Row, Col } from 'reactstrap'
 import { Icon } from '../../components/Icon'
 import { FlexCol } from '../../components/FlexCol'
-import { NavButton } from '../../components/NavButton'
+// import { NavButton } from '../../components/NavButton'
 
 // Icons
 
@@ -33,12 +33,13 @@ const buttonStyles = {
 
 const NavigationItem = ({ label, icon, href, identifier, activeSection }) => (
   <Link key={identifier} href={href} prefetch passHref>
-    <NavButton css={buttonStyles} active={activeSection === identifier}>
-      <Icon src={icon} css={iconStyles} />
-      {label}
-    </NavButton>
+    {label}
   </Link>
 )
+// <NavButton css={buttonStyles} active={activeSection === identifier}>
+//   <Icon src={icon} css={iconStyles} />
+//   {label}
+// </NavButton>
 
 export const SideNavigation = ({ children, activeSection }) => (
   <Container>
