@@ -163,7 +163,7 @@ export const Navigation = ({ transparent, activePage }) => (
               return <LoadingPlaceholder />
 
             default: {
-              return null
+              return <LoadingPlaceholder />
             }
           }
         }}

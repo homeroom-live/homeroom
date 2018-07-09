@@ -12,10 +12,11 @@ import { Icon } from 'components/Icon'
 import { Thumbnail } from 'components/Thumbnail'
 import { Button } from 'components/Button'
 import { Text } from 'components/Text'
+import { ClassCard } from 'components/ClassCard'
 
 import iconHome from 'static/assets/icons/ui/home.svg'
 import iconPlusCircleWhite from 'static/assets/icons/ui/plus-circle-white.svg'
-import { colors, spacing, outline, shadow } from 'utils/theme'
+import { colors, spacing, outline, HEIGHT_MINUS_NAVBAR } from 'utils/theme'
 
 // Components
 
@@ -34,6 +35,11 @@ const classroomsQuery = gql`
             node {
               id
               name
+              teacher {
+                id
+                name
+                url
+              }
               classesConnection {
                 aggregate {
                   count
@@ -68,7 +74,7 @@ const classroomsQuery = gql`
 `
 
 const ClassroomsCol = styled(FlexCol)`
-  margin: ${spacing.medium};
+  margin: ${spacing.medium} ${spacing.medium} ${spacing.xxxlarge};
 `
 const ClassroomsHeader = styled.header`
   display: flex;
@@ -90,13 +96,15 @@ const NewIcon = styled(Icon)`
 
 const ClassroomContainer = styled(FlexCol)`
   ${outline()};
-  margin-top: ${spacing.regular};
+  margin: ${spacing.regular} 0 ${spacing.xlarge};
 `
 const ClassroomHeader = styled(FlexRow)`
   padding: ${spacing.regular};
   border-bottom: 1px solid ${colors.grayLighter};
 `
-const ClassroomMeta = styled(FlexRow)``
+const ClassroomMeta = styled(FlexCol)`
+  width: initial;
+`
 const ClassroomTitle = styled(Header)`
   cursor: pointer;
   &:hover {
@@ -110,55 +118,55 @@ const ClassroomThumbnail = styled(Thumbnail)`
 
 // Classrooms And Classes
 
-const Class = ({ id, name, description, price, picture }) => (
-  <div>
-    <header>
-      <div>Hero should be seen here (picture)</div>
-      <h3>{name}</h3>
-    </header>
-    <main>
-      <p>{description}</p>
-      <div>{price}</div>
-      <div>
-        <Link
-          href={{
-            pathname: `/dashboard/classes/class`,
-            query: { classId: id },
-          }}
-          as={`/dashboard/classes/class/${id}`}
-          prefetch
-        >
-          <a>See more</a>
-        </Link>
-      </div>
-    </main>
-  </div>
-)
+// const Class = ({ id, name, description, price, picture }) => (
+//   <div>
+//     <header>
+//       <div>Hero should be seen here (picture)</div>
+//       <h3>{name}</h3>
+//     </header>
+//     <main>
+//       <p>{description}</p>
+//       <div>{price}</div>
+//       <div>
+//         <Link
+//           href={{
+//             pathname: `/dashboard/classes/class`,
+//             query: { classId: id },
+//           }}
+//           as={`/dashboard/classes/class/${id}`}
+//           prefetch
+//         >
+//           <a>See more</a>
+//         </Link>
+//       </div>
+//     </main>
+//   </div>
+// )
 
-const Classroom = ({ id, name, numberOfClasses, classes }) => (
+const Classroom = ({ id, name, numberOfClasses, classes, teacher }) => (
   <ClassroomContainer>
     <ClassroomHeader>
-      <ClassroomMeta>
+      <FlexRow>
         <Link href={`/dashboard/classrooms/${id}`}>
           <ClassroomThumbnail
-            size="large"
+            size="xlarge"
             src="http://www.bistiproofpage.com/wp-content/uploads/2018/04/cute-profile-pics-for-whatsapp-images.png"
           />
         </Link>
-        <FlexCol>
+        <ClassroomMeta>
           <Link href="USER_PROFILE">
             <TextStyle size="small" weight="bold">
               Name of Teachers
             </TextStyle>
           </Link>
           <Link href={`/dashboard/classrooms/${id}`}>
-            <ClassroomTitle>{name}</ClassroomTitle>
+            <ClassroomTitle size="xlarge">{name}</ClassroomTitle>
           </Link>
           <Text size="small" color="gray" weight="bold">
             XXXXX Subscribers – {numberOfClasses} Classes
           </Text>
-        </FlexCol>
-      </ClassroomMeta>
+        </ClassroomMeta>
+      </FlexRow>
 
       <NewLink
         href={`/dashboard/classes/new?classroomId=${id}`}
@@ -172,13 +180,15 @@ const Classroom = ({ id, name, numberOfClasses, classes }) => (
       </NewLink>
     </ClassroomHeader>
     <div>
-      <label>Classes: {numberOfClasses}</label>
       {classes.map(({ node }) => (
-        <Class
-          key={node.id}
-          id={node.id}
-          name={node.name}
-          description={node.description}
+        <ClassCard
+          node={node}
+          href={`/classroom/${id}/class/${node.id}`}
+          teacher={teacher}
+          // key={node.id}
+          // id={node.id}
+          // name={node.name}
+          // description={node.description}
           // picture={_class.picture.url}
         />
       ))}
@@ -219,6 +229,7 @@ export const ClassroomsCoverflow = () => (
                     name={node.name}
                     numberOfClasses={node.classesConnection.aggregate.count}
                     classes={node.classesConnection.edges}
+                    teacher={node.teacher}
                   />
                 ))}
               </main>

@@ -1,154 +1,92 @@
 import React from 'react'
-import Link from 'next/link'
+import styled from 'styled-components'
+import Router from 'next/router'
 import moment from 'moment-timezone'
-import gql from 'graphql-tag'
 
-// Components
+import { FlexRow } from 'components/FlexRow'
+import { FlexCol } from 'components/FlexCol'
+import { Link } from 'components/Link'
+import { Text } from 'components/Text'
+import { Header } from 'components/Header'
+import { TextStyle } from 'components/TextStyle'
+import { Icon } from 'components/Icon'
 
-import { FlexCol } from '../FlexCol'
-import { FlexRow } from '../FlexRow'
-import { Text } from '../Text'
-import { Video } from '../Video'
-// import { Image } from '../Image'
-import { Price } from '../Price'
-import { Icon } from '../Icon'
-import { ListItem } from '../ListItem'
-// import { formatStartTime } from './utils'
+import { shadow, spacing, colors } from 'utils/theme'
+import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
+import clockGrayIcon from 'static/assets/icons/ui/clock-gray.svg'
+import calendarGrayIcon from 'static/assets/icons/ui/calendar-gray.svg'
 
-import noVideo from '../../static/assets/images/no-video.jpg'
+const ClassContainer = styled(Link)`
+  display: flex;
+  align-items: flex-start;
+  ${shadow()};
+  border: 1px solid transparent;
+  padding: ${spacing.regular};
+  border-radius: 0;
+  border-top: 0px;
+  text-decoration: none;
+  color: transparent;
+  &:hover {
+    color: transparent;
+    border: 1px solid ${colors.grayLighter};
+    text-decoration: none;
+  }
+`
+const ClassImage = styled.img`
+  object-fit: contain;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 256px;
+  max-height: 144px;
+  margin-right: ${spacing.regular};
+  background: ${colors.black};
+`
+const ClassTitle = styled(Header)`
+  &:hover {
+    text-decoration: underline;
+  }
+`
+const ClassMetaItem = styled(Text)`
+  display: flex;
+  align-items: center;
+  margin-right: ${spacing.small};
+  margin-top: 2px;
+`
+const ClassIcon = styled(Icon)`
+  height: 16px;
+  margin-top: -2px;
+  margin-right: ${spacing.xsmall};
+`
 
-// Icons
+// Router.push(`/classroom/${data.classroom.id}/class/${node.id}`)
+export const ClassCard = ({ node, teacher, href }) => (
+  <ClassContainer key={node.id} href={href}>
+    <ClassImage src="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
+    <FlexCol>
+      <Link href={teacher.url || ''} weight="bold" size="small">
+        {'Teacher Name' || teacher.name}
+      </Link>
+      <ClassTitle margin="0">
+        {node.name} <TextStyle color="primary">{node.price}</TextStyle>
+      </ClassTitle>
+      <FlexRow>
+        <ClassMetaItem color="gray" weight="bold" size="small">
+          <ClassIcon src={userGrayIcon} />
+          {0} Students
+        </ClassMetaItem>
 
-// import editIcon from '../../static/assets/icons/ui/edit.svg'
-import liveIcon from '../../static/assets/icons/ui/live.svg'
-import userGrayIcon from '../../static/assets/icons/ui/user-gray.svg'
-import clockGrayIcon from '../../static/assets/icons/ui/clock-gray.svg'
-import calendarGrayIcon from '../../static/assets/icons/ui/calendar-gray.svg'
+        <ClassMetaItem color="gray" weight="bold" size="small">
+          <ClassIcon src={calendarGrayIcon} />
+          {moment(node.schedule).format('M/D/YY')}
+        </ClassMetaItem>
 
-// Styles
-
-import { spacing } from '../../utils/spacing'
-
-// const editIconStyles = {
-//   position: 'absolute',
-//   right: '-30px',
-//   top: 0,
-//   height: '20px',
-//   padding: 0,
-//   opacity: '0.5',
-//   ':hover': {
-//     opacity: 1,
-//   },
-// }
-
-const iconStyles = {
-  height: '16px',
-  padding: 0,
-  paddingRight: spacing.xsmall,
-  marginBottom: '4px',
-}
-
-const titleStyles = {
-  display: 'flex',
-  alignItems: 'flex-start',
-  marginBottom: '3px',
-}
-
-// height = 2 lines of text
-// const descriptionStyles = {
-//   overflow: 'hidden',
-//   maxHeight: `${16 * 1.3 * 2}px`,
-//   margin: 0,
-// }
-
-const containerMobileStyles = {
-  '@media(max-width: 992px)': {
-    flexDirection: 'column',
-  },
-}
-
-const classMetaStyles = {
-  width: '100%',
-  marginLeft: spacing.regular,
-
-  '@media(max-width: 992px)': {
-    marginLeft: 0,
-    marginTop: spacing.regular,
-  },
-}
-
-const liveIconStyles = {
-  position: 'absolute',
-  top: spacing.regular,
-  left: spacing.regular,
-  height: '16px',
-  padding: 0,
-  zIndex: 10,
-}
-
-// ClassCard
-
-export const ClassCard = ({ data }) => (
-  <ListItem css={containerMobileStyles}>
-    <FlexCol css={{ flex: 0 }}>
-      {data.name}
-      {/* {live && <Icon src={liveIcon} css={liveIconStyles} />}
-      {video && video.url ? (
-        <Video src={video ? video.url : ''} />
-      ) : (
-        <Image src={noVideo} />
-      )} */}
-    </FlexCol>
-    {/*
-    <FlexCol css={classMetaStyles}>
-      <Text weight="bold" size="medium" css={titleStyles}>
-        <span style={{ marginRight: 'auto' }}>{name}</span>
-        <Price value={price || 'free'} css={{ marginLeft: spacing.regular }} />
-      </Text>
-
-      <FlexRow css={{ marginTop: spacing.xsmall }}>
-        <Text
-          size="small"
-          color="grayDarker"
-          weight="bold"
-          css={{ marginRight: '20px' }}
-        >
-          <Icon src={userGrayIcon} css={iconStyles} />
-          0
-        </Text>
-
-        <Text
-          size="small"
-          color="grayDarker"
-          weight="bold"
-          css={{ marginRight: '20px' }}
-        >
-          <Icon src={calendarGrayIcon} css={iconStyles} />
-          {moment(schedule).format('M/D/YY')}
-        </Text>
-
-        <Text
-          size="small"
-          color="grayDarker"
-          weight="bold"
-          css={{ marginRight: '20px' }}
-        >
-          <Icon src={clockGrayIcon} css={iconStyles} />
-          {moment(schedule)
+        <ClassMetaItem color="gray" weight="bold" size="small">
+          <ClassIcon src={clockGrayIcon} />
+          {moment(node.schedule)
             .tz('America/New_York')
             .format('LT z')}
-        </Text>
+        </ClassMetaItem>
       </FlexRow>
-
-      <Link href={`/user/${teacher.username}`}>
-        <Text
-          size="small"
-          weight="bold"
-          css={{ margin: 0, width: 'fit-content' }}
-        >
-          {teacher.name}
-        </Text>
-      </Link>
-    </FlexCol> */}
-  </ListItem>
+    </FlexCol>
+  </ClassContainer>
 )

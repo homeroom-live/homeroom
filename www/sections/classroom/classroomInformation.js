@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { default as Router, withRouter } from 'next/router'
+import Router, { withRouter } from 'next/router'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import styled from 'styled-components'
@@ -110,7 +110,6 @@ export const ClassroomInformation = withRouter(({ router }) => (
           return <Loading />
         }
         case STATUS.READY: {
-          console.log(data)
           return (
             <Container>
               <ClassroomHeader>
