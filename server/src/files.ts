@@ -1,8 +1,7 @@
 import { upload } from 'graphql-middleware-apollo-upload-server'
-import { S3, AWSError } from 'aws-sdk'
+import { S3 } from 'aws-sdk'
 import * as mime from 'mime-types'
 import { v4 as uuid } from 'uuid'
-import { PromiseResult } from 'aws-sdk/lib/request'
 
 export interface IUpload {
   stream: string
@@ -28,14 +27,14 @@ const s3Client = new S3({
 // Helpers
 
 async function uploadFile(upload: IUpload): Promise<IFile> {
-  const { stream, filename, mimetype, encoding } = await upload
+  const { stream, filename } = upload
   const secret = uuid()
   const contentType = mime.lookup(filename) || undefined
 
   const response = await s3Client
     .upload({
       Key: secret,
-      ACL: 'public-read',
+      ACL: 'public-read', // private
       Body: stream,
       ContentType: contentType,
       Bucket: process.env.S3_BUCKET,
@@ -55,14 +54,3 @@ async function uploadFile(upload: IUpload): Promise<IFile> {
 export const apolloUploadMiddleware = upload<IFile>({
   uploadHandler: uploadFile,
 })
-
-export async function removeFile(
-  file: IFile,
-): Promise<PromiseResult<S3.DeleteObjectOutput, AWSError>> {
-  return s3Client
-    .deleteObject({
-      Key: file.secret,
-      Bucket: process.env.S3_BUCKET,
-    })
-    .promise()
-}

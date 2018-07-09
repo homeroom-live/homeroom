@@ -434,7 +434,7 @@ type ClassFilesConnection {
 
 type FileEdge {
   cursor: String!
-  node: Message!
+  node: File!
 }
 
 type AggregateFile {
