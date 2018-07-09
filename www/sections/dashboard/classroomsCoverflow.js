@@ -16,9 +16,8 @@ import { ClassCard } from 'components/ClassCard'
 
 import iconHome from 'static/assets/icons/ui/home.svg'
 import iconPlusCircleWhite from 'static/assets/icons/ui/plus-circle-white.svg'
-import { colors, spacing, outline, HEIGHT_MINUS_NAVBAR } from 'utils/theme'
-
-// Components
+import iconPlusCircleGray from 'static/assets/icons/ui/plus-circle-gray.svg'
+import { colors, spacing, outline, shadow } from 'utils/theme'
 
 // GraphQL
 
@@ -73,6 +72,8 @@ const classroomsQuery = gql`
   }
 `
 
+// Components
+
 const ClassroomsCol = styled(FlexCol)`
   margin: ${spacing.medium} ${spacing.medium} ${spacing.xxxlarge};
 `
@@ -115,33 +116,21 @@ const ClassroomThumbnail = styled(Thumbnail)`
   margin-right: ${spacing.regular};
   cursor: pointer;
 `
-
-// Classrooms And Classes
-
-// const Class = ({ id, name, description, price, picture }) => (
-//   <div>
-//     <header>
-//       <div>Hero should be seen here (picture)</div>
-//       <h3>{name}</h3>
-//     </header>
-//     <main>
-//       <p>{description}</p>
-//       <div>{price}</div>
-//       <div>
-//         <Link
-//           href={{
-//             pathname: `/dashboard/classes/class`,
-//             query: { classId: id },
-//           }}
-//           as={`/dashboard/classes/class/${id}`}
-//           prefetch
-//         >
-//           <a>See more</a>
-//         </Link>
-//       </div>
-//     </main>
-//   </div>
-// )
+const ClassroomShowMore = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: ${spacing.regular};
+  text-decoration: none;
+  color: ${colors.gray};
+  ${shadow()};
+  border: none;
+  border-top: 1px solid ${colors.grayLighter};
+  &:hover {
+    color: ${colors.gray};
+    text-decoration: none;
+  }
+`
 
 const Classroom = ({ id, name, numberOfClasses, classes, teacher }) => (
   <ClassroomContainer>
@@ -193,6 +182,9 @@ const Classroom = ({ id, name, numberOfClasses, classes, teacher }) => (
         />
       ))}
     </div>
+    <ClassroomShowMore href="" size="small" color="gray" weight="bold">
+      <NewIcon src={iconPlusCircleGray} /> View All Classes
+    </ClassroomShowMore>
   </ClassroomContainer>
 )
 

@@ -15,6 +15,7 @@ import { Thumbnail } from 'components/Thumbnail'
 import { Link } from 'components/Link'
 import { Loading } from 'components/Loading'
 import { Icon } from 'components/Icon'
+import { ClassCard } from 'components/ClassCard'
 
 import videoIcon from 'static/assets/icons/ui/video.svg'
 import { STATUS } from 'utils/constants'
@@ -143,7 +144,25 @@ export const ClassroomInformation = withRouter(({ router }) => (
                 </ClassesHeader>
 
                 {data.classroom.classesConnection.edges.map(({ node }) => (
-                  <Class
+                  <ClassCard
+                    node={node}
+                    href={`/classroom/${data.classroom.id}/class/${node.id}`}
+                    teacher={data.classroom.teacher}
+                  />
+                ))}
+              </div>
+            </Container>
+          )
+        }
+        default: {
+          return null
+        }
+      }
+    }}
+  </Query>
+))
+
+/*<Class
                     key={node.id}
                     onClick={() =>
                       Router.push(
@@ -170,16 +189,4 @@ export const ClassroomInformation = withRouter(({ router }) => (
                         Subscribers
                       </Text>
                     </FlexCol>
-                  </Class>
-                ))}
-              </div>
-            </Container>
-          )
-        }
-        default: {
-          return null
-        }
-      }
-    }}
-  </Query>
-))
+                      </Class>*/

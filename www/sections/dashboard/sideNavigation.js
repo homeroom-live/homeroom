@@ -71,7 +71,7 @@ const SideNavIcon = styled(Icon)`
 `
 
 export const SideNavigation = ({ children, activeSection }) => (
-  <Container fluid>
+  <Container fluid direction="row">
     <Query query={stripeAccountUrl} notifyOnNetworkStatusChange>
       {({ networkStatus, data }) => {
         switch (networkStatus) {

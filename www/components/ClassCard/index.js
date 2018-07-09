@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import Router from 'next/router'
 import moment from 'moment-timezone'
 
 import { FlexRow } from 'components/FlexRow'
@@ -19,11 +18,9 @@ import calendarGrayIcon from 'static/assets/icons/ui/calendar-gray.svg'
 const ClassContainer = styled(Link)`
   display: flex;
   align-items: flex-start;
+  padding: ${spacing.regular};
   ${shadow()};
   border: 1px solid transparent;
-  padding: ${spacing.regular};
-  border-radius: 0;
-  border-top: 0px;
   text-decoration: none;
   color: transparent;
   &:hover {
@@ -46,6 +43,9 @@ const ClassTitle = styled(Header)`
     text-decoration: underline;
   }
 `
+const ClassMeta = styled(FlexCol)`
+  width: initial;
+`
 const ClassMetaItem = styled(Text)`
   display: flex;
   align-items: center;
@@ -58,11 +58,10 @@ const ClassIcon = styled(Icon)`
   margin-right: ${spacing.xsmall};
 `
 
-// Router.push(`/classroom/${data.classroom.id}/class/${node.id}`)
 export const ClassCard = ({ node, teacher, href }) => (
   <ClassContainer key={node.id} href={href}>
     <ClassImage src="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
-    <FlexCol>
+    <ClassMeta>
       <Link href={teacher.url || ''} weight="bold" size="small">
         {'Teacher Name' || teacher.name}
       </Link>
@@ -74,12 +73,10 @@ export const ClassCard = ({ node, teacher, href }) => (
           <ClassIcon src={userGrayIcon} />
           {0} Students
         </ClassMetaItem>
-
         <ClassMetaItem color="gray" weight="bold" size="small">
           <ClassIcon src={calendarGrayIcon} />
           {moment(node.schedule).format('M/D/YY')}
         </ClassMetaItem>
-
         <ClassMetaItem color="gray" weight="bold" size="small">
           <ClassIcon src={clockGrayIcon} />
           {moment(node.schedule)
@@ -87,6 +84,6 @@ export const ClassCard = ({ node, teacher, href }) => (
             .format('LT z')}
         </ClassMetaItem>
       </FlexRow>
-    </FlexCol>
+    </ClassMeta>
   </ClassContainer>
 )

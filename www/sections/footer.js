@@ -22,16 +22,11 @@ import iconFacebook from 'static/assets/icons/ui/facebook.svg'
 import iconInstagram from 'static/assets/icons/ui/instagram.svg'
 import iconTwitter from 'static/assets/icons/ui/twitter.svg'
 
-const FooterContainer = styled.footer`
+const FooterWrapper = styled.footer`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   padding: ${spacing.xlarge} ${spacing.small};
   border-top: 1px solid ${colors.grayLighter};
-`
-const FooterNav = styled.nav`
-  display: flex;
-
-  margin: 0 auto;
 `
 const FooterLink = styled(Link)`
   margin: 0 0 ${spacing.xsmall};
@@ -70,8 +65,8 @@ const SocialIcon = styled(Icon)`
 `
 
 export const Footer = () => (
-  <FooterContainer>
-    <Container>
+  <FooterWrapper>
+    <Container direction="row">
       <LogoCol>
         <Link href="/">
           <Logo src={logoDark} />
@@ -114,5 +109,5 @@ export const Footer = () => (
         </Link>
       </SocialCol>
     </Container>
-  </FooterContainer>
+  </FooterWrapper>
 )
