@@ -16,7 +16,7 @@ import { Icon } from 'components/Icon'
 import { TextStyle } from 'components/TextStyle'
 import { Button } from 'components/Button'
 
-import { colors, spacing, outline, shadow } from 'utils/theme'
+import { colors, spacing, outline } from 'utils/theme'
 import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
 import clockGrayIcon from 'static/assets/icons/ui/clock-gray.svg'
 import calendarGrayIcon from 'static/assets/icons/ui/calendar-gray.svg'

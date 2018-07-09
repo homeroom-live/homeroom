@@ -1,16 +1,58 @@
 import React, { Fragment } from 'react'
-import Link from 'next/link'
 import { withRouter } from 'next/router'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
+import styled from 'styled-components'
 
 // Components
 
-import { Calendar } from '../../components/Calendar'
-import { FilePicker } from '../../components/FilePicker'
-import { ImagePicker } from '../../components/ImagePicker'
-import { VideoPicker } from '../../components/VideoPicker'
-import { Loading } from '../../components/Loading'
+import { Calendar } from 'components/Calendar'
+import { FilePicker } from 'components/FilePicker'
+import { ImagePicker } from 'components/ImagePicker'
+import { VideoPicker } from 'components/VideoPicker'
+import { Loading } from 'components/Loading'
+import { FlexCol } from 'components/FlexCol'
+import { FlexRow } from 'components/FlexRow'
+import { Text } from 'components/Text'
+import { Icon } from 'components/Icon'
+import { Link } from 'components/Link'
+import { Button } from 'components/Button'
+
+import { colors, shadow, spacing } from 'utils/theme'
+import iconCheck from 'static/assets/icons/ui/check.svg'
+import iconVideoWhite from 'static/assets/icons/ui/video-white.svg'
+
+const CardCol = styled(FlexCol)`
+  align-items: center;
+  justify-content: flex-start;
+  margin: ${spacing.medium};
+`
+const Card = styled(FlexCol)`
+  ${shadow()};
+  max-width: 384px;
+`
+const CardHeader = styled(FlexRow)`
+  padding: ${spacing.regular};
+  border-bottom: 1px solid ${colors.grayLighter};
+`
+const CardBody = styled(FlexCol)`
+  padding: ${spacing.regular};
+`
+const CardFooter = styled(FlexRow)`
+  justify-content: flex-end;
+`
+const CardTitleLink = styled(Link)`
+  margin-bottom: ${spacing.xsmall};
+  &:hover {
+    text-decoration: underline;
+  }
+`
+const CardText = styled(Text)`
+  margin-bottom: ${spacing.medium};
+`
+const LiveLink = styled(Link)`
+  margin-left: ${spacing.small};
+`
 
 // GraphQL
 
@@ -36,6 +78,8 @@ const createClass = gql`
       files: $files
     ) {
       id
+      name
+      description
     }
   }
 `
@@ -121,14 +165,43 @@ class _ClassForm extends React.Component {
             return 'something went wrong'
           } else if (data) {
             return (
-              <Fragment>
-                <div>You have successfully created a new class!</div>
-                <div>
-                  <Link href={this.getClassStreamURL(data.createClass.id)}>
-                    <a>Start the stream!</a>
-                  </Link>
-                </div>
-              </Fragment>
+              <CardCol>
+                <Card>
+                  <CardHeader>
+                    <Icon src={iconCheck} inline />
+                    <Text weight="bold" margin="0">
+                      Class Created!
+                    </Text>
+                  </CardHeader>
+                  <CardBody>
+                    <CardTitleLink
+                      href={`/dashboard/classes/class/${data.createClass.id}`}
+                      color="secondary"
+                      size="large"
+                      weight="bold"
+                    >
+                      {data.createClass.name}
+                    </CardTitleLink>
+                    <CardText>{data.createClass.description}</CardText>
+                    <CardFooter>
+                      <Link
+                        href={`/class${data.createClass.id}`}
+                        textDecoration="none"
+                      >
+                        <Button color="secondary">Preview Class</Button>
+                      </Link>
+                      <LiveLink
+                        href={`/dashboard/live/class/${data.createClass.id}`}
+                      >
+                        <Button color="primary">
+                          <Icon src={iconVideoWhite} inline />
+                          Go Live
+                        </Button>
+                      </LiveLink>
+                    </CardFooter>
+                  </CardBody>
+                </Card>
+              </CardCol>
             )
           } else {
             return (
