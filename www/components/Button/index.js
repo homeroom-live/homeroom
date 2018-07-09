@@ -23,26 +23,18 @@ const themes = {
         transform: translateY(-2px);
       }
   `,
-  // primary: {
-  //   color: colors.white,
-  //   background: colors.primary,
-  //   borderColor: colors.primary,
-  //   ':hover': {
-  //     borderColor: darken(0.1, colors.primary),
-  //     background: darken(0.1, colors.primary),
-  //   },
-  // },
-
-  secondary: {
-    color: colors.primary,
-    background: 'transparent',
-    borderColor: 'transparent',
-    ':hover': {
-      color: colors.white,
-      borderColor: darken(0.1, colors.primary),
-      background: darken(0.1, colors.primary),
-    },
-  },
+  secondary: () => `
+    color: ${colors.primary};
+    background: transparent;
+    border-color: transparent;
+    &:hover {
+      color: ${colors.white}
+      border-color: ${darken(0.1, colors.primary)};
+      background: ${darken(0.1, colors.primary)};
+      box-shadow: ${colors.shadowActive};
+      transform: translateY(-2px);
+    }
+  `,
 
   danger: {
     color: colors.white,

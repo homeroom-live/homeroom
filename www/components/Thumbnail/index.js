@@ -12,8 +12,8 @@ const sizes = {
 
 export const Thumbnail = styled.img`
   border-radius: 50%;
-  width: 100%;
   height: ${props => sizes[props.size || 'regular']};
+  width: ${props => sizes[props.size || 'regular']};
   max-height: ${props => sizes[props.size || 'regular']};
   max-width: ${props => sizes[props.size || 'regular']};
 `

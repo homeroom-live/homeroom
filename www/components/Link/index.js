@@ -12,7 +12,7 @@ export const StyledLink = styled.a`
 
   transition: ${transition};
   &:hover {
-    text-decoration: underline;
+    text-decoration: ${props => props.textDecoration || 'underline'};
     color: ${darken(0.1, colors.primary)};
   }
 `

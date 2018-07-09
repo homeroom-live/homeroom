@@ -16,16 +16,14 @@ import clockGrayIcon from 'static/assets/icons/ui/clock-gray.svg'
 import calendarGrayIcon from 'static/assets/icons/ui/calendar-gray.svg'
 
 const ClassContainer = styled(Link)`
+  ${shadow()};
   display: flex;
   align-items: flex-start;
   padding: ${spacing.regular};
-  ${shadow()};
-  border: 1px solid transparent;
   text-decoration: none;
   color: transparent;
   &:hover {
     color: transparent;
-    border: 1px solid ${colors.grayLighter};
     text-decoration: none;
   }
 `
@@ -59,7 +57,7 @@ const ClassIcon = styled(Icon)`
 `
 
 export const ClassCard = ({ node, teacher, href }) => (
-  <ClassContainer key={node.id} href={href}>
+  <ClassContainer href={href}>
     <ClassImage src="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
     <ClassMeta>
       <Link href={teacher.url || ''} weight="bold" size="small">

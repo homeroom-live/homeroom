@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
@@ -13,6 +13,7 @@ import { Thumbnail } from 'components/Thumbnail'
 import { Button } from 'components/Button'
 import { Text } from 'components/Text'
 import { ClassCard } from 'components/ClassCard'
+import { ClassroomHeader } from 'sections/dashboard/classroomHeader'
 
 import iconHome from 'static/assets/icons/ui/home.svg'
 import iconPlusCircleWhite from 'static/assets/icons/ui/plus-circle-white.svg'
@@ -96,25 +97,7 @@ const NewIcon = styled(Icon)`
 `
 
 const ClassroomContainer = styled(FlexCol)`
-  ${outline()};
   margin: ${spacing.regular} 0 ${spacing.xlarge};
-`
-const ClassroomHeader = styled(FlexRow)`
-  padding: ${spacing.regular};
-  border-bottom: 1px solid ${colors.grayLighter};
-`
-const ClassroomMeta = styled(FlexCol)`
-  width: initial;
-`
-const ClassroomTitle = styled(Header)`
-  cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
-`
-const ClassroomThumbnail = styled(Thumbnail)`
-  margin-right: ${spacing.regular};
-  cursor: pointer;
 `
 const ClassroomShowMore = styled(Link)`
   display: flex;
@@ -124,8 +107,6 @@ const ClassroomShowMore = styled(Link)`
   text-decoration: none;
   color: ${colors.gray};
   ${shadow()};
-  border: none;
-  border-top: 1px solid ${colors.grayLighter};
   &:hover {
     color: ${colors.gray};
     text-decoration: none;
@@ -134,55 +115,28 @@ const ClassroomShowMore = styled(Link)`
 
 const Classroom = ({ id, name, numberOfClasses, classes, teacher }) => (
   <ClassroomContainer>
-    <ClassroomHeader>
-      <FlexRow>
-        <Link href={`/dashboard/classrooms/${id}`}>
-          <ClassroomThumbnail
-            size="xlarge"
-            src="http://www.bistiproofpage.com/wp-content/uploads/2018/04/cute-profile-pics-for-whatsapp-images.png"
-          />
-        </Link>
-        <ClassroomMeta>
-          <Link href="USER_PROFILE">
-            <TextStyle size="small" weight="bold">
-              Name of Teachers
-            </TextStyle>
-          </Link>
-          <Link href={`/dashboard/classrooms/${id}`}>
-            <ClassroomTitle size="xlarge">{name}</ClassroomTitle>
-          </Link>
-          <Text size="small" color="gray" weight="bold">
-            XXXXX Subscribers – {numberOfClasses} Classes
-          </Text>
-        </ClassroomMeta>
-      </FlexRow>
-
-      <NewLink
-        href={`/dashboard/classes/new?classroomId=${id}`}
-        as={`/dashboard/classes/new/${id}`}
-        prefetch
-      >
-        <Button color="primary">
-          <NewIcon src={iconPlusCircleWhite} />
-          New Class
-        </Button>
-      </NewLink>
-    </ClassroomHeader>
+    <ClassroomHeader
+      id={id}
+      name={name}
+      numberOfClasses={numberOfClasses}
+      teacher={teacher}
+    />
     <div>
       {classes.map(({ node }) => (
         <ClassCard
           node={node}
-          href={`/classroom/${id}/class/${node.id}`}
+          key={node.id}
+          href={`/dashboard/classroom/${id}/class/${node.id}`}
           teacher={teacher}
-          // key={node.id}
-          // id={node.id}
-          // name={node.name}
-          // description={node.description}
-          // picture={_class.picture.url}
         />
       ))}
     </div>
-    <ClassroomShowMore href="" size="small" color="gray" weight="bold">
+    <ClassroomShowMore
+      href={`/dashboard/classrooms/classroom/${id}`}
+      size="small"
+      color="gray"
+      weight="bold"
+    >
       <NewIcon src={iconPlusCircleGray} /> View All Classes
     </ClassroomShowMore>
   </ClassroomContainer>
