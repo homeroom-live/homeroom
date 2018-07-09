@@ -21,6 +21,7 @@ const P = styled.p`
     props.weight ? fontWeights[props.weight] : fontWeights.regular};
   margin: ${props => props.margin || `0 0 ${spacing.xsmall}`};
   width: 100%;
+  outline: none;
 `
 
 export const Text = ({ children, ...props }) => (

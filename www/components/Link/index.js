@@ -9,7 +9,7 @@ export const StyledLink = styled.a`
   color: ${props => colors[props.color || 'primary']};
   font-size: ${props => fontSizes[props.size || 'regular']};
   font-weight: ${props => fontWeights[props.weight || 'regular']};
-
+  outline: none;
   transition: ${transition};
   &:hover {
     text-decoration: ${props => props.textDecoration || 'underline'};

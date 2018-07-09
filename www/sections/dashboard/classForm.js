@@ -26,6 +26,7 @@ const CardCol = styled(FlexCol)`
   align-items: center;
   justify-content: flex-start;
   margin: ${spacing.medium};
+  margin-top: ${spacing.xxlarge};
 `
 const Card = styled(FlexCol)`
   ${shadow()};

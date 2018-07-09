@@ -64,7 +64,7 @@ export const ClassCard = ({ node, teacher, href }) => (
         {'Teacher Name' || teacher.name}
       </Link>
       <ClassTitle margin="0">
-        {node.name} <TextStyle color="primary">{node.price}</TextStyle>
+        {node.name} <TextStyle color="primary">${node.price}</TextStyle>
       </ClassTitle>
       <FlexRow>
         <ClassMetaItem color="gray" weight="bold" size="small">

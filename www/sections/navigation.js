@@ -146,9 +146,6 @@ export const Navigation = ({ transparent, activePage }) => (
                     <DropdownLink href="/profile">
                       <DropdownOption>Profile</DropdownOption>
                     </DropdownLink>
-                    <DropdownLink href="/dashboard">
-                      <DropdownOption>Dashboard</DropdownOption>
-                    </DropdownLink>
                     <DropdownLink href="/logout">
                       <DropdownOption>Logout</DropdownOption>
                     </DropdownLink>

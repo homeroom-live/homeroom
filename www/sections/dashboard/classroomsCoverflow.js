@@ -126,7 +126,7 @@ const Classroom = ({ id, name, numberOfClasses, classes, teacher }) => (
         <ClassCard
           node={node}
           key={node.id}
-          href={`/dashboard/classroom/${id}/class/${node.id}`}
+          href={`/dashboard/classes/class/${node.id}`}
           teacher={teacher}
         />
       ))}

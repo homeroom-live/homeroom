@@ -15,7 +15,7 @@ function normalizeGender(gender: string): Gender {
 }
 
 function generateClassroomName(name: string): string {
-  return `${name}'s Classroom`
+  return `${name}’s Classroom`
 }
 
 function generateClassroomDescription(name: string): string {

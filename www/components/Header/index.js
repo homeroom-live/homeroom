@@ -8,4 +8,5 @@ export const Header = styled.h2`
   font-weight: ${props =>
     props.weight ? fontWeights[props.weight] : fontWeights.bold};
   margin: ${props => props.margin || `0`};
+  outline: none;
 `
