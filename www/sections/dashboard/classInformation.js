@@ -28,10 +28,17 @@ const classQuery = gql`
         id
         url
       }
-      files {
-        id
-        name
-        url
+      filesConnection {
+        edges {
+          node {
+            id
+            name
+            url
+          }
+        }
+        aggregate {
+          count
+        }
       }
       vod {
         id
