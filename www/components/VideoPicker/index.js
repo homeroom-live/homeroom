@@ -1,32 +1,17 @@
 import React from 'react'
-import RawDropzone from 'react-dropzone'
 import styled from 'styled-components'
 
 import { FlexCol } from 'components/FlexCol'
 import { Icon } from 'components/Icon'
 import { Text } from 'components/Text'
+import { Dropzone } from 'components/Dropzone'
 
-import { borderRadius, transition, colors, spacing, opacity } from 'utils/theme'
+import { borderRadius, colors, spacing, opacity } from 'utils/theme'
 import iconVideoGray from 'static/assets/icons/ui/video-gray.svg'
 import iconXWhite from 'static/assets/icons/ui/x-circle-white.svg'
 
 const VideoPickerContainer = styled(FlexCol)`
   text-transform: initial;
-`
-const Dropzone = styled(RawDropzone)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: ${spacing.medium};
-  cursor: pointer;
-  border: 2px dashed ${colors.grayLighter};
-  border-radius: ${borderRadius};
-  transition: ${transition};
-  &:hover,
-  &:focus {
-    border-color: ${colors.secondary};
-  }
 `
 const VideoContainer = styled.div`
   position: relative;
@@ -56,7 +41,6 @@ export class VideoPicker extends React.Component {
   getVideoSrc = () => {
     const { value } = this.props
     // From API...
-    console.log(value[0].preview)
     if (value.length) {
       return value[0].preview
     }
@@ -67,7 +51,6 @@ export class VideoPicker extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     return (
       <VideoPickerContainer size={this.props.size}>
         {!this.props.value && (
@@ -78,7 +61,7 @@ export class VideoPicker extends React.Component {
             onClick={e => e.preventDefault()}
           >
             <PlaceholderIcon src={iconVideoGray} />
-            <PlaceholderText size="small" color="grayDarker" weight="bold">
+            <PlaceholderText size="small" color="gray" weight="bold">
               Drop video or click here to upload
             </PlaceholderText>
           </Dropzone>

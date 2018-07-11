@@ -14,11 +14,12 @@ import { Loading } from 'components/Loading'
 import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
 import { Text } from 'components/Text'
-import { Icon } from 'components/Icon'
+import { IconHeader } from 'components/IconHeader'
 import { Link } from 'components/Link'
 import { Button } from 'components/Button'
+import { Icon } from 'components/Icon'
 
-import { colors, shadow, spacing } from 'utils/theme'
+import { shadow, spacing } from 'utils/theme'
 import iconCheck from 'static/assets/icons/ui/check.svg'
 import iconVideoWhite from 'static/assets/icons/ui/video-white.svg'
 
@@ -31,10 +32,6 @@ const CardCol = styled(FlexCol)`
 const Card = styled(FlexCol)`
   ${shadow()};
   max-width: 384px;
-`
-const CardHeader = styled(FlexRow)`
-  padding: ${spacing.regular};
-  border-bottom: 1px solid ${colors.grayLighter};
 `
 const CardBody = styled(FlexCol)`
   padding: ${spacing.regular};
@@ -168,12 +165,7 @@ class _ClassForm extends React.Component {
             return (
               <CardCol>
                 <Card>
-                  <CardHeader>
-                    <Icon src={iconCheck} inline />
-                    <Text weight="bold" margin="0">
-                      Class Created!
-                    </Text>
-                  </CardHeader>
+                  <IconHeader inline src={iconCheck} value="Class Created!" />
                   <CardBody>
                     <CardTitleLink
                       href={`/dashboard/classes/class/${data.createClass.id}`}
@@ -186,7 +178,7 @@ class _ClassForm extends React.Component {
                     <CardText>{data.createClass.description}</CardText>
                     <CardFooter>
                       <Link
-                        href={`/class${data.createClass.id}`}
+                        href={`/class/${data.createClass.id}`}
                         textDecoration="none"
                       >
                         <Button color="secondary">Preview Class</Button>

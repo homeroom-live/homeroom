@@ -1,101 +1,78 @@
 import React from 'react'
-import Dropzone from 'react-dropzone'
-import glamorous from 'glamorous'
+import styled from 'styled-components'
 
 import { FlexCol } from 'components/FlexCol'
 import { Icon } from 'components/Icon'
 import { Text } from 'components/Text'
 import { Thumbnail } from 'components/Thumbnail'
+import { Dropzone } from 'components/Dropzone'
 
-import { colors, shadow } from 'utils/colors'
-import { spacing } from 'utils/spacing'
-
+import { borderRadius, colors, spacing, opacity } from 'utils/theme'
 import iconCameraGray from 'static/assets/icons/ui/camera-gray.svg'
 import iconXWhite from 'static/assets/icons/ui/x-circle-white.svg'
 
-const DropzoneWrapper = glamorous(Dropzone)({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: spacing.medium,
-  cursor: 'pointer',
-  ...shadow,
-})
-
-const ImageContainer = glamorous.div({
-  maxWidth: '174px', // xlarge thumbnail + 30px padding
-  padding: spacing.regular,
-  position: 'relative',
-  ...shadow,
-  transform: 'none !important',
-})
-
-const iconStyles = {
-  padding: 0,
-  position: 'absolute',
-  top: spacing.medium,
-  right: spacing.medium,
-  borderRadius: '20px',
-  background: colors.secondary,
-  height: '20px',
-  opacity: 0.75,
+const ImagePickerContainer = styled(FlexCol)`
+  text-transform: initial;
+`
+const ImageContainer = styled.div`
+  position: relative;
+  border-radius: ${borderRadius};
+`
+const PlaceholderIcon = styled(Icon)`
+  margin-bottom: ${spacing.small};
+`
+const PlaceholderText = styled(Text)`
+  margin: 0;
+  text-align: center;
+`
+const XIcon = styled(Icon)`
+  position: absolute;
+  top: ${spacing.regular};
+  right: ${spacing.regular};
+  border-radius: 20px;
+  background: ${colors.secondary};
+  height: 20px;
+  opacity: ${opacity};
   ':hover': {
-    opacity: 1,
-  },
-}
+    opacity: 1;
+  }
+`
 
 export class ImagePicker extends React.Component {
   getImageSrc = () => {
     const { value } = this.props
     // From browser
-    if (value.preview) {
-      return value.preview
+    if (value.length) {
+      return value[0].preview
     } else {
       return value.url
     }
   }
 
   render() {
-    console.log(this.props)
     return (
-      <FlexCol>
+      <ImagePickerContainer>
         {!this.props.value && (
-          <DropzoneWrapper
+          <Dropzone
             multiple={false}
             onDrop={this.props.onChange}
             accept="image/*"
             onClick={e => e.preventDefault()}
           >
-            <Icon
-              src={iconCameraGray}
-              css={{ padding: 0, marginBottom: spacing.small }}
-            />
-            <Text
-              size="xsmall"
-              color="grayDarker"
-              weight="bold"
-              css={{ margin: 0, textAlign: 'center' }}
-            >
+            <PlaceholderIcon src={iconCameraGray} />
+            <PlaceholderText size="small" color="gray" weight="bold">
               Drop image or click here to upload
-            </Text>
-          </DropzoneWrapper>
+            </PlaceholderText>
+          </Dropzone>
         )}
 
         {this.props.value && (
           <ImageContainer>
-            <Thumbnail
-              size={this.props.size || 'xlarge'}
-              src={this.getImageSrc()}
-            />
-            <Icon
-              src={iconXWhite}
-              css={iconStyles}
-              onClick={this.props.onRemove}
-            />
+            <Thumbnail size="xxxlarge" src={this.getImageSrc()} />
+            <XIcon src={iconXWhite} onClick={this.props.onRemove} />
           </ImageContainer>
         )}
-      </FlexCol>
+      </ImagePickerContainer>
     )
   }
 }

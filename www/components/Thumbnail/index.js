@@ -5,15 +5,16 @@ const sizes = {
   small: '24px',
   regular: '32px',
   medium: '48px',
-  large: '72px',
+  large: '64px',
   xlarge: '96px',
-  xxlarge: '144px',
+  xxlarge: '128px',
+  xxxlarge: '256px',
 }
 
 export const Thumbnail = styled.img`
   border-radius: 50%;
-  height: ${props => sizes[props.size || 'regular']};
-  width: ${props => sizes[props.size || 'regular']};
-  max-height: ${props => sizes[props.size || 'regular']};
-  max-width: ${props => sizes[props.size || 'regular']};
+  height: ${props => sizes[props.size || 'regular'] || '100%'};
+  width: ${props => sizes[props.size || 'regular'] || '100%'};
+  max-height: ${props => sizes[props.size || 'regular'] || '100%'};
+  max-width: ${props => sizes[props.size || 'regular'] || '100%'};
 `

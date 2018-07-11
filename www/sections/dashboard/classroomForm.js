@@ -1,5 +1,4 @@
-import React, { Fragment } from 'react'
-import Link from 'next/link'
+import React from 'react'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import styled from 'styled-components'
@@ -9,15 +8,46 @@ import styled from 'styled-components'
 import { Loading } from 'components/Loading'
 import { IconHeader } from 'components/IconHeader'
 import { FlexCol } from 'components/FlexCol'
+import { FlexRow } from 'components/FlexRow'
 import { Button } from 'components/Button'
 import { Breadcrumb } from 'components/Breadcrumb'
 import { VideoPicker } from 'components/VideoPicker'
+import { ImagePicker } from 'components/ImagePicker'
 import { Label } from 'components/Label'
 import { Input } from 'components/Input'
 import { Textarea } from 'components/Textarea'
+import { Text } from 'components/Text'
+import { Link } from 'components/Link'
 
-import { spacing } from 'utils/theme'
+import { spacing, shadow } from 'utils/theme'
 import iconHome from 'static/assets/icons/ui/home.svg'
+import iconCheck from 'static/assets/icons/ui/check.svg'
+
+const CardCol = styled(FlexCol)`
+  align-items: center;
+  justify-content: flex-start;
+  margin: ${spacing.medium};
+  margin-top: ${spacing.xxlarge};
+`
+const Card = styled(FlexCol)`
+  ${shadow()};
+  max-width: 384px;
+`
+const CardBody = styled(FlexCol)`
+  padding: ${spacing.regular};
+`
+const CardFooter = styled(FlexRow)`
+  justify-content: flex-end;
+`
+const CardTitleLink = styled(Link)`
+  margin-bottom: ${spacing.xsmall};
+  &:hover {
+    text-decoration: underline;
+  }
+`
+const CardText = styled(Text)`
+  margin-bottom: ${spacing.medium};
+`
 
 // GraphQL
 
@@ -50,6 +80,7 @@ export class ClassroomForm extends React.Component {
     name: '',
     description: '',
     video: null,
+    image: null,
   }
 
   handleNameChange = e => {
@@ -76,6 +107,18 @@ export class ClassroomForm extends React.Component {
     })
   }
 
+  handleImageChange = file => {
+    this.setState({
+      image: file,
+    })
+  }
+
+  handleImageRemove = e => {
+    this.setState({
+      image: null,
+    })
+  }
+
   render() {
     return (
       <Mutation
@@ -84,6 +127,7 @@ export class ClassroomForm extends React.Component {
           name: this.state.name,
           description: this.state.description,
           video: this.state.video,
+          image: this.state.image,
         }}
       >
         {(create, { loading, error, data }) => {
@@ -93,18 +137,32 @@ export class ClassroomForm extends React.Component {
             return 'something went wrong'
           } else if (data) {
             return (
-              <Fragment>
-                Classroom successfully created!
-                <Link
-                  href={`/dashboard/classes/new?classroomId=${
-                    data.createClassroom.id
-                  }`}
-                  as={`/dashboard/classes/new/${data.createClassroom.id}`}
-                  prefetch
-                >
-                  <a>Create a new class</a>
-                </Link>
-              </Fragment>
+              <CardCol>
+                <Card>
+                  <IconHeader inline src={iconCheck} value="Class Created!" />
+                  <CardBody>
+                    <CardTitleLink
+                      href={`/dashboard/classrooms/classroom/${
+                        data.createClassroom.id
+                      }`}
+                      color="secondary"
+                      size="large"
+                      weight="bold"
+                    >
+                      {data.createClassroom.name}
+                    </CardTitleLink>
+                    <CardText>{data.createClassroom.description}</CardText>
+                    <CardFooter>
+                      <Link
+                        href={`/classroom/${data.createClassroom.id}`}
+                        textDecoration="none"
+                      >
+                        <Button color="secondary">Preview Classroom</Button>
+                      </Link>
+                    </CardFooter>
+                  </CardBody>
+                </Card>
+              </CardCol>
             )
           } else {
             return (
@@ -122,6 +180,14 @@ export class ClassroomForm extends React.Component {
                       onChange={this.handleVideoChange}
                       onRemove={this.handleVideoRemove}
                       value={this.state.video}
+                    />
+                  </Label>
+                  <Label size="regular">
+                    Classroom Picture
+                    <ImagePicker
+                      onChange={this.handleImageChange}
+                      onRemove={this.handleImageRemove}
+                      value={this.state.image}
                     />
                   </Label>
                   <Label size="large">
