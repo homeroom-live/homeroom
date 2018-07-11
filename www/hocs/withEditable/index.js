@@ -4,14 +4,7 @@ import styled from 'styled-components'
 import { Icon } from 'components/Icon'
 import { FlexRow } from 'components/FlexRow'
 
-import {
-  colors,
-  opacity,
-  spacing,
-  borderRadius,
-  fontSizes,
-  fontWeights,
-} from 'utils/theme'
+import { colors, opacity, spacing } from 'utils/theme'
 import iconCheckGreen from 'static/assets/icons/ui/check-green.svg'
 import iconXCircle from 'static/assets/icons/ui/x-circle.svg'
 

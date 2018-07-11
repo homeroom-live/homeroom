@@ -25,7 +25,7 @@ const P = styled.p`
 `
 
 export const Text = ({ children, ...props }) => (
-  <Linkify target="_blank" {...props}>
+  <Linkify target="_blank">
     <P {...props}>{children}</P>
   </Linkify>
 )

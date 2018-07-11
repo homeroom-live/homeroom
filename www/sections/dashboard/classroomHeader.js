@@ -5,7 +5,6 @@ import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
 import { Header } from 'components/Header'
 import { Link } from 'components/Link'
-import { Icon } from 'components/Icon'
 import { Button } from 'components/Button'
 import { Thumbnail } from 'components/Thumbnail'
 import { TextStyle } from 'components/TextStyle'
@@ -38,10 +37,6 @@ const ClassroomTitle = styled(Header)`
 const ClassroomThumbnail = styled(Thumbnail)`
   margin-right: ${spacing.regular};
   cursor: pointer;
-`
-const ActionIcon = styled(Icon)`
-  margin-top: -2px;
-  margin-right: ${spacing.xsmall};
 `
 const ActionLink = styled(Link)`
   margin-left: ${spacing.small};
@@ -80,8 +75,7 @@ export const ClassroomHeader = ({
     <ActionRow>
       {children}
       <ActionLink href={`/dashboard/live/${id}`}>
-        <Button color="primary">
-          <ActionIcon src={iconVideoWhite} />
+        <Button color="primary" src={iconVideoWhite}>
           Go Live
         </Button>
       </ActionLink>
@@ -90,8 +84,7 @@ export const ClassroomHeader = ({
         as={`/dashboard/classes/new/${id}`}
         prefetch
       >
-        <Button color="primary">
-          <ActionIcon src={iconPlusCircleWhite} />
+        <Button color="primary" src={iconPlusCircleWhite}>
           New Class
         </Button>
       </ActionLink>

@@ -1,5 +1,8 @@
+import React from 'react'
 import styled from 'styled-components'
 import { darken } from 'polished'
+
+import { Icon } from 'components/Icon'
 
 import {
   colors,
@@ -10,6 +13,12 @@ import {
   borderRadius,
   transition,
 } from 'utils/theme'
+
+const ButtonIcon = styled(Icon)`
+  height: 18px;
+  margin-top: -2px;
+  margin-right: ${spacing.small};
+`
 
 const themes = {
   primary: () => `
@@ -58,11 +67,11 @@ const themes = {
   },
 }
 
-export const Button = styled.button`
+const _Button = styled.button`
   display: flex;
   align-items: center;
   position: relative;
-  padding: ${spacing.small} ${spacing.regular};
+  padding: 7px ${spacing.regular};
   outline: none;
   border-radius: ${borderRadius};
   border: 1px solid transparent;
@@ -76,3 +85,10 @@ export const Button = styled.button`
   transition: ${transition};
   ${props => (props.color ? themes[props.color]() : themes.primary())};
 `
+
+export const Button = ({ src, children, ...props }) => (
+  <_Button {...props}>
+    {src && <ButtonIcon src={src} />}
+    {children}
+  </_Button>
+)

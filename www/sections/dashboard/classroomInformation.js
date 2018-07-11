@@ -15,6 +15,7 @@ import { Breadcrumb } from 'components/Breadcrumb'
 import { Icon } from 'components/Icon'
 import { TextStyle } from 'components/TextStyle'
 import { Button } from 'components/Button'
+import { IconHeader } from 'components/IconHeader'
 
 import { colors, spacing, outline } from 'utils/theme'
 import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
@@ -55,22 +56,10 @@ const classroomQuery = gql`
 const ClassroomInformationCol = styled(FlexCol)`
   margin: ${spacing.medium} ${spacing.medium} ${spacing.xxxlarge};
 `
-
 const ClassesCol = styled(FlexCol)`
   ${outline()};
   margin-top: ${spacing.medium};
 `
-const ClassesHeader = styled(FlexRow)`
-  align-items: center;
-  padding: ${spacing.regular};
-  border-bottom: 1px solid ${colors.grayLighter};
-`
-const ClassesIcon = styled(Icon)`
-  padding: 0;
-  margin-bottom: 2px;
-  margin-right: ${spacing.small};
-`
-
 const ClassRow = styled(FlexRow)`
   display: flex;
   padding: ${spacing.regular};
@@ -179,15 +168,11 @@ export const ClassroomInformation = withRouter(({ router }) => (
               />
 
               <ClassesCol>
-                <ClassesHeader>
-                  <ClassesIcon src={videoIcon} />
-                  <Text weight="bold" margin="0">
-                    Classes
-                  </Text>
-                  <Text weight="bold" margin="0 0 0 3px" color="gray">
+                <IconHeader inline src={videoIcon} value="Classes">
+                  <Text weight="bold" margin="0" color="gray">
                     {data.classroom.classesConnection.aggregate.count}
                   </Text>
-                </ClassesHeader>
+                </IconHeader>
                 <div>
                   {data.classroom.classesConnection.edges.map(({ node }) => (
                     <Class

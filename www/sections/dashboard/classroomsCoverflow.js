@@ -4,14 +4,11 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 
 import { FlexCol } from 'components/FlexCol'
-import { FlexRow } from 'components/FlexRow'
-import { Header } from 'components/Header'
 import { Link } from 'components/Link'
-import { TextStyle } from 'components/TextStyle'
-import { Icon } from 'components/Icon'
-import { Thumbnail } from 'components/Thumbnail'
-import { Button } from 'components/Button'
 import { Text } from 'components/Text'
+import { Icon } from 'components/Icon'
+import { IconHeader } from 'components/IconHeader'
+import { Button } from 'components/Button'
 import { ClassCard } from 'components/ClassCard'
 import { ClassroomHeader } from 'sections/dashboard/classroomHeader'
 
@@ -78,15 +75,14 @@ const classroomsQuery = gql`
 const ClassroomsCol = styled(FlexCol)`
   margin: ${spacing.medium} ${spacing.medium} ${spacing.xxxlarge};
 `
-const ClassroomsHeader = styled.header`
+const ClassroomsHeader = styled(IconHeader)`
   display: flex;
   align-items: center;
   padding: ${spacing.regular};
   ${outline()};
 `
-const ClassroomsIcon = styled(Icon)`
-  margin-top: -4px;
-  margin-right: ${spacing.small};
+const ClassroomHeaderText = styled(Text)`
+  margin-left: ${spacing.xsmall};
 `
 const NewLink = styled(Link)`
   margin-left: auto;
@@ -151,17 +147,12 @@ export const ClassroomsCoverflow = () => (
 
           return (
             <ClassroomsCol>
-              <ClassroomsHeader>
-                <ClassroomsIcon src={iconHome} />
-                <Header size="medium">
-                  Classrooms{' '}
-                  <TextStyle color="gray">
-                    {user.teachingClassroomsConnection.aggregate.count}
-                  </TextStyle>
-                </Header>
+              <ClassroomsHeader src={iconHome} value="Classrooms">
+                <ClassroomHeaderText color="gray" weight="bold" margin="0">
+                  {user.teachingClassroomsConnection.aggregate.count}
+                </ClassroomHeaderText>
                 <NewLink href="/dashboard/classrooms/new">
-                  <Button color="primary">
-                    <NewIcon src={iconPlusCircleWhite} />
+                  <Button color="primary" src={iconPlusCircleWhite}>
                     New classroom
                   </Button>
                 </NewLink>

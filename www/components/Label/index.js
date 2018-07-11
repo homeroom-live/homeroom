@@ -1,25 +1,31 @@
-import glamorous from 'glamorous'
+import styled from 'styled-components'
 
-import { colors } from 'utils/colors'
-import { fontSize, fontWeight } from 'utils/typography'
-import { spacing } from 'utils/spacing'
+import { colors, fontSizes, fontWeights, spacing } from 'utils/theme'
 
-export const Label = glamorous.label({
-  display: 'flex',
-  flexDirection: 'column',
-  marginTop: spacing.regular,
-  marginBottom: spacing.regular,
-  color: colors.grayDarker,
-  fontWeight: fontWeight.bold,
-  fontSize: fontSize.xsmall,
-  textTransform: 'uppercase',
-  letterSpacing: '1',
+const inputSizes = {
+  xsmall: '64px',
+  small: '128px',
+  regular: '256px',
+  medium: '384px',
+  large: '512px',
+  xlarge: '768px',
+}
 
-  ':focus': {
-    color: colors.primary,
+export const Label = styled.label`
+  display: flex;
+  flex-direction: column;
+  margin-top: ${spacing.regular};
+  margin-bottom: ${spacing.large};
+  color: ${colors.grayDarker};
+  font-weight: ${fontWeights.bold};
+  font-size: ${fontSizes.small};
+  letter-spacing: 1;
+  width: ${props => (props.size ? inputSizes[props.size] : null)};
+  &:focus {
+    color: ${colors.primary};
   },
 
-  // '@media(max-width: 1023px)': {
-  //   fontSize: '5vw'
+  // @media(max-width: 1023px): {
+  //   fontSizes: 5vw
   // }
-})
+`

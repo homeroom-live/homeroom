@@ -2,10 +2,22 @@ import React, { Fragment } from 'react'
 import Link from 'next/link'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
+import styled from 'styled-components'
 
 // Components
 
-import { Loading } from '../../components/Loading'
+import { Loading } from 'components/Loading'
+import { IconHeader } from 'components/IconHeader'
+import { FlexCol } from 'components/FlexCol'
+import { Button } from 'components/Button'
+import { Breadcrumb } from 'components/Breadcrumb'
+import { VideoPicker } from 'components/VideoPicker'
+import { Label } from 'components/Label'
+import { Input } from 'components/Input'
+import { Textarea } from 'components/Textarea'
+
+import { spacing } from 'utils/theme'
+import iconHome from 'static/assets/icons/ui/home.svg'
 
 // GraphQL
 
@@ -21,13 +33,23 @@ const createClassroom = gql`
   }
 `
 
+const NewClassroomCol = styled(FlexCol)`
+  margin: ${spacing.medium};
+`
+const NewClassroomHeader = styled(IconHeader)`
+  margin-bottom: ${spacing.regular};
+`
+const SaveButton = styled(Button)`
+  margin-left: auto;
+`
+
 // ClassroomForm
 
 export class ClassroomForm extends React.Component {
   state = {
     name: '',
     description: '',
-    price: 0,
+    video: null,
   }
 
   handleNameChange = e => {
@@ -42,9 +64,15 @@ export class ClassroomForm extends React.Component {
     })
   }
 
-  handlePriceChange = e => {
+  handleVideoChange = file => {
     this.setState({
-      price: e.target.value,
+      video: file,
+    })
+  }
+
+  handleVideoRemove = e => {
+    this.setState({
+      video: null,
     })
   }
 
@@ -55,7 +83,7 @@ export class ClassroomForm extends React.Component {
         variables={{
           name: this.state.name,
           description: this.state.description,
-          price: this.state.price,
+          video: this.state.video,
         }}
       >
         {(create, { loading, error, data }) => {
@@ -80,37 +108,39 @@ export class ClassroomForm extends React.Component {
             )
           } else {
             return (
-              <Fragment>
-                <header>
-                  <h2>New Classroom</h2>
-                </header>
-                <form onSubmit={create}>
-                  <div>
-                    <label>{`What's the name of your classroom?`}</label>
-                    <input
+              <NewClassroomCol>
+                <Breadcrumb href="/dashboard">Back to Classrooms</Breadcrumb>
+                <NewClassroomHeader src={iconHome} value="Create New Classroom">
+                  <SaveButton color="primary" onClick={create}>
+                    Save Classroom
+                  </SaveButton>
+                </NewClassroomHeader>
+                <form>
+                  <Label size="xlarge">
+                    Classroom Welcome Video
+                    <VideoPicker
+                      onChange={this.handleVideoChange}
+                      onRemove={this.handleVideoRemove}
+                      value={this.state.video}
+                    />
+                  </Label>
+                  <Label size="large">
+                    Classroom Name
+                    <Input
                       type="text"
                       onChange={this.handleNameChange}
                       value={this.state.name}
                     />
-                  </div>
-                  <div>
-                    <label>In this classroom I will be talking about...?</label>
-                    <textarea
+                  </Label>
+                  <Label size="large">
+                    Classroom Description
+                    <Textarea
                       onChange={this.handleDescriptionChange}
                       value={this.state.description}
                     />
-                  </div>
-                  <div>
-                    <label>{`Set your subscription fee:`}</label>
-                    <input
-                      type="number"
-                      onChange={this.handlePriceChange}
-                      value={this.state.price}
-                    />
-                  </div>
-                  <button type="submit">{`Let's do this!`}</button>
+                  </Label>
                 </form>
-              </Fragment>
+              </NewClassroomCol>
             )
           }
         }}

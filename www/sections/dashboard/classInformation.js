@@ -16,6 +16,7 @@ import { Header } from 'components/Header'
 import { TextStyle } from 'components/TextStyle'
 import { Icon } from 'components/Icon'
 import { Link } from 'components/Link'
+import { VideoPicker } from 'components/VideoPicker'
 import { withEditable } from 'hocs/withEditable'
 
 import { spacing, outline, shadow, colors } from 'utils/theme'
@@ -101,6 +102,7 @@ const EditableClassTitle = withEditable(styled(Header)``)
 // const EditableClassTitle = styled(Header)``
 const ClassMeta = styled(FlexCol)`
   width: initial;
+  margin-top: ${spacing.regular};
 `
 const ClassMetaItem = styled(Text)`
   display: flex;
@@ -117,7 +119,7 @@ const ClassIcon = styled(Icon)`
 const ClassInformationCol = styled(FlexCol)`
   margin: ${spacing.medium};
 `
-const ClassHeader = styled(FlexRow)`
+const ClassHeader = styled(FlexCol)`
   ${outline()};
   align-items: flex-start;
   padding: ${spacing.regular};
@@ -147,7 +149,7 @@ export const ClassInformation = withRouter(({ router }) => (
                 Back to {data.class.classroom.name}
               </Breadcrumb>
               <ClassHeader>
-                <ClassImage src="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
+                <VideoPicker value="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
                 <ClassMeta>
                   <Link
                     href={data.class.classroom.teacher.url || ''}
