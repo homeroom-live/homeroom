@@ -1,7 +1,7 @@
 import RawDropzone from 'react-dropzone'
 import styled from 'styled-components'
 
-import { spacing, colors, borderRadius, transition } from 'utils/theme'
+import { spacing, colors, borderRadius } from 'utils/theme'
 
 export const Dropzone = styled(RawDropzone)`
   display: flex;
@@ -10,11 +10,6 @@ export const Dropzone = styled(RawDropzone)`
   justify-content: center;
   padding: ${spacing.medium};
   cursor: pointer;
-  border: 2px dashed ${colors.grayLighter};
+  border: 2px dashed ${colors.secondary};
   border-radius: ${borderRadius};
-  transition: ${transition};
-  &:hover,
-  &:focus {
-    border-color: ${colors.secondary};
-  }
 `

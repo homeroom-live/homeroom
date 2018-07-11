@@ -81,9 +81,6 @@ const ClassroomsHeader = styled(IconHeader)`
   padding: ${spacing.regular};
   ${outline()};
 `
-const ClassroomHeaderText = styled(Text)`
-  margin-left: ${spacing.xsmall};
-`
 const NewLink = styled(Link)`
   margin-left: auto;
 `
@@ -94,6 +91,7 @@ const NewIcon = styled(Icon)`
 
 const ClassroomContainer = styled(FlexCol)`
   margin: ${spacing.regular} 0 ${spacing.xlarge};
+  ${outline()};
 `
 const ClassroomShowMore = styled(Link)`
   display: flex;
@@ -112,6 +110,7 @@ const ClassroomShowMore = styled(Link)`
 const Classroom = ({ id, name, numberOfClasses, classes, teacher }) => (
   <ClassroomContainer>
     <ClassroomHeader
+      inline
       id={id}
       name={name}
       numberOfClasses={numberOfClasses}
@@ -120,6 +119,7 @@ const Classroom = ({ id, name, numberOfClasses, classes, teacher }) => (
     <div>
       {classes.map(({ node }) => (
         <ClassCard
+          inline
           node={node}
           key={node.id}
           href={`/dashboard/classes/class/${node.id}`}
@@ -148,9 +148,9 @@ export const ClassroomsCoverflow = () => (
           return (
             <ClassroomsCol>
               <ClassroomsHeader src={iconHome} value="Classrooms">
-                <ClassroomHeaderText color="gray" weight="bold" margin="0">
+                <Text color="gray" weight="bold" margin="0">
                   {user.teachingClassroomsConnection.aggregate.count}
-                </ClassroomHeaderText>
+                </Text>
                 <NewLink href="/dashboard/classrooms/new">
                   <Button color="primary" src={iconPlusCircleWhite}>
                     New classroom

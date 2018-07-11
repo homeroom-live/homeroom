@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { withRouter } from 'next/router'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
@@ -18,10 +18,24 @@ import { IconHeader } from 'components/IconHeader'
 import { Link } from 'components/Link'
 import { Button } from 'components/Button'
 import { Icon } from 'components/Icon'
+import { Label } from 'components/Label'
+import { Input } from 'components/Input'
+import { Textarea } from 'components/Textarea'
 
 import { shadow, spacing } from 'utils/theme'
 import iconCheck from 'static/assets/icons/ui/check.svg'
 import iconVideoWhite from 'static/assets/icons/ui/video-white.svg'
+import iconVideo from 'static/assets/icons/ui/video.svg'
+
+const NewClassCol = styled(FlexCol)`
+  margin: ${spacing.medium};
+`
+const NewClassHeader = styled(IconHeader)`
+  margin-bottom: ${spacing.regular};
+`
+const SaveButton = styled(Button)`
+  margin-left: auto;
+`
 
 const CardCol = styled(FlexCol)`
   align-items: center;
@@ -198,67 +212,67 @@ class _ClassForm extends React.Component {
             )
           } else {
             return (
-              <Fragment>
-                <header>
-                  <h2>Create new class</h2>
-                </header>
-                <form onSubmit={create}>
-                  <div>
-                    <label>Name of your class:</label>
-                    <input
+              <NewClassCol>
+                <NewClassHeader src={iconVideo} value="Create New Class">
+                  <SaveButton color="primary" onClick={create}>
+                    Save Class
+                  </SaveButton>
+                </NewClassHeader>
+                <form>
+                  <Label size="large">
+                    Class Name
+                    <Input
                       type="text"
                       onChange={this.handleNameChange}
                       value={this.state.name}
                     />
-                  </div>
-                  <div>
-                    <label>
-                      Tell us, what is the topic you are going to present?
-                    </label>
-                    <textarea
+                  </Label>
+                  <Label size="large">
+                    Class Description
+                    <Textarea
                       onChange={this.handleDescriptionChange}
                       value={this.state.description}
                     />
-                  </div>
-                  <div>
-                    <label>People love to see the cover photo!</label>
-                    <ImagePicker
-                      onChange={this.handlePictureChange}
-                      value={this.state.picture}
-                    />
-                  </div>
-                  <div>
-                    <label>Have you prepared a short intro video?</label>
-                    <VideoPicker
-                      onChange={this.handlePictureChange}
-                      value={this.state.picture}
-                    />
-                  </div>
-                  <div>
-                    <label>Will your students need any files?</label>
-                    <FilePicker
-                      onChange={this.handleFilesChange}
-                      value={this.state.files}
-                    />
-                  </div>
-                  <div>
-                    <label>Set the price for your class:</label>
-                    <input
-                      type="number"
-                      onChange={this.handlePriceChange}
-                      value={this.state.price}
-                    />
-                  </div>
-                  <div>
-                    <label>{`When's your class starting?`}</label>
+                  </Label>
+                  <Label size="medium">
+                    Class Date & Time
                     <Calendar
                       onChange={this.handleScheduleChange}
                       value={this.state.schedule}
                     />
-                  </div>
-                  <button type="submit">{`Let's do this!`}</button>
+                  </Label>
+                  <Label size="medium">
+                    Class Cover Picture
+                    <ImagePicker
+                      onChange={this.handlePictureChange}
+                      value={this.state.picture}
+                    />
+                  </Label>
+                  <Label size="large">
+                    Class Video
+                    <VideoPicker
+                      onChange={this.handlePictureChange}
+                      value={this.state.picture}
+                    />
+                  </Label>
+                  <Label size="medium">
+                    Class Files
+                    <FilePicker
+                      onChange={this.handleFilesChange}
+                      onRemove={() => {}}
+                      value={this.state.files}
+                    />
+                  </Label>
+                  <Label size="small">
+                    Class Price
+                    <Input
+                      type="number"
+                      onChange={this.handlePriceChange}
+                      value={this.state.price}
+                    />
+                  </Label>
                 </form>
-              </Fragment>
+              </NewClassCol>
             )
           }
         }}

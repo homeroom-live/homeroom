@@ -1,27 +1,30 @@
 import React from 'react'
-import RawDropzone from 'react-dropzone'
-import glamorous from 'glamorous'
+import styled from 'styled-components'
 
 import { FlexCol } from 'components/FlexCol'
 import { Icon } from 'components/Icon'
 import { Text } from 'components/Text'
 import { File } from 'components/File'
+import { Dropzone } from 'components/Dropzone'
 
-import { spacing } from 'utils/spacing'
-import { theme } from 'utils/theme'
-import { shadow } from 'utils/colors'
+import { spacing, transition } from 'utils/theme'
 import iconFile from 'static/assets/icons/ui/file-plus.svg'
 
-const Dropzone = glamorous(RawDropzone)({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: spacing.medium,
-  cursor: 'pointer',
-  ...shadow,
-  ...theme,
-})
+const FilePickerContainer = styled(FlexCol)`
+  text-transform: initial;
+  transition: ${transition};
+  opacity: 0.5;
+  &:hover {
+    opacity: 1;
+  }
+`
+const PlaceholderIcon = styled(Icon)`
+  margin-bottom: ${spacing.small};
+`
+const PlaceholderText = styled(Text)`
+  margin: 0;
+  text-align: center;
+`
 
 export class FilePicker extends React.Component {
   renderFile = file => (
@@ -29,35 +32,27 @@ export class FilePicker extends React.Component {
       {...file}
       name={file.name}
       key={file.name}
-      onRemoveClick={this.props.handleRemoveClick}
+      onRemove={this.props.onRemove}
     />
   )
 
   render() {
     return (
-      <FlexCol>
+      <FilePickerContainer>
         <Dropzone
           onDrop={this.props.onChange}
           multiple={this.props.multiple}
           accept={this.props.accept}
           onClick={e => e.preventDefault()}
         >
-          <Icon
-            src={iconFile}
-            css={{ padding: 0, marginBottom: spacing.small }}
-          />
-          <Text
-            size="xsmall"
-            color="grayDarker"
-            weight="bold"
-            css={{ margin: 0, textAlign: 'center' }}
-          >
+          <PlaceholderIcon src={iconFile} />
+          <PlaceholderText size="small" weight="bold">
             Drop files or click here to upload
-          </Text>
+          </PlaceholderText>
         </Dropzone>
 
-        <div>{this.props.files && this.props.files.map(this.renderFile)}</div>
-      </FlexCol>
+        <div>{this.props.value && this.props.value.map(this.renderFile)}</div>
+      </FilePickerContainer>
     )
   }
 }

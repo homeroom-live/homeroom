@@ -7,12 +7,17 @@ import { Text } from 'components/Text'
 import { Thumbnail } from 'components/Thumbnail'
 import { Dropzone } from 'components/Dropzone'
 
-import { borderRadius, colors, spacing, opacity } from 'utils/theme'
-import iconCameraGray from 'static/assets/icons/ui/camera-gray.svg'
+import { borderRadius, colors, spacing, opacity, transition } from 'utils/theme'
+import iconCamera from 'static/assets/icons/ui/camera.svg'
 import iconXWhite from 'static/assets/icons/ui/x-circle-white.svg'
 
 const ImagePickerContainer = styled(FlexCol)`
   text-transform: initial;
+  transition: ${transition};
+  opacity: 0.5;
+  &:hover {
+    opacity: 1;
+  }
 `
 const ImageContainer = styled.div`
   position: relative;
@@ -59,8 +64,8 @@ export class ImagePicker extends React.Component {
             accept="image/*"
             onClick={e => e.preventDefault()}
           >
-            <PlaceholderIcon src={iconCameraGray} />
-            <PlaceholderText size="small" color="gray" weight="bold">
+            <PlaceholderIcon src={iconCamera} />
+            <PlaceholderText size="small" weight="bold">
               Drop image or click here to upload
             </PlaceholderText>
           </Dropzone>

@@ -15,8 +15,14 @@ import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
 import clockGrayIcon from 'static/assets/icons/ui/clock-gray.svg'
 import calendarGrayIcon from 'static/assets/icons/ui/calendar-gray.svg'
 
+const inlineStyles = () => `
+  border: none;
+  border-bottom: 1px solid ${colors.grayLighter};
+  border-radius: 0;
+`
+
 const ClassContainer = styled(Link)`
-  ${shadow()};
+  ${props => (props.inline ? inlineStyles() : shadow())};
   display: flex;
   align-items: flex-start;
   padding: ${spacing.regular};
@@ -25,6 +31,7 @@ const ClassContainer = styled(Link)`
   &:hover {
     color: transparent;
     text-decoration: none;
+    background: ${colors.grayLightest};
   }
 `
 const ClassImage = styled.img`
@@ -56,15 +63,15 @@ const ClassIcon = styled(Icon)`
   margin-right: ${spacing.xsmall};
 `
 
-export const ClassCard = ({ node, teacher, href }) => (
-  <ClassContainer href={href}>
+export const ClassCard = ({ node, teacher, href, ...props }) => (
+  <ClassContainer href={href} {...props}>
     <ClassImage src="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
     <ClassMeta>
       <Link href={teacher.url || ''} weight="bold" size="small">
         {'Teacher Name' || teacher.name}
       </Link>
       <ClassTitle margin="0">
-        {node.name} <TextStyle color="primary">${node.price}</TextStyle>
+        {node.name} {/*<TextStyle color="primary">${node.price}</TextStyle>*/}
       </ClassTitle>
       <FlexRow>
         <ClassMetaItem color="gray" weight="bold" size="small">

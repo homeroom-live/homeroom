@@ -6,12 +6,17 @@ import { Icon } from 'components/Icon'
 import { Text } from 'components/Text'
 import { Dropzone } from 'components/Dropzone'
 
-import { borderRadius, colors, spacing, opacity } from 'utils/theme'
-import iconVideoGray from 'static/assets/icons/ui/video-gray.svg'
+import { borderRadius, colors, spacing, opacity, transition } from 'utils/theme'
+import iconVideo from 'static/assets/icons/ui/video.svg'
 import iconXWhite from 'static/assets/icons/ui/x-circle-white.svg'
 
 const VideoPickerContainer = styled(FlexCol)`
   text-transform: initial;
+  transition: ${transition};
+  opacity: 0.5;
+  &:hover {
+    opacity: 1;
+  }
 `
 const VideoContainer = styled.div`
   position: relative;
@@ -60,8 +65,8 @@ export class VideoPicker extends React.Component {
             accept="video/*"
             onClick={e => e.preventDefault()}
           >
-            <PlaceholderIcon src={iconVideoGray} />
-            <PlaceholderText size="small" color="gray" weight="bold">
+            <PlaceholderIcon src={iconVideo} />
+            <PlaceholderText size="small" weight="bold">
               Drop video or click here to upload
             </PlaceholderText>
           </Dropzone>

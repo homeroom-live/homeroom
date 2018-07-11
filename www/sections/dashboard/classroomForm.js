@@ -23,6 +23,16 @@ import { spacing, shadow } from 'utils/theme'
 import iconHome from 'static/assets/icons/ui/home.svg'
 import iconCheck from 'static/assets/icons/ui/check.svg'
 
+const NewClassroomCol = styled(FlexCol)`
+  margin: ${spacing.medium};
+`
+const NewClassroomHeader = styled(IconHeader)`
+  margin-bottom: ${spacing.regular};
+`
+const SaveButton = styled(Button)`
+  margin-left: auto;
+`
+
 const CardCol = styled(FlexCol)`
   align-items: center;
   justify-content: flex-start;
@@ -61,16 +71,6 @@ const createClassroom = gql`
       id
     }
   }
-`
-
-const NewClassroomCol = styled(FlexCol)`
-  margin: ${spacing.medium};
-`
-const NewClassroomHeader = styled(IconHeader)`
-  margin-bottom: ${spacing.regular};
-`
-const SaveButton = styled(Button)`
-  margin-left: auto;
 `
 
 // ClassroomForm
