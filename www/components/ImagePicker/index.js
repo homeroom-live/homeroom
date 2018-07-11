@@ -7,18 +7,11 @@ import { Text } from 'components/Text'
 import { Thumbnail } from 'components/Thumbnail'
 import { Dropzone } from 'components/Dropzone'
 
-import { borderRadius, colors, spacing, opacity, transition } from 'utils/theme'
+import { borderRadius, colors, spacing, opacity } from 'utils/theme'
 import iconCamera from 'static/assets/icons/ui/camera.svg'
 import iconXWhite from 'static/assets/icons/ui/x-circle-white.svg'
 
-const ImagePickerContainer = styled(FlexCol)`
-  text-transform: initial;
-  transition: ${transition};
-  opacity: 0.5;
-  &:hover {
-    opacity: 1;
-  }
-`
+const ImagePickerContainer = styled(FlexCol)``
 const ImageContainer = styled.div`
   position: relative;
   border-radius: ${borderRadius};
@@ -43,41 +36,27 @@ const XIcon = styled(Icon)`
   }
 `
 
-export class ImagePicker extends React.Component {
-  getImageSrc = () => {
-    const { value } = this.props
-    // From browser
-    if (value.length) {
-      return value[0].preview
-    } else {
-      return value.url
-    }
-  }
+export const ImagePicker = ({ value, onChange, onRemove }) => (
+  <ImagePickerContainer>
+    {!value && (
+      <Dropzone
+        multiple={false}
+        onDrop={onChange}
+        accept="image/*"
+        onClick={e => e.preventDefault()}
+      >
+        <PlaceholderIcon src={iconCamera} />
+        <PlaceholderText size="small" weight="bold">
+          Drop image or click here to upload
+        </PlaceholderText>
+      </Dropzone>
+    )}
 
-  render() {
-    return (
-      <ImagePickerContainer>
-        {!this.props.value && (
-          <Dropzone
-            multiple={false}
-            onDrop={this.props.onChange}
-            accept="image/*"
-            onClick={e => e.preventDefault()}
-          >
-            <PlaceholderIcon src={iconCamera} />
-            <PlaceholderText size="small" weight="bold">
-              Drop image or click here to upload
-            </PlaceholderText>
-          </Dropzone>
-        )}
-
-        {this.props.value && (
-          <ImageContainer>
-            <Thumbnail size="xxxlarge" src={this.getImageSrc()} />
-            <XIcon src={iconXWhite} onClick={this.props.onRemove} />
-          </ImageContainer>
-        )}
-      </ImagePickerContainer>
-    )
-  }
-}
+    {value && (
+      <ImageContainer>
+        <Thumbnail size="xxxlarge" src={value} />
+        <XIcon src={iconXWhite} onClick={onRemove} />
+      </ImageContainer>
+    )}
+  </ImagePickerContainer>
+)

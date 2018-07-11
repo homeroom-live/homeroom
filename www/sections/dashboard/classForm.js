@@ -123,13 +123,25 @@ class _ClassForm extends React.Component {
 
   handlePictureChange = picture => {
     this.setState({
-      picture,
+      picture: picture[0].preview,
+    })
+  }
+
+  handlePictureRemove = () => {
+    this.setState({
+      picture: null,
     })
   }
 
   handleVideoChange = video => {
     this.setState({
-      video,
+      video: video[0].preview,
+    })
+  }
+
+  handleVideoRemove = () => {
+    this.setState({
+      video: null,
     })
   }
 
@@ -244,23 +256,25 @@ class _ClassForm extends React.Component {
                   <Label size="medium">
                     Class Cover Picture
                     <ImagePicker
-                      onChange={this.handlePictureChange}
                       value={this.state.picture}
+                      onChange={this.handlePictureChange}
+                      onRemove={this.handlePictureRemove}
                     />
                   </Label>
                   <Label size="large">
                     Class Video
                     <VideoPicker
-                      onChange={this.handlePictureChange}
-                      value={this.state.picture}
+                      value={this.state.video}
+                      onChange={this.handleVideoChange}
+                      onRemove={this.handleVideoRemove}
                     />
                   </Label>
                   <Label size="medium">
                     Class Files
                     <FilePicker
+                      value={this.state.files}
                       onChange={this.handleFilesChange}
                       onRemove={() => {}}
-                      value={this.state.files}
                     />
                   </Label>
                   <Label size="small">
