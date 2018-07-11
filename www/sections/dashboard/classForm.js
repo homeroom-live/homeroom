@@ -21,6 +21,7 @@ import { Icon } from 'components/Icon'
 import { Label } from 'components/Label'
 import { Input } from 'components/Input'
 import { Textarea } from 'components/Textarea'
+import { Breadcrumb } from 'components/Breadcrumb'
 
 import { shadow, spacing } from 'utils/theme'
 import iconCheck from 'static/assets/icons/ui/check.svg'
@@ -168,6 +169,8 @@ class _ClassForm extends React.Component {
   }
 
   render() {
+    console.log(this.props)
+
     return (
       <Mutation
         mutation={createClass}
@@ -225,6 +228,9 @@ class _ClassForm extends React.Component {
           } else {
             return (
               <NewClassCol>
+                <Breadcrumb href="/dashboard/classrooms/classroom">
+                  Back to Classrooms
+                </Breadcrumb>
                 <NewClassHeader src={iconVideo} value="Create New Class">
                   <SaveButton color="primary" onClick={create}>
                     Save Class
