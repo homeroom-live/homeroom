@@ -24,10 +24,11 @@ yarn
 yarn dev
 ```
 
-## Streaming
+## Proxy
 
 ```bash
-todo
+yarn
+yarn dev
 ```
 
 ## License
