@@ -48,8 +48,8 @@ export const permissions = shield(
       createClass: and(
         rules.isUserAuthenticated,
         rules.isUserSetup,
-        rules.classroomExists,
-        rules.isClassroomOwner,
+        // rules.classroomExists,
+        // rules.isClassroomOwner,
       ),
       updateClass: and(
         rules.isUserAuthenticated,
