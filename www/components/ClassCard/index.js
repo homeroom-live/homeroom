@@ -67,7 +67,7 @@ export const ClassCard = ({ node, teacher, href, ...props }) => (
   <ClassContainer href={href} {...props}>
     <ClassImage src="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
     <ClassMeta>
-      <Link href={teacher.url || ''} weight="bold" size="small">
+      <Link href={'test' || teacher.url} weight="bold" size="small">
         {'Teacher Name' || teacher.name}
       </Link>
       <ClassTitle margin="0">

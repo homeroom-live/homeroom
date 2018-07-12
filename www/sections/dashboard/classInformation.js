@@ -176,11 +176,12 @@ const EditableLabel = styled(Label)`
   margin-bottom: ${spacing.regular};
 `
 const VideoSettingsRow = styled(FlexRow)`
+  align-items: flex-start;
   margin-top: ${spacing.regular};
 `
 const VideoSettingsLabel = styled(Label)`
-  margin: 0;
   margin-right: ${spacing.medium};
+  margin-bottom: 0;
 `
 const VideoSettingsLink = styled(Link)`
   margin-left: auto;
