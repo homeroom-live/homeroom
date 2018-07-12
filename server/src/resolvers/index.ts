@@ -24,7 +24,7 @@ import { ClassroomStudentsConnection } from './ClassroomStudentsConnection'
 // Class
 import { Class } from './Class'
 // Message
-import { MessageEdge } from './MessageEdge'
+import { Message } from './Message'
 // File
 import { File } from './File'
 // Picture
@@ -53,7 +53,7 @@ export const resolvers = {
   Classroom,
   ClassroomStudentsConnection,
   Class,
-  MessageEdge,
+  Message,
   File,
   Picture,
 }

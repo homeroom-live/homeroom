@@ -60,22 +60,32 @@ type Mutation {
   createStripeCustomer(token: String!): Viewer
   updateStripeCustomer(token: String!): Viewer
   # Classroom
-  createClassroom(name: String!, description: String!, price: Float!): Classroom
+  createClassroom(
+    name: String!
+    description: String!
+    price: Float!
+    thumbnail: Upload
+    video: Upload
+  ): Classroom
   updateClassroom(
     id: ID!
     name: String
     description: String
     price: Float
+    thumbnail: Upload
+    video: Upload
   ): Classroom
   deleteClassroom(id: ID!): Classroom
   joinClassroom(id: ID!): Classroom
   leaveClassroom(id: ID): Classroom
+  # addClassroomTeacher(classroomId: ID!, teacherId: ID!): Classroom
+  # removeClassroomTeacher(classroomId: ID!, teacherId: ID!): Classroom
   # Classes
   createClass(
     classroomId: ID!
     name: String!
     description: String!
-    picture: Upload
+    thumbnail: Upload
     video: Upload
     price: Float!
     schedule: DateTime
@@ -85,7 +95,7 @@ type Mutation {
     id: ID!
     name: String
     description: String
-    picture: Upload
+    thumbnail: Upload
     video: Upload
     price: Float
     schedule: DateTime
@@ -192,7 +202,12 @@ type Classroom {
     last: Int
   ): ClassroomClassesConnection!
 
-  teacher: User!
+  teachersConnection(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ClassroomTeachersConnection!
   studentsConnection(
     after: String
     before: String
@@ -241,7 +256,8 @@ type Message {
   id: ID!
   createdAt: DateTime!
   text: String!
-  sender: User!
+  sender: ClassroomTeachersConnection!
+  is_viewer_message: Boolean!
 }
 
 type Charge {
@@ -345,6 +361,13 @@ type ClassroomStudentsConnection {
   aggregate: AggregateUser!
 }
 
+type ClassroomTeachersConnection {
+  pageInfo: PageInfo!
+  edges: [UserEdge!]!
+  taught_by_viewer: Boolean!
+  aggregate: AggregateUser!
+}
+
 type ClassroomClassesConnection {
   pageInfo: PageInfo!
   edges: [ClassEdge!]!
@@ -416,7 +439,6 @@ type ClassMessagesConnection {
 
 type MessageEdge {
   cursor: String!
-  is_viewer_message: Boolean! # TODO
   node: Message!
 }
 

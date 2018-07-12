@@ -16,14 +16,11 @@ type User {
   url: String
   picture: File @relation(name: "UserPicture", onDelete: CASCADE)
   video: File @relation(name: "UserVideo", onDelete: CASCADE)
-  # isTeacher: Boolean
 
   # Stripe
   stripeId: String @unique
   stripeCustomerId: String @unique
 
-  # classes: [Class!]! @relation(name: "UserClasses")
-  # taughtClasses: [Class!]! @relation(name: "UserTaughtClasses")
   teaching_classrooms: [Classroom!]!
     @relation(name: "ClassroomTeacher", onDelete: CASCADE)
   studying_classrooms: [Classroom!]!
@@ -31,10 +28,8 @@ type User {
 
   followers: [Follow!]! @relation(name: "UserFollowed", onDelete: CASCADE)
   following: [Follow!]! @relation(name: "UserFollowing", onDelete: CASCADE)
-  # activities: [Activity!]! @relation(name: "UserActivities")
   messages: [Message!]! @relation(name: "UserMessages", onDelete: CASCADE)
   charges: [Charge!]! @relation(name: "UserCharges", onDelete: CASCADE)
-  # refunds: [Refund!]! @relation(name: "UserRefunds")
 
   # Settings
   receiveNotifications: Boolean! @default(value: "true")
@@ -57,12 +52,21 @@ type Classroom {
   createdAt: DateTime!
   updatedAt: DateTime!
 
+  # Meta
   name: String!
   description: String!
   price: Float! @default(value: "0")
+  thumbnail: File @relation(name: "ClassroomThumbnail", onDelete: CASCADE)
+  video: File @relation(name: "ClassroomVideo", onDelete: CASCADE)
+
+  # Content
   classes: [Class!]! @relation(name: "ClassroomClass", onDelete: CASCADE)
 
-  teacher: User! @relation(name: "ClassroomTeacher", onDelete: SET_NULL)
+  # Extras
+  # files: [File!]! @relation(name: "ClassroomFile", onDelete: CASCADE)
+
+  # Social
+  teachers: [User!]! @relation(name: "ClassroomTeacher", onDelete: SET_NULL)
   students: [User!]! @relation(name: "ClassroomStudent", onDelete: SET_NULL)
 
   # System
@@ -78,7 +82,7 @@ type Class {
   name: String!
   description: String!
   price: Float! @default(value: "0")
-  picture: File @relation(name: "ClassPicture", onDelete: CASCADE)
+  thumbnail: File @relation(name: "ClassThumbnail", onDelete: CASCADE)
   video: File @relation(name: "ClassVideo", onDelete: CASCADE)
 
   # Stream
@@ -92,13 +96,7 @@ type Class {
   files: [File!]! @relation(name: "ClassFile", onDelete: CASCADE)
 
   # Specs
-  # teachers: [User!]! @relation(name: "UserTaughtClasses")
-  # students: [User!]! @relation(name: "UserClasses")
-  # studentsCount: Int
   classroom: Classroom! @relation(name: "ClassroomClass", onDelete: SET_NULL)
-  # activities: [Activity!]! @relation(name: "ClassActivities")
-  # charges: [Charge!]! @relation(name: "ClassCharges")
-  # refunds: [Refund!]! @relation(name: "ClassRefunds")
 
   # System
   archived: Boolean! @default(value: "false")
@@ -115,6 +113,7 @@ type File {
 
   # Connections
   class: Class @relation(name: "ClassFile", onDelete: SET_NULL)
+  # classroom: Classroom @relation(name: "ClassroomFile", onDelete: SET_NULL)
 
   # System
   archived: Boolean! @default(value: "false")
@@ -128,6 +127,8 @@ type Message {
   text: String!
   sender: User! @relation(name: "UserMessages", onDelete: SET_NULL)
   class: Class! @relation(name: "ClassMessage", onDelete: SET_NULL)
+
+  # file: File @relation(name: "MessageFile", onDelete: CASCADE)
 
   # response: Response @relation(name: "MessageResponse", onDelete: CASCADE)
 
@@ -171,9 +172,6 @@ type Refund {
   stripeId: String! @unique
   amount: Float!
   charge: Charge! @relation(name: "ChargeRefund", onDelete: SET_NULL)
-  # TODO: some of this can be omitted
-  # class: Class! @relation(name: "ClassRefunds")
-  # user: User! @relation(name: "UserRefunds")
 
   # System
   archived: Boolean! @default(value: "false")

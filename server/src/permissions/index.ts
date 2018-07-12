@@ -145,7 +145,7 @@ export const permissions = shield(
       description: allow,
       price: allow,
       classesConnection: allow,
-      teacher: allow,
+      teachersConnection: allow,
       studentsConnection: and(
         rules.isUserAuthenticated,
         rules.isUserSetup,
@@ -203,6 +203,7 @@ export const permissions = shield(
       createdAt: allow,
       text: allow,
       sender: allow,
+      is_viewer_message: and(rules.isUserAuthenticated, rules.isUserSetup),
     },
     Charge: {
       id: allow,

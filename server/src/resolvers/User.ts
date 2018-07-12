@@ -95,7 +95,7 @@ export const User = {
       return ctx.db.query.classroomsConnection(
         {
           where: {
-            teacher: { id },
+            teachers_some: { id },
             archived: false,
           },
           after,

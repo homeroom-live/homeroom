@@ -35,9 +35,30 @@ export const Classroom = {
       return ctx.db.query.usersConnection(
         {
           where: {
-            studying_classrooms_some: {
-              id,
-            },
+            studying_classrooms_some: { id },
+            archived: false,
+          },
+          after,
+          before,
+          first,
+          last,
+        },
+        info,
+      )
+    },
+  },
+  teachersConnection: {
+    fragment: `fragment ClassroomID on Classroom { id }`,
+    resolve: async (
+      { id },
+      { after, before, first, last },
+      ctx: Context,
+      info,
+    ) => {
+      return ctx.db.query.usersConnection(
+        {
+          where: {
+            teaching_classrooms_some: { id },
             archived: false,
           },
           after,

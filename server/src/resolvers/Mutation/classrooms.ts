@@ -3,7 +3,7 @@ import { Context } from '../../utils'
 export const classrooms = {
   async createClassroom(
     parent,
-    { name, description, price },
+    { name, description, price, thumbnail, video },
     ctx: Context,
     info,
   ) {
@@ -14,10 +14,14 @@ export const classrooms = {
           name,
           description,
           price,
-          teacher: {
-            connect: {
-              auth0Id,
-            },
+          teachers: {
+            connect: [{ auth0Id }],
+          },
+          thumbnail: {
+            create: thumbnail,
+          },
+          video: {
+            create: video,
           },
         },
       },
@@ -26,7 +30,7 @@ export const classrooms = {
   },
   async updateClassroom(
     parent,
-    { id, name, description, price },
+    { id, name, description, price, thumbnail, video },
     ctx: Context,
     info,
   ) {
@@ -37,6 +41,8 @@ export const classrooms = {
           name,
           description,
           price,
+          thumbnail: { create: thumbnail },
+          video: { create: video },
         },
       },
       info,

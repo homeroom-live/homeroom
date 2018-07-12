@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/matic-zavadlal-03c51f/homeroom-database/dev
-# timestamp: Fri Jul 06 2018 17:10:04 GMT+0200 (CEST)
+# timestamp: Thu Jul 12 2018 20:09:40 GMT+0200 (CEST)
 
 type AggregateCharge {
   count: Int!
@@ -401,7 +401,7 @@ type Class implements Node {
   name: String!
   description: String!
   price: Float!
-  picture(where: FileWhereInput): File
+  thumbnail(where: FileWhereInput): File
   video(where: FileWhereInput): File
   schedule: DateTime
   duration: Int
@@ -431,7 +431,7 @@ input ClassCreateInput {
   duration: Int
   live: Boolean
   archived: Boolean
-  picture: FileCreateOneInput
+  thumbnail: FileCreateOneInput
   video: FileCreateOneInput
   vod: FileCreateOneInput
   messages: MessageCreateManyWithoutClassInput
@@ -467,7 +467,7 @@ input ClassCreateWithoutClassroomInput {
   duration: Int
   live: Boolean
   archived: Boolean
-  picture: FileCreateOneInput
+  thumbnail: FileCreateOneInput
   video: FileCreateOneInput
   vod: FileCreateOneInput
   messages: MessageCreateManyWithoutClassInput
@@ -482,7 +482,7 @@ input ClassCreateWithoutFilesInput {
   duration: Int
   live: Boolean
   archived: Boolean
-  picture: FileCreateOneInput
+  thumbnail: FileCreateOneInput
   video: FileCreateOneInput
   vod: FileCreateOneInput
   messages: MessageCreateManyWithoutClassInput
@@ -497,7 +497,7 @@ input ClassCreateWithoutMessagesInput {
   duration: Int
   live: Boolean
   archived: Boolean
-  picture: FileCreateOneInput
+  thumbnail: FileCreateOneInput
   video: FileCreateOneInput
   vod: FileCreateOneInput
   files: FileCreateManyWithoutClassInput
@@ -556,8 +556,10 @@ type Classroom implements Node {
   name: String!
   description: String!
   price: Float!
+  thumbnail(where: FileWhereInput): File
+  video(where: FileWhereInput): File
   classes(where: ClassWhereInput, orderBy: ClassOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Class!]
-  teacher(where: UserWhereInput): User!
+  teachers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   students(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   archived: Boolean!
 }
@@ -575,10 +577,12 @@ type ClassroomConnection {
 input ClassroomCreateInput {
   name: String!
   description: String!
-  price: Float!
+  price: Float
   archived: Boolean
+  thumbnail: FileCreateOneInput
+  video: FileCreateOneInput
   classes: ClassCreateManyWithoutClassroomInput
-  teacher: UserCreateOneWithoutTeaching_classroomsInput!
+  teachers: UserCreateManyWithoutTeaching_classroomsInput
   students: UserCreateManyWithoutStudying_classroomsInput
 }
 
@@ -587,8 +591,8 @@ input ClassroomCreateManyWithoutStudentsInput {
   connect: [ClassroomWhereUniqueInput!]
 }
 
-input ClassroomCreateManyWithoutTeacherInput {
-  create: [ClassroomCreateWithoutTeacherInput!]
+input ClassroomCreateManyWithoutTeachersInput {
+  create: [ClassroomCreateWithoutTeachersInput!]
   connect: [ClassroomWhereUniqueInput!]
 }
 
@@ -600,26 +604,32 @@ input ClassroomCreateOneWithoutClassesInput {
 input ClassroomCreateWithoutClassesInput {
   name: String!
   description: String!
-  price: Float!
+  price: Float
   archived: Boolean
-  teacher: UserCreateOneWithoutTeaching_classroomsInput!
+  thumbnail: FileCreateOneInput
+  video: FileCreateOneInput
+  teachers: UserCreateManyWithoutTeaching_classroomsInput
   students: UserCreateManyWithoutStudying_classroomsInput
 }
 
 input ClassroomCreateWithoutStudentsInput {
   name: String!
   description: String!
-  price: Float!
+  price: Float
   archived: Boolean
+  thumbnail: FileCreateOneInput
+  video: FileCreateOneInput
   classes: ClassCreateManyWithoutClassroomInput
-  teacher: UserCreateOneWithoutTeaching_classroomsInput!
+  teachers: UserCreateManyWithoutTeaching_classroomsInput
 }
 
-input ClassroomCreateWithoutTeacherInput {
+input ClassroomCreateWithoutTeachersInput {
   name: String!
   description: String!
-  price: Float!
+  price: Float
   archived: Boolean
+  thumbnail: FileCreateOneInput
+  video: FileCreateOneInput
   classes: ClassCreateManyWithoutClassroomInput
   students: UserCreateManyWithoutStudying_classroomsInput
 }
@@ -704,8 +714,10 @@ input ClassroomUpdateInput {
   description: String
   price: Float
   archived: Boolean
+  thumbnail: FileUpdateOneInput
+  video: FileUpdateOneInput
   classes: ClassUpdateManyWithoutClassroomInput
-  teacher: UserUpdateOneWithoutTeaching_classroomsInput
+  teachers: UserUpdateManyWithoutTeaching_classroomsInput
   students: UserUpdateManyWithoutStudying_classroomsInput
 }
 
@@ -718,13 +730,13 @@ input ClassroomUpdateManyWithoutStudentsInput {
   upsert: [ClassroomUpsertWithWhereUniqueWithoutStudentsInput!]
 }
 
-input ClassroomUpdateManyWithoutTeacherInput {
-  create: [ClassroomCreateWithoutTeacherInput!]
+input ClassroomUpdateManyWithoutTeachersInput {
+  create: [ClassroomCreateWithoutTeachersInput!]
   connect: [ClassroomWhereUniqueInput!]
   disconnect: [ClassroomWhereUniqueInput!]
   delete: [ClassroomWhereUniqueInput!]
-  update: [ClassroomUpdateWithWhereUniqueWithoutTeacherInput!]
-  upsert: [ClassroomUpsertWithWhereUniqueWithoutTeacherInput!]
+  update: [ClassroomUpdateWithWhereUniqueWithoutTeachersInput!]
+  upsert: [ClassroomUpsertWithWhereUniqueWithoutTeachersInput!]
 }
 
 input ClassroomUpdateOneWithoutClassesInput {
@@ -740,7 +752,9 @@ input ClassroomUpdateWithoutClassesDataInput {
   description: String
   price: Float
   archived: Boolean
-  teacher: UserUpdateOneWithoutTeaching_classroomsInput
+  thumbnail: FileUpdateOneInput
+  video: FileUpdateOneInput
+  teachers: UserUpdateManyWithoutTeaching_classroomsInput
   students: UserUpdateManyWithoutStudying_classroomsInput
 }
 
@@ -749,15 +763,19 @@ input ClassroomUpdateWithoutStudentsDataInput {
   description: String
   price: Float
   archived: Boolean
+  thumbnail: FileUpdateOneInput
+  video: FileUpdateOneInput
   classes: ClassUpdateManyWithoutClassroomInput
-  teacher: UserUpdateOneWithoutTeaching_classroomsInput
+  teachers: UserUpdateManyWithoutTeaching_classroomsInput
 }
 
-input ClassroomUpdateWithoutTeacherDataInput {
+input ClassroomUpdateWithoutTeachersDataInput {
   name: String
   description: String
   price: Float
   archived: Boolean
+  thumbnail: FileUpdateOneInput
+  video: FileUpdateOneInput
   classes: ClassUpdateManyWithoutClassroomInput
   students: UserUpdateManyWithoutStudying_classroomsInput
 }
@@ -767,9 +785,9 @@ input ClassroomUpdateWithWhereUniqueWithoutStudentsInput {
   data: ClassroomUpdateWithoutStudentsDataInput!
 }
 
-input ClassroomUpdateWithWhereUniqueWithoutTeacherInput {
+input ClassroomUpdateWithWhereUniqueWithoutTeachersInput {
   where: ClassroomWhereUniqueInput!
-  data: ClassroomUpdateWithoutTeacherDataInput!
+  data: ClassroomUpdateWithoutTeachersDataInput!
 }
 
 input ClassroomUpsertWithoutClassesInput {
@@ -783,10 +801,10 @@ input ClassroomUpsertWithWhereUniqueWithoutStudentsInput {
   create: ClassroomCreateWithoutStudentsInput!
 }
 
-input ClassroomUpsertWithWhereUniqueWithoutTeacherInput {
+input ClassroomUpsertWithWhereUniqueWithoutTeachersInput {
   where: ClassroomWhereUniqueInput!
-  update: ClassroomUpdateWithoutTeacherDataInput!
-  create: ClassroomCreateWithoutTeacherInput!
+  update: ClassroomUpdateWithoutTeachersDataInput!
+  create: ClassroomCreateWithoutTeachersInput!
 }
 
 input ClassroomWhereInput {
@@ -988,10 +1006,14 @@ input ClassroomWhereInput {
 
   """All values that are not equal to given value."""
   archived_not: Boolean
+  thumbnail: FileWhereInput
+  video: FileWhereInput
   classes_every: ClassWhereInput
   classes_some: ClassWhereInput
   classes_none: ClassWhereInput
-  teacher: UserWhereInput
+  teachers_every: UserWhereInput
+  teachers_some: UserWhereInput
+  teachers_none: UserWhereInput
   students_every: UserWhereInput
   students_some: UserWhereInput
   students_none: UserWhereInput
@@ -1048,7 +1070,7 @@ input ClassUpdateDataInput {
   duration: Int
   live: Boolean
   archived: Boolean
-  picture: FileUpdateOneInput
+  thumbnail: FileUpdateOneInput
   video: FileUpdateOneInput
   vod: FileUpdateOneInput
   messages: MessageUpdateManyWithoutClassInput
@@ -1064,7 +1086,7 @@ input ClassUpdateInput {
   duration: Int
   live: Boolean
   archived: Boolean
-  picture: FileUpdateOneInput
+  thumbnail: FileUpdateOneInput
   video: FileUpdateOneInput
   vod: FileUpdateOneInput
   messages: MessageUpdateManyWithoutClassInput
@@ -1114,7 +1136,7 @@ input ClassUpdateWithoutClassroomDataInput {
   duration: Int
   live: Boolean
   archived: Boolean
-  picture: FileUpdateOneInput
+  thumbnail: FileUpdateOneInput
   video: FileUpdateOneInput
   vod: FileUpdateOneInput
   messages: MessageUpdateManyWithoutClassInput
@@ -1129,7 +1151,7 @@ input ClassUpdateWithoutFilesDataInput {
   duration: Int
   live: Boolean
   archived: Boolean
-  picture: FileUpdateOneInput
+  thumbnail: FileUpdateOneInput
   video: FileUpdateOneInput
   vod: FileUpdateOneInput
   messages: MessageUpdateManyWithoutClassInput
@@ -1144,7 +1166,7 @@ input ClassUpdateWithoutMessagesDataInput {
   duration: Int
   live: Boolean
   archived: Boolean
-  picture: FileUpdateOneInput
+  thumbnail: FileUpdateOneInput
   video: FileUpdateOneInput
   vod: FileUpdateOneInput
   files: FileUpdateManyWithoutClassInput
@@ -1424,7 +1446,7 @@ input ClassWhereInput {
 
   """All values that are not equal to given value."""
   archived_not: Boolean
-  picture: FileWhereInput
+  thumbnail: FileWhereInput
   video: FileWhereInput
   vod: FileWhereInput
   messages_every: MessageWhereInput
@@ -1844,15 +1866,21 @@ input FileWhereInput {
   _MagicalBackRelation_ClassVod_every: ClassWhereInput
   _MagicalBackRelation_ClassVod_some: ClassWhereInput
   _MagicalBackRelation_ClassVod_none: ClassWhereInput
-  _MagicalBackRelation_ClassPicture_every: ClassWhereInput
-  _MagicalBackRelation_ClassPicture_some: ClassWhereInput
-  _MagicalBackRelation_ClassPicture_none: ClassWhereInput
+  _MagicalBackRelation_ClassThumbnail_every: ClassWhereInput
+  _MagicalBackRelation_ClassThumbnail_some: ClassWhereInput
+  _MagicalBackRelation_ClassThumbnail_none: ClassWhereInput
   _MagicalBackRelation_UserPicture_every: UserWhereInput
   _MagicalBackRelation_UserPicture_some: UserWhereInput
   _MagicalBackRelation_UserPicture_none: UserWhereInput
+  _MagicalBackRelation_ClassroomVideo_every: ClassroomWhereInput
+  _MagicalBackRelation_ClassroomVideo_some: ClassroomWhereInput
+  _MagicalBackRelation_ClassroomVideo_none: ClassroomWhereInput
   _MagicalBackRelation_UserVideo_every: UserWhereInput
   _MagicalBackRelation_UserVideo_some: UserWhereInput
   _MagicalBackRelation_UserVideo_none: UserWhereInput
+  _MagicalBackRelation_ClassroomThumbnail_every: ClassroomWhereInput
+  _MagicalBackRelation_ClassroomThumbnail_some: ClassroomWhereInput
+  _MagicalBackRelation_ClassroomThumbnail_none: ClassroomWhereInput
   _MagicalBackRelation_ClassVideo_every: ClassWhereInput
   _MagicalBackRelation_ClassVideo_some: ClassWhereInput
   _MagicalBackRelation_ClassVideo_none: ClassWhereInput
@@ -2931,7 +2959,7 @@ input UserCreateInput {
   archived: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
-  teaching_classrooms: ClassroomCreateManyWithoutTeacherInput
+  teaching_classrooms: ClassroomCreateManyWithoutTeachersInput
   studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   followers: FollowCreateManyWithoutUser_followedInput
   following: FollowCreateManyWithoutUser_followingInput
@@ -2941,6 +2969,11 @@ input UserCreateInput {
 
 input UserCreateManyWithoutStudying_classroomsInput {
   create: [UserCreateWithoutStudying_classroomsInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutTeaching_classroomsInput {
+  create: [UserCreateWithoutTeaching_classroomsInput!]
   connect: [UserWhereUniqueInput!]
 }
 
@@ -2964,11 +2997,6 @@ input UserCreateOneWithoutMessagesInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutTeaching_classroomsInput {
-  create: UserCreateWithoutTeaching_classroomsInput
-  connect: UserWhereUniqueInput
-}
-
 input UserCreateWithoutChargesInput {
   auth0Id: String!
   username: String!
@@ -2984,7 +3012,7 @@ input UserCreateWithoutChargesInput {
   archived: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
-  teaching_classrooms: ClassroomCreateManyWithoutTeacherInput
+  teaching_classrooms: ClassroomCreateManyWithoutTeachersInput
   studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   followers: FollowCreateManyWithoutUser_followedInput
   following: FollowCreateManyWithoutUser_followingInput
@@ -3006,7 +3034,7 @@ input UserCreateWithoutFollowersInput {
   archived: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
-  teaching_classrooms: ClassroomCreateManyWithoutTeacherInput
+  teaching_classrooms: ClassroomCreateManyWithoutTeachersInput
   studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   following: FollowCreateManyWithoutUser_followingInput
   messages: MessageCreateManyWithoutSenderInput
@@ -3028,7 +3056,7 @@ input UserCreateWithoutFollowingInput {
   archived: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
-  teaching_classrooms: ClassroomCreateManyWithoutTeacherInput
+  teaching_classrooms: ClassroomCreateManyWithoutTeachersInput
   studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   followers: FollowCreateManyWithoutUser_followedInput
   messages: MessageCreateManyWithoutSenderInput
@@ -3050,7 +3078,7 @@ input UserCreateWithoutMessagesInput {
   archived: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
-  teaching_classrooms: ClassroomCreateManyWithoutTeacherInput
+  teaching_classrooms: ClassroomCreateManyWithoutTeachersInput
   studying_classrooms: ClassroomCreateManyWithoutStudentsInput
   followers: FollowCreateManyWithoutUser_followedInput
   following: FollowCreateManyWithoutUser_followingInput
@@ -3072,7 +3100,7 @@ input UserCreateWithoutStudying_classroomsInput {
   archived: Boolean
   picture: FileCreateOneInput
   video: FileCreateOneInput
-  teaching_classrooms: ClassroomCreateManyWithoutTeacherInput
+  teaching_classrooms: ClassroomCreateManyWithoutTeachersInput
   followers: FollowCreateManyWithoutUser_followedInput
   following: FollowCreateManyWithoutUser_followingInput
   messages: MessageCreateManyWithoutSenderInput
@@ -3215,7 +3243,7 @@ input UserUpdateInput {
   archived: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  teaching_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  teaching_classrooms: ClassroomUpdateManyWithoutTeachersInput
   studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   followers: FollowUpdateManyWithoutUser_followedInput
   following: FollowUpdateManyWithoutUser_followingInput
@@ -3230,6 +3258,15 @@ input UserUpdateManyWithoutStudying_classroomsInput {
   delete: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueWithoutStudying_classroomsInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutStudying_classroomsInput!]
+}
+
+input UserUpdateManyWithoutTeaching_classroomsInput {
+  create: [UserCreateWithoutTeaching_classroomsInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutTeaching_classroomsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutTeaching_classroomsInput!]
 }
 
 input UserUpdateOneWithoutChargesInput {
@@ -3264,14 +3301,6 @@ input UserUpdateOneWithoutMessagesInput {
   upsert: UserUpsertWithoutMessagesInput
 }
 
-input UserUpdateOneWithoutTeaching_classroomsInput {
-  create: UserCreateWithoutTeaching_classroomsInput
-  connect: UserWhereUniqueInput
-  delete: Boolean
-  update: UserUpdateWithoutTeaching_classroomsDataInput
-  upsert: UserUpsertWithoutTeaching_classroomsInput
-}
-
 input UserUpdateWithoutChargesDataInput {
   auth0Id: String
   username: String
@@ -3287,7 +3316,7 @@ input UserUpdateWithoutChargesDataInput {
   archived: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  teaching_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  teaching_classrooms: ClassroomUpdateManyWithoutTeachersInput
   studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   followers: FollowUpdateManyWithoutUser_followedInput
   following: FollowUpdateManyWithoutUser_followingInput
@@ -3309,7 +3338,7 @@ input UserUpdateWithoutFollowersDataInput {
   archived: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  teaching_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  teaching_classrooms: ClassroomUpdateManyWithoutTeachersInput
   studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   following: FollowUpdateManyWithoutUser_followingInput
   messages: MessageUpdateManyWithoutSenderInput
@@ -3331,7 +3360,7 @@ input UserUpdateWithoutFollowingDataInput {
   archived: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  teaching_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  teaching_classrooms: ClassroomUpdateManyWithoutTeachersInput
   studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   followers: FollowUpdateManyWithoutUser_followedInput
   messages: MessageUpdateManyWithoutSenderInput
@@ -3353,7 +3382,7 @@ input UserUpdateWithoutMessagesDataInput {
   archived: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  teaching_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  teaching_classrooms: ClassroomUpdateManyWithoutTeachersInput
   studying_classrooms: ClassroomUpdateManyWithoutStudentsInput
   followers: FollowUpdateManyWithoutUser_followedInput
   following: FollowUpdateManyWithoutUser_followingInput
@@ -3375,7 +3404,7 @@ input UserUpdateWithoutStudying_classroomsDataInput {
   archived: Boolean
   picture: FileUpdateOneInput
   video: FileUpdateOneInput
-  teaching_classrooms: ClassroomUpdateManyWithoutTeacherInput
+  teaching_classrooms: ClassroomUpdateManyWithoutTeachersInput
   followers: FollowUpdateManyWithoutUser_followedInput
   following: FollowUpdateManyWithoutUser_followingInput
   messages: MessageUpdateManyWithoutSenderInput
@@ -3409,6 +3438,11 @@ input UserUpdateWithWhereUniqueWithoutStudying_classroomsInput {
   data: UserUpdateWithoutStudying_classroomsDataInput!
 }
 
+input UserUpdateWithWhereUniqueWithoutTeaching_classroomsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutTeaching_classroomsDataInput!
+}
+
 input UserUpsertWithoutChargesInput {
   update: UserUpdateWithoutChargesDataInput!
   create: UserCreateWithoutChargesInput!
@@ -3429,15 +3463,16 @@ input UserUpsertWithoutMessagesInput {
   create: UserCreateWithoutMessagesInput!
 }
 
-input UserUpsertWithoutTeaching_classroomsInput {
-  update: UserUpdateWithoutTeaching_classroomsDataInput!
-  create: UserCreateWithoutTeaching_classroomsInput!
-}
-
 input UserUpsertWithWhereUniqueWithoutStudying_classroomsInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutStudying_classroomsDataInput!
   create: UserCreateWithoutStudying_classroomsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutTeaching_classroomsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutTeaching_classroomsDataInput!
+  create: UserCreateWithoutTeaching_classroomsInput!
 }
 
 input UserWhereInput {

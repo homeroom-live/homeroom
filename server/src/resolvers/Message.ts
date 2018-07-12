@@ -1,6 +1,6 @@
 import { Context } from '../utils'
 
-export const MessageEdge = {
+export const Message = {
   is_viewer_message: {
     fragment: `fragment MessageID on Message { id }`,
     resolve: async ({ id }, args, ctx: Context, info) => {

@@ -3,37 +3,28 @@ import { Context } from '../../utils'
 export const classes = {
   async createClass(
     parent,
-    { classroomId, name, description, picture, price, schedule, files },
+    { classroomId, name, description, thumbnail, price, schedule, files },
     ctx: Context,
     info,
   ) {
-    const auth0Id = ctx.request.user.sub
     return ctx.db.mutation.createClass(
       {
         data: {
           classroom: { connect: { id: classroomId } },
           name,
           description,
-          ...(picture
-            ? {
-                picture: {
-                  create: {
-                    name: picture.name,
-                    secret: picture.secret,
-                    contentType: picture.contentType,
-                  },
-                },
-              }
-            : {}),
+          thumbnail: {
+            create: {
+              name: thumbnail.name,
+              secret: thumbnail.secret,
+              contentType: thumbnail.contentType,
+            },
+          },
           price,
           schedule,
-          ...(files
-            ? {
-                files: {
-                  create: files,
-                },
-              }
-            : {}),
+          files: {
+            create: files,
+          },
           live: false,
         },
       },
@@ -43,7 +34,7 @@ export const classes = {
 
   async updateClass(
     parent,
-    { id, name, description, picture, price, schedule, files },
+    { id, name, description, thumbnail, video, price, schedule, files },
     ctx: Context,
     info,
   ) {
@@ -53,10 +44,14 @@ export const classes = {
         data: {
           name,
           description,
-          // picture,
+          thumbnail: {
+            create: thumbnail,
+          },
           price,
           schedule,
-          // files,
+          files: {
+            create: files,
+          },
         },
       },
       info,
