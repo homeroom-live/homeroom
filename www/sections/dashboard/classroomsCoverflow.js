@@ -4,12 +4,13 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 
 import { FlexCol } from 'components/FlexCol'
+import { FlexRow } from 'components/FlexRow'
 import { Link } from 'components/Link'
 import { Text } from 'components/Text'
 import { Icon } from 'components/Icon'
 import { IconHeader } from 'components/IconHeader'
 import { Button } from 'components/Button'
-import { ClassCard } from 'components/ClassCard'
+import { ClassCardMedium } from 'components/ClassCardMedium'
 import { ClassroomHeader } from 'sections/dashboard/classroomHeader'
 
 import iconHome from 'static/assets/icons/ui/home.svg'
@@ -32,7 +33,7 @@ const classroomsQuery = gql`
             node {
               id
               name
-              teacher {
+              teachers {
                 id
                 name
                 url
@@ -106,6 +107,8 @@ const ClassroomShowMore = styled(Link)`
     text-decoration: none;
   }
 `
+const ClassesRow = styled(FlexRow)``
+// flex-wrap: nowrap;
 
 const Classroom = ({ id, name, numberOfClasses, classes, teacher }) => (
   <ClassroomContainer>
@@ -116,9 +119,9 @@ const Classroom = ({ id, name, numberOfClasses, classes, teacher }) => (
       numberOfClasses={numberOfClasses}
       teacher={teacher}
     />
-    <div>
+    <ClassesRow>
       {classes.map(({ node }) => (
-        <ClassCard
+        <ClassCardMedium
           inline
           node={node}
           key={node.id}
@@ -126,7 +129,7 @@ const Classroom = ({ id, name, numberOfClasses, classes, teacher }) => (
           teacher={teacher}
         />
       ))}
-    </div>
+    </ClassesRow>
     <ClassroomShowMore
       href={`/dashboard/classrooms/classroom/${id}`}
       size="small"
