@@ -131,7 +131,6 @@ type User {
   # Info
   name: String!
   description: String
-  url: String
   picture: Picture
   video: File
 

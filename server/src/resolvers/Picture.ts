@@ -3,8 +3,13 @@ import { Context } from '../utils'
 export const Picture = {
   url: {
     fragment: `fragment FileSecret on File { secret }`,
-    resolve: async ({ secret }, args, ctx: Context, info) => {
-      return secret
+    resolve: async ({ secret }, { width, height }, ctx: Context, info) => {
+      if (width || height) {
+        const size = [width, height].join('x')
+        return `${process.env.PROXT_ENDPOINT}/picture/${secret}/${size}`
+      } else {
+        return `${process.env.PROXT_ENDPOINT}/picture/${secret}`
+      }
     },
   },
 }

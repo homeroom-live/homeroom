@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/matic-zavadlal-03c51f/homeroom-database/dev
-# timestamp: Thu Jul 12 2018 20:09:40 GMT+0200 (CEST)
+# timestamp: Fri Jul 13 2018 01:13:50 GMT+0200 (CEST)
 
 type AggregateCharge {
   count: Int!
@@ -2919,7 +2919,6 @@ type User implements Node {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   picture(where: FileWhereInput): File
   video(where: FileWhereInput): File
   stripeId: String
@@ -2952,7 +2951,6 @@ input UserCreateInput {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3005,7 +3003,6 @@ input UserCreateWithoutChargesInput {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3027,7 +3024,6 @@ input UserCreateWithoutFollowersInput {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3049,7 +3045,6 @@ input UserCreateWithoutFollowingInput {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3071,7 +3066,6 @@ input UserCreateWithoutMessagesInput {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3093,7 +3087,6 @@ input UserCreateWithoutStudying_classroomsInput {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3115,7 +3108,6 @@ input UserCreateWithoutTeaching_classroomsInput {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3159,8 +3151,6 @@ enum UserOrderByInput {
   gender_DESC
   bio_ASC
   bio_DESC
-  url_ASC
-  url_DESC
   stripeId_ASC
   stripeId_DESC
   stripeCustomerId_ASC
@@ -3182,7 +3172,6 @@ type UserPreviousValues {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean!
@@ -3236,7 +3225,6 @@ input UserUpdateInput {
   name: String
   gender: Gender
   bio: String
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3309,7 +3297,6 @@ input UserUpdateWithoutChargesDataInput {
   name: String
   gender: Gender
   bio: String
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3331,7 +3318,6 @@ input UserUpdateWithoutFollowersDataInput {
   name: String
   gender: Gender
   bio: String
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3353,7 +3339,6 @@ input UserUpdateWithoutFollowingDataInput {
   name: String
   gender: Gender
   bio: String
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3375,7 +3360,6 @@ input UserUpdateWithoutMessagesDataInput {
   name: String
   gender: Gender
   bio: String
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3397,7 +3381,6 @@ input UserUpdateWithoutStudying_classroomsDataInput {
   name: String
   gender: Gender
   bio: String
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3419,7 +3402,6 @@ input UserUpdateWithoutTeaching_classroomsDataInput {
   name: String
   gender: Gender
   bio: String
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3782,46 +3764,6 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   bio_not_ends_with: String
-  url: String
-
-  """All values that are not equal to given value."""
-  url_not: String
-
-  """All values that are contained in given list."""
-  url_in: [String!]
-
-  """All values that are not contained in given list."""
-  url_not_in: [String!]
-
-  """All values less than the given value."""
-  url_lt: String
-
-  """All values less than or equal the given value."""
-  url_lte: String
-
-  """All values greater than the given value."""
-  url_gt: String
-
-  """All values greater than or equal the given value."""
-  url_gte: String
-
-  """All values containing the given string."""
-  url_contains: String
-
-  """All values not containing the given string."""
-  url_not_contains: String
-
-  """All values starting with the given string."""
-  url_starts_with: String
-
-  """All values not starting with the given string."""
-  url_not_starts_with: String
-
-  """All values ending with the given string."""
-  url_ends_with: String
-
-  """All values not ending with the given string."""
-  url_not_ends_with: String
   stripeId: String
 
   """All values that are not equal to given value."""

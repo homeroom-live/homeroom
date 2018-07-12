@@ -83,7 +83,6 @@ export const permissions = shield(
       gender: allow,
       name: allow,
       description: allow,
-      url: allow,
       picture: allow,
       video: allow,
       stripeId: and(rules.isUserAuthenticated, rules.isUserSetup, rules.isSelf),

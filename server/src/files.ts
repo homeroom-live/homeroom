@@ -34,7 +34,7 @@ async function uploadFile(upload: IUpload): Promise<IFile> {
   const response = await s3Client
     .upload({
       Key: secret,
-      ACL: 'public-read', // private
+      ACL: 'private',
       Body: stream,
       ContentType: contentType,
       Bucket: process.env.S3_BUCKET,

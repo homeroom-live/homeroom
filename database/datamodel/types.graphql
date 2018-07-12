@@ -13,7 +13,6 @@ type User {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   picture: File @relation(name: "UserPicture", onDelete: CASCADE)
   video: File @relation(name: "UserVideo", onDelete: CASCADE)
 

@@ -3044,7 +3044,6 @@ type User implements Node {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   picture(where: FileWhereInput): File
   video(where: FileWhereInput): File
   stripeId: String
@@ -3077,7 +3076,6 @@ input UserCreateInput {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3130,7 +3128,6 @@ input UserCreateWithoutChargesInput {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3152,7 +3149,6 @@ input UserCreateWithoutFollowersInput {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3174,7 +3170,6 @@ input UserCreateWithoutFollowingInput {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3196,7 +3191,6 @@ input UserCreateWithoutMessagesInput {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3218,7 +3212,6 @@ input UserCreateWithoutStudying_classroomsInput {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3240,7 +3233,6 @@ input UserCreateWithoutTeaching_classroomsInput {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3284,8 +3276,6 @@ enum UserOrderByInput {
   gender_DESC
   bio_ASC
   bio_DESC
-  url_ASC
-  url_DESC
   stripeId_ASC
   stripeId_DESC
   stripeCustomerId_ASC
@@ -3307,7 +3297,6 @@ type UserPreviousValues {
   name: String
   gender: Gender!
   bio: String!
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean!
@@ -3361,7 +3350,6 @@ input UserUpdateInput {
   name: String
   gender: Gender
   bio: String
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3434,7 +3422,6 @@ input UserUpdateWithoutChargesDataInput {
   name: String
   gender: Gender
   bio: String
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3456,7 +3443,6 @@ input UserUpdateWithoutFollowersDataInput {
   name: String
   gender: Gender
   bio: String
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3478,7 +3464,6 @@ input UserUpdateWithoutFollowingDataInput {
   name: String
   gender: Gender
   bio: String
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3500,7 +3485,6 @@ input UserUpdateWithoutMessagesDataInput {
   name: String
   gender: Gender
   bio: String
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3522,7 +3506,6 @@ input UserUpdateWithoutStudying_classroomsDataInput {
   name: String
   gender: Gender
   bio: String
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3544,7 +3527,6 @@ input UserUpdateWithoutTeaching_classroomsDataInput {
   name: String
   gender: Gender
   bio: String
-  url: String
   stripeId: String
   stripeCustomerId: String
   receiveNotifications: Boolean
@@ -3907,46 +3889,6 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   bio_not_ends_with: String
-  url: String
-
-  """All values that are not equal to given value."""
-  url_not: String
-
-  """All values that are contained in given list."""
-  url_in: [String!]
-
-  """All values that are not contained in given list."""
-  url_not_in: [String!]
-
-  """All values less than the given value."""
-  url_lt: String
-
-  """All values less than or equal the given value."""
-  url_lte: String
-
-  """All values greater than the given value."""
-  url_gt: String
-
-  """All values greater than or equal the given value."""
-  url_gte: String
-
-  """All values containing the given string."""
-  url_contains: String
-
-  """All values not containing the given string."""
-  url_not_contains: String
-
-  """All values starting with the given string."""
-  url_starts_with: String
-
-  """All values not starting with the given string."""
-  url_not_starts_with: String
-
-  """All values ending with the given string."""
-  url_ends_with: String
-
-  """All values not ending with the given string."""
-  url_not_ends_with: String
   stripeId: String
 
   """All values that are not equal to given value."""
@@ -4100,8 +4042,6 @@ export type UserOrderByInput =   'id_ASC' |
   'gender_DESC' |
   'bio_ASC' |
   'bio_DESC' |
-  'url_ASC' |
-  'url_DESC' |
   'stripeId_ASC' |
   'stripeId_DESC' |
   'stripeCustomerId_ASC' |
@@ -4321,20 +4261,6 @@ export interface UserWhereInput {
   bio_not_starts_with?: String
   bio_ends_with?: String
   bio_not_ends_with?: String
-  url?: String
-  url_not?: String
-  url_in?: String[] | String
-  url_not_in?: String[] | String
-  url_lt?: String
-  url_lte?: String
-  url_gt?: String
-  url_gte?: String
-  url_contains?: String
-  url_not_contains?: String
-  url_starts_with?: String
-  url_not_starts_with?: String
-  url_ends_with?: String
-  url_not_ends_with?: String
   stripeId?: String
   stripeId_not?: String
   stripeId_in?: String[] | String
@@ -4870,7 +4796,6 @@ export interface UserCreateWithoutChargesInput {
   name?: String
   gender: Gender
   bio: String
-  url?: String
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
@@ -4937,7 +4862,6 @@ export interface UserUpdateInput {
   name?: String
   gender?: Gender
   bio?: String
-  url?: String
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
@@ -5068,7 +4992,6 @@ export interface UserCreateInput {
   name?: String
   gender: Gender
   bio: String
-  url?: String
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
@@ -5211,7 +5134,6 @@ export interface UserCreateWithoutMessagesInput {
   name?: String
   gender: Gender
   bio: String
-  url?: String
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
@@ -5252,7 +5174,6 @@ export interface UserUpdateWithoutMessagesDataInput {
   name?: String
   gender?: Gender
   bio?: String
-  url?: String
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
@@ -5310,7 +5231,6 @@ export interface UserCreateWithoutStudying_classroomsInput {
   name?: String
   gender: Gender
   bio: String
-  url?: String
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
@@ -5356,7 +5276,6 @@ export interface UserCreateWithoutFollowingInput {
   name?: String
   gender: Gender
   bio: String
-  url?: String
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
@@ -5409,7 +5328,6 @@ export interface UserCreateWithoutTeaching_classroomsInput {
   name?: String
   gender: Gender
   bio: String
-  url?: String
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
@@ -5449,7 +5367,6 @@ export interface UserCreateWithoutFollowersInput {
   name?: String
   gender: Gender
   bio: String
-  url?: String
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
@@ -5594,7 +5511,6 @@ export interface UserUpdateWithoutStudying_classroomsDataInput {
   name?: String
   gender?: Gender
   bio?: String
-  url?: String
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
@@ -5633,7 +5549,6 @@ export interface UserUpdateWithoutChargesDataInput {
   name?: String
   gender?: Gender
   bio?: String
-  url?: String
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
@@ -5696,7 +5611,6 @@ export interface UserUpdateWithoutFollowingDataInput {
   name?: String
   gender?: Gender
   bio?: String
-  url?: String
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
@@ -5789,7 +5703,6 @@ export interface UserUpdateWithoutTeaching_classroomsDataInput {
   name?: String
   gender?: Gender
   bio?: String
-  url?: String
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
@@ -5879,7 +5792,6 @@ export interface UserUpdateWithoutFollowersDataInput {
   name?: String
   gender?: Gender
   bio?: String
-  url?: String
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications?: Boolean
@@ -6253,7 +6165,6 @@ export interface User extends Node {
   name?: String
   gender: Gender
   bio: String
-  url?: String
   picture?: File
   video?: File
   stripeId?: String
@@ -6406,7 +6317,6 @@ export interface UserPreviousValues {
   name?: String
   gender: Gender
   bio: String
-  url?: String
   stripeId?: String
   stripeCustomerId?: String
   receiveNotifications: Boolean
