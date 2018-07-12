@@ -7,7 +7,7 @@ import { Header } from 'components/Header'
 import { Link } from 'components/Link'
 import { Button } from 'components/Button'
 import { Thumbnail } from 'components/Thumbnail'
-import { TextStyle } from 'components/TextStyle'
+import { ProfileLinks } from 'components/ProfileLinks'
 import { Text } from 'components/Text'
 
 import { spacing, outline, colors } from 'utils/theme'
@@ -66,17 +66,7 @@ export const ClassroomHeader = ({
         />
       </Link>
       <ClassroomMeta>
-        {teachers.map((node, index) => (
-          <Link
-            key={node.id}
-            href={'TEST' || node.url}
-            size="small"
-            weight="bold"
-          >
-            {node.name}
-            {index > 0 && index !== teachers.length - 1 && ', '}
-          </Link>
-        ))}
+        <ProfileLinks users={teachers} />
         <Link href={`/dashboard/classrooms/classroom/${id}`}>
           <ClassroomTitle size="xlarge">{name}</ClassroomTitle>
         </Link>

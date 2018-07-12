@@ -16,6 +16,7 @@ import { Icon } from 'components/Icon'
 import { TextStyle } from 'components/TextStyle'
 import { Button } from 'components/Button'
 import { IconHeader } from 'components/IconHeader'
+import { TeachersLinks } from 'components/TeachersLinks'
 
 import { colors, spacing, outline } from 'utils/theme'
 import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
@@ -31,10 +32,14 @@ const classroomQuery = gql`
       id
       name
       description
-      teacher {
-        id
-        name
-        url
+      teachersConnection {
+        edges {
+          node {
+            id
+            name
+            url
+          }
+        }
       }
       classesConnection {
         aggregate {
@@ -106,13 +111,11 @@ const ClassActions = styled(FlexRow)`
   margin-left: auto;
 `
 
-const Class = ({ node, teacher }) => (
+const Class = ({ node, teachers }) => (
   <ClassRow>
     <ClassImage src="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
     <ClassMeta>
-      <Link href={'test' || teacher.url} weight="bold" size="small">
-        {'Teacher Name' || teacher.name}
-      </Link>
+      <TeachersLinks teachers={teachers} />
       <ClassTitle href={`/dashboard/classes/class/${node.id}`} weight="bold">
         {node.name} <TextStyle color="primary">{node.price}</TextStyle>
       </ClassTitle>
@@ -164,7 +167,7 @@ export const ClassroomInformation = withRouter(({ router }) => (
                 numberOfClasses={
                   data.classroom.classesConnection.aggregate.count
                 }
-                teacher={data.classroom.teacher}
+                teachers={data.classroom.teachersConnection.edges}
               />
 
               <ClassesCol>
@@ -178,7 +181,7 @@ export const ClassroomInformation = withRouter(({ router }) => (
                     <Class
                       node={node}
                       key={node.id}
-                      teacher={data.classroom.teacher}
+                      teachers={data.classroom.teachersConnection.edges}
                     />
                   ))}
                 </div>

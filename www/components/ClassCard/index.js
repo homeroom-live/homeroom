@@ -7,7 +7,7 @@ import { FlexCol } from 'components/FlexCol'
 import { Link } from 'components/Link'
 import { Text } from 'components/Text'
 import { Header } from 'components/Header'
-import { TextStyle } from 'components/TextStyle'
+import { ProfileLinks } from 'components/ProfileLinks'
 import { Icon } from 'components/Icon'
 
 import { shadow, spacing, colors } from 'utils/theme'
@@ -67,17 +67,7 @@ export const ClassCard = ({ node, teachers, href, ...props }) => (
   <ClassContainer href={href} {...props}>
     <ClassImage src="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
     <ClassMeta>
-      {teachers.map((node, index) => (
-        <Link
-          key={node.id}
-          href={'TEST' || node.url}
-          size="small"
-          weight="bold"
-        >
-          {node.name}
-          {index > 0 && index !== teachers.length - 1 && ', '}
-        </Link>
-      ))}
+      <ProfileLinks users={teachers} />
       <ClassTitle margin="0">
         {node.name} {/*<TextStyle color="primary">${node.price}</TextStyle>*/}
       </ClassTitle>

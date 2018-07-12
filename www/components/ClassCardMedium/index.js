@@ -9,6 +9,7 @@ import { Text } from 'components/Text'
 import { Header } from 'components/Header'
 import { Player } from 'components/Player'
 import { Icon } from 'components/Icon'
+import { ProfileLinks } from 'components/ProfileLinks'
 
 import { shadow, spacing, colors } from 'utils/theme'
 import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
@@ -67,17 +68,7 @@ export const ClassCardMedium = ({ node, teachers, href, ...props }) => (
   <ClassContainer href={href} {...props}>
     <ClassVideo src="http://techslides.com/demos/sample-videos/small.mp4" />
     <ClassMeta>
-      {teachers.map((node, index) => (
-        <Link
-          key={node.id}
-          href={'TEST' || node.url}
-          size="small"
-          weight="bold"
-        >
-          {node.name}
-          {index > 0 && index !== teachers.length - 1 && ', '}
-        </Link>
-      ))}
+      <ProfileLinks users={teachers} />
       <ClassTitle margin="0">{node.name}</ClassTitle>
       <FlexRow>
         <ClassMetaItem color="gray" weight="bold" size="small">
