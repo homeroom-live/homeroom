@@ -7,6 +7,7 @@ import moment from 'moment-timezone'
 
 // Components
 
+import { withEditable } from 'hocs/withEditable'
 import { Loading } from 'components/Loading'
 import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
@@ -22,9 +23,9 @@ import { ImagePicker } from 'components/ImagePicker'
 import { FilePicker } from 'components/FilePicker'
 import { IconHeader } from 'components/IconHeader'
 import { Label } from 'components/Label'
-import { withEditable } from 'hocs/withEditable'
+import { Toggle } from 'components/Toggle'
 
-import { spacing, shadow, outline, colors } from 'utils/theme'
+import { spacing, shadow, outline, colors, opacity } from 'utils/theme'
 import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
 import clockGrayIcon from 'static/assets/icons/ui/clock-gray.svg'
 import calendarGrayIcon from 'static/assets/icons/ui/calendar-gray.svg'
@@ -102,7 +103,7 @@ const classQuery = gql`
 
 // margin: ${spacing.medium};
 const ClassInformationCol = styled(FlexCol)``
-const ClassHeader = styled(FlexCol)`
+const ClassHeader = styled(FlexRow)`
   position: sticky;
   top: 0;
   z-index: 10;
@@ -111,6 +112,9 @@ const ClassHeader = styled(FlexCol)`
   background: ${colors.white};
   border-bottom: 1px solid ${colors.grayLighter};
   box-shadow: ${colors.shadowActive};
+`
+const ClassToggle = styled(Toggle)`
+  margin-left: auto;
 `
 const ClassImage = styled.img`
   object-fit: contain;
@@ -156,6 +160,17 @@ const SectionBody = styled(FlexCol)`
 const SectionRightCol = styled(SectionCol)`
   margin-left: ${spacing.medium};
 `
+const QuestionsDisabledCol = styled(FlexCol)`
+  ${outline()};
+  margin-left: ${spacing.medium};
+  margin-bottom: ${spacing.medium};
+  cursor: not-allowed;
+  opacity: ${opacity};
+`
+const QuestionsDisabledBody = styled(SectionBody)`
+  align-items: center;
+  justify-content: center;
+`
 const EditableText = withEditable(Text)
 const EditableLabel = styled(Label)`
   margin-bottom: ${spacing.regular};
@@ -200,7 +215,7 @@ export const ClassInformation = withRouter(({ router }) => (
                     value={data.class.name}
                     handleSave={() => {}}
                   />
-                  <VideoSettingsRow>
+                  <FlexRow>
                     <ClassMetaItem color="gray" weight="bold" size="small">
                       <ClassIcon src={userGrayIcon} />
                       {0} Students
@@ -215,8 +230,13 @@ export const ClassInformation = withRouter(({ router }) => (
                         .tz('America/New_York')
                         .format('LT z')}
                     </ClassMetaItem>
-                  </VideoSettingsRow>
+                  </FlexRow>
                 </ClassMeta>
+                <ClassToggle
+                  activeLabel="Live"
+                  inactiveLabel="Offline"
+                  onChange={() => {}}
+                />
               </ClassHeader>
               <ClassBody>
                 <SectionCol>
@@ -251,10 +271,14 @@ export const ClassInformation = withRouter(({ router }) => (
                     <IconHeader inline src={iconChat} value="Chat" />
                     <SectionBody />
                   </SectionCol>
-                  <SectionRightCol>
+                  <QuestionsDisabledCol>
                     <IconHeader inline src={iconHelp} value="Questions" />
-                    <SectionBody />
-                  </SectionRightCol>
+                    <QuestionsDisabledBody>
+                      <Text size="medium" weight="bold">
+                        Coming Soon!
+                      </Text>
+                    </QuestionsDisabledBody>
+                  </QuestionsDisabledCol>
                 </SectionRow>
 
                 <SectionRow>
