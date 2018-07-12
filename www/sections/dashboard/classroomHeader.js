@@ -53,7 +53,7 @@ export const ClassroomHeader = ({
   id,
   name,
   numberOfClasses,
-  teacher,
+  teachers,
   children,
   ...props
 }) => (
@@ -66,11 +66,17 @@ export const ClassroomHeader = ({
         />
       </Link>
       <ClassroomMeta>
-        <Link href="USER_PROFILE">
-          <TextStyle size="small" weight="bold">
-            Name of Teachers
-          </TextStyle>
-        </Link>
+        {teachers.map((node, index) => (
+          <Link
+            key={node.id}
+            href={'TEST' || node.url}
+            size="small"
+            weight="bold"
+          >
+            {node.name}
+            {index > 0 && index !== teachers.length - 1 && ', '}
+          </Link>
+        ))}
         <Link href={`/dashboard/classrooms/classroom/${id}`}>
           <ClassroomTitle size="xlarge">{name}</ClassroomTitle>
         </Link>

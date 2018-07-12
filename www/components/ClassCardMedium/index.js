@@ -17,7 +17,6 @@ import calendarGrayIcon from 'static/assets/icons/ui/calendar-gray.svg'
 
 const inlineStyles = () => `
   border: none;
-  border-bottom: 1px solid ${colors.grayLighter};
   border-radius: 0;
 `
 
@@ -26,9 +25,11 @@ const ClassContainer = styled(Link)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  flex: 1;
+  flex-basis: 30%;
   padding: ${spacing.regular};
-  text-decoration: none;
   color: transparent;
+  text-decoration: none;
   &:hover {
     color: transparent;
     text-decoration: none;
@@ -42,8 +43,6 @@ const ClassVideo = styled(Player)`
   margin-bottom: ${spacing.small};
   background: ${colors.black};
 `
-// max-width: 256px;
-// max-height: 144px;
 const ClassTitle = styled(Header)`
   &:hover {
     text-decoration: underline;
@@ -64,16 +63,22 @@ const ClassIcon = styled(Icon)`
   margin-right: ${spacing.xsmall};
 `
 
-export const ClassCardMedium = ({ node, teacher, href, ...props }) => (
+export const ClassCardMedium = ({ node, teachers, href, ...props }) => (
   <ClassContainer href={href} {...props}>
     <ClassVideo src="http://techslides.com/demos/sample-videos/small.mp4" />
     <ClassMeta>
-      <Link href={'test' || teacher.url} weight="bold" size="small">
-        {'Teacher Name' || teacher.name}
-      </Link>
-      <ClassTitle margin="0">
-        {node.name} {/*<TextStyle color="primary">${node.price}</TextStyle>*/}
-      </ClassTitle>
+      {teachers.map((node, index) => (
+        <Link
+          key={node.id}
+          href={'TEST' || node.url}
+          size="small"
+          weight="bold"
+        >
+          {node.name}
+          {index > 0 && index !== teachers.length - 1 && ', '}
+        </Link>
+      ))}
+      <ClassTitle margin="0">{node.name}</ClassTitle>
       <FlexRow>
         <ClassMetaItem color="gray" weight="bold" size="small">
           <ClassIcon src={userGrayIcon} />

@@ -63,13 +63,21 @@ const ClassIcon = styled(Icon)`
   margin-right: ${spacing.xsmall};
 `
 
-export const ClassCard = ({ node, teacher, href, ...props }) => (
+export const ClassCard = ({ node, teachers, href, ...props }) => (
   <ClassContainer href={href} {...props}>
     <ClassImage src="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
     <ClassMeta>
-      <Link href={'test' || teacher.url} weight="bold" size="small">
-        {'Teacher Name' || teacher.name}
-      </Link>
+      {teachers.map((node, index) => (
+        <Link
+          key={node.id}
+          href={'TEST' || node.url}
+          size="small"
+          weight="bold"
+        >
+          {node.name}
+          {index > 0 && index !== teachers.length - 1 && ', '}
+        </Link>
+      ))}
       <ClassTitle margin="0">
         {node.name} {/*<TextStyle color="primary">${node.price}</TextStyle>*/}
       </ClassTitle>

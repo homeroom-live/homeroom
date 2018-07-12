@@ -33,10 +33,14 @@ const classroomsQuery = gql`
             node {
               id
               name
-              teachers {
-                id
-                name
-                url
+              teachersConnection {
+                edges {
+                  node {
+                    id
+                    name
+                    url
+                  }
+                }
               }
               classesConnection {
                 aggregate {
@@ -107,17 +111,18 @@ const ClassroomShowMore = styled(Link)`
     text-decoration: none;
   }
 `
-const ClassesRow = styled(FlexRow)``
-// flex-wrap: nowrap;
+const ClassesRow = styled(FlexRow)`
+  flex-wrap: wrap;
+`
 
-const Classroom = ({ id, name, numberOfClasses, classes, teacher }) => (
+const Classroom = ({ id, name, numberOfClasses, classes, teachers }) => (
   <ClassroomContainer>
     <ClassroomHeader
       inline
       id={id}
       name={name}
       numberOfClasses={numberOfClasses}
-      teacher={teacher}
+      teachers={teachers}
     />
     <ClassesRow>
       {classes.map(({ node }) => (
@@ -126,7 +131,7 @@ const Classroom = ({ id, name, numberOfClasses, classes, teacher }) => (
           node={node}
           key={node.id}
           href={`/dashboard/classes/class/${node.id}`}
-          teacher={teacher}
+          teachers={teachers}
         />
       ))}
     </ClassesRow>
@@ -169,7 +174,7 @@ export const ClassroomsCoverflow = () => (
                     name={node.name}
                     numberOfClasses={node.classesConnection.aggregate.count}
                     classes={node.classesConnection.edges}
-                    teacher={node.teacher}
+                    teachers={node.teachersConnection.edges}
                   />
                 ))}
               </main>
