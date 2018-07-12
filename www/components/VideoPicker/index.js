@@ -6,18 +6,11 @@ import { Icon } from 'components/Icon'
 import { Text } from 'components/Text'
 import { Dropzone } from 'components/Dropzone'
 
-import { borderRadius, colors, spacing, opacity, transition } from 'utils/theme'
+import { borderRadius, colors, spacing, opacity } from 'utils/theme'
 import iconVideo from 'static/assets/icons/ui/video.svg'
 import iconXWhite from 'static/assets/icons/ui/x-circle-white.svg'
 
-const VideoPickerContainer = styled(FlexCol)`
-  text-transform: initial;
-  transition: ${transition};
-  opacity: 0.5;
-  &:hover {
-    opacity: 1;
-  }
-`
+const VideoPickerContainer = styled(FlexCol)``
 const VideoContainer = styled.div`
   position: relative;
   border-radius: ${borderRadius};
@@ -42,46 +35,27 @@ const XIcon = styled(Icon)`
   }
 `
 
-export class VideoPicker extends React.Component {
-  getVideoSrc = () => {
-    const { value } = this.props
-    // From API...
-    if (value.length) {
-      return value[0].preview
-    }
-    // From database
-    else {
-      return value.url
-    }
-  }
+export const VideoPicker = ({ value, onChange, onRemove }) => (
+  <VideoPickerContainer>
+    {!value && (
+      <Dropzone
+        multiple={false}
+        onDrop={onChange}
+        accept="video/*"
+        onClick={e => e.preventDefault()}
+      >
+        <PlaceholderIcon src={iconVideo} />
+        <PlaceholderText size="small" weight="bold">
+          Drop video or click here to upload
+        </PlaceholderText>
+      </Dropzone>
+    )}
 
-  render() {
-    return (
-      <VideoPickerContainer size={this.props.size}>
-        {!this.props.value && (
-          <Dropzone
-            multiple={false}
-            onDrop={this.props.onChange}
-            accept="video/*"
-            onClick={e => e.preventDefault()}
-          >
-            <PlaceholderIcon src={iconVideo} />
-            <PlaceholderText size="small" weight="bold">
-              Drop video or click here to upload
-            </PlaceholderText>
-          </Dropzone>
-        )}
-
-        {this.props.value && (
-          <VideoContainer>
-            <video controls width={'100%'} src={this.getVideoSrc()} />
-            <XIcon
-              src={iconXWhite}
-              onClick={() => this.props.onRemove(this.props.value.id || '')}
-            />
-          </VideoContainer>
-        )}
-      </VideoPickerContainer>
-    )
-  }
-}
+    {value && (
+      <VideoContainer>
+        <video controls crossOrigin="anonymous" width={'100%'} src={value} />
+        <XIcon src={iconXWhite} onClick={onRemove} />
+      </VideoContainer>
+    )}
+  </VideoPickerContainer>
+)

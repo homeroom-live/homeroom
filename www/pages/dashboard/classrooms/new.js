@@ -17,8 +17,8 @@ class NewClassroom extends React.Component {
   render() {
     return (
       <Fragment>
-        <Navigation />
-        <SideNavigation activePage="class">
+        <Navigation activePage="dashboard" />
+        <SideNavigation activeSection="">
           <ClassroomForm />
         </SideNavigation>
         <Footer />

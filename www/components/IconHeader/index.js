@@ -27,7 +27,9 @@ const HeaderText = styled(Text)`
 export const IconHeader = ({ src, value, children, ...props }) => (
   <Header {...props}>
     <Icon src={src} inline />
-    <HeaderText weight="bold">{value}</HeaderText>
+    <HeaderText weight="bold" margin="0">
+      {value}
+    </HeaderText>
     {children}
   </Header>
 )

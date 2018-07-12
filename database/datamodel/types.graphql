@@ -59,7 +59,7 @@ type Classroom {
 
   name: String!
   description: String!
-  price: Float! @deafult(value: "0")
+  price: Float! @default(value: "0")
   classes: [Class!]! @relation(name: "ClassroomClass", onDelete: CASCADE)
 
   teacher: User! @relation(name: "ClassroomTeacher", onDelete: SET_NULL)

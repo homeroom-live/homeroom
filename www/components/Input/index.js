@@ -1,19 +1,26 @@
 import styled from 'styled-components'
 
-import { colors, fontSizes, fontFamily, spacing, transition } from 'utils/theme'
+import {
+  colors,
+  fontSizes,
+  fontFamily,
+  spacing,
+  transition,
+  borderRadius,
+} from 'utils/theme'
 
 export const Input = styled.input`
-  padding: ${spacing.xsmall} 0;
+  padding: ${spacing.small};
   color: ${colors.secondary};
   font-size: ${fontSizes.regular};
   font-family: ${fontFamily};
   outline: none;
-  border: none;
-  border-bottom: 2px solid ${colors.grayLighter};
+  border: 2px solid ${colors.grayLighter};
+  border-radius: ${borderRadius};
   transition: ${transition};
   &:hover,
   &:focus {
-    border-bottom: 2px solid ${colors.secondary};
+    border: 2px solid ${colors.secondary};
   }
   &::placeholder {
     color: ${colors.gray};

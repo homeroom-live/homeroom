@@ -97,7 +97,7 @@ export class ClassroomForm extends React.Component {
 
   handleVideoChange = file => {
     this.setState({
-      video: file,
+      video: file[0].preview,
     })
   }
 
@@ -109,7 +109,7 @@ export class ClassroomForm extends React.Component {
 
   handleImageChange = file => {
     this.setState({
-      image: file,
+      image: file[0].preview,
     })
   }
 

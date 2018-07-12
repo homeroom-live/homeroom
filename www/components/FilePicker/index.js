@@ -7,17 +7,10 @@ import { Text } from 'components/Text'
 import { File } from 'components/File'
 import { Dropzone } from 'components/Dropzone'
 
-import { spacing, transition } from 'utils/theme'
+import { spacing } from 'utils/theme'
 import iconFile from 'static/assets/icons/ui/file-plus.svg'
 
-const FilePickerContainer = styled(FlexCol)`
-  text-transform: initial;
-  transition: ${transition};
-  opacity: 0.5;
-  &:hover {
-    opacity: 1;
-  }
-`
+const FilePickerContainer = styled(FlexCol)``
 const PlaceholderIcon = styled(Icon)`
   margin-bottom: ${spacing.small};
 `
