@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { FlexCol } from 'components/FlexCol'
 import { Icon } from 'components/Icon'
 import { Text } from 'components/Text'
-import { Thumbnail } from 'components/Thumbnail'
 import { Dropzone } from 'components/Dropzone'
 
 import { borderRadius, colors, spacing, opacity } from 'utils/theme'
@@ -30,10 +29,14 @@ const XIcon = styled(Icon)`
   border-radius: 20px;
   background: ${colors.secondary};
   height: 20px;
+  width: 20px;
   opacity: ${opacity};
   ':hover': {
     opacity: 1;
   }
+`
+const PreviewImage = styled.img`
+  width: 100%;
 `
 
 export const ImagePicker = ({ value, onChange, onRemove }) => (
@@ -54,7 +57,7 @@ export const ImagePicker = ({ value, onChange, onRemove }) => (
 
     {value && (
       <ImageContainer>
-        <Thumbnail size="xxxlarge" src={value} />
+        <PreviewImage src={value} />
         <XIcon src={iconXWhite} onClick={onRemove} />
       </ImageContainer>
     )}

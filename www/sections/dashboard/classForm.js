@@ -228,8 +228,12 @@ class _ClassForm extends React.Component {
           } else {
             return (
               <NewClassCol>
-                <Breadcrumb href="/dashboard/classrooms/classroom">
-                  Back to Classrooms
+                <Breadcrumb
+                  href={`/dashboard/classrooms/classroom/${
+                    this.props.router.query.classroomId
+                  }`}
+                >
+                  Back to Classroom
                 </Breadcrumb>
                 <NewClassHeader src={iconVideo} value="Create New Class">
                   <SaveButton color="primary" onClick={create}>

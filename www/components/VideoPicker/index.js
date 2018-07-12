@@ -53,7 +53,7 @@ export const VideoPicker = ({ value, onChange, onRemove }) => (
 
     {value && (
       <VideoContainer>
-        <video controls width={'100%'} src={value} />
+        <video controls crossOrigin="anonymous" width={'100%'} src={value} />
         <XIcon src={iconXWhite} onClick={onRemove} />
       </VideoContainer>
     )}

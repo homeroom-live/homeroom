@@ -14,7 +14,6 @@ const inputSizes = {
 export const Label = styled.label`
   display: flex;
   flex-direction: column;
-  margin-top: ${spacing.regular};
   margin-bottom: ${spacing.large};
   color: ${colors.grayDarker};
   font-weight: ${fontWeights.bold};
