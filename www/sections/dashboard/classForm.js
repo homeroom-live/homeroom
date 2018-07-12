@@ -74,7 +74,7 @@ const createClass = gql`
     $classroomId: ID!
     $name: String!
     $description: String!
-    $picture: Upload
+    $thumbnail: Upload
     $video: Upload
     $price: Float!
     $schedule: DateTime
@@ -84,7 +84,7 @@ const createClass = gql`
       classroomId: $classroomId
       name: $name
       description: $description
-      picture: $picture
+      thumbnail: $thumbnail
       video: $video
       price: $price
       schedule: $schedule
@@ -103,7 +103,7 @@ class _ClassForm extends React.Component {
   state = {
     name: '',
     description: '',
-    picture: null,
+    thumbnail: null,
     video: null,
     price: 0,
     schedule: null,
@@ -122,15 +122,15 @@ class _ClassForm extends React.Component {
     })
   }
 
-  handlePictureChange = picture => {
+  handleThumbnailChange = thumbnail => {
     this.setState({
-      picture: picture[0].preview,
+      thumbnail: thumbnail[0].preview,
     })
   }
 
-  handlePictureRemove = () => {
+  handleThumbnailRemove = () => {
     this.setState({
-      picture: null,
+      thumbnail: null,
     })
   }
 
@@ -169,8 +169,6 @@ class _ClassForm extends React.Component {
   }
 
   render() {
-    console.log(this.props)
-
     return (
       <Mutation
         mutation={createClass}
@@ -178,7 +176,7 @@ class _ClassForm extends React.Component {
           classroomId: this.props.router.query.classroomId,
           name: this.state.name,
           description: this.state.description,
-          picture: this.state.picture,
+          thumbnail: this.state.thumbnail,
           video: this.state.video,
           price: this.state.price,
           schedule: this.state.schedule,
@@ -264,11 +262,11 @@ class _ClassForm extends React.Component {
                     />
                   </Label>
                   <Label size="medium">
-                    Class Cover Picture
+                    Class Thumbnail
                     <ImagePicker
-                      value={this.state.picture}
-                      onChange={this.handlePictureChange}
-                      onRemove={this.handlePictureRemove}
+                      value={this.state.thumbnail}
+                      onChange={this.handleThumbnailChange}
+                      onRemove={this.handleThumbnailRemove}
                     />
                   </Label>
                   <Label size="large">
