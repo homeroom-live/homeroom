@@ -80,7 +80,6 @@ const classQuery = gql`
             node {
               id
               name
-              url
             }
           }
         }

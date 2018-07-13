@@ -37,7 +37,6 @@ const classroomQuery = gql`
           node {
             id
             name
-            url
           }
         }
       }
