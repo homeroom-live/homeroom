@@ -17,12 +17,19 @@ import { TextStyle } from 'components/TextStyle'
 import { Button } from 'components/Button'
 import { IconHeader } from 'components/IconHeader'
 import { ProfileLinks } from 'components/ProfileLinks'
+import { Label } from 'components/Label'
+import { Input } from 'components/Input'
+import { Textarea } from 'components/Textarea'
+import { ImagePicker } from 'components/ImagePicker'
+import { VideoPicker } from 'components/VideoPicker'
 
-import { colors, spacing, outline } from 'utils/theme'
+import { colors, spacing, outline, shadow } from 'utils/theme'
 import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
 import clockGrayIcon from 'static/assets/icons/ui/clock-gray.svg'
 import calendarGrayIcon from 'static/assets/icons/ui/calendar-gray.svg'
 import videoIcon from 'static/assets/icons/ui/video.svg'
+import iconInformation from 'static/assets/icons/ui/information.svg'
+import iconFile from 'static/assets/icons/ui/file.svg'
 
 // GraphQL
 
@@ -62,7 +69,7 @@ const ClassroomInformationCol = styled(FlexCol)`
 `
 const ClassesCol = styled(FlexCol)`
   ${outline()};
-  margin-top: ${spacing.medium};
+  margin: ${spacing.medium} 0;
 `
 const ClassRow = styled(FlexRow)`
   display: flex;
@@ -109,6 +116,24 @@ const ClassActions = styled(FlexRow)`
   justify-content: flex-end;
   margin-left: auto;
 `
+const SectionRow = styled(FlexRow)`
+  align-items: flex-start;
+  width: initial;
+`
+const SectionCol = styled(FlexCol)`
+  ${shadow()};
+  margin-bottom: ${spacing.medium};
+`
+const SectionBody = styled(FlexCol)`
+  min-height: 512px;
+  padding: ${spacing.regular};
+`
+const SectionRightCol = styled(SectionCol)`
+  margin-left: ${spacing.medium};
+`
+const EditableLabel = styled(Label)`
+  margin-bottom: ${spacing.regular};
+`
 
 const Class = ({ node, teachers }) => (
   <ClassRow>
@@ -145,53 +170,110 @@ const Class = ({ node, teachers }) => (
 
 // Classroom Information
 
-export const ClassroomInformation = withRouter(({ router }) => (
-  <Query
-    query={classroomQuery}
-    variables={{ classroomId: router.query.classroomId }}
-    notifyOnNetworkStatusChange
-  >
-    {({ networkStatus, data }) => {
-      switch (networkStatus) {
-        case 1: {
-          return <Loading />
-        }
-        case 7: {
-          return (
-            <ClassroomInformationCol>
-              <Breadcrumb href="/dashboard">Back to Classrooms</Breadcrumb>
-              <ClassroomHeader
-                id={data.classroom.id}
-                name={data.classroom.name}
-                numberOfClasses={
-                  data.classroom.classesConnection.aggregate.count
-                }
-                teachers={data.classroom.teachersConnection.edges}
-              />
+class _ClassroomInformation extends React.Component {
+  state = {
+    name: '',
+    description: '',
+    thumbnail: null,
+    video: null,
+  }
 
-              <ClassesCol>
-                <IconHeader inline src={videoIcon} value="Classes">
-                  <Text weight="bold" margin="0" color="gray">
-                    {data.classroom.classesConnection.aggregate.count}
-                  </Text>
-                </IconHeader>
-                <div>
-                  {data.classroom.classesConnection.edges.map(({ node }) => (
-                    <Class
-                      node={node}
-                      key={node.id}
-                      teachers={data.classroom.teachersConnection.edges}
-                    />
-                  ))}
-                </div>
-              </ClassesCol>
-            </ClassroomInformationCol>
-          )
-        }
-        default: {
-          return null
-        }
-      }
-    }}
-  </Query>
-))
+  render() {
+    return (
+      <Query
+        query={classroomQuery}
+        variables={{ classroomId: this.props.router.query.classroomId }}
+        notifyOnNetworkStatusChange
+      >
+        {({ networkStatus, data }) => {
+          switch (networkStatus) {
+            case 1: {
+              return <Loading />
+            }
+            case 7: {
+              return (
+                <ClassroomInformationCol>
+                  <Breadcrumb href="/dashboard">Back to Classrooms</Breadcrumb>
+                  <ClassroomHeader
+                    id={data.classroom.id}
+                    name={data.classroom.name}
+                    numberOfClasses={
+                      data.classroom.classesConnection.aggregate.count
+                    }
+                    teachers={data.classroom.teachersConnection.edges}
+                  />
+
+                  <ClassesCol>
+                    <IconHeader inline src={videoIcon} value="Classes">
+                      <Text weight="bold" margin="0" color="gray">
+                        {data.classroom.classesConnection.aggregate.count}
+                      </Text>
+                    </IconHeader>
+                    <div>
+                      {data.classroom.classesConnection.edges.map(
+                        ({ node }) => (
+                          <Class
+                            node={node}
+                            key={node.id}
+                            teachers={data.classroom.teachersConnection.edges}
+                          />
+                        ),
+                      )}
+                    </div>
+                  </ClassesCol>
+
+                  <SectionRow>
+                    <SectionCol>
+                      <IconHeader
+                        inline
+                        src={iconInformation}
+                        value="Information"
+                      />
+                      <SectionBody>
+                        <EditableLabel size="regular">
+                          Thumbnail
+                          <ImagePicker value={''} />
+                        </EditableLabel>
+                        <EditableLabel>
+                          Name
+                          <Input
+                            type="text"
+                            value={this.state.name}
+                            onChange={this.handleNameChange}
+                          />
+                        </EditableLabel>
+                        <EditableLabel>
+                          Description
+                          <Textarea
+                            type="text"
+                            value={this.state.description}
+                            onChange={this.handleDescriptionChange}
+                          />
+                        </EditableLabel>
+                      </SectionBody>
+                    </SectionCol>
+
+                    <SectionRightCol>
+                      <IconHeader inline src={iconFile} value="Files" />
+                      <SectionBody>
+                        <EditableLabel>
+                          Overview Video
+                          <VideoPicker value={''} />
+                        </EditableLabel>
+                      </SectionBody>
+                    </SectionRightCol>
+                  </SectionRow>
+                </ClassroomInformationCol>
+              )
+            }
+            default: {
+              return null
+            }
+          }
+        }}
+      </Query>
+    )
+  }
+}
+
+export const ClassroomInformation = withRouter(_ClassroomInformation)

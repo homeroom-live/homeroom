@@ -26,6 +26,14 @@ import iconCheck from 'static/assets/icons/ui/check.svg'
 const NewClassroomCol = styled(FlexCol)`
   margin: ${spacing.medium};
 `
+const NewClassroomForm = styled.form`
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: ${spacing.xlarge};
+`
+const NewClassroomFormCol = styled(FlexCol)`
+  margin-right: ${spacing.xlarge};
+`
 const NewClassroomHeader = styled(IconHeader)`
   margin-bottom: ${spacing.regular};
 `
@@ -107,15 +115,15 @@ export class ClassroomForm extends React.Component {
     })
   }
 
-  handleImageChange = file => {
+  handleThumbnailChange = file => {
     this.setState({
-      image: file[0].preview,
+      thumbnail: file[0].preview,
     })
   }
 
-  handleImageRemove = e => {
+  handleThumbnailRemove = e => {
     this.setState({
-      image: null,
+      thumbnail: null,
     })
   }
 
@@ -127,7 +135,7 @@ export class ClassroomForm extends React.Component {
           name: this.state.name,
           description: this.state.description,
           video: this.state.video,
-          image: this.state.image,
+          thumbnail: this.state.thumbnail,
         }}
       >
         {(create, { loading, error, data }) => {
@@ -173,39 +181,48 @@ export class ClassroomForm extends React.Component {
                     Save Classroom
                   </SaveButton>
                 </NewClassroomHeader>
-                <form>
-                  <Label size="xlarge">
-                    Classroom Welcome Video
-                    <VideoPicker
-                      onChange={this.handleVideoChange}
-                      onRemove={this.handleVideoRemove}
-                      value={this.state.video}
-                    />
-                  </Label>
-                  <Label size="regular">
-                    Classroom Picture
-                    <ImagePicker
-                      onChange={this.handleImageChange}
-                      onRemove={this.handleImageRemove}
-                      value={this.state.image}
-                    />
-                  </Label>
-                  <Label size="large">
-                    Classroom Name
-                    <Input
-                      type="text"
-                      onChange={this.handleNameChange}
-                      value={this.state.name}
-                    />
-                  </Label>
-                  <Label size="large">
-                    Classroom Description
-                    <Textarea
-                      onChange={this.handleDescriptionChange}
-                      value={this.state.description}
-                    />
-                  </Label>
-                </form>
+
+                <NewClassroomForm onSubmit={create}>
+                  <NewClassroomFormCol>
+                    <Label size="regular">
+                      Classroom Thumbnail
+                      <ImagePicker
+                        onChange={this.handleThumbnailChange}
+                        onRemove={this.handleThumbnailRemove}
+                        value={this.state.thumbnail}
+                      />
+                    </Label>
+                    <Label>
+                      Classroom Name
+                      <Input
+                        type="text"
+                        onChange={this.handleNameChange}
+                        value={this.state.name}
+                      />
+                    </Label>
+                    <Label>
+                      Classroom Description
+                      <Textarea
+                        onChange={this.handleDescriptionChange}
+                        value={this.state.description}
+                      />
+                    </Label>
+                    <Button type="submit" color="primary">
+                      Save Classroom
+                    </Button>
+                  </NewClassroomFormCol>
+
+                  <FlexCol>
+                    <Label>
+                      Classroom Welcome Video
+                      <VideoPicker
+                        onChange={this.handleVideoChange}
+                        onRemove={this.handleVideoRemove}
+                        value={this.state.video}
+                      />
+                    </Label>
+                  </FlexCol>
+                </NewClassroomForm>
               </NewClassroomCol>
             )
           }

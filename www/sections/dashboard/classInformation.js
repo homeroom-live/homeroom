@@ -112,7 +112,7 @@ const ClassHeader = styled(FlexRow)`
   top: 0;
   z-index: 10;
   align-items: flex-start;
-  padding: ${spacing.medium} ${spacing.large};
+  padding: ${spacing.large} ${spacing.large} ${spacing.medium};
   background: ${colors.white};
   border-bottom: 1px solid ${colors.grayLighter};
   box-shadow: ${colors.shadowActive};
@@ -158,6 +158,7 @@ const ClassBody = styled(FlexCol)`
   margin: ${spacing.medium};
 `
 const SectionRow = styled(FlexRow)`
+  align-items: flex-start;
   width: initial;
 `
 const SectionCol = styled(FlexCol)`
@@ -283,13 +284,6 @@ class _ClassInformation extends React.Component {
             case 7: {
               return (
                 <ClassInformationCol>
-                  {/*<Breadcrumb
-              href={`/dashboard/classrooms/classroom/${
-                data.class.classroom.id
-              }`}
-            >
-              Back to {data.class.classroom.name}
-            </Breadcrumb>*/}
                   <ClassHeader>
                     <ClassMeta>
                       <ClassTitle>
@@ -325,6 +319,7 @@ class _ClassInformation extends React.Component {
                       onChange={() => {}}
                     />
                   </ClassHeader>
+
                   <ClassBody>
                     <SectionCol>
                       <IconHeader inline src={iconVideo} value="Video" />
@@ -333,7 +328,6 @@ class _ClassInformation extends React.Component {
                           autoPlay
                           src="https://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"
                         />
-
                         <VideoSettingsRow>
                           <VideoSettingsLabel>
                             Server Url
