@@ -35,38 +35,47 @@ const XIcon = styled(Icon)`
   }
 `
 
-export const VideoPicker = ({ value, onChange, onRemove }) => (
-  <VideoPickerContainer>
-    {!value && (
-      <Dropzone
-        multiple={false}
-        onDrop={onChange}
-        accept="video/*"
-        onClick={e => e.preventDefault()}
-      >
-        <PlaceholderIcon src={iconVideo} />
-        <PlaceholderText size="small" weight="bold">
-          Drop video or click here to upload
-        </PlaceholderText>
-      </Dropzone>
-    )}
+export class VideoPicker extends React.Component {
+  handleDrop = files => {
+    this.props.onChange(files[0])
+  }
 
-    {value && (
-      <VideoContainer>
-        <video
-          controls
-          crossOrigin="anonymous"
-          width={'100%'}
-          src={value.preview || value.url}
-        />
-        <XIcon
-          src={iconXWhite}
-          onClick={e => {
-            e.preventDefault()
-            onRemove()
-          }}
-        />
-      </VideoContainer>
-    )}
-  </VideoPickerContainer>
-)
+  handleRemove = e => {
+    e.preventDefault()
+    this.props.onChange()
+  }
+
+  render() {
+    const { value } = this.props
+
+    return (
+      <VideoPickerContainer>
+        {!value && (
+          <Dropzone
+            multiple={false}
+            onDrop={this.handleDrop}
+            accept="video/*"
+            onClick={e => e.preventDefault()}
+          >
+            <PlaceholderIcon src={iconVideo} />
+            <PlaceholderText size="small" weight="bold">
+              Drop video or click here to upload
+            </PlaceholderText>
+          </Dropzone>
+        )}
+
+        {value && (
+          <VideoContainer>
+            <video
+              controls
+              crossOrigin="anonymous"
+              width={'100%'}
+              src={value.preview || value.url}
+            />
+            <XIcon src={iconXWhite} onClick={this.handleRemove} />
+          </VideoContainer>
+        )}
+      </VideoPickerContainer>
+    )
+  }
+}

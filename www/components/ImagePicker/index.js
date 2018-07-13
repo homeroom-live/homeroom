@@ -39,33 +39,42 @@ const PreviewImage = styled.img`
   width: 100%;
 `
 
-export const ImagePicker = ({ value, onChange, onRemove }) => (
-  <ImagePickerContainer>
-    {!value && (
-      <Dropzone
-        multiple={false}
-        onDrop={onChange}
-        accept="image/*"
-        onClick={e => e.preventDefault()}
-      >
-        <PlaceholderIcon src={iconCamera} />
-        <PlaceholderText size="small" weight="bold">
-          Drop image or click here to upload
-        </PlaceholderText>
-      </Dropzone>
-    )}
+export class ImagePicker extends React.Component {
+  handleDrop = files => {
+    this.props.onChange(files[0])
+  }
 
-    {value && (
-      <ImageContainer>
-        <PreviewImage src={value.preview || value.url} />
-        <XIcon
-          src={iconXWhite}
-          onClick={e => {
-            e.preventDefault()
-            onRemove()
-          }}
-        />
-      </ImageContainer>
-    )}
-  </ImagePickerContainer>
-)
+  handleRemove = e => {
+    e.preventDefault()
+    this.props.onChange()
+  }
+
+  render() {
+    const { value } = this.props
+
+    return (
+      <ImagePickerContainer>
+        {!value && (
+          <Dropzone
+            multiple={false}
+            onDrop={this.handleDrop}
+            accept="image/*"
+            onClick={e => e.preventDefault()}
+          >
+            <PlaceholderIcon src={iconCamera} />
+            <PlaceholderText size="small" weight="bold">
+              Drop image or click here to upload
+            </PlaceholderText>
+          </Dropzone>
+        )}
+
+        {value && (
+          <ImageContainer>
+            <PreviewImage src={value.preview || value.url} />
+            <XIcon src={iconXWhite} onClick={this.handleRemove} />
+          </ImageContainer>
+        )}
+      </ImagePickerContainer>
+    )
+  }
+}
