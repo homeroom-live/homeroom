@@ -188,6 +188,19 @@ export const permissions = shield(
         or(rules.isClassroomOwner, rules.isClassStudent),
       ),
     },
+    ClassParticipantsConnection: {
+      pageInfo: allow,
+      edges: allow,
+      is_viewer_participating: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+      ),
+      aggregate: and(
+        rules.isUserAuthenticated,
+        rules.isUserSetup,
+        rules.isClassroomOwner,
+      ),
+    },
     ClassMessagesConnection: {
       pageInfo: allow,
       edges: allow,

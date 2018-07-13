@@ -225,6 +225,14 @@ type Class {
   picture: Picture
   schedule: DateTime
 
+  classroom: Classroom!
+  participantsConnection(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ClassParticipantsConnection!
+
   # Stream
   live: Boolean!
   duration: Int
@@ -238,7 +246,6 @@ type Class {
     last: Int
   ): ClassFilesConnection!
   vod: File
-  classroom: Classroom!
 
   # Social
   messagesConnection(
@@ -291,32 +298,7 @@ type Picture {
 
 # Connections and Edges ------------------------------------------------------
 
-# User
-
-type UserFollowersConnection {
-  pageInfo: PageInfo!
-  edges: [UserEdge!]!
-  followed_by_viewer: Boolean!
-  aggregate: AggregateUser!
-}
-
-type UserFollowingConnection {
-  pageInfo: PageInfo!
-  edges: [UserEdge!]!
-  following_viewer: Boolean!
-  aggregate: AggregateUser!
-}
-
-type UserEdge {
-  cursor: String!
-  node: User!
-}
-
-type AggregateUser {
-  count: Int!
-}
-
-# Class
+# Explore
 
 type AllClassesConnection {
   pageInfo: PageInfo!
@@ -340,6 +322,76 @@ type UpcomingClassesConnection {
   pageInfo: PageInfo!
   edges: [ClassEdge!]!
   aggregate: AggregateClass!
+}
+
+# User
+
+type UserTeachingClassroomsConnection {
+  pageInfo: PageInfo!
+  edges: [ClassroomEdge]!
+  aggregate: AggregateClassroom!
+}
+
+type UserStudyingClassroomsConnection {
+  pageInfo: PageInfo!
+  classrooms: [ClassroomEdge!]!
+  aggregate: AggregateClassroom!
+}
+
+type UserFollowersConnection {
+  pageInfo: PageInfo!
+  edges: [UserEdge!]!
+  followed_by_viewer: Boolean!
+  aggregate: AggregateUser!
+}
+
+type UserFollowingConnection {
+  pageInfo: PageInfo!
+  edges: [UserEdge!]!
+  following_viewer: Boolean!
+  aggregate: AggregateUser!
+}
+
+type UserChargesConnection {
+  pageInfo: PageInfo!
+  edges: [ChargeEdge!]
+  aggregate: AggregateCharge!
+}
+
+type UserRefundsConnection {
+  pageInfo: PageInfo!
+  edges: [RefundEdge!]!
+  aggregate: AggregateRefund!
+}
+
+type UserEdge {
+  cursor: String!
+  node: User!
+}
+
+type AggregateUser {
+  count: Int!
+}
+
+# Class
+
+type ClassParticipantsConnection {
+  pageInfo: PageInfo!
+  edges: [UserEdge!]!
+  is_viewer_participating: Boolean!
+  aggregate: AggregateUser!
+}
+
+type ClassMessagesConnection {
+  pageInfo: PageInfo!
+  edges: [MessageEdge!]!
+  aggregate: AggregateMessage!
+}
+
+type ClassFilesConnection {
+  pageInfo: PageInfo!
+  edges: [FileEdge!]!
+  aggregate: AggregateFile!
 }
 
 type ClassEdge {
@@ -373,18 +425,6 @@ type ClassroomClassesConnection {
   aggregate: AggregateClass!
 }
 
-type UserTeachingClassroomsConnection {
-  pageInfo: PageInfo!
-  edges: [ClassroomEdge]!
-  aggregate: AggregateClassroom!
-}
-
-type UserStudyingClassroomsConnection {
-  pageInfo: PageInfo!
-  classrooms: [ClassroomEdge!]!
-  aggregate: AggregateClassroom!
-}
-
 type ClassroomEdge {
   node: Classroom!
   cursor: String!
@@ -395,12 +435,6 @@ type AggregateClassroom {
 }
 
 # Charges
-
-type UserChargesConnection {
-  pageInfo: PageInfo!
-  edges: [ChargeEdge!]
-  aggregate: AggregateCharge!
-}
 
 type AggregateCharge {
   count: Int!
@@ -413,12 +447,6 @@ type ChargeEdge {
 
 # Refunds
 
-type UserRefundsConnection {
-  pageInfo: PageInfo!
-  edges: [RefundEdge!]!
-  aggregate: AggregateRefund!
-}
-
 type RefundEdge {
   cursor: String!
   node: Refund!
@@ -430,12 +458,6 @@ type AggregateRefund {
 
 # Messages
 
-type ClassMessagesConnection {
-  pageInfo: PageInfo!
-  edges: [MessageEdge!]!
-  aggregate: AggregateMessage!
-}
-
 type MessageEdge {
   cursor: String!
   node: Message!
@@ -446,12 +468,6 @@ type AggregateMessage {
 }
 
 # Files
-
-type ClassFilesConnection {
-  pageInfo: PageInfo!
-  edges: [FileEdge!]!
-  aggregate: AggregateFile!
-}
 
 type FileEdge {
   cursor: String!

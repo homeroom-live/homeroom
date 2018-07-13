@@ -1,6 +1,32 @@
 import { Context } from '../utils'
 
 export const Class = {
+  participantsConnection: {
+    fragment: `fragment ClassID on Class { id }`,
+    resolve: async (
+      { id },
+      { after, before, first, last },
+      ctx: Context,
+      info,
+    ) => {
+      return ctx.db.query.usersConnection(
+        {
+          where: {
+            participating_classes_some: {
+              id,
+              archived: false,
+            },
+          },
+          orderBy: 'createdAt_DESC',
+          after,
+          before,
+          first,
+          last,
+        },
+        info,
+      )
+    },
+  },
   messagesConnection: {
     fragment: `fragment ClassID on Class { id }`,
     resolve: async (

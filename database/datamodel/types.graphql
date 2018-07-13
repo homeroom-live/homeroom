@@ -24,6 +24,8 @@ type User {
     @relation(name: "ClassroomTeacher", onDelete: CASCADE)
   studying_classrooms: [Classroom!]!
     @relation(name: "ClassroomStudent", onDelete: SET_NULL)
+  participating_classes: [Class!]!
+    @relation(name: "ClassParticipant", onDelete: SET_NULL)
 
   followers: [Follow!]! @relation(name: "UserFollowed", onDelete: CASCADE)
   following: [Follow!]! @relation(name: "UserFollowing", onDelete: CASCADE)
@@ -84,6 +86,9 @@ type Class {
   thumbnail: File @relation(name: "ClassThumbnail", onDelete: CASCADE)
   video: File @relation(name: "ClassVideo", onDelete: CASCADE)
 
+  classroom: Classroom! @relation(name: "ClassroomClass", onDelete: SET_NULL)
+  participants: [User!]! @relation(name: "ClassParticipant", onDelete: SET_NULL)
+
   # Stream
   schedule: DateTime
   duration: Int # in minutes
@@ -93,9 +98,6 @@ type Class {
   # Extras
   messages: [Message!]! @relation(name: "ClassMessage", onDelete: CASCADE)
   files: [File!]! @relation(name: "ClassFile", onDelete: CASCADE)
-
-  # Specs
-  classroom: Classroom! @relation(name: "ClassroomClass", onDelete: SET_NULL)
 
   # System
   archived: Boolean! @default(value: "false")
