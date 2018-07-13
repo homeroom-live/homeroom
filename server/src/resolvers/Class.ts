@@ -15,7 +15,9 @@ export const Class = {
             class: {
               id,
             },
+            archived: false,
           },
+          orderBy: 'createdAt_DESC',
           after,
           before,
           first,
@@ -39,6 +41,7 @@ export const Class = {
             class: {
               id,
             },
+            archived: false,
           },
           after,
           before,

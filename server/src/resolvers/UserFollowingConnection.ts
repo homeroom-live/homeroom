@@ -7,8 +7,8 @@ export const UserFollowingConnection = {
       const auth0Id = ctx.request.user.sub
 
       return ctx.db.exists.Follow({
-        user_following: { id },
-        user_followed: { auth0Id },
+        user_following: { id, archived: false },
+        user_followed: { auth0Id, archived: false },
       })
     },
   },

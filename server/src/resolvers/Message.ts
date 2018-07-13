@@ -10,6 +10,7 @@ export const Message = {
         sender: {
           auth0Id,
         },
+        archived: false,
       })
     },
   },

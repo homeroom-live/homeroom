@@ -8,6 +8,7 @@ export const ClassroomStudentsConnection = {
       return ctx.db.exists.Classroom({
         id,
         students_some: { auth0Id },
+        archived: false,
       })
     },
   },
