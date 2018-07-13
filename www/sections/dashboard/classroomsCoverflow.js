@@ -15,7 +15,6 @@ import { ClassroomHeader } from 'sections/dashboard/classroomHeader'
 
 import iconHome from 'static/assets/icons/ui/home.svg'
 import iconPlusCircleWhite from 'static/assets/icons/ui/plus-circle-white.svg'
-import iconPlusCircleGray from 'static/assets/icons/ui/plus-circle-gray.svg'
 import { colors, spacing, outline, shadow } from 'utils/theme'
 
 // GraphQL
@@ -119,7 +118,6 @@ const ClassesRow = styled(FlexRow)`
 const Classroom = ({ id, name, numberOfClasses, classes, teachers }) => (
   <ClassroomContainer>
     <ClassroomHeader
-      inline
       id={id}
       name={name}
       numberOfClasses={numberOfClasses}
@@ -128,7 +126,6 @@ const Classroom = ({ id, name, numberOfClasses, classes, teachers }) => (
     <ClassesRow>
       {classes.map(({ node }) => (
         <ClassCardMedium
-          inline
           node={node}
           key={node.id}
           href={`/dashboard/classes/class/${node.id}`}
