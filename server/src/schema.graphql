@@ -255,7 +255,7 @@ type Message {
   id: ID!
   createdAt: DateTime!
   text: String!
-  sender: ClassroomTeachersConnection!
+  sender: User!
   is_viewer_message: Boolean!
 }
 
