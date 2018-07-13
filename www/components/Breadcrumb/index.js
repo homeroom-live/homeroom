@@ -12,8 +12,8 @@ const BreadcrumbLink = styled(Link)`
   margin-bottom: ${spacing.small};
 `
 
-export const Breadcrumb = ({ href, children }) => (
-  <BreadcrumbLink href={href} size="small" weight="bold">
+export const Breadcrumb = ({ href, children, className }) => (
+  <BreadcrumbLink href={href} size="small" weight="bold" className={className}>
     {`\u2190 `}
     {children}
   </BreadcrumbLink>

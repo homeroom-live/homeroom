@@ -9,6 +9,7 @@ import { Text } from 'components/Text'
 import { Header } from 'components/Header'
 import { ProfileLinks } from 'components/ProfileLinks'
 import { Icon } from 'components/Icon'
+import { Player } from 'components/Player'
 
 import { shadow, spacing, colors } from 'utils/theme'
 import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
@@ -20,8 +21,7 @@ const inlineStyles = () => `
   border-bottom: 1px solid ${colors.grayLighter};
   border-radius: 0;
 `
-
-const ClassContainer = styled(Link)`
+const ClassCardContainer = styled(Link)`
   ${props => (props.inline ? inlineStyles() : shadow())};
   display: flex;
   align-items: flex-start;
@@ -62,15 +62,12 @@ const ClassIcon = styled(Icon)`
   margin-top: -2px;
   margin-right: ${spacing.xsmall};
 `
-
 export const ClassCard = ({ node, teachers, href, ...props }) => (
-  <ClassContainer href={href} {...props}>
+  <ClassCardContainer href={href} {...props}>
     <ClassImage src="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
     <ClassMeta>
       <ProfileLinks users={teachers} />
-      <ClassTitle margin="0">
-        {node.name} {/*<TextStyle color="primary">${node.price}</TextStyle>*/}
-      </ClassTitle>
+      <ClassTitle margin="0">{node.name}</ClassTitle>
       <FlexRow>
         <ClassMetaItem color="gray" weight="bold" size="small">
           <ClassIcon src={userGrayIcon} />
@@ -88,5 +85,53 @@ export const ClassCard = ({ node, teachers, href, ...props }) => (
         </ClassMetaItem>
       </FlexRow>
     </ClassMeta>
-  </ClassContainer>
+  </ClassCardContainer>
+)
+
+const ClassCardMediumContainer = styled(Link)`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  flex-basis: 30%;
+  padding: ${spacing.regular};
+  color: transparent;
+  text-decoration: none;
+  &:hover {
+    color: transparent;
+    text-decoration: none;
+    background: ${colors.grayLightest};
+  }
+`
+const ClassVideo = styled(Player)`
+  object-fit: contain;
+  border-radius: 4px;
+  width: 100%;
+  margin-bottom: ${spacing.small};
+  background: ${colors.black};
+`
+export const ClassCardMedium = ({ node, teachers, href, ...props }) => (
+  <ClassCardMediumContainer href={href} {...props}>
+    <ClassVideo src="http://techslides.com/demos/sample-videos/small.mp4" />
+    <ClassMeta>
+      <ProfileLinks users={teachers} />
+      <ClassTitle margin="0">{node.name}</ClassTitle>
+      <FlexRow>
+        <ClassMetaItem color="gray" weight="bold" size="small">
+          <ClassIcon src={userGrayIcon} />
+          {0} Students
+        </ClassMetaItem>
+        <ClassMetaItem color="gray" weight="bold" size="small">
+          <ClassIcon src={calendarGrayIcon} />
+          {moment(node.schedule).format('M/D/YY')}
+        </ClassMetaItem>
+        <ClassMetaItem color="gray" weight="bold" size="small">
+          <ClassIcon src={clockGrayIcon} />
+          {moment(node.schedule)
+            .tz('America/New_York')
+            .format('LT z')}
+        </ClassMetaItem>
+      </FlexRow>
+    </ClassMeta>
+  </ClassCardMediumContainer>
 )

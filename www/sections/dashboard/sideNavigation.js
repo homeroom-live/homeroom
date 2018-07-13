@@ -12,11 +12,11 @@ import { Icon } from 'components/Icon'
 import { Loading } from 'components/Loading'
 import { Link } from 'components/Link'
 import { Container } from 'components/Container'
-// import StatTitle from 'components/StatTitle'
+import { TextStyle } from 'components/TextStyle'
 
 // Icons
 
-import iconVideoWhite from 'static/assets/icons/ui/video-white.svg'
+import iconGraphBarWhite from 'static/assets/icons/ui/graph-bar-white.svg'
 import iconHomeWhite from 'static/assets/icons/ui/home-white.svg'
 import iconCurrencyDollarWhite from 'static/assets/icons/ui/currency-dollar-white.svg'
 
@@ -44,14 +44,27 @@ const { publicRuntimeConfig } = getConfig()
 const SideNav = styled(FlexCol)`
   min-height: ${HEIGHT_MINUS_NAVBAR};
   width: 250px;
-  padding: ${spacing.medium} 0;
   background: ${colors.grayDarkest};
+`
+const SideNavSticky = styled(FlexCol)`
+  position: sticky;
+  top: 0;
+  padding: ${spacing.medium} 0;
 `
 const activeSideNavLinkStyles = () => `
   opacity: 1;
   color: ${colors.white};
   background: ${lighten(0.1, colors.grayDarkest)};
   text-decoration: none;
+`
+const disabledSideNavLinkStyles = () => `
+  opacity: 0.5;
+  text-decoration: none;
+  cursor: not-allowed;
+  &:hover {
+    opacity: 0.5;
+    background: none;
+  }
 `
 const SideNavLink = styled(Link)`
   display: flex;
@@ -64,6 +77,7 @@ const SideNavLink = styled(Link)`
     ${activeSideNavLinkStyles()};
   }
   ${({ active }) => (active ? activeSideNavLinkStyles() : null)};
+  ${({ disabled }) => (disabled ? disabledSideNavLinkStyles() : null)};
 `
 const SideNavIcon = styled(Icon)`
   margin-right: ${spacing.small};
@@ -81,37 +95,43 @@ export const SideNavigation = ({ children, activeSection }) => (
           case 7: {
             return (
               <SideNav>
-                <SideNavLink
-                  size="small"
-                  weight="bold"
-                  href="/dashboard"
-                  active={activeSection === ''}
-                >
-                  <SideNavIcon src={iconHomeWhite} />
-                  Classrooms
-                </SideNavLink>
-                <SideNavLink
-                  size="small"
-                  weight="bold"
-                  href="/dashboard"
-                  active={activeSection === 'stream'}
-                >
-                  <SideNavIcon src={iconVideoWhite} />
-                  Live
-                </SideNavLink>
-                <SideNavLink
-                  size="small"
-                  weight="bold"
-                  href={
-                    data.viewer.user.stripeURL
-                      ? data.viewer.user.stripeURL
-                      : publicRuntimeConfig.stripeSignupURL
-                  }
-                  active={activeSection === 'stripe'}
-                >
-                  <SideNavIcon src={iconCurrencyDollarWhite} />
-                  Stripe Account
-                </SideNavLink>
+                <SideNavSticky>
+                  <SideNavLink
+                    size="small"
+                    weight="bold"
+                    href="/dashboard"
+                    active={activeSection === ''}
+                  >
+                    <SideNavIcon src={iconHomeWhite} />
+                    Classrooms
+                  </SideNavLink>
+                  <SideNavLink
+                    size="small"
+                    weight="bold"
+                    href={
+                      data.viewer.user.stripeURL
+                        ? data.viewer.user.stripeURL
+                        : publicRuntimeConfig.stripeSignupURL
+                    }
+                    active={activeSection === 'stripe'}
+                  >
+                    <SideNavIcon src={iconCurrencyDollarWhite} />
+                    Stripe Account
+                  </SideNavLink>
+                  <SideNavLink
+                    size="small"
+                    weight="bold"
+                    href="/dashboard"
+                    active={false}
+                    disabled
+                  >
+                    <SideNavIcon src={iconGraphBarWhite} />
+                    <FlexCol>
+                      <TextStyle size="xxsmall">Coming Soon</TextStyle>
+                      Insights
+                    </FlexCol>
+                  </SideNavLink>
+                </SideNavSticky>
               </SideNav>
             )
           }

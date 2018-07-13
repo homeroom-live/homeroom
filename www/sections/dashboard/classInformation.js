@@ -7,23 +7,25 @@ import moment from 'moment-timezone'
 
 // Components
 
-import { withEditable } from 'hocs/withEditable'
 import { Loading } from 'components/Loading'
 import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
 import { Breadcrumb } from 'components/Breadcrumb'
 import { Text } from 'components/Text'
 import { Header } from 'components/Header'
-import { TextStyle } from 'components/TextStyle'
 import { Icon } from 'components/Icon'
 import { Link } from 'components/Link'
 import { Button } from 'components/Button'
+import { Player } from 'components/Player'
 import { VideoPicker } from 'components/VideoPicker'
 import { ImagePicker } from 'components/ImagePicker'
 import { FilePicker } from 'components/FilePicker'
 import { IconHeader } from 'components/IconHeader'
 import { Label } from 'components/Label'
 import { Toggle } from 'components/Toggle'
+import { Input } from 'components/Input'
+import { Textarea } from 'components/Textarea'
+import { DatePicker } from 'components/DatePicker'
 
 import { spacing, shadow, outline, colors, opacity } from 'utils/theme'
 import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
@@ -118,6 +120,15 @@ const ClassHeader = styled(FlexRow)`
 const ClassToggle = styled(Toggle)`
   margin-left: auto;
 `
+const ClassBreadcrumb = styled(Breadcrumb)`
+  position: absolute;
+  top: -22px;
+  left: 0;
+`
+const ClassTitle = styled(Header)`
+  position: relative;
+  margin-bottom: ${spacing.xsmall};
+`
 const ClassImage = styled.img`
   object-fit: contain;
   border-radius: 4px;
@@ -127,8 +138,6 @@ const ClassImage = styled.img`
   margin-right: ${spacing.regular};
   background: ${colors.black};
 `
-const EditableClassTitle = withEditable(styled(Header)``)
-// const EditableClassTitle = styled(Header)``
 const ClassMeta = styled(FlexCol)`
   width: initial;
 `
@@ -173,15 +182,18 @@ const QuestionsDisabledBody = styled(SectionBody)`
   align-items: center;
   justify-content: center;
 `
-const EditableText = withEditable(Text)
 const EditableLabel = styled(Label)`
   margin-bottom: ${spacing.regular};
+`
+const PriceLabel = styled(EditableLabel)`
+  margin-right: ${spacing.regular};
 `
 const VideoSettingsRow = styled(FlexRow)`
   align-items: flex-start;
   margin-top: ${spacing.regular};
 `
 const VideoSettingsLabel = styled(Label)`
+  width: initial;
   margin-right: ${spacing.medium};
   margin-bottom: 0;
 `
@@ -191,143 +203,254 @@ const VideoSettingsLink = styled(Link)`
 
 // Class Information
 
-export const ClassInformation = withRouter(({ router }) => (
-  <Query
-    query={classQuery}
-    variables={{ classId: router.query.classId }}
-    notifyOnNetworkStatusChange
-  >
-    {({ networkStatus, data }) => {
-      switch (networkStatus) {
-        case 1: {
-          return <Loading />
-        }
-        case 7: {
-          return (
-            <ClassInformationCol>
-              {/*<Breadcrumb
+class _ClassInformation extends React.Component {
+  state = {
+    name: '',
+    description: '',
+    thumbnail: null,
+    video: null,
+    price: '',
+    schedule: null,
+    files: [],
+  }
+
+  handleNameChange = e => {
+    this.setState({
+      name: e.target.value,
+    })
+  }
+
+  handleDescriptionChange = e => {
+    this.setState({
+      description: e.target.value,
+    })
+  }
+
+  handleThumbnailChange = thumbnail => {
+    this.setState({
+      thumbnail: thumbnail[0],
+    })
+  }
+
+  handleThumbnailRemove = e => {
+    this.setState({
+      thumbnail: null,
+    })
+  }
+
+  handleVideoChange = video => {
+    this.setState({
+      video: video[0],
+    })
+  }
+
+  handleVideoRemove = () => {
+    this.setState({
+      video: null,
+    })
+  }
+
+  handlePriceChange = e => {
+    this.setState({
+      price: e.target.value,
+    })
+  }
+
+  handleScheduleChange = date => {
+    this.setState({
+      schedule: date,
+    })
+  }
+
+  handleFilesChange = files => {
+    this.setState({
+      files,
+    })
+  }
+
+  render() {
+    return (
+      <Query
+        query={classQuery}
+        variables={{ classId: this.props.router.query.classId }}
+        notifyOnNetworkStatusChange
+      >
+        {({ networkStatus, data }) => {
+          switch (networkStatus) {
+            case 1: {
+              return <Loading />
+            }
+            case 7: {
+              return (
+                <ClassInformationCol>
+                  {/*<Breadcrumb
               href={`/dashboard/classrooms/classroom/${
                 data.class.classroom.id
               }`}
             >
               Back to {data.class.classroom.name}
             </Breadcrumb>*/}
-              <ClassHeader>
-                <ClassMeta>
-                  <EditableClassTitle
-                    value={data.class.name}
-                    handleSave={() => {}}
-                  />
-                  <FlexRow>
-                    <ClassMetaItem color="gray" weight="bold" size="small">
-                      <ClassIcon src={userGrayIcon} />
-                      {0} Students
-                    </ClassMetaItem>
-                    <ClassMetaItem color="gray" weight="bold" size="small">
-                      <ClassIcon src={calendarGrayIcon} />
-                      {moment(data.class.schedule).format('M/D/YY')}
-                    </ClassMetaItem>
-                    <ClassMetaItem color="gray" weight="bold" size="small">
-                      <ClassIcon src={clockGrayIcon} />
-                      {moment(data.class.schedule)
-                        .tz('America/New_York')
-                        .format('LT z')}
-                    </ClassMetaItem>
-                  </FlexRow>
-                </ClassMeta>
-                <ClassToggle
-                  activeLabel="Live"
-                  inactiveLabel="Offline"
-                  onChange={() => {}}
-                />
-              </ClassHeader>
-              <ClassBody>
-                <SectionCol>
-                  <IconHeader inline src={iconVideo} value="Video" />
-                  <SectionBody>
-                    <VideoPicker value="https://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4" />
-
-                    <VideoSettingsRow>
-                      <VideoSettingsLabel>
-                        Server Url
-                        <Text>https://stream.homeroom.live</Text>
-                      </VideoSettingsLabel>
-                      <VideoSettingsLabel>
-                        Live Stream Key
-                        <Text>Super-Secret-Streams</Text>
-                      </VideoSettingsLabel>
-                      <VideoSettingsLabel>
-                        Preview Stream Key
-                        <Text>Preview-Streams</Text>
-                      </VideoSettingsLabel>
-                      <VideoSettingsLink href="">
-                        <Button color="primary" src={iconHelpWhite}>
-                          How to Stream
-                        </Button>
-                      </VideoSettingsLink>
-                    </VideoSettingsRow>
-                  </SectionBody>
-                </SectionCol>
-
-                <SectionRow>
-                  <SectionCol>
-                    <IconHeader inline src={iconChat} value="Chat" />
-                    <SectionBody />
-                  </SectionCol>
-                  <QuestionsDisabledCol>
-                    <IconHeader inline src={iconHelp} value="Questions" />
-                    <QuestionsDisabledBody>
-                      <Text size="medium" weight="bold">
-                        Coming Soon!
-                      </Text>
-                    </QuestionsDisabledBody>
-                  </QuestionsDisabledCol>
-                </SectionRow>
-
-                <SectionRow>
-                  <SectionCol>
-                    <IconHeader
-                      inline
-                      src={iconInformation}
-                      value="Information"
+                  <ClassHeader>
+                    <ClassMeta>
+                      <ClassTitle>
+                        <ClassBreadcrumb
+                          href={`/dashboard/classrooms/classroom/${
+                            data.class.classroom.id
+                          }`}
+                        >
+                          Back to Classroom
+                        </ClassBreadcrumb>
+                        {data.class.name}
+                      </ClassTitle>
+                      <FlexRow>
+                        <ClassMetaItem color="gray" weight="bold" size="small">
+                          <ClassIcon src={userGrayIcon} />
+                          {0} Students
+                        </ClassMetaItem>
+                        <ClassMetaItem color="gray" weight="bold" size="small">
+                          <ClassIcon src={calendarGrayIcon} />
+                          {moment(data.class.schedule).format('M/D/YY')}
+                        </ClassMetaItem>
+                        <ClassMetaItem color="gray" weight="bold" size="small">
+                          <ClassIcon src={clockGrayIcon} />
+                          {moment(data.class.schedule)
+                            .tz('America/New_York')
+                            .format('LT z')}
+                        </ClassMetaItem>
+                      </FlexRow>
+                    </ClassMeta>
+                    <ClassToggle
+                      activeLabel="Live"
+                      inactiveLabel="Offline"
+                      onChange={() => {}}
                     />
-                    <SectionBody>
-                      <EditableLabel>
-                        Description
-                        <EditableText value={data.class.description} />
-                      </EditableLabel>
-                      <EditableLabel>
-                        Price
-                        <EditableText value={data.class.price} />
-                      </EditableLabel>
-                      <EditableLabel>
-                        Date & Time
-                        <EditableText value={data.class.schedule} />
-                      </EditableLabel>
-                    </SectionBody>
-                  </SectionCol>
-                  <SectionRightCol>
-                    <IconHeader inline src={iconFile} value="Files" />
-                    <SectionBody>
-                      <EditableLabel>
-                        Cover Picture
-                        <ImagePicker value={''} />
-                      </EditableLabel>
-                      <EditableLabel>
-                        Class Files
-                        <FilePicker value={[]} />
-                      </EditableLabel>
-                    </SectionBody>
-                  </SectionRightCol>
-                </SectionRow>
-              </ClassBody>
-            </ClassInformationCol>
-          )
-        }
-        default: {
-          return null
-        }
-      }
-    }}
-  </Query>
-))
+                  </ClassHeader>
+                  <ClassBody>
+                    <SectionCol>
+                      <IconHeader inline src={iconVideo} value="Video" />
+                      <SectionBody>
+                        <Player
+                          autoPlay
+                          src="https://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"
+                        />
+
+                        <VideoSettingsRow>
+                          <VideoSettingsLabel>
+                            Server Url
+                            <Text>https://stream.homeroom.live</Text>
+                          </VideoSettingsLabel>
+                          <VideoSettingsLabel>
+                            Live Stream Key
+                            <Text>Super-Secret-Streams</Text>
+                          </VideoSettingsLabel>
+                          <VideoSettingsLabel>
+                            Preview Stream Key
+                            <Text>Preview-Streams</Text>
+                          </VideoSettingsLabel>
+                          <VideoSettingsLink href="">
+                            <Button color="primary" src={iconHelpWhite}>
+                              How to Stream
+                            </Button>
+                          </VideoSettingsLink>
+                        </VideoSettingsRow>
+                      </SectionBody>
+                    </SectionCol>
+
+                    <SectionRow>
+                      <SectionCol>
+                        <IconHeader inline src={iconChat} value="Chat" />
+                        <SectionBody />
+                      </SectionCol>
+                      <QuestionsDisabledCol>
+                        <IconHeader inline src={iconHelp} value="Questions" />
+                        <QuestionsDisabledBody>
+                          <Text size="medium" weight="bold">
+                            Coming Soon!
+                          </Text>
+                        </QuestionsDisabledBody>
+                      </QuestionsDisabledCol>
+                    </SectionRow>
+
+                    <SectionRow>
+                      <SectionCol>
+                        <IconHeader
+                          inline
+                          src={iconInformation}
+                          value="Information"
+                        />
+                        <SectionBody>
+                          <EditableLabel size="regular">
+                            Thumbnail
+                            <ImagePicker value={''} />
+                          </EditableLabel>
+                          <EditableLabel>
+                            Name
+                            <Input
+                              type="text"
+                              value={this.state.name}
+                              onChange={this.handleNameChange}
+                            />
+                          </EditableLabel>
+                          <EditableLabel>
+                            Description
+                            <Textarea
+                              type="text"
+                              value={this.state.description}
+                              onChange={this.handleDescriptionChange}
+                            />
+                          </EditableLabel>
+                          <FlexRow>
+                            <PriceLabel size="small">
+                              Price
+                              <Input
+                                type="number"
+                                value={this.state.price}
+                                onChange={this.handlePriceChange}
+                              />
+                            </PriceLabel>
+                            <EditableLabel>
+                              Date & Time
+                              <DatePicker
+                                showTimeSelect
+                                name="schedule"
+                                type="date"
+                                dateFormat="M/D/YY – h:mma"
+                                timeFormat="h:mm a"
+                                customInput={<Input type="text" />}
+                                selected={this.state.schedule}
+                                onChange={this.handleScheduleChange}
+                              />
+                            </EditableLabel>
+                          </FlexRow>
+                        </SectionBody>
+                      </SectionCol>
+
+                      <SectionRightCol>
+                        <IconHeader inline src={iconFile} value="Files" />
+                        <SectionBody>
+                          <EditableLabel>
+                            Overview Video
+                            <VideoPicker value={''} />
+                          </EditableLabel>
+                          <EditableLabel>
+                            Files
+                            <FilePicker value={[]} />
+                          </EditableLabel>
+                        </SectionBody>
+                      </SectionRightCol>
+                    </SectionRow>
+                  </ClassBody>
+                </ClassInformationCol>
+              )
+            }
+            default: {
+              return null
+            }
+          }
+        }}
+      </Query>
+    )
+  }
+}
+
+export const ClassInformation = withRouter(_ClassInformation)

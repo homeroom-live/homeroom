@@ -7,8 +7,13 @@ const Video = styled.video`
   width: 100%;
 `
 
-export const Player = ({ src, type, ...props }) => (
-  <Video controls poster={src ? null : offlinePoster} {...props}>
+export const Player = ({ src, type, className, autoPlay }) => (
+  <Video
+    controls
+    poster={src ? null : offlinePoster}
+    className={className}
+    autoPlay={autoPlay}
+  >
     <source src={src} type={type} />
   </Video>
 )

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { FlexRow } from 'components/FlexRow'
 import { Label } from 'components/Label'
 
-import { colors, shadow, transition } from 'utils/theme'
+import { colors, transition } from 'utils/theme'
 
 const _Toggle = styled.input.attrs({
   type: 'checkbox',
@@ -13,7 +13,6 @@ const _Toggle = styled.input.attrs({
   background: ${colors.secondary};
 `
 const ToggleContainer = styled(FlexRow)`
-  ${shadow()};
   position: relative;
   border: none;
   border-radius: 500px;
@@ -32,6 +31,7 @@ const ToggleIndicator = styled.span`
     props.checked ? 'translateX(48px)' : 'translateX(4px)'};
 `
 const ToggleLabel = styled(Label)`
+  width: initial;
   margin: 0;
   text-align: center;
   color: ${props => (props.checked ? colors.primary : colors.gray)} !important;

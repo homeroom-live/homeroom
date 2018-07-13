@@ -12,7 +12,6 @@ import { Text } from 'components/Text'
 
 import { spacing, outline, colors } from 'utils/theme'
 import iconPlusCircleWhite from 'static/assets/icons/ui/plus-circle-white.svg'
-import iconVideoWhite from 'static/assets/icons/ui/video-white.svg'
 
 const inlineStyles = () => `
   border: none;
@@ -78,11 +77,6 @@ export const ClassroomHeader = ({
 
     <ActionRow>
       {children}
-      <ActionLink href={`/dashboard/live/${id}`}>
-        <Button color="primary" src={iconVideoWhite}>
-          Go Live
-        </Button>
-      </ActionLink>
       <ActionLink
         href={`/dashboard/classes/new?classroomId=${id}`}
         as={`/dashboard/classes/new/${id}`}

@@ -114,7 +114,7 @@ const Class = ({ node, teachers }) => (
   <ClassRow>
     <ClassImage src="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
     <ClassMeta>
-      <ProfileLinks teachers={teachers} />
+      <ProfileLinks users={teachers} />
       <ClassTitle href={`/dashboard/classes/class/${node.id}`} weight="bold">
         {node.name} <TextStyle color="primary">{node.price}</TextStyle>
       </ClassTitle>

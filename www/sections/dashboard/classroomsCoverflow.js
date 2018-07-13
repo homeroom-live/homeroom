@@ -10,7 +10,7 @@ import { Text } from 'components/Text'
 import { Icon } from 'components/Icon'
 import { IconHeader } from 'components/IconHeader'
 import { Button } from 'components/Button'
-import { ClassCardMedium } from 'components/ClassCardMedium'
+import { ClassCardMedium } from 'components/ClassCard'
 import { ClassroomHeader } from 'sections/dashboard/classroomHeader'
 
 import iconHome from 'static/assets/icons/ui/home.svg'
@@ -41,7 +41,7 @@ const classroomsQuery = gql`
                   }
                 }
               }
-              classesConnection {
+              classesConnection(last: 3) {
                 aggregate {
                   count
                 }
@@ -105,6 +105,8 @@ const ClassroomShowMore = styled(Link)`
   text-decoration: none;
   color: ${colors.gray};
   ${shadow()};
+  border: none;
+  border-top: 1px solid ${colors.grayLighter};
   &:hover {
     color: ${colors.gray};
     text-decoration: none;
@@ -140,7 +142,7 @@ const Classroom = ({ id, name, numberOfClasses, classes, teachers }) => (
       color="gray"
       weight="bold"
     >
-      <NewIcon src={iconPlusCircleGray} /> View All Classes
+      View All Classes
     </ClassroomShowMore>
   </ClassroomContainer>
 )
