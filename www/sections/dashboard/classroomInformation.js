@@ -16,7 +16,7 @@ import { Icon } from 'components/Icon'
 import { TextStyle } from 'components/TextStyle'
 import { Button } from 'components/Button'
 import { IconHeader } from 'components/IconHeader'
-import { TeachersLinks } from 'components/TeachersLinks'
+import { ProfileLinks } from 'components/ProfileLinks'
 
 import { colors, spacing, outline } from 'utils/theme'
 import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
@@ -115,7 +115,7 @@ const Class = ({ node, teachers }) => (
   <ClassRow>
     <ClassImage src="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
     <ClassMeta>
-      <TeachersLinks teachers={teachers} />
+      <ProfileLinks teachers={teachers} />
       <ClassTitle href={`/dashboard/classes/class/${node.id}`} weight="bold">
         {node.name} <TextStyle color="primary">{node.price}</TextStyle>
       </ClassTitle>

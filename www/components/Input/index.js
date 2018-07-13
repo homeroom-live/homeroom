@@ -18,6 +18,7 @@ export const Input = styled.input`
   border: 2px solid ${colors.grayLighter};
   border-radius: ${borderRadius};
   transition: ${transition};
+  box-sizing: border-box;
   &:hover,
   &:focus {
     border: 2px solid ${colors.secondary};

@@ -53,8 +53,19 @@ export const VideoPicker = ({ value, onChange, onRemove }) => (
 
     {value && (
       <VideoContainer>
-        <video controls crossOrigin="anonymous" width={'100%'} src={value} />
-        <XIcon src={iconXWhite} onClick={onRemove} />
+        <video
+          controls
+          crossOrigin="anonymous"
+          width={'100%'}
+          src={value.preview || value.url}
+        />
+        <XIcon
+          src={iconXWhite}
+          onClick={e => {
+            e.preventDefault()
+            onRemove()
+          }}
+        />
       </VideoContainer>
     )}
   </VideoPickerContainer>

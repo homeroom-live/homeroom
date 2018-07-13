@@ -75,11 +75,14 @@ const classQuery = gql`
       classroom {
         id
         name
-        teacher {
-          # This should be teachers on Class
-          id
-          name
-          url
+        teachersConnection {
+          edges {
+            node {
+              id
+              name
+              url
+            }
+          }
         }
       }
       messagesConnection {
@@ -90,10 +93,10 @@ const classQuery = gql`
           node {
             id
             text
-            sender {
-              id
-              name
-            }
+            # sender {
+            #   id
+            #   name
+            # }
           }
         }
       }

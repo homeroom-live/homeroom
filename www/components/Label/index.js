@@ -1,6 +1,12 @@
 import styled from 'styled-components'
 
-import { colors, fontSizes, fontWeights, spacing } from 'utils/theme'
+import {
+  colors,
+  fontSizes,
+  fontWeights,
+  spacing,
+  transition,
+} from 'utils/theme'
 
 const inputSizes = {
   xsmall: '64px',
@@ -14,17 +20,15 @@ const inputSizes = {
 export const Label = styled.label`
   display: flex;
   flex-direction: column;
-  margin-bottom: ${spacing.large};
+  width: ${props => (props.size ? inputSizes[props.size] : '100%')};
+  margin-bottom: ${spacing.medium};
   color: ${colors.grayDarker};
   font-weight: ${fontWeights.bold};
   font-size: ${fontSizes.small};
   letter-spacing: 1;
-  width: ${props => (props.size ? inputSizes[props.size] : null)};
-  &:focus {
-    color: ${colors.primary};
-  },
-
-  // @media(max-width: 1023px): {
-  //   fontSizes: 5vw
-  // }
+  transition: ${transition};
+  &:focus-within,
+  &:hover {
+    color: ${colors.secondary};
+  }
 `

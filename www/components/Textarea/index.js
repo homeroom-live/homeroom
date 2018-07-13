@@ -19,6 +19,7 @@ export const Textarea = styled.textarea`
   border-radius: ${borderRadius};
   transition: ${transition};
   resize: vertical;
+  box-sizing: border-box;
   &:hover,
   &:focus {
     border: 2px solid ${colors.secondary};

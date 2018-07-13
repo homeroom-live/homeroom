@@ -6,10 +6,10 @@ import styled from 'styled-components'
 
 // Components
 
-import { Calendar } from 'components/Calendar'
 import { FilePicker } from 'components/FilePicker'
 import { ImagePicker } from 'components/ImagePicker'
 import { VideoPicker } from 'components/VideoPicker'
+import { DatePicker } from 'components/DatePicker'
 import { Loading } from 'components/Loading'
 import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
@@ -36,6 +36,27 @@ const NewClassHeader = styled(IconHeader)`
 `
 const SaveButton = styled(Button)`
   margin-left: auto;
+`
+const NewClassForm = styled.form`
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: ${spacing.xlarge};
+`
+const NewClassFormCol = styled(FlexCol)`
+  margin-right: ${spacing.xlarge};
+`
+const ThumbnailCol = styled(FlexCol)`
+  flex: 0;
+  margin-right: ${spacing.medium};
+`
+const NewClassMetaRow = styled(FlexRow)`
+  align-items: flex-start;
+`
+const ClassNameLabel = styled(Label)`
+  margin-bottom: ${spacing.regular};
+`
+const ClassPriceLabel = styled(Label)`
+  margin-right: ${spacing.regular};
 `
 
 const CardCol = styled(FlexCol)`
@@ -105,7 +126,7 @@ class _ClassForm extends React.Component {
     description: '',
     thumbnail: null,
     video: null,
-    price: 0,
+    price: '',
     schedule: null,
     files: [],
   }
@@ -124,11 +145,11 @@ class _ClassForm extends React.Component {
 
   handleThumbnailChange = thumbnail => {
     this.setState({
-      thumbnail: thumbnail[0].preview,
+      thumbnail: thumbnail[0],
     })
   }
 
-  handleThumbnailRemove = () => {
+  handleThumbnailRemove = e => {
     this.setState({
       thumbnail: null,
     })
@@ -136,7 +157,7 @@ class _ClassForm extends React.Component {
 
   handleVideoChange = video => {
     this.setState({
-      video: video[0].preview,
+      video: video[0],
     })
   }
 
@@ -152,9 +173,9 @@ class _ClassForm extends React.Component {
     })
   }
 
-  handleScheduleChange = e => {
+  handleScheduleChange = date => {
     this.setState({
-      schedule: e.target.value,
+      schedule: date,
     })
   }
 
@@ -197,7 +218,6 @@ class _ClassForm extends React.Component {
                     <CardTitleLink
                       href={`/dashboard/classes/class/${data.createClass.id}`}
                       color="secondary"
-                      size="large"
                       weight="bold"
                     >
                       {data.createClass.name}
@@ -211,7 +231,7 @@ class _ClassForm extends React.Component {
                         <Button color="secondary">Preview Class</Button>
                       </Link>
                       <LiveLink
-                        href={`/dashboard/live/class/${data.createClass.id}`}
+                        href={`/dashboard/classes/class/${data.createClass.id}`}
                       >
                         <Button color="primary">
                           <Icon src={iconVideoWhite} inline />
@@ -238,62 +258,83 @@ class _ClassForm extends React.Component {
                     Save Class
                   </SaveButton>
                 </NewClassHeader>
-                <form>
-                  <Label size="large">
-                    Class Name
-                    <Input
-                      type="text"
-                      onChange={this.handleNameChange}
-                      value={this.state.name}
-                    />
-                  </Label>
-                  <Label size="large">
-                    Class Description
-                    <Textarea
-                      onChange={this.handleDescriptionChange}
-                      value={this.state.description}
-                    />
-                  </Label>
-                  <Label size="medium">
-                    Class Date & Time
-                    <Calendar
-                      onChange={this.handleScheduleChange}
-                      value={this.state.schedule}
-                    />
-                  </Label>
-                  <Label size="medium">
-                    Class Thumbnail
-                    <ImagePicker
-                      value={this.state.thumbnail}
-                      onChange={this.handleThumbnailChange}
-                      onRemove={this.handleThumbnailRemove}
-                    />
-                  </Label>
-                  <Label size="large">
-                    Class Video
-                    <VideoPicker
-                      value={this.state.video}
-                      onChange={this.handleVideoChange}
-                      onRemove={this.handleVideoRemove}
-                    />
-                  </Label>
-                  <Label size="medium">
-                    Class Files
-                    <FilePicker
-                      value={this.state.files}
-                      onChange={this.handleFilesChange}
-                      onRemove={() => {}}
-                    />
-                  </Label>
-                  <Label size="small">
-                    Class Price
-                    <Input
-                      type="number"
-                      onChange={this.handlePriceChange}
-                      value={this.state.price}
-                    />
-                  </Label>
-                </form>
+                <NewClassForm onSubmit={create}>
+                  <NewClassFormCol>
+                    <NewClassMetaRow>
+                      <ThumbnailCol>
+                        <Label size="regular">
+                          Class Thumbnail
+                          <ImagePicker
+                            value={this.state.thumbnail}
+                            onChange={this.handleThumbnailChange}
+                            onRemove={this.handleThumbnailRemove}
+                          />
+                        </Label>
+                      </ThumbnailCol>
+                      <FlexCol>
+                        <ClassNameLabel>
+                          Class Name
+                          <Input
+                            type="text"
+                            onChange={this.handleNameChange}
+                            value={this.state.name}
+                          />
+                        </ClassNameLabel>
+                        <FlexRow>
+                          <ClassPriceLabel size="small">
+                            Class Price
+                            <Input
+                              type="number"
+                              onChange={this.handlePriceChange}
+                              value={this.state.price}
+                            />
+                          </ClassPriceLabel>
+                          <Label>
+                            Class Date & Time{' '}
+                            <DatePicker
+                              showTimeSelect
+                              name="schedule"
+                              type="date"
+                              dateFormat="M/D/YY – h:mma"
+                              timeFormat="h:mm a"
+                              customInput={<Input type="text" />}
+                              selected={this.state.schedule}
+                              onChange={this.handleScheduleChange}
+                            />
+                          </Label>
+                        </FlexRow>
+                      </FlexCol>
+                    </NewClassMetaRow>
+                    <Label>
+                      Class Description
+                      <Textarea
+                        onChange={this.handleDescriptionChange}
+                        value={this.state.description}
+                      />
+                    </Label>
+                    <Button color="primary" type="submit">
+                      Save Class
+                    </Button>
+                  </NewClassFormCol>
+                  <FlexCol>
+                    <Label>
+                      Class Video
+                      <VideoPicker
+                        value={this.state.video}
+                        onChange={this.handleVideoChange}
+                        onRemove={this.handleVideoRemove}
+                      />
+                    </Label>
+                    <Label>
+                      Class Files
+                      <FilePicker
+                        value={this.state.files}
+                        onChange={this.handleFilesChange}
+                        onRemove={() => {}}
+                      />
+                    </Label>
+                  </FlexCol>
+                </NewClassForm>
               </NewClassCol>
             )
           }

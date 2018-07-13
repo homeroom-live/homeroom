@@ -70,6 +70,7 @@ const themes = {
 const _Button = styled.button`
   display: flex;
   align-items: center;
+  justify-content: center;
   position: relative;
   padding: 7px ${spacing.regular};
   outline: none;

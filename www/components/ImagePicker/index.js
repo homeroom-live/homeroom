@@ -57,8 +57,14 @@ export const ImagePicker = ({ value, onChange, onRemove }) => (
 
     {value && (
       <ImageContainer>
-        <PreviewImage src={value} />
-        <XIcon src={iconXWhite} onClick={onRemove} />
+        <PreviewImage src={value.preview || value.url} />
+        <XIcon
+          src={iconXWhite}
+          onClick={e => {
+            e.preventDefault()
+            onRemove()
+          }}
+        />
       </ImageContainer>
     )}
   </ImagePickerContainer>

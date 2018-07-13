@@ -23,8 +23,8 @@ class Class extends React.Component {
   render() {
     return (
       <Fragment>
-        <Navigation />
-        <SideNavigation activePage="class">
+        <Navigation activePage="dashboard" />
+        <SideNavigation activeSection="">
           <ClassInformation />
         </SideNavigation>
         <Footer />

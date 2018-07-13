@@ -8,7 +8,7 @@ import { Icon } from 'components/Icon'
 import { Text } from 'components/Text'
 import { FlexRow } from 'components/FlexRow'
 
-import { spacing, opacity, colors, shadow } from 'utils/theme'
+import { spacing, opacity, shadow } from 'utils/theme'
 import iconDownload from 'static/assets/icons/ui/download.svg'
 import iconX from 'static/assets/icons/ui/x-circle.svg'
 
@@ -32,12 +32,6 @@ const DownloadIcon = styled(Icon)`
   width: 16px;
   margin-right: spacing.small;
 `
-const iconStyles = {
-  padding: 0,
-  height: '16px',
-  width: '16px',
-  marginRight: spacing.small,
-}
 const Filename = styled(Text)`
   flex: 1;
   margin: 0;
@@ -88,7 +82,15 @@ export const File = ({ name, url, updatedAt, onRemove }) => (
         </Text>
       )}
 
-      {onRemove && <XIcon src={iconX} onClick={onRemove(name)} />}
+      {onRemove && (
+        <XIcon
+          src={iconX}
+          onClick={e => {
+            e.preventDefault()
+            onRemove()
+          }}
+        />
+      )}
     </MetaRow>
   </Container>
 )
