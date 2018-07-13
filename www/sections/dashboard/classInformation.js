@@ -322,7 +322,7 @@ class _ClassInformation extends React.Component {
 
                   <ClassBody>
                     <SectionCol>
-                      <IconHeader inline src={iconVideo} value="Video" />
+                      <IconHeader src={iconVideo} value="Video" />
                       <SectionBody>
                         <Player
                           autoPlay
@@ -352,11 +352,11 @@ class _ClassInformation extends React.Component {
 
                     <SectionRow>
                       <SectionCol>
-                        <IconHeader inline src={iconChat} value="Chat" />
+                        <IconHeader src={iconChat} value="Chat" />
                         <SectionBody />
                       </SectionCol>
                       <QuestionsDisabledCol>
-                        <IconHeader inline src={iconHelp} value="Questions" />
+                        <IconHeader src={iconHelp} value="Questions" />
                         <QuestionsDisabledBody>
                           <Text size="medium" weight="bold">
                             Coming Soon!
@@ -367,11 +367,7 @@ class _ClassInformation extends React.Component {
 
                     <SectionRow>
                       <SectionCol>
-                        <IconHeader
-                          inline
-                          src={iconInformation}
-                          value="Information"
-                        />
+                        <IconHeader src={iconInformation} value="Information" />
                         <SectionBody>
                           <EditableLabel size="regular">
                             Thumbnail
@@ -420,7 +416,7 @@ class _ClassInformation extends React.Component {
                       </SectionCol>
 
                       <SectionRightCol>
-                        <IconHeader inline src={iconFile} value="Files" />
+                        <IconHeader src={iconFile} value="Files" />
                         <SectionBody>
                           <EditableLabel>
                             Overview Video

@@ -19,7 +19,7 @@ import { Textarea } from 'components/Textarea'
 import { Text } from 'components/Text'
 import { Link } from 'components/Link'
 
-import { spacing, shadow } from 'utils/theme'
+import { spacing, shadow, outline } from 'utils/theme'
 import iconHome from 'static/assets/icons/ui/home.svg'
 import iconCheck from 'static/assets/icons/ui/check.svg'
 
@@ -35,6 +35,7 @@ const NewClassroomFormCol = styled(FlexCol)`
   margin-right: ${spacing.xlarge};
 `
 const NewClassroomHeader = styled(IconHeader)`
+  ${outline()};
   margin-bottom: ${spacing.regular};
 `
 const SaveButton = styled(Button)`
@@ -147,7 +148,7 @@ export class ClassroomForm extends React.Component {
             return (
               <CardCol>
                 <Card>
-                  <IconHeader inline src={iconCheck} value="Class Created!" />
+                  <IconHeader src={iconCheck} value="Class Created!" />
                   <CardBody>
                     <CardTitleLink
                       href={`/dashboard/classrooms/classroom/${

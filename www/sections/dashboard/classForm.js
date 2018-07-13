@@ -23,7 +23,7 @@ import { Input } from 'components/Input'
 import { Textarea } from 'components/Textarea'
 import { Breadcrumb } from 'components/Breadcrumb'
 
-import { shadow, spacing } from 'utils/theme'
+import { shadow, spacing, outline } from 'utils/theme'
 import iconCheck from 'static/assets/icons/ui/check.svg'
 import iconVideoWhite from 'static/assets/icons/ui/video-white.svg'
 import iconVideo from 'static/assets/icons/ui/video.svg'
@@ -32,6 +32,7 @@ const NewClassCol = styled(FlexCol)`
   margin: ${spacing.medium};
 `
 const NewClassHeader = styled(IconHeader)`
+  ${outline()};
   margin-bottom: ${spacing.regular};
 `
 const SaveButton = styled(Button)`
@@ -213,7 +214,7 @@ class _ClassForm extends React.Component {
             return (
               <CardCol>
                 <Card>
-                  <IconHeader inline src={iconCheck} value="Class Created!" />
+                  <IconHeader src={iconCheck} value="Class Created!" />
                   <CardBody>
                     <CardTitleLink
                       href={`/dashboard/classes/class/${data.createClass.id}`}

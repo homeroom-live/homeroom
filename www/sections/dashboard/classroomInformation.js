@@ -67,6 +67,9 @@ const classroomQuery = gql`
 const ClassroomInformationCol = styled(FlexCol)`
   margin: ${spacing.medium} ${spacing.medium} ${spacing.xxxlarge};
 `
+const BorderedClassroomHeader = styled(ClassroomHeader)`
+  ${outline()};
+`
 const ClassesCol = styled(FlexCol)`
   ${outline()};
   margin: ${spacing.medium} 0;
@@ -194,7 +197,7 @@ class _ClassroomInformation extends React.Component {
               return (
                 <ClassroomInformationCol>
                   <Breadcrumb href="/dashboard">Back to Classrooms</Breadcrumb>
-                  <ClassroomHeader
+                  <BorderedClassroomHeader
                     id={data.classroom.id}
                     name={data.classroom.name}
                     numberOfClasses={
@@ -204,7 +207,7 @@ class _ClassroomInformation extends React.Component {
                   />
 
                   <ClassesCol>
-                    <IconHeader inline src={videoIcon} value="Classes">
+                    <IconHeader src={videoIcon} value="Classes">
                       <Text weight="bold" margin="0" color="gray">
                         {data.classroom.classesConnection.aggregate.count}
                       </Text>
@@ -224,11 +227,7 @@ class _ClassroomInformation extends React.Component {
 
                   <SectionRow>
                     <SectionCol>
-                      <IconHeader
-                        inline
-                        src={iconInformation}
-                        value="Information"
-                      />
+                      <IconHeader src={iconInformation} value="Information" />
                       <SectionBody>
                         <EditableLabel size="regular">
                           Thumbnail
@@ -254,7 +253,7 @@ class _ClassroomInformation extends React.Component {
                     </SectionCol>
 
                     <SectionRightCol>
-                      <IconHeader inline src={iconFile} value="Files" />
+                      <IconHeader src={iconFile} value="Files" />
                       <SectionBody>
                         <EditableLabel>
                           Overview Video

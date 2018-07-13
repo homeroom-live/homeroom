@@ -10,19 +10,12 @@ import { Thumbnail } from 'components/Thumbnail'
 import { ProfileLinks } from 'components/ProfileLinks'
 import { Text } from 'components/Text'
 
-import { spacing, outline, colors } from 'utils/theme'
+import { spacing, colors } from 'utils/theme'
 import iconPlusCircleWhite from 'static/assets/icons/ui/plus-circle-white.svg'
-
-const inlineStyles = () => `
-  border: none;
-  border-bottom: 1px solid ${colors.grayLighter};
-  border-radius: 0;
-`
 
 const ClassroomHeaderContainer = styled(FlexRow)`
   padding: ${spacing.regular};
-  ${outline()};
-  ${props => (props.inline ? inlineStyles() : null)};
+  border-bottom: 1px solid ${colors.grayLighter};
 `
 const ClassroomMeta = styled(FlexCol)`
   width: initial;
@@ -54,9 +47,9 @@ export const ClassroomHeader = ({
   numberOfClasses,
   teachers,
   children,
-  ...props
+  className,
 }) => (
-  <ClassroomHeaderContainer {...props}>
+  <ClassroomHeaderContainer className={className}>
     <MetaRow>
       <Link href={`/dashboard/classrooms/classroom/${id}`}>
         <ClassroomThumbnail

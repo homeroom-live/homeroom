@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import { Navigation } from 'sections/navigation'
 import { SideNavigation } from 'sections/explore/sideNavigation'
 import { Classes } from 'sections/explore/classes'
+import { RecommendedClasses } from 'sections/explore/recommended'
 import { Footer } from 'sections/footer'
 
 // Explore
@@ -36,9 +37,10 @@ class Suggestions extends React.Component {
     return (
       <>
         <Navigation activePage="explore" />
-        <SideNavigation activeSection="suggestions">
+        <RecommendedClasses />
+        {/*<SideNavigation activeSection="suggestions">
           <Classes query={this.query} />
-        </SideNavigation>
+    </SideNavigation>*/}
         <Footer />
       </>
     )
