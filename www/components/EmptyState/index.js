@@ -1,29 +1,30 @@
 import React from 'react'
+import styled from 'styled-components'
 
-import { FlexCol } from '../FlexCol'
-import { Text } from '../Text'
-import { Icon } from '../Icon'
+import { FlexCol } from 'components/FlexCol'
+import { Text } from 'components/Text'
+import { Icon } from 'components/Icon'
 
-import { spacing } from '../../utils/spacing'
-import { shadow } from '../../utils/colors'
+import { spacing } from 'utils/theme'
 
-const containerStyles = {
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: spacing.medium,
-  ...shadow,
-}
+const EmptyStateContainer = styled(FlexCol)`
+  align-items: center;
+  justify-content: center;
+  padding: ${spacing.medium};
+`
+const EmptyStateIcon = styled(Icon)`
+  margin-bottom: ${spacing.small};
+`
+const EmptyStateText = styled(Text)`
+  margin: 0;
+  text-align: center;
+`
 
-export const EmptyState = ({ icon, text, css, props }) => (
-  <FlexCol {...props} css={{ ...containerStyles, ...css }}>
-    <Icon src={icon} css={{ padding: 0, marginBottom: spacing.small }} />
-    <Text
-      size="xsmall"
-      color="grayDarker"
-      weight="bold"
-      css={{ margin: 0, textAlign: 'center' }}
-    >
-      {text}
-    </Text>
-  </FlexCol>
+export const EmptyState = ({ src, value, css, className }) => (
+  <EmptyStateContainer className={className}>
+    <EmptyStateIcon src={src} />
+    <EmptyStateText color="grayDarker" weight="bold">
+      {value}
+    </EmptyStateText>
+  </EmptyStateContainer>
 )

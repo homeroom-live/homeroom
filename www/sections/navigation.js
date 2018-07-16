@@ -27,7 +27,7 @@ const Navbar = styled.nav`
     transparent ? 'transparent' : colors.black};
   border-bottom: ${({ transparent }) =>
     transparent ? 'none' : `4px solid ${colors.primary}`};
-  z-index: 1;
+  z-index: 10;
 `
 const NavLeft = styled(FlexRow)`
   flex: 1;
@@ -152,7 +152,7 @@ export const Navigation = ({ transparent, activePage }) => (
                   </Dropdown>
                 )
               } else {
-                return <NavLinkGreen href="/signup">Get Started</NavLinkGreen>
+                return <NavLinkGreen href="/signup">Sign In</NavLinkGreen>
               }
             }
 

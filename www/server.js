@@ -16,6 +16,12 @@ app.prepare().then(() => {
 
   // Routes
 
+  server.get('/class/:classId', (req, res) => {
+    return app.render(req, res, '/class', {
+      classId: req.params.classId,
+    })
+  })
+
   server.get('/classroom/:classroomId', (req, res) => {
     return app.render(req, res, '/classroom', {
       classroomId: req.params.classroomId,

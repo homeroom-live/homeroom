@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import Router, { withRouter } from 'next/router'
+import { withRouter } from 'next/router'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import styled from 'styled-components'
@@ -161,32 +161,3 @@ export const ClassroomInformation = withRouter(({ router }) => (
     }}
   </Query>
 ))
-
-/*<Class
-                    key={node.id}
-                    onClick={() =>
-                      Router.push(
-                        `/classroom/${data.classroom.id}/class/${node.id}`,
-                      )
-                    }
-                  >
-                    <ClassImage src="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
-                    <FlexCol>
-                      <Header margin="0">{node.name}</Header>
-                      <Link
-                        href={`/classroom/${data.classroom.id}/class/${
-                          node.id
-                        }`}
-                        weight="bold"
-                      >
-                        {'Teacher Name' || data.classroom.teacher.name}
-                      </Link>
-                      <Text weight="bold" color="gray">
-                        {
-                          data.classroom.teacher.followersConnection.aggregate
-                            .count
-                        }{' '}
-                        Subscribers
-                      </Text>
-                    </FlexCol>
-                      </Class>*/

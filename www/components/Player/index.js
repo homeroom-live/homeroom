@@ -1,3 +1,13 @@
+/*
+ * 
+ * API / example / inspiration:
+ * https://github.com/video-react/video-react
+ * 
+ * Design: 
+ * Vimeo meets YouTube meets Homeroom
+ * 
+ */
+
 import React from 'react'
 import styled from 'styled-components'
 
@@ -14,6 +24,7 @@ export const Player = ({ src, type, className, autoPlay }) => (
     className={className}
     autoPlay={autoPlay}
   >
+    ¡
     <source src={src} type={type} />
   </Video>
 )

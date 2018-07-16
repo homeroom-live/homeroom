@@ -90,9 +90,9 @@ class _Dropdown extends React.Component {
   }
 
   render() {
-    const { label, icon, image, children } = this.props
+    const { label, icon, image, children, className } = this.props
     return (
-      <DropdownContainer>
+      <DropdownContainer className={className} active={this.state.open}>
         <DropdownToggle
           label={label}
           icon={icon}

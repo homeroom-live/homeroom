@@ -70,7 +70,7 @@ export const RecommendedClasses = ({ classes = mockClasses }) => (
         <ClassCardLarge
           node={classes[0]}
           key={classes[0].id}
-          href={`/explore`}
+          href={`/class/${classes[0].id}`}
           teachers={classes[0].teachers}
         />
       </RecommendedBody>
@@ -80,7 +80,7 @@ export const RecommendedClasses = ({ classes = mockClasses }) => (
           <ClassCardMedium
             node={node}
             key={node.id}
-            href={`/explore`}
+            href={`/class/${node.id}`}
             teachers={node.teachers}
           />
         ))}
@@ -94,7 +94,7 @@ export const RecommendedClasses = ({ classes = mockClasses }) => (
           <ClassCardSmall
             node={node}
             key={node.id}
-            href={`/explore`}
+            href={`/class/${node.id}`}
             teachers={node.teachers}
           />
         ))}
@@ -108,7 +108,7 @@ export const RecommendedClasses = ({ classes = mockClasses }) => (
           <ClassCardMedium
             node={node}
             key={node.id}
-            href={`/explore`}
+            href={`/class/${node.id}`}
             teachers={node.teachers}
           />
         ))}

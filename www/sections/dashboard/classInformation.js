@@ -141,7 +141,6 @@ const ClassImage = styled.img`
 const ClassMeta = styled(FlexCol)`
   width: initial;
 `
-// margin-top: ${spacing.regular};
 const ClassMetaItem = styled(Text)`
   display: flex;
   align-items: center;

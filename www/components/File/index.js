@@ -8,29 +8,30 @@ import { Icon } from 'components/Icon'
 import { Text } from 'components/Text'
 import { FlexRow } from 'components/FlexRow'
 
-import { spacing, opacity, shadow } from 'utils/theme'
+import { spacing, opacity, colors, shadow } from 'utils/theme'
 import iconDownload from 'static/assets/icons/ui/download.svg'
 import iconX from 'static/assets/icons/ui/x-circle.svg'
 
-const Container = styled.div`
+// ${shadow()};
+const Container = styled.div``
+const DownloadWrapper = styled.a`
   display: flex;
   align-items: center;
   padding: ${spacing.regular};
-  margin-top: ${spacing.small};
   opacity: ${opacity};
-  ${shadow()};
+  text-decoration: none;
+  color: transparent;
   &:hover,
   &:focus {
     opacity: 1;
+    background: ${colors.grayLightest};
   }
-`
-const DownloadWrapper = styled.a`
-  display: flex;
 `
 const DownloadIcon = styled(Icon)`
   height: 16px;
   width: 16px;
-  margin-right: spacing.small;
+  margin-right: ${spacing.small};
+  margin-top: -4px;
 `
 const Filename = styled(Text)`
   flex: 1;
@@ -66,18 +67,16 @@ const XIcon = styled(DownloadIcon)`
 // }
 
 export const File = ({ name, url, updatedAt, onRemove }) => (
-  <Container>
-    <DownloadWrapper href={url} download={name} target="_blank">
-      <DownloadIcon src={iconDownload} />
-    </DownloadWrapper>
+  <DownloadWrapper href={url} download={name} target="_blank">
+    <DownloadIcon src={iconDownload} />
 
-    <Filename size="xsmall" weight="bold">
+    <Filename size="small" weight="bold">
       {name}
     </Filename>
 
     <MetaRow>
       {updatedAt && (
-        <Text size="xsmall" weight="medium" margin="0">
+        <Text size="small" weight="medium" margin="0">
           {moment(updatedAt).format('M/D/YY')}
         </Text>
       )}
@@ -92,5 +91,5 @@ export const File = ({ name, url, updatedAt, onRemove }) => (
         />
       )}
     </MetaRow>
-  </Container>
+  </DownloadWrapper>
 )
