@@ -33,8 +33,12 @@ const TeachCol = styled(FlexCol)`
 `
 const WelcomeIllustration = styled.img`
   height: 450px;
+  padding-left: ${spacing.medium};
 `
 const TeachIllustration = styled.img``
+const EducateIllustration = styled.img`
+  padding-right: ${spacing.regular};
+`
 const TeachLink = styled(Link)`
   margin-top: ${spacing.regular};
   margin-right: ${spacing.xsmall};
@@ -77,7 +81,7 @@ export const Content = () => (
       <TeachCol>
         <Header size="xlarge">Share your passion</Header>
         <Text size="medium">
-          Educate, grow, and monetize your audience through educational
+          Educate, grow, and monetize your audience with educational
           livestreams.
         </Text>
         <TeachLink href="/signup">
@@ -91,7 +95,7 @@ export const Content = () => (
 
     <TeachRow>
       <TeachCol>
-        <TeachIllustration src={illustrationEducate} />
+        <EducateIllustration src={illustrationEducate} />
       </TeachCol>
       <TeachCol>
         <Header size="xlarge">Educate</Header>
