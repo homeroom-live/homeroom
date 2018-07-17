@@ -74,7 +74,7 @@ const ClassroomHeader = styled(FlexRow)`
   position: sticky;
   top: 0;
   z-index: 3;
-  padding: ${spacing.regular} ${spacing.large};
+  padding: ${spacing.regular} ${spacing.medium};
   background: ${colors.white};
   border-bottom: 1px solid ${colors.grayLighter};
   box-shadow: 0 15px 30px 0 rgba(66, 75, 84, 0.1);
