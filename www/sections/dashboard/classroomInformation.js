@@ -311,19 +311,13 @@ export const ClassroomInformation = withRouter(({ router }) => (
                       >
                         {({ status, value, onChange, onSubmit }) => (
                           <Textarea
-<<<<<<< HEAD
+                            rows={5}
                             onChange={e => {
                               e.preventDefault()
                               onChange(e.target.value)
                             }}
                             onBlur={onSubmit}
                             value={value}
-=======
-                            type="text"
-                            rows={5}
-                            value={this.state.description}
-                            onChange={this.handleDescriptionChange}
->>>>>>> increase height of Textarea in classroomInformation
                           />
                         )}
                       </EditableComponent>
