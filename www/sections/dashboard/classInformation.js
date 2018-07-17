@@ -237,13 +237,17 @@ export const ClassInformation = withRouter(({ router }) => (
                     </ClassMetaItem>
                     <ClassMetaItem color="gray" weight="bold" size="small">
                       <ClassIcon src={calendarGrayIcon} />
-                      {moment(data.class.schedule).format('M/D/YY')}
+                      {data.class.schedule
+                        ? moment(data.class.schedule).format('M/D/YY')
+                        : 'No date set'}
                     </ClassMetaItem>
                     <ClassMetaItem color="gray" weight="bold" size="small">
                       <ClassIcon src={clockGrayIcon} />
-                      {moment(data.class.schedule)
-                        .tz('America/New_York')
-                        .format('LT z')}
+                      {data.class.schedule
+                        ? moment(data.class.schedule)
+                            .tz('America/New_York')
+                            .format('LT z')
+                        : 'No date set'}
                     </ClassMetaItem>
                   </FlexRow>
                 </ClassMeta>
@@ -484,7 +488,7 @@ export const ClassInformation = withRouter(({ router }) => (
                                 dateFormat="M/D/YY – h:mma"
                                 timeFormat="h:mm a"
                                 customInput={<Input type="text" />}
-                                selected={moment(value)}
+                                selected={value && moment(value)}
                                 onChange={onChange}
                                 onBlur={onSubmit}
                               />

@@ -48,7 +48,7 @@ const classroomsQuery = gql`
                   node {
                     id
                     name
-                    picture {
+                    thumbnail {
                       url
                     }
                   }

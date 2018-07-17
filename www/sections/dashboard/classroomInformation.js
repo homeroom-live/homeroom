@@ -5,6 +5,7 @@ import { Query } from 'react-apollo'
 import styled from 'styled-components'
 import moment from 'moment-timezone'
 
+import { EditableComponent } from 'hocs/EditableComponent'
 import { ClassroomHeader } from 'sections/dashboard/classroomHeader'
 import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
@@ -173,106 +174,202 @@ const Class = ({ node, teachers }) => (
 
 // Classroom Information
 
-class _ClassroomInformation extends React.Component {
-  state = {
-    name: '',
-    description: '',
-    thumbnail: null,
-    video: null,
-  }
+export const ClassroomInformation = withRouter(({ router }) => (
+  <Query
+    query={classroomQuery}
+    variables={{ classroomId: router.query.classroomId }}
+    notifyOnNetworkStatusChange
+  >
+    {({ networkStatus, data }) => {
+      switch (networkStatus) {
+        case 1: {
+          return <Loading />
+        }
+        case 7: {
+          return (
+            <ClassroomInformationCol>
+              <Breadcrumb href="/dashboard">Back to Classrooms</Breadcrumb>
+              <BorderedClassroomHeader
+                id={data.classroom.id}
+                name={data.classroom.name}
+                numberOfClasses={
+                  data.classroom.classesConnection.aggregate.count
+                }
+                teachers={data.classroom.teachersConnection.edges}
+              />
 
-  render() {
-    return (
-      <Query
-        query={classroomQuery}
-        variables={{ classroomId: this.props.router.query.classroomId }}
-        notifyOnNetworkStatusChange
-      >
-        {({ networkStatus, data }) => {
-          switch (networkStatus) {
-            case 1: {
-              return <Loading />
-            }
-            case 7: {
-              return (
-                <ClassroomInformationCol>
-                  <Breadcrumb href="/dashboard">Back to Classrooms</Breadcrumb>
-                  <BorderedClassroomHeader
-                    id={data.classroom.id}
-                    name={data.classroom.name}
-                    numberOfClasses={
-                      data.classroom.classesConnection.aggregate.count
-                    }
-                    teachers={data.classroom.teachersConnection.edges}
-                  />
+              <ClassesCol>
+                <IconHeader src={videoIcon} value="Classes">
+                  <Text weight="bold" margin="0" color="gray">
+                    {data.classroom.classesConnection.aggregate.count}
+                  </Text>
+                </IconHeader>
+                <div>
+                  {data.classroom.classesConnection.edges.map(({ node }) => (
+                    <Class
+                      node={node}
+                      key={node.id}
+                      teachers={data.classroom.teachersConnection.edges}
+                    />
+                  ))}
+                </div>
+              </ClassesCol>
 
-                  <ClassesCol>
-                    <IconHeader src={videoIcon} value="Classes">
-                      <Text weight="bold" margin="0" color="gray">
-                        {data.classroom.classesConnection.aggregate.count}
-                      </Text>
-                    </IconHeader>
-                    <div>
-                      {data.classroom.classesConnection.edges.map(
-                        ({ node }) => (
-                          <Class
-                            node={node}
-                            key={node.id}
-                            teachers={data.classroom.teachersConnection.edges}
+              <SectionRow>
+                <SectionCol>
+                  <IconHeader src={iconInformation} value="Information" />
+                  <SectionBody>
+                    <EditableLabel size="regular">
+                      Thumbnail
+                      <EditableComponent
+                        mutation={gql`
+                          mutation UpdateClassroomThumbnail(
+                            $classroomId: ID!
+                            $data: Boolean
+                          ) {
+                            updateClassroom(
+                              id: $classroomId
+                              thumbnail: $data
+                            ) {
+                              id
+                              thumbnail {
+                                id
+                                url
+                              }
+                            }
+                          }
+                        `}
+                        variables={{
+                          classroomId: router.query.classroomId,
+                        }}
+                        value={data.classroom.thumbnail}
+                      >
+                        {({ status, value, onChange, onSubmit }) => (
+                          <ImagePicker
+                            onChange={thumbnail => {
+                              onChange(thumbnail)
+                              onSubmit()
+                            }}
+                            value={value}
                           />
-                        ),
-                      )}
-                    </div>
-                  </ClassesCol>
-
-                  <SectionRow>
-                    <SectionCol>
-                      <IconHeader src={iconInformation} value="Information" />
-                      <SectionBody>
-                        <EditableLabel size="regular">
-                          Thumbnail
-                          <ImagePicker value={''} />
-                        </EditableLabel>
-                        <EditableLabel>
-                          Name
+                        )}
+                      </EditableComponent>
+                    </EditableLabel>
+                    <EditableLabel>
+                      Name
+                      <EditableComponent
+                        mutation={gql`
+                          mutation UpdateClassroomName(
+                            $classroomId: ID!
+                            $data: String
+                          ) {
+                            updateClassroom(id: $classroomId, name: $data) {
+                              id
+                              name
+                            }
+                          }
+                        `}
+                        variables={{
+                          classroomId: router.query.classroomId,
+                        }}
+                        value={data.classroom.name}
+                      >
+                        {({ status, value, onChange, onSubmit }) => (
                           <Input
                             type="text"
-                            value={this.state.name}
-                            onChange={this.handleNameChange}
+                            onChange={e => {
+                              e.preventDefault()
+                              onChange(e.target.value)
+                            }}
+                            onBlur={onSubmit}
+                            value={value}
                           />
-                        </EditableLabel>
-                        <EditableLabel>
-                          Description
+                        )}
+                      </EditableComponent>
+                    </EditableLabel>
+                    <EditableLabel>
+                      Description
+                      <EditableComponent
+                        mutation={gql`
+                          mutation UpdateClassroomDescription(
+                            $classroomId: ID!
+                            $data: String
+                          ) {
+                            updateClassroom(
+                              id: $classroomId
+                              description: $data
+                            ) {
+                              id
+                              description
+                            }
+                          }
+                        `}
+                        variables={{
+                          classroomId: router.query.classroomId,
+                        }}
+                        value={data.classroom.description}
+                      >
+                        {({ status, value, onChange, onSubmit }) => (
                           <Textarea
-                            type="text"
-                            value={this.state.description}
-                            onChange={this.handleDescriptionChange}
+                            onChange={e => {
+                              e.preventDefault()
+                              onChange(e.target.value)
+                            }}
+                            onBlur={onSubmit}
+                            value={value}
                           />
-                        </EditableLabel>
-                      </SectionBody>
-                    </SectionCol>
+                        )}
+                      </EditableComponent>
+                    </EditableLabel>
+                  </SectionBody>
+                </SectionCol>
 
-                    <SectionRightCol>
-                      <IconHeader src={iconFile} value="Files" />
-                      <SectionBody>
-                        <EditableLabel>
-                          Overview Video
-                          <VideoPicker value={''} />
-                        </EditableLabel>
-                      </SectionBody>
-                    </SectionRightCol>
-                  </SectionRow>
-                </ClassroomInformationCol>
-              )
-            }
-            default: {
-              return null
-            }
-          }
-        }}
-      </Query>
-    )
-  }
-}
-
-export const ClassroomInformation = withRouter(_ClassroomInformation)
+                <SectionRightCol>
+                  <IconHeader src={iconFile} value="Files" />
+                  <SectionBody>
+                    <EditableLabel>
+                      Overview Video
+                      <EditableComponent
+                        mutation={gql`
+                          mutation UpdateClassroomVideo(
+                            $classroomId: ID!
+                            $data: Upload
+                          ) {
+                            updateClassroom(id: $classroomId, video: $data) {
+                              id
+                              video {
+                                id
+                                url
+                              }
+                            }
+                          }
+                        `}
+                        variables={{
+                          classroomId: router.query.classroomId,
+                        }}
+                        value={data.classroom.video}
+                      >
+                        {({ status, value, onChange, onSubmit }) => (
+                          <VideoPicker
+                            value={value}
+                            onChange={video => {
+                              onChange(video)
+                              onSubmit()
+                            }}
+                          />
+                        )}
+                      </EditableComponent>
+                    </EditableLabel>
+                  </SectionBody>
+                </SectionRightCol>
+              </SectionRow>
+            </ClassroomInformationCol>
+          )
+        }
+        default: {
+          return null
+        }
+      }
+    }}
+  </Query>
+))
