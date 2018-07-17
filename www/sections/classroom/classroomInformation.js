@@ -231,6 +231,7 @@ export const ClassroomInformation = withRouter(({ router }) => (
                 ) : (
                   data.classroom.classesConnection.edges.map(({ node }) => (
                     <ClassCardMedium
+                      key={node.id}
                       node={node}
                       href={`/class/${node.id}`}
                       teachers={data.classroom.teachersConnection.edges}

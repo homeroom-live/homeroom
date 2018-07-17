@@ -2,6 +2,7 @@ import React from 'react'
 import { withRouter } from 'next/router'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
+import { NetworkStatus } from 'apollo-client'
 import styled from 'styled-components'
 import moment from 'moment-timezone'
 
@@ -35,7 +36,7 @@ import iconFile from 'static/assets/icons/ui/file.svg'
 // GraphQL
 
 const classroomQuery = gql`
-  query ClassroomQuery($classroomId: ID!) {
+  query ClassroomQuery($classroomId: ID!, $cursor: String) {
     classroom(id: $classroomId) {
       id
       name
@@ -48,7 +49,12 @@ const classroomQuery = gql`
           }
         }
       }
-      classesConnection {
+      classesConnection(first: 5, after: $cursor)
+        @connection(key: "classesConnection") {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
         aggregate {
           count
         }
@@ -177,15 +183,18 @@ const Class = ({ node, teachers }) => (
 export const ClassroomInformation = withRouter(({ router }) => (
   <Query
     query={classroomQuery}
-    variables={{ classroomId: router.query.classroomId }}
+    variables={{
+      classroomId: router.query.classroomId,
+    }}
     notifyOnNetworkStatusChange
   >
-    {({ networkStatus, data }) => {
+    {({ networkStatus, data, fetchMore }) => {
       switch (networkStatus) {
-        case 1: {
+        case NetworkStatus.loading: {
           return <Loading />
         }
-        case 7: {
+        case NetworkStatus.ready:
+        case NetworkStatus.fetchMore: {
           return (
             <ClassroomInformationCol>
               <Breadcrumb href="/dashboard">Back to Classrooms</Breadcrumb>
@@ -213,6 +222,46 @@ export const ClassroomInformation = withRouter(({ router }) => (
                     />
                   ))}
                 </div>
+                {data.classroom.classesConnection.pageInfo.hasNextPage && (
+                  <button
+                    onClick={e => {
+                      e.preventDefault()
+
+                      fetchMore({
+                        variables: {
+                          cursor:
+                            data.classroom.classesConnection.pageInfo.endCursor,
+                        },
+                        updateQuery: (previousResult, { fetchMoreResult }) => {
+                          const previousEdges =
+                            previousResult.classroom.classesConnection.edges
+                          const newEdges =
+                            fetchMoreResult.classroom.classesConnection.edges
+                          const pageInfo =
+                            fetchMoreResult.classroom.classesConnection.pageInfo
+
+                          const newClassroomData = {
+                            ...previousResult.classroom,
+                            classesConnection: {
+                              ...previousResult.classroom.classesConnection,
+                              edges: [...previousEdges, ...newEdges],
+                              pageInfo,
+                            },
+                          }
+
+                          const newData = {
+                            ...previousResult,
+                            classroom: newClassroomData,
+                          }
+
+                          return newData
+                        },
+                      })
+                    }}
+                  >
+                    More
+                  </button>
+                )}
               </ClassesCol>
 
               <SectionRow>
