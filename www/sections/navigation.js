@@ -3,7 +3,7 @@ import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 
-import { STATUS } from 'utils/constants'
+import { NETWORK_STATUS } from 'utils/constants'
 import { colors, spacing, fontSizes, fontWeights, opacity } from 'utils/theme'
 
 import logoLight from 'static/assets/images/logos/logo-light.svg'
@@ -137,7 +137,7 @@ export const Navigation = ({ transparent, activePage }) => (
       >
         {({ networkStatus, data }) => {
           switch (networkStatus) {
-            case STATUS.READY: {
+            case NETWORK_STATUS.READY: {
               if (data.viewer) {
                 return (
                   <Dropdown // image={data.viewer.user.picture.url}
@@ -152,11 +152,13 @@ export const Navigation = ({ transparent, activePage }) => (
                   </Dropdown>
                 )
               } else {
-                return <NavLinkGreen href="/signup">Sign In</NavLinkGreen>
+                return (
+                  <NavLinkGreen href="/signup">Sign up & Login</NavLinkGreen>
+                )
               }
             }
 
-            case STATUS.LOADING:
+            case NETWORK_STATUS.LOADING:
               return <LoadingPlaceholder />
 
             default: {

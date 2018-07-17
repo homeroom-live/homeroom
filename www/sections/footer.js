@@ -77,7 +77,7 @@ export const Footer = () => (
         <Text color="grayDarker" weight="bold">
           TEACH & LEARN
         </Text>
-        <FooterLink href="/explore">Become a Teacher</FooterLink>
+        <FooterLink href="/teach">Become a Teacher</FooterLink>
         <FooterLink href="/explore">Explore Classes</FooterLink>
       </FooterCol>
 
@@ -85,7 +85,7 @@ export const Footer = () => (
         <Text color="grayDarker" weight="bold">
           SUPPORT
         </Text>
-        <FooterLink href="/explore">Email Us</FooterLink>
+        <FooterLink href="mailto:team@homeroom.live">Email Us</FooterLink>
         <FooterLink href="/explore">FAQs</FooterLink>
       </FooterCol>
 

@@ -83,7 +83,8 @@ export const fontSizes = {
   medium: '18px',
   large: '24px',
   xlarge: '32px',
-  xxlarge: '48px',
+  xxlarge: '40px',
+  xxxlarge: '48px',
 }
 
 export const fontWeights = {

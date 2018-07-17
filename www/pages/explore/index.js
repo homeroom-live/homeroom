@@ -7,6 +7,7 @@ import { Navigation } from 'sections/navigation'
 import { SideNavigation } from 'sections/explore/sideNavigation'
 import { Classes } from 'sections/explore/classes'
 import { RecommendedClasses } from 'sections/explore/recommended'
+import { Welcome } from 'sections/explore/welcome'
 import { Footer } from 'sections/footer'
 
 // Explore
@@ -37,6 +38,7 @@ class Suggestions extends React.Component {
     return (
       <>
         <Navigation activePage="explore" />
+        <Welcome />
         <RecommendedClasses />
         {/*<SideNavigation activeSection="suggestions">
           <Classes query={this.query} />

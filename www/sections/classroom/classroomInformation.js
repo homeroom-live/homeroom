@@ -24,7 +24,7 @@ import {
 } from 'components/ClassCard'
 
 import { shadow, colors, spacing, borderRadius } from 'utils/theme'
-import { STATUS } from 'utils/constants'
+import { NETWORK_STATUS } from 'utils/constants'
 import iconVideo from 'static/assets/icons/ui/video.svg'
 import iconInformation from 'static/assets/icons/ui/information.svg'
 import iconHome from 'static/assets/icons/ui/home.svg'
@@ -153,10 +153,10 @@ export const ClassroomInformation = withRouter(({ router }) => (
   >
     {({ networkStatus, data }) => {
       switch (networkStatus) {
-        case STATUS.LOADING: {
+        case NETWORK_STATUS.LOADING: {
           return <Loading />
         }
-        case STATUS.READY: {
+        case NETWORK_STATUS.READY: {
           return (
             <ClassroomRow>
               <ClassroomBody>

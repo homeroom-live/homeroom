@@ -30,7 +30,7 @@ import {
   transition,
   opacity,
 } from 'utils/theme'
-import { STATUS } from 'utils/constants'
+import { NETWORK_STATUS } from 'utils/constants'
 import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
 import clockGrayIcon from 'static/assets/icons/ui/clock-gray.svg'
 import calendarGrayIcon from 'static/assets/icons/ui/calendar-gray.svg'
@@ -291,12 +291,11 @@ export const ClassInformation = withRouter(({ router }) => (
     notifyOnNetworkStatusChange
   >
     {({ networkStatus, data }) => {
-      console.log(data)
       switch (networkStatus) {
-        case STATUS.LOADING: {
+        case NETWORK_STATUS.LOADING: {
           return <Loading />
         }
-        case STATUS.READY: {
+        case NETWORK_STATUS.READY: {
           return (
             <ClassRow>
               <ClassBodyCol>
