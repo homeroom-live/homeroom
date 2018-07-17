@@ -37,30 +37,19 @@ const ToggleLabel = styled(Label)`
   color: ${props => (props.checked ? colors.primary : colors.gray)} !important;
 `
 
-export class Toggle extends React.Component {
-  state = {
-    checked: this.props.checked || false,
-  }
-
-  render() {
-    return (
-      <ToggleLabel
-        checked={this.state.checked}
-        onClick={e => {
-          e.preventDefault()
-          this.setState({ checked: !this.state.checked })
-        }}
-        {...this.props}
-      >
-        {this.state.checked ? this.props.activeLabel : this.props.inactiveLabel}
-        <ToggleContainer checked={this.state.checked}>
-          <ToggleIndicator checked={this.state.checked} />
-          <_Toggle
-            checked={this.state.checked}
-            onChange={this.props.onChange}
-          />
-        </ToggleContainer>
-      </ToggleLabel>
-    )
-  }
-}
+export const Toggle = ({
+  checked,
+  activeLabel,
+  inactiveLabel,
+  onChange,
+  onBlur,
+  ...props
+}) => (
+  <ToggleLabel checked={checked} onClick={onChange} {...props}>
+    {checked ? activeLabel : inactiveLabel}
+    <ToggleContainer checked={checked}>
+      <ToggleIndicator checked={checked} />
+      <_Toggle checked={checked} onChange={onChange} onBlur={onBlur} />
+    </ToggleContainer>
+  </ToggleLabel>
+)

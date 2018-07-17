@@ -34,7 +34,7 @@ export const classes = {
 
   async updateClass(
     parent,
-    { id, name, description, thumbnail, video, price, schedule, files },
+    { id, name, description, thumbnail, video, live, price, schedule, files },
     ctx: Context,
     info,
   ) {
@@ -47,6 +47,10 @@ export const classes = {
           thumbnail: {
             create: thumbnail,
           },
+          video: {
+            create: video,
+          },
+          live,
           price,
           schedule,
           files: {
@@ -64,18 +68,6 @@ export const classes = {
         where: { id },
         data: {
           archived: true,
-        },
-      },
-      info,
-    )
-  },
-
-  async goLive(parent, { id }, ctx: Context, info) {
-    return ctx.db.mutation.updateClass(
-      {
-        where: { id },
-        data: {
-          live: true,
         },
       },
       info,

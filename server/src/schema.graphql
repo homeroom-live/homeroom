@@ -97,12 +97,12 @@ type Mutation {
     description: String
     thumbnail: Upload
     video: Upload
+    live: Boolean
     price: Float
     schedule: DateTime
-    files: [Upload!]!
+    files: [Upload!]
   ): Class
   deleteClass(id: ID!): Class
-  goLive(classId: ID!): Class
   # Message
   createMessage(classId: ID!, text: String!): Message!
   # Charges
@@ -130,7 +130,7 @@ type User {
 
   # Info
   name: String!
-  description: String
+  bio: String
   picture: Picture
   video: File
 
@@ -194,13 +194,15 @@ type Classroom {
   name: String!
   description: String!
   price: Float!
+  thumbnail: Picture
+  video: File
+
   classesConnection(
     after: String
     before: String
     first: Int
     last: Int
   ): ClassroomClassesConnection!
-
   teachersConnection(
     after: String
     before: String
@@ -222,7 +224,7 @@ type Class {
   name: String!
   description: String!
   price: Float!
-  picture: Picture
+  thumbnail: Picture
   schedule: DateTime
 
   classroom: Classroom!

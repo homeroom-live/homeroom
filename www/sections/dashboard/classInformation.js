@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { withRouter } from 'next/router'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
@@ -7,6 +7,7 @@ import moment from 'moment-timezone'
 
 // Components
 
+import { EditableComponent } from 'hocs/EditableComponent'
 import { Loading } from 'components/Loading'
 import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
@@ -47,7 +48,7 @@ const classQuery = gql`
       name
       description
       price
-      picture {
+      thumbnail {
         id
         url
       }
@@ -203,202 +204,279 @@ const VideoSettingsLink = styled(Link)`
 
 // Class Information
 
-class _ClassInformation extends React.Component {
-  state = {
-    name: '',
-    description: '',
-    thumbnail: null,
-    video: null,
-    price: '',
-    schedule: null,
-    files: [],
-  }
-
-  handleNameChange = e => {
-    this.setState({
-      name: e.target.value,
-    })
-  }
-
-  handleDescriptionChange = e => {
-    this.setState({
-      description: e.target.value,
-    })
-  }
-
-  handleThumbnailChange = thumbnail => {
-    this.setState({
-      thumbnail: thumbnail[0],
-    })
-  }
-
-  handleThumbnailRemove = e => {
-    this.setState({
-      thumbnail: null,
-    })
-  }
-
-  handleVideoChange = video => {
-    this.setState({
-      video: video[0],
-    })
-  }
-
-  handleVideoRemove = () => {
-    this.setState({
-      video: null,
-    })
-  }
-
-  handlePriceChange = e => {
-    this.setState({
-      price: e.target.value,
-    })
-  }
-
-  handleScheduleChange = date => {
-    this.setState({
-      schedule: date,
-    })
-  }
-
-  handleFilesChange = files => {
-    this.setState({
-      files,
-    })
-  }
-
-  render() {
-    return (
-      <Query
-        query={classQuery}
-        variables={{ classId: this.props.router.query.classId }}
-        notifyOnNetworkStatusChange
-      >
-        {({ networkStatus, data }) => {
-          switch (networkStatus) {
-            case 1: {
-              return <Loading />
-            }
-            case 7: {
-              return (
-                <ClassInformationCol>
-                  <ClassHeader>
-                    <ClassMeta>
-                      <ClassTitle>
-                        <ClassBreadcrumb
-                          href={`/dashboard/classrooms/classroom/${
-                            data.class.classroom.id
-                          }`}
-                        >
-                          Back to Classroom
-                        </ClassBreadcrumb>
-                        {data.class.name}
-                      </ClassTitle>
-                      <FlexRow>
-                        <ClassMetaItem color="gray" weight="bold" size="small">
-                          <ClassIcon src={userGrayIcon} />
-                          {0} Students
-                        </ClassMetaItem>
-                        <ClassMetaItem color="gray" weight="bold" size="small">
-                          <ClassIcon src={calendarGrayIcon} />
-                          {moment(data.class.schedule).format('M/D/YY')}
-                        </ClassMetaItem>
-                        <ClassMetaItem color="gray" weight="bold" size="small">
-                          <ClassIcon src={clockGrayIcon} />
-                          {moment(data.class.schedule)
-                            .tz('America/New_York')
-                            .format('LT z')}
-                        </ClassMetaItem>
-                      </FlexRow>
-                    </ClassMeta>
+export const ClassInformation = withRouter(({ router }) => (
+  <Query
+    query={classQuery}
+    variables={{ classId: router.query.classId }}
+    notifyOnNetworkStatusChange
+  >
+    {({ networkStatus, data }) => {
+      switch (networkStatus) {
+        case 1: {
+          return <Loading />
+        }
+        case 7: {
+          return (
+            <ClassInformationCol>
+              <ClassHeader>
+                <ClassMeta>
+                  <ClassTitle>
+                    <ClassBreadcrumb
+                      href={`/dashboard/classrooms/classroom/${
+                        data.class.classroom.id
+                      }`}
+                    >
+                      Back to Classroom
+                    </ClassBreadcrumb>
+                    {data.class.name}
+                  </ClassTitle>
+                  <FlexRow>
+                    <ClassMetaItem color="gray" weight="bold" size="small">
+                      <ClassIcon src={userGrayIcon} />
+                      {0} Students
+                    </ClassMetaItem>
+                    <ClassMetaItem color="gray" weight="bold" size="small">
+                      <ClassIcon src={calendarGrayIcon} />
+                      {moment(data.class.schedule).format('M/D/YY')}
+                    </ClassMetaItem>
+                    <ClassMetaItem color="gray" weight="bold" size="small">
+                      <ClassIcon src={clockGrayIcon} />
+                      {moment(data.class.schedule)
+                        .tz('America/New_York')
+                        .format('LT z')}
+                    </ClassMetaItem>
+                  </FlexRow>
+                </ClassMeta>
+                <EditableComponent
+                  mutation={gql`
+                    mutation UpdateClassLive($classId: ID!, $data: Boolean) {
+                      updateClass(id: $classId, live: $data) {
+                        id
+                        live
+                      }
+                    }
+                  `}
+                  variables={{
+                    classId: router.query.classId,
+                  }}
+                  value={data.class.live}
+                >
+                  {({ status, value, onChange, onSubmit }) => (
                     <ClassToggle
                       activeLabel="Live"
                       inactiveLabel="Offline"
-                      onChange={() => {}}
+                      onChange={e => {
+                        e.preventDefault()
+                        console.log(e, e.target.checked)
+                        onChange(true)
+                      }}
+                      onBlur={onSubmit}
+                      value={value}
                     />
-                  </ClassHeader>
+                  )}
+                </EditableComponent>
+              </ClassHeader>
 
-                  <ClassBody>
-                    <SectionCol>
-                      <IconHeader src={iconVideo} value="Video" />
-                      <SectionBody>
-                        <Player
-                          autoPlay
-                          src="https://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"
-                        />
-                        <VideoSettingsRow>
-                          <VideoSettingsLabel>
-                            Server Url
-                            <Text>https://stream.homeroom.live</Text>
-                          </VideoSettingsLabel>
-                          <VideoSettingsLabel>
-                            Live Stream Key
-                            <Text>Super-Secret-Streams</Text>
-                          </VideoSettingsLabel>
-                          <VideoSettingsLabel>
-                            Preview Stream Key
-                            <Text>Preview-Streams</Text>
-                          </VideoSettingsLabel>
-                          <VideoSettingsLink href="">
-                            <Button color="primary" src={iconHelpWhite}>
-                              How to Stream
-                            </Button>
-                          </VideoSettingsLink>
-                        </VideoSettingsRow>
-                      </SectionBody>
-                    </SectionCol>
+              <ClassBody>
+                <SectionCol>
+                  <IconHeader src={iconVideo} value="Video" />
+                  <SectionBody>
+                    <Player
+                      autoPlay={data.class.live}
+                      src="https://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"
+                    />
+                    <VideoSettingsRow>
+                      <VideoSettingsLabel>
+                        Server Url
+                        <Text>https://stream.homeroom.live</Text>
+                      </VideoSettingsLabel>
+                      <VideoSettingsLabel>
+                        Live Stream Key
+                        <Text>Super-Secret-Streams</Text>
+                      </VideoSettingsLabel>
+                      <VideoSettingsLabel>
+                        Preview Stream Key
+                        <Text>Preview-Streams</Text>
+                      </VideoSettingsLabel>
+                      <VideoSettingsLink href="/dashboard/howtostream" prefetch>
+                        <Button color="primary" src={iconHelpWhite}>
+                          How to Stream
+                        </Button>
+                      </VideoSettingsLink>
+                    </VideoSettingsRow>
+                  </SectionBody>
+                </SectionCol>
 
-                    <SectionRow>
-                      <SectionCol>
-                        <IconHeader src={iconChat} value="Chat" />
-                        <SectionBody />
-                      </SectionCol>
-                      <QuestionsDisabledCol>
-                        <IconHeader src={iconHelp} value="Questions" />
-                        <QuestionsDisabledBody>
-                          <Text size="medium" weight="bold">
-                            Coming Soon!
-                          </Text>
-                        </QuestionsDisabledBody>
-                      </QuestionsDisabledCol>
-                    </SectionRow>
+                <SectionRow>
+                  <SectionCol>
+                    <IconHeader src={iconChat} value="Chat" />
+                    <SectionBody />
+                  </SectionCol>
+                  <QuestionsDisabledCol>
+                    <IconHeader src={iconHelp} value="Questions" />
+                    <QuestionsDisabledBody>
+                      <Text size="medium" weight="bold">
+                        Coming Soon!
+                      </Text>
+                    </QuestionsDisabledBody>
+                  </QuestionsDisabledCol>
+                </SectionRow>
 
-                    <SectionRow>
-                      <SectionCol>
-                        <IconHeader src={iconInformation} value="Information" />
-                        <SectionBody>
-                          <EditableLabel size="regular">
-                            Thumbnail
-                            <ImagePicker value={''} />
-                          </EditableLabel>
-                          <EditableLabel>
-                            Name
+                <SectionRow>
+                  <SectionCol>
+                    <IconHeader src={iconInformation} value="Information" />
+                    <SectionBody>
+                      <EditableLabel size="regular">
+                        Thumbnail
+                        <EditableComponent
+                          mutation={gql`
+                            mutation UpdateClassThumbnail(
+                              $classId: ID!
+                              $data: Upload
+                            ) {
+                              updateClass(id: $classId, thumbnail: $data) {
+                                id
+                                thumbnail {
+                                  id
+                                  url
+                                }
+                              }
+                            }
+                          `}
+                          variables={{
+                            classId: router.query.classId,
+                          }}
+                          value={data.class.thumbnail}
+                        >
+                          {({ status, value, onChange, onSubmit }) => (
+                            <ImagePicker
+                              value={value}
+                              onBlur={onSubmit}
+                              onChange={thumbnail => {
+                                onChange(thumbnail)
+                                onSubmit()
+                              }}
+                            />
+                          )}
+                        </EditableComponent>
+                      </EditableLabel>
+                      <EditableLabel>
+                        Name
+                        <EditableComponent
+                          mutation={gql`
+                            mutation UpdateClassName(
+                              $classId: ID!
+                              $data: String
+                            ) {
+                              updateClass(id: $classId, name: $data) {
+                                id
+                                name
+                              }
+                            }
+                          `}
+                          variables={{
+                            classId: router.query.classId,
+                          }}
+                          value={data.class.name}
+                        >
+                          {({ status, value, onChange, onSubmit }) => (
                             <Input
                               type="text"
-                              value={this.state.name}
-                              onChange={this.handleNameChange}
+                              value={value}
+                              onChange={e => {
+                                e.preventDefault()
+                                onChange(e.target.value)
+                              }}
+                              onBlur={onSubmit}
                             />
-                          </EditableLabel>
-                          <EditableLabel>
-                            Description
+                          )}
+                        </EditableComponent>
+                      </EditableLabel>
+                      <EditableLabel>
+                        Description
+                        <EditableComponent
+                          mutation={gql`
+                            mutation UpdateClassDescription(
+                              $classId: ID!
+                              $data: String
+                            ) {
+                              updateClass(id: $classId, description: $data) {
+                                id
+                                description
+                              }
+                            }
+                          `}
+                          variables={{
+                            classId: router.query.classId,
+                          }}
+                          value={data.class.description}
+                        >
+                          {({ status, value, onChange, onSubmit }) => (
                             <Textarea
                               type="text"
-                              value={this.state.description}
-                              onChange={this.handleDescriptionChange}
+                              value={value}
+                              onChange={e => {
+                                e.preventDefault()
+                                onChange(e.target.value)
+                              }}
+                              onBlur={onSubmit}
                             />
-                          </EditableLabel>
-                          <FlexRow>
-                            <PriceLabel size="small">
-                              Price
+                          )}
+                        </EditableComponent>
+                      </EditableLabel>
+                      <FlexRow>
+                        <PriceLabel size="small">
+                          Price
+                          <EditableComponent
+                            mutation={gql`
+                              mutation UpdateClassPrice(
+                                $classId: ID!
+                                $data: Float
+                              ) {
+                                updateClass(id: $classId, price: $data) {
+                                  id
+                                  price
+                                }
+                              }
+                            `}
+                            variables={{
+                              classId: router.query.classId,
+                            }}
+                            value={data.class.price}
+                          >
+                            {({ status, value, onChange, onSubmit }) => (
                               <Input
                                 type="number"
-                                value={this.state.price}
-                                onChange={this.handlePriceChange}
+                                value={value}
+                                onChange={e => {
+                                  e.preventDefault()
+                                  onChange(e.target.value)
+                                }}
+                                onBlur={onSubmit}
                               />
-                            </PriceLabel>
-                            <EditableLabel>
-                              Date & Time
+                            )}
+                          </EditableComponent>
+                        </PriceLabel>
+                        <EditableLabel>
+                          Date & Time
+                          <EditableComponent
+                            mutation={gql`
+                              mutation UpdateClassSchedule(
+                                $classId: ID!
+                                $data: DateTime
+                              ) {
+                                updateClass(id: $classId, schedule: $data) {
+                                  id
+                                  schedule
+                                }
+                              }
+                            `}
+                            variables={{
+                              classId: router.query.classId,
+                            }}
+                            value={data.class.schedule}
+                          >
+                            {({ status, value, onChange, onSubmit }) => (
                               <DatePicker
                                 showTimeSelect
                                 name="schedule"
@@ -406,40 +484,98 @@ class _ClassInformation extends React.Component {
                                 dateFormat="M/D/YY – h:mma"
                                 timeFormat="h:mm a"
                                 customInput={<Input type="text" />}
-                                selected={this.state.schedule}
-                                onChange={this.handleScheduleChange}
+                                selected={moment(value)}
+                                onChange={onChange}
+                                onBlur={onSubmit}
                               />
-                            </EditableLabel>
-                          </FlexRow>
-                        </SectionBody>
-                      </SectionCol>
+                            )}
+                          </EditableComponent>
+                        </EditableLabel>
+                      </FlexRow>
+                    </SectionBody>
+                  </SectionCol>
 
-                      <SectionRightCol>
-                        <IconHeader src={iconFile} value="Files" />
-                        <SectionBody>
-                          <EditableLabel>
-                            Overview Video
-                            <VideoPicker value={''} />
-                          </EditableLabel>
-                          <EditableLabel>
-                            Files
-                            <FilePicker value={[]} />
-                          </EditableLabel>
-                        </SectionBody>
-                      </SectionRightCol>
-                    </SectionRow>
-                  </ClassBody>
-                </ClassInformationCol>
-              )
-            }
-            default: {
-              return null
-            }
-          }
-        }}
-      </Query>
-    )
-  }
-}
-
-export const ClassInformation = withRouter(_ClassInformation)
+                  <SectionRightCol>
+                    <IconHeader src={iconFile} value="Files" />
+                    <SectionBody>
+                      <EditableLabel>
+                        Overview Video
+                        <EditableComponent
+                          mutation={gql`
+                            mutation UpdateClassVideo(
+                              $classId: ID!
+                              $data: Upload
+                            ) {
+                              updateClass(id: $classId, video: $data) {
+                                id
+                                video {
+                                  id
+                                  url
+                                }
+                              }
+                            }
+                          `}
+                          variables={{
+                            classId: router.query.classId,
+                          }}
+                          value={data.class.video}
+                        >
+                          {({ status, value, onChange, onSubmit }) => (
+                            <VideoPicker
+                              value={value}
+                              onChange={video => {
+                                onChange(video)
+                                onSubmit()
+                              }}
+                            />
+                          )}
+                        </EditableComponent>
+                      </EditableLabel>
+                      <EditableLabel>
+                        Files
+                        <EditableComponent
+                          mutation={gql`
+                            mutation UpdateClassFiles(
+                              $classId: ID!
+                              $data: [Upload!]
+                            ) {
+                              updateClass(id: $classId, files: $data) {
+                                id
+                                files {
+                                  id
+                                  contentType
+                                  url
+                                }
+                              }
+                            }
+                          `}
+                          variables={{
+                            classId: router.query.classId,
+                          }}
+                          value={data.class.files}
+                        >
+                          {({ status, value, onChange, onSubmit }) => (
+                            <FilePicker
+                              value={value}
+                              onChange={files => {
+                                onChange(files)
+                                onSubmit()
+                              }}
+                            />
+                          )}
+                        </EditableComponent>
+                      </EditableLabel>
+                    </SectionBody>
+                  </SectionRightCol>
+                </SectionRow>
+              </ClassBody>
+            </ClassInformationCol>
+          )
+        }
+        default: {
+          return null
+        }
+      }
+    }}
+  </Query>
+))
