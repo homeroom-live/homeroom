@@ -43,7 +43,7 @@ export const DropdownOption = styled.li`
   &:focus,
   &:active {
     opacity: 1;
-    background: ${colors.grayLighter};
+    background: ${colors.grayLightest};
   }
 `
 const ToggleContainer = styled.div`

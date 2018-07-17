@@ -93,6 +93,7 @@ const ClassCardMediumContainer = styled(Link)`
   align-items: flex-start;
   flex: 1;
   flex-basis: 30%;
+  min-height: 313px;
   padding: ${spacing.regular};
   color: transparent;
   text-decoration: none;

@@ -20,6 +20,7 @@ import { ClassCardMedium } from 'components/ClassCard'
 import { Label } from 'components/Label'
 import { File } from 'components/File'
 import { EmptyState } from 'components/EmptyState'
+import { Thumbnail } from 'components/Thumbnail'
 
 import {
   colors,
@@ -161,10 +162,13 @@ const ClassHeader = styled(FlexRow)`
   bottom: 0;
   z-index: 3;
   margin-top: auto;
-  padding: ${spacing.medium} ${spacing.large};
+  padding: ${spacing.regular} ${spacing.large};
   background: ${colors.white};
   border-top: 1px solid ${colors.grayLighter};
   box-shadow: 0 -15px 30px 0 rgba(66, 75, 84, 0.1);
+`
+const ClassroomThumbnail = styled(Thumbnail)`
+  margin-right: ${spacing.small};
 `
 const ClassTitle = styled(Header)`
   position: relative;
@@ -351,6 +355,10 @@ export const ClassInformation = withRouter(({ router }) => (
                 </RelatedRow>
 
                 <ClassHeader>
+                  <ClassroomThumbnail
+                    size="xlarge"
+                    src="http://www.bistiproofpage.com/wp-content/uploads/2018/04/cute-profile-pics-for-whatsapp-images.png"
+                  />
                   <ClassMeta>
                     <ProfileLinks
                       users={data.class.classroom.teachersConnection.edges}
@@ -375,7 +383,6 @@ export const ClassInformation = withRouter(({ router }) => (
                   </ClassMeta>
                 </ClassHeader>
               </ClassBodyCol>
-
               <ActionCol />
             </ClassRow>
           )
