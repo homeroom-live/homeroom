@@ -4,79 +4,63 @@ import styled from 'styled-components'
 import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
 import { IconHeader } from 'components/IconHeader'
-import { Container } from 'components/Container'
-import {
-  ClassCardSmall,
-  ClassCardMedium,
-  ClassCardLarge,
-} from 'components/ClassCard'
+import { Text } from 'components/Text'
+import { ClassCardMedium, ClassCardLarge } from 'components/ClassCard'
 
-import { spacing, shadow, colors } from 'utils/theme'
+import { mockClasses } from 'sections/explore/data'
+import { colors, spacing } from 'utils/theme'
 import iconVideo from 'static/assets/icons/ui/video.svg'
 import iconCalendar from 'static/assets/icons/ui/calendar.svg'
 import iconHome from 'static/assets/icons/ui/home.svg'
+import iconClock from 'static/assets/icons/ui/clock.svg'
 
-const RecommendedCol = styled(Container)`
-  ${shadow()};
-  align-items: center;
-  margin: ${spacing.medium} auto;
+const ContainerRow = styled(FlexRow)`
+  align-items: flex-start;
 `
-const RecommendedBody = styled(FlexCol)`
-  align-items: center;
-  width: 100%;
+const StickyHeader = styled(IconHeader)`
+  position: sticky;
+  top: 0;
+  background: ${colors.white};
 `
-
-const mockClasses = [
-  {
-    id: '123',
-    name: 'My Test Class',
-    schedule: new Date(),
-    teachers: [
-      {
-        id: '123',
-        name: 'Baba O‘Reilly',
-      },
-    ],
-  },
-  {
-    id: '123',
-    name: 'My Test Class',
-    schedule: new Date(),
-    teachers: [
-      {
-        id: '123',
-        name: 'Baba O‘Reilly',
-      },
-    ],
-  },
-  {
-    id: '123',
-    name: 'My Test Class',
-    schedule: new Date(),
-    teachers: [
-      {
-        id: '123',
-        name: 'Baba O‘Reilly',
-      },
-    ],
-  },
-]
+const SideNavigationCol = styled(FlexCol)`
+  width: 250px;
+  height: 100vh;
+  background: ${colors.white};
+  border-right: 1px solid ${colors.grayLightest};
+`
+const HeroCol = styled(FlexCol)`
+  max-width: 768px;
+  margin: 0 ${spacing.large};
+  border-left: 1px solid ${colors.grayLightest};
+  border-right: 1px solid ${colors.grayLightest};
+`
+const RecommendedRow = styled(FlexRow)`
+  align-items: flex-start;
+`
+const RecommendedCol = styled(FlexCol)`
+  height: 631px;
+  max-width: 300px;
+  overflow: auto;
+`
+const RecommendedClassCardMedium = styled(ClassCardMedium)``
 
 export const RecommendedClasses = ({ classes = mockClasses }) => (
-  <Fragment>
-    <RecommendedCol>
-      <IconHeader src={iconVideo} value="Recent/Recommended Classes" />
-      <RecommendedBody>
-        <ClassCardLarge
-          node={classes[0]}
-          key={classes[0].id}
-          href={`/class/${classes[0].id}`}
-          teachers={classes[0].teachers}
-        />
-      </RecommendedBody>
+  <ContainerRow>
+    <SideNavigationCol>
+      <Text>SIDENAV</Text>
+    </SideNavigationCol>
 
-      <FlexRow>
-        {classes.map(node => (
+    <HeroCol>
+      <StickyHeader src={iconVideo} value="Recommended Classes" />
+
+      <ClassCardLarge
+        node={mockClasses[0]}
+        key={'9'}
+        href={`/class/${mockClasses[0].id}`}
+        teachers={mockClasses[0].teachers}
+      />
+      <RecommendedRow>
+        {mockClasses.map(node => (
           <ClassCardMedium
             node={node}
             key={node.id}
@@ -84,35 +68,20 @@ export const RecommendedClasses = ({ classes = mockClasses }) => (
             teachers={node.teachers}
           />
         ))}
-      </FlexRow>
-    </RecommendedCol>
-
-    <RecommendedCol>
-      <IconHeader src={iconCalendar} value="Upcoming Classes" />
-      <FlexCol>
-        {classes.map(node => (
-          <ClassCardSmall
-            node={node}
-            key={node.id}
-            href={`/class/${node.id}`}
-            teachers={node.teachers}
-          />
-        ))}
-      </FlexCol>
-    </RecommendedCol>
-
-    <RecommendedCol>
-      <IconHeader src={iconHome} value="Recommended Classrooms" />
-      <FlexRow>
-        {classes.map(node => (
-          <ClassCardMedium
-            node={node}
-            key={node.id}
-            href={`/class/${node.id}`}
-            teachers={node.teachers}
-          />
-        ))}
-      </FlexRow>
-    </RecommendedCol>
-  </Fragment>
+      </RecommendedRow>
+    </HeroCol>
+  </ContainerRow>
 )
+
+// < FlexRow >
+// {
+//   mockClasses.map(node => (
+//     <ClassCardMedium
+//       node={node}
+//       key={node.id}
+//       href={`/class/${node.id}`}
+//       teachers={node.teachers}
+//     />
+//   ))
+// }
+//     </FlexRow >

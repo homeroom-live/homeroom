@@ -11,7 +11,7 @@ import { ProfileLinks } from 'components/ProfileLinks'
 import { Icon } from 'components/Icon'
 import { Player } from 'components/Player'
 
-import { shadow, spacing, colors } from 'utils/theme'
+import { spacing, colors } from 'utils/theme'
 import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
 import clockGrayIcon from 'static/assets/icons/ui/clock-gray.svg'
 import calendarGrayIcon from 'static/assets/icons/ui/calendar-gray.svg'
@@ -48,6 +48,9 @@ const ClassTitle = styled(Header)`
 const ClassMeta = styled(FlexCol)`
   width: initial;
 `
+const ClassMetaStatsRow = styled(FlexRow)`
+  flex-wrap: wrap;
+`
 const ClassMetaItem = styled(Text)`
   display: flex;
   align-items: center;
@@ -67,7 +70,7 @@ export const ClassCardSmall = ({ node, teachers, href, className }) => (
       <ClassTitle size="medium" margin="0">
         {node.name}
       </ClassTitle>
-      <FlexRow>
+      <ClassMetaStatsRow>
         <ClassMetaItem color="gray" weight="bold" size="small">
           <ClassIcon src={userGrayIcon} />
           {0} Students
@@ -82,7 +85,7 @@ export const ClassCardSmall = ({ node, teachers, href, className }) => (
             .tz('America/New_York')
             .format('LT z')}
         </ClassMetaItem>
-      </FlexRow>
+      </ClassMetaStatsRow>
     </ClassMeta>
   </ClassCardContainer>
 )
@@ -93,7 +96,6 @@ const ClassCardMediumContainer = styled(Link)`
   align-items: flex-start;
   flex: 1;
   flex-basis: 30%;
-  min-height: 313px;
   padding: ${spacing.regular};
   color: transparent;
   text-decoration: none;
@@ -116,7 +118,7 @@ export const ClassCardMedium = ({ node, teachers, href, className }) => (
     <ClassMeta>
       <ProfileLinks users={teachers} />
       <ClassTitle margin="0">{node.name}</ClassTitle>
-      <FlexRow>
+      <ClassMetaStatsRow>
         <ClassMetaItem color="gray" weight="bold" size="small">
           <ClassIcon src={userGrayIcon} />
           {0} Students
@@ -131,7 +133,7 @@ export const ClassCardMedium = ({ node, teachers, href, className }) => (
             .tz('America/New_York')
             .format('LT z')}
         </ClassMetaItem>
-      </FlexRow>
+      </ClassMetaStatsRow>
     </ClassMeta>
   </ClassCardMediumContainer>
 )
@@ -142,6 +144,7 @@ const ClassCardLargeContainer = styled(Link)`
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
+  max-height: 631px;
   padding: ${spacing.regular};
   color: transparent;
   text-decoration: none;
@@ -165,7 +168,7 @@ export const ClassCardLarge = ({ node, teachers, href, className }) => (
     <ClassMeta>
       <ProfileLinks users={teachers} />
       <ClassTitle margin="0">{node.name}</ClassTitle>
-      <FlexRow>
+      <ClassMetaStatsRow>
         <ClassMetaItem color="gray" weight="bold" size="small">
           <ClassIcon src={userGrayIcon} />
           {0} Students
@@ -180,7 +183,7 @@ export const ClassCardLarge = ({ node, teachers, href, className }) => (
             .tz('America/New_York')
             .format('LT z')}
         </ClassMetaItem>
-      </FlexRow>
+      </ClassMetaStatsRow>
     </ClassMeta>
   </ClassCardLargeContainer>
 )
