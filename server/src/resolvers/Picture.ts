@@ -6,9 +6,9 @@ export const Picture = {
     resolve: async ({ secret }, { width, height }, ctx: Context, info) => {
       if (width || height) {
         const size = [width, height].join('x')
-        return `${process.env.PROXT_ENDPOINT}/picture/${secret}/${size}`
+        return `${process.env.PROXY_ENDPOINT}/picture/${secret}/${size}`
       } else {
-        return `${process.env.PROXT_ENDPOINT}/picture/${secret}`
+        return `${process.env.PROXY_ENDPOINT}/picture/${secret}`
       }
     },
   },

@@ -26,7 +26,7 @@ const client = new AWS.S3({
 
 const app = express()
 
-app.use(auth0)
+// app.use(auth0)
 
 // Routes --------------------------------------------------------------------
 

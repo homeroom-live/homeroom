@@ -62,6 +62,10 @@ const classroomQuery = gql`
           node {
             id
             name
+            thumbnail {
+              id
+              url(width: 50)
+            }
           }
         }
       }
@@ -147,7 +151,13 @@ const EditableLabel = styled(Label)`
 
 const Class = ({ node, teachers }) => (
   <ClassRow>
-    <ClassImage src="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
+    <ClassImage
+      src={
+        node.thumbnail
+          ? node.thumbnail.url
+          : 'https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale'
+      }
+    />
     <ClassMeta>
       <ProfileLinks users={teachers} />
       <ClassTitle href={`/dashboard/classes/class/${node.id}`} weight="bold">

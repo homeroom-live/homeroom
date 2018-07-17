@@ -14,11 +14,7 @@ export const classes = {
           name,
           description,
           thumbnail: {
-            create: {
-              name: thumbnail.name,
-              secret: thumbnail.secret,
-              contentType: thumbnail.contentType,
-            },
+            create: thumbnail,
           },
           price,
           schedule,

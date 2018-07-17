@@ -41,28 +41,12 @@ export const users = {
         name,
         gender: normalizeGender(gender),
         bio,
-        ...(picture
-          ? {
-              picture: {
-                create: {
-                  name: `${email}-picture`,
-                  secret: picture.secret,
-                  contentType: picture.contentType,
-                },
-              },
-            }
-          : {}),
-        ...(video
-          ? {
-              video: {
-                create: {
-                  name: `${email}-video`,
-                  secret: video.secret,
-                  contentType: video.contentType,
-                },
-              },
-            }
-          : {}),
+        picture: {
+          create: picture,
+        },
+        video: {
+          create: video,
+        },
         teaching_classrooms: {
           create: {
             name: generateClassroomName(name),
@@ -89,28 +73,12 @@ export const users = {
       data: {
         name,
         gender,
-        ...(picture
-          ? {
-              picture: {
-                create: {
-                  name: `${ctx.request.user.email}-picture`,
-                  secret: picture.secret,
-                  contentType: picture.contentType,
-                },
-              },
-            }
-          : {}),
-        ...(video
-          ? {
-              video: {
-                create: {
-                  name: `${ctx.request.user.email}-video`,
-                  secret: video.secret,
-                  contentType: video.contentType,
-                },
-              },
-            }
-          : {}),
+        picture: {
+          create: picture,
+        },
+        video: {
+          create: video,
+        },
         bio,
         receiveNotifications,
       },

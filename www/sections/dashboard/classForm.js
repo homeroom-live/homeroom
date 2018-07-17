@@ -146,7 +146,7 @@ class _ClassForm extends React.Component {
 
   handleThumbnailChange = thumbnail => {
     this.setState({
-      thumbnail: thumbnail[0],
+      thumbnail: thumbnail,
     })
   }
 
@@ -158,7 +158,7 @@ class _ClassForm extends React.Component {
 
   handleVideoChange = video => {
     this.setState({
-      video: video[0],
+      video: video,
     })
   }
 
@@ -226,7 +226,13 @@ class _ClassForm extends React.Component {
                     <CardText>{data.createClass.description}</CardText>
                     <CardFooter>
                       <Link
-                        href={`/class/${data.createClass.id}`}
+                        href={{
+                          pathname: `/dashboard/classes/class/`,
+                          query: {
+                            classId: data.createClass.id,
+                          },
+                        }}
+                        as={`/dashboard/classes/class/${data.createClass.id}`}
                         textDecoration="none"
                       >
                         <Button color="secondary">Preview Class</Button>

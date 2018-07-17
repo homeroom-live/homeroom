@@ -14,7 +14,6 @@ export interface IFile {
   name: string
   secret: string
   contentType: string
-  url: string
 }
 
 // Config
@@ -45,7 +44,6 @@ async function uploadFile(upload: IUpload): Promise<IFile> {
     name: filename,
     secret,
     contentType,
-    url: response.Location,
   }
 }
 

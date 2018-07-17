@@ -61,7 +61,7 @@ export const classrooms = {
   },
   async joinClassroom(parent, { id }, ctx: Context, info) {
     const auth0Id = ctx.request.user.sub
-    return await ctx.db.mutation.updateClassroom(
+    return ctx.db.mutation.updateClassroom(
       {
         where: { id },
         data: {
@@ -75,7 +75,7 @@ export const classrooms = {
   },
   async leaveClassroom(parent, { id }, ctx: Context, info) {
     const auth0Id = ctx.request.user.sub
-    return await ctx.db.mutation.updateClassroom(
+    return ctx.db.mutation.updateClassroom(
       {
         where: { id },
         data: {
