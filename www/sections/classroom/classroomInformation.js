@@ -164,7 +164,7 @@ export const ClassroomInformation = withRouter(({ router }) => (
                   <ClassroomImage>
                     <Thumbnail
                       src="https://janecanblogdotcom.files.wordpress.com/2014/09/ashley-square-profile.jpg"
-                      size="xlarge"
+                      size="large"
                     />
                   </ClassroomImage>
                   <FlexCol>
@@ -209,7 +209,10 @@ export const ClassroomInformation = withRouter(({ router }) => (
                           color="secondary"
                           href="TEACHER_URL"
                         >
-                          <CreatorThumbnail src="https://janecanblogdotcom.files.wordpress.com/2014/09/ashley-square-profile.jpg" />
+                          <CreatorThumbnail
+                            size="medium"
+                            src="https://janecanblogdotcom.files.wordpress.com/2014/09/ashley-square-profile.jpg"
+                          />
                           {data.classroom.teachersConnection.edges[0].node.name}
                         </CreatorLink>
                       </SectionBodyRow>
