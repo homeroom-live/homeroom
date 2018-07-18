@@ -142,6 +142,10 @@ const CreatorLink = styled(Link)`
 const CreatorThumbnail = styled(Thumbnail)`
   margin-right: ${spacing.small};
 `
+const RecentClassCardMedium = styled(ClassCardMedium)`
+  flex-shrink: 0;
+  min-height: 268px;
+`
 
 // Classroom Information
 
@@ -230,8 +234,12 @@ export const ClassroomInformation = withRouter(({ router }) => (
                   />
                 ) : (
                   data.classroom.classesConnection.edges.map(({ node }) => (
+<<<<<<< HEAD
                     <ClassCardMedium
                       key={node.id}
+=======
+                    <RecentClassCardMedium
+>>>>>>> styling fixes
                       node={node}
                       href={`/class/${node.id}`}
                       teachers={data.classroom.teachersConnection.edges}

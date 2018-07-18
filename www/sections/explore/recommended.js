@@ -30,7 +30,7 @@ const SideNavigationCol = styled(FlexCol)`
 `
 const HeroCol = styled(FlexCol)`
   max-width: 768px;
-  margin: 0 ${spacing.large};
+  margin: 0 auto;
   border-left: 1px solid ${colors.grayLightest};
   border-right: 1px solid ${colors.grayLightest};
 `
@@ -70,6 +70,10 @@ export const RecommendedClasses = ({ classes = mockClasses }) => (
         ))}
       </RecommendedRow>
     </HeroCol>
+
+    <SideNavigationCol>
+      <Text>FAVORITE CLASSROOMS</Text>
+    </SideNavigationCol>
   </ContainerRow>
 )
 
