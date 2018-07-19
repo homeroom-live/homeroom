@@ -51,7 +51,7 @@ const classQuery = gql`
       name
       description
       price
-      picture {
+      thumbnail {
         id
         url
       }
@@ -88,7 +88,7 @@ const classQuery = gql`
               name
               description
               price
-              picture {
+              thumbnail {
                 id
                 url
               }
@@ -157,11 +157,13 @@ const ClassChatCol = styled(FlexCol)`
 const ClassChatContent = styled(FlexCol)`
   min-height: ${HEIGHT_MINUS_NAVBAR};
 `
+const CLASS_HEADER_HEIGHT = '127px'
+const ClassPlayer = styled(Player)`
+  height: calc(${HEIGHT_MINUS_NAVBAR} - ${CLASS_HEADER_HEIGHT});
+`
 const ClassHeader = styled(FlexRow)`
   position: sticky;
   bottom: 0;
-  z-index: 3;
-  margin-top: auto;
   padding: ${spacing.regular} ${spacing.large};
   background: ${colors.white};
   border-top: 1px solid ${colors.grayLighter};
@@ -187,9 +189,6 @@ const ClassIcon = styled(Icon)`
   height: 16px;
   margin-top: -2px;
   margin-right: ${spacing.xsmall};
-`
-const SubscribeButton = styled(Button)`
-  margin-left: auto;
 `
 const CardRow = styled(FlexRow)`
   align-items: flex-start;
@@ -299,7 +298,9 @@ export const ClassInformation = withRouter(({ router }) => (
           return (
             <ClassRow>
               <ClassBodyCol>
-                <Player />
+                <FlexCol>
+                  <ClassPlayer />
+                </FlexCol>
 
                 <CardRow>
                   <CardColLeft>

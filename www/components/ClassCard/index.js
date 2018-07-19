@@ -8,16 +8,13 @@ import { Link } from 'components/Link'
 import { Text } from 'components/Text'
 import { Header } from 'components/Header'
 import { ProfileLinks } from 'components/ProfileLinks'
-import { Icon } from 'components/Icon'
 import { Player } from 'components/Player'
 
 import { spacing, colors } from 'utils/theme'
-import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
-import clockGrayIcon from 'static/assets/icons/ui/clock-gray.svg'
-import calendarGrayIcon from 'static/assets/icons/ui/calendar-gray.svg'
 
 const ClassCardContainer = styled(Link)`
   display: flex;
+  flex-direction: row;
   align-items: flex-start;
   padding: ${spacing.regular};
   text-decoration: none;
@@ -29,8 +26,6 @@ const ClassCardContainer = styled(Link)`
     background: ${colors.grayLightest};
   }
 `
-// max-width: 256px;
-// max-height: 144px;
 const ClassImage = styled.img`
   object-fit: contain;
   border-radius: 4px;
@@ -55,13 +50,10 @@ const ClassMetaItem = styled(Text)`
   display: flex;
   align-items: center;
   margin-right: ${spacing.small};
-  margin-top: 2px;
+  margin-top: 0;
+  letter-spacing: 0.2px;
 `
-const ClassIcon = styled(Icon)`
-  height: 16px;
-  margin-top: -2px;
-  margin-right: ${spacing.xsmall};
-`
+
 export const ClassCardSmall = ({ node, teachers, href, className }) => (
   <ClassCardContainer href={href} className={className}>
     <ClassImage src="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
@@ -71,16 +63,13 @@ export const ClassCardSmall = ({ node, teachers, href, className }) => (
         {node.name}
       </ClassTitle>
       <ClassMetaStatsRow>
-        <ClassMetaItem color="gray" weight="bold" size="small">
-          <ClassIcon src={userGrayIcon} />
+        <ClassMetaItem color="gray" weight="bold" size="xsmall">
           {0} Students
         </ClassMetaItem>
-        <ClassMetaItem color="gray" weight="bold" size="small">
-          <ClassIcon src={calendarGrayIcon} />
+        <ClassMetaItem color="gray" weight="bold" size="xsmall">
           {moment(node.schedule).format('M/D/YY')}
         </ClassMetaItem>
-        <ClassMetaItem color="gray" weight="bold" size="small">
-          <ClassIcon src={clockGrayIcon} />
+        <ClassMetaItem color="gray" weight="bold" size="xsmall">
           {moment(node.schedule)
             .tz('America/New_York')
             .format('LT z')}
@@ -117,18 +106,17 @@ export const ClassCardMedium = ({ node, teachers, href, className }) => (
     <ClassVideo src="http://techslides.com/demos/sample-videos/small.mp4" />
     <ClassMeta>
       <ProfileLinks users={teachers} />
-      <ClassTitle margin="0">{node.name}</ClassTitle>
+      <ClassTitle size="regular" margin="0">
+        {node.name}
+      </ClassTitle>
       <ClassMetaStatsRow>
-        <ClassMetaItem color="gray" weight="bold" size="small">
-          <ClassIcon src={userGrayIcon} />
+        <ClassMetaItem color="gray" weight="bold" size="xsmall">
           {0} Students
         </ClassMetaItem>
-        <ClassMetaItem color="gray" weight="bold" size="small">
-          <ClassIcon src={calendarGrayIcon} />
+        <ClassMetaItem color="gray" weight="bold" size="xsmall">
           {moment(node.schedule).format('M/D/YY')}
         </ClassMetaItem>
-        <ClassMetaItem color="gray" weight="bold" size="small">
-          <ClassIcon src={clockGrayIcon} />
+        <ClassMetaItem color="gray" weight="bold" size="xsmall">
           {moment(node.schedule)
             .tz('America/New_York')
             .format('LT z')}
@@ -143,8 +131,7 @@ const ClassCardLargeContainer = styled(Link)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 100%;
-  max-height: 631px;
+  max-width: 50%;
   padding: ${spacing.regular};
   color: transparent;
   text-decoration: none;
@@ -156,29 +143,28 @@ const ClassCardLargeContainer = styled(Link)`
 `
 const ClassVideoLarge = styled(Player)`
   object-fit: contain;
-  width: 100%;
-  max-height: 512px;
+  max-height: 300px;
   margin-bottom: ${spacing.small};
   border-radius: 4px;
   background: ${colors.black};
 `
-export const ClassCardLarge = ({ node, teachers, href, className }) => (
+
+export const ClassCardLarge = ({ node, teachers, href, className, size }) => (
   <ClassCardLargeContainer href={href} className={className}>
     <ClassVideoLarge src="http://techslides.com/demos/sample-videos/small.mp4" />
     <ClassMeta>
       <ProfileLinks users={teachers} />
-      <ClassTitle margin="0">{node.name}</ClassTitle>
+      <ClassTitle size={size} margin="0">
+        {node.name}
+      </ClassTitle>
       <ClassMetaStatsRow>
-        <ClassMetaItem color="gray" weight="bold" size="small">
-          <ClassIcon src={userGrayIcon} />
+        <ClassMetaItem color="gray" weight="bold" size="xsmall">
           {0} Students
         </ClassMetaItem>
-        <ClassMetaItem color="gray" weight="bold" size="small">
-          <ClassIcon src={calendarGrayIcon} />
+        <ClassMetaItem color="gray" weight="bold" size="xsmall">
           {moment(node.schedule).format('M/D/YY')}
         </ClassMetaItem>
-        <ClassMetaItem color="gray" weight="bold" size="small">
-          <ClassIcon src={clockGrayIcon} />
+        <ClassMetaItem color="gray" weight="bold" size="xsmall">
           {moment(node.schedule)
             .tz('America/New_York')
             .format('LT z')}

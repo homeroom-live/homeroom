@@ -28,7 +28,14 @@ import { Input } from 'components/Input'
 import { Textarea } from 'components/Textarea'
 import { DatePicker } from 'components/DatePicker'
 
-import { spacing, shadow, outline, colors, opacity } from 'utils/theme'
+import {
+  spacing,
+  shadow,
+  outline,
+  colors,
+  opacity,
+  HEIGHT_MINUS_NAVBAR,
+} from 'utils/theme'
 import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
 import clockGrayIcon from 'static/assets/icons/ui/clock-gray.svg'
 import calendarGrayIcon from 'static/assets/icons/ui/calendar-gray.svg'
@@ -130,15 +137,6 @@ const ClassTitle = styled(Header)`
   position: relative;
   margin-bottom: ${spacing.xsmall};
 `
-const ClassImage = styled.img`
-  object-fit: contain;
-  border-radius: 4px;
-  width: 100%;
-  max-width: 256px;
-  max-height: 144px;
-  margin-right: ${spacing.regular};
-  background: ${colors.black};
-`
 const ClassMeta = styled(FlexCol)`
   width: initial;
 `
@@ -153,6 +151,11 @@ const ClassIcon = styled(Icon)`
   margin-top: -2px;
   margin-right: ${spacing.xsmall};
 `
+const CLASS_HEADER_HEIGHT = '140px'
+const ClassPlayer = styled(Player)`
+  max-height: 256px;
+`
+// height: calc(${HEIGHT_MINUS_NAVBAR} - ${CLASS_HEADER_HEIGHT} - 20vh);
 const ClassBody = styled(FlexCol)`
   width: initial;
   margin: ${spacing.medium};
@@ -166,7 +169,6 @@ const SectionCol = styled(FlexCol)`
   margin-bottom: ${spacing.medium};
 `
 const SectionBody = styled(FlexCol)`
-  min-height: 512px;
   padding: ${spacing.regular};
 `
 const SectionRightCol = styled(SectionCol)`
@@ -193,10 +195,13 @@ const VideoSettingsRow = styled(FlexRow)`
   align-items: flex-start;
   margin-top: ${spacing.regular};
 `
+const VideoSettingsLabelsRow = styled(FlexRow)`
+  flex-wrap: wrap;
+`
 const VideoSettingsLabel = styled(Label)`
   width: initial;
   margin-right: ${spacing.medium};
-  margin-bottom: 0;
+  margin-bottom: ${spacing.xsmall};
 `
 const VideoSettingsLink = styled(Link)`
   margin-left: auto;
@@ -260,9 +265,7 @@ export const ClassInformation = withRouter(({ router }) => (
                       }
                     }
                   `}
-                  variables={{
-                    classId: router.query.classId,
-                  }}
+                  variables={{ classId: router.query.classId }}
                   value={data.class.live}
                 >
                   {({ status, value, onChange, onSubmit }) => (
@@ -282,48 +285,45 @@ export const ClassInformation = withRouter(({ router }) => (
               </ClassHeader>
 
               <ClassBody>
-                <SectionCol>
-                  <IconHeader src={iconVideo} value="Video" />
-                  <SectionBody>
-                    <Player
-                      autoPlay={data.class.live}
-                      src="https://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"
-                    />
-                    <VideoSettingsRow>
-                      <VideoSettingsLabel>
-                        Server Url
-                        <Text>https://stream.homeroom.live</Text>
-                      </VideoSettingsLabel>
-                      <VideoSettingsLabel>
-                        Live Stream Key
-                        <Text>Super-Secret-Streams</Text>
-                      </VideoSettingsLabel>
-                      <VideoSettingsLabel>
-                        Preview Stream Key
-                        <Text>Preview-Streams</Text>
-                      </VideoSettingsLabel>
-                      <VideoSettingsLink href="/dashboard/howtostream" prefetch>
-                        <Button color="primary" src={iconHelpWhite}>
-                          How to Stream
-                        </Button>
-                      </VideoSettingsLink>
-                    </VideoSettingsRow>
-                  </SectionBody>
-                </SectionCol>
-
                 <SectionRow>
                   <SectionCol>
+                    <IconHeader src={iconVideo} value="Video" />
+                    <SectionBody>
+                      <ClassPlayer
+                        autoPlay={data.class.live}
+                        src="https://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"
+                      />
+                      <VideoSettingsRow>
+                        <VideoSettingsLabelsRow>
+                          <VideoSettingsLabel>
+                            Server Url
+                            <Text>https://stream.homeroom.live</Text>
+                          </VideoSettingsLabel>
+                          <VideoSettingsLabel>
+                            Live Stream Key
+                            <Text>Super-Secret-Streams</Text>
+                          </VideoSettingsLabel>
+                          <VideoSettingsLabel>
+                            Preview Stream Key
+                            <Text>Preview-Streams</Text>
+                          </VideoSettingsLabel>
+                        </VideoSettingsLabelsRow>
+                        <VideoSettingsLink
+                          href="/dashboard/howtostream"
+                          prefetch
+                        >
+                          <Button color="primary" src={iconHelpWhite}>
+                            How to Stream
+                          </Button>
+                        </VideoSettingsLink>
+                      </VideoSettingsRow>
+                    </SectionBody>
+                  </SectionCol>
+
+                  <SectionRightCol>
                     <IconHeader src={iconChat} value="Chat" />
                     <SectionBody />
-                  </SectionCol>
-                  <QuestionsDisabledCol>
-                    <IconHeader src={iconHelp} value="Questions" />
-                    <QuestionsDisabledBody>
-                      <Text size="medium" weight="bold">
-                        Coming Soon!
-                      </Text>
-                    </QuestionsDisabledBody>
-                  </QuestionsDisabledCol>
+                  </SectionRightCol>
                 </SectionRow>
 
                 <SectionRow>
@@ -347,9 +347,7 @@ export const ClassInformation = withRouter(({ router }) => (
                               }
                             }
                           `}
-                          variables={{
-                            classId: router.query.classId,
-                          }}
+                          variables={{ classId: router.query.classId }}
                           value={data.class.thumbnail}
                         >
                           {({ status, value, onChange, onSubmit }) => (
@@ -378,9 +376,7 @@ export const ClassInformation = withRouter(({ router }) => (
                               }
                             }
                           `}
-                          variables={{
-                            classId: router.query.classId,
-                          }}
+                          variables={{ classId: router.query.classId }}
                           value={data.class.name}
                         >
                           {({ status, value, onChange, onSubmit }) => (
@@ -410,14 +406,13 @@ export const ClassInformation = withRouter(({ router }) => (
                               }
                             }
                           `}
-                          variables={{
-                            classId: router.query.classId,
-                          }}
+                          variables={{ classId: router.query.classId }}
                           value={data.class.description}
                         >
                           {({ status, value, onChange, onSubmit }) => (
                             <Textarea
                               type="text"
+                              rows={5}
                               value={value}
                               onChange={e => {
                                 e.preventDefault()
@@ -443,9 +438,7 @@ export const ClassInformation = withRouter(({ router }) => (
                                 }
                               }
                             `}
-                            variables={{
-                              classId: router.query.classId,
-                            }}
+                            variables={{ classId: router.query.classId }}
                             value={data.class.price}
                           >
                             {({ status, value, onChange, onSubmit }) => (
@@ -475,9 +468,7 @@ export const ClassInformation = withRouter(({ router }) => (
                                 }
                               }
                             `}
-                            variables={{
-                              classId: router.query.classId,
-                            }}
+                            variables={{ classId: router.query.classId }}
                             value={data.class.schedule}
                           >
                             {({ status, value, onChange, onSubmit }) => (
@@ -519,9 +510,7 @@ export const ClassInformation = withRouter(({ router }) => (
                               }
                             }
                           `}
-                          variables={{
-                            classId: router.query.classId,
-                          }}
+                          variables={{ classId: router.query.classId }}
                           value={data.class.video}
                         >
                           {({ status, value, onChange, onSubmit }) => (
@@ -553,9 +542,7 @@ export const ClassInformation = withRouter(({ router }) => (
                               }
                             }
                           `}
-                          variables={{
-                            classId: router.query.classId,
-                          }}
+                          variables={{ classId: router.query.classId }}
                           value={data.class.files}
                         >
                           {({ status, value, onChange, onSubmit }) => (
@@ -572,6 +559,14 @@ export const ClassInformation = withRouter(({ router }) => (
                     </SectionBody>
                   </SectionRightCol>
                 </SectionRow>
+                {/*                  <QuestionsDisabledCol>
+                    <IconHeader src={iconHelp} value="Questions" />
+                    <QuestionsDisabledBody>
+                      <Text size="medium" weight="bold">
+                        Coming Soon!
+                      </Text>
+                    </QuestionsDisabledBody>
+                  </QuestionsDisabledCol>*/}
               </ClassBody>
             </ClassInformationCol>
           )

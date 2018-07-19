@@ -87,11 +87,6 @@ const ClassroomsHeader = styled(IconHeader)`
 const NewLink = styled(Link)`
   margin-left: auto;
 `
-const NewIcon = styled(Icon)`
-  margin-top: -2px;
-  margin-right: ${spacing.xsmall};
-`
-
 const ClassroomContainer = styled(FlexCol)`
   margin: ${spacing.regular} 0 ${spacing.xlarge};
   ${outline()};
@@ -100,16 +95,15 @@ const ClassroomShowMore = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: ${spacing.regular};
-  text-decoration: none;
-  color: ${colors.gray};
-  ${shadow()};
-  border: none;
-  border-top: 1px solid ${colors.grayLighter};
   &:hover {
-    color: ${colors.gray};
     text-decoration: none;
   }
+`
+const ShowMoreButton = styled(Button)`
+  width: 100%;
+  border-top: 1px solid ${colors.grayLighter};
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 `
 const ClassesRow = styled(FlexRow)`
   flex-wrap: wrap;
@@ -139,7 +133,7 @@ const Classroom = ({ id, name, numberOfClasses, classes, teachers }) => (
       color="gray"
       weight="bold"
     >
-      View All Classes
+      <ShowMoreButton color="tertiary">View All</ShowMoreButton>
     </ClassroomShowMore>
   </ClassroomContainer>
 )

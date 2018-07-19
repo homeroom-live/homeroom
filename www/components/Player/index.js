@@ -11,10 +11,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { colors } from 'utils/theme'
 import offlinePoster from 'static/assets/images/stream-offline.jpg'
 
 const Video = styled.video`
   width: 100%;
+  background: ${colors.black};
 `
 
 export const Player = ({ src, type, className, autoPlay }) => (
@@ -24,7 +26,6 @@ export const Player = ({ src, type, className, autoPlay }) => (
     className={className}
     autoPlay={autoPlay}
   >
-    ¡
     <source src={src} type={type} />
   </Video>
 )

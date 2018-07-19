@@ -12,6 +12,7 @@ import {
   fontFamily,
   borderRadius,
   transition,
+  opacity,
 } from 'utils/theme'
 
 const ButtonIcon = styled(Icon)`
@@ -42,6 +43,18 @@ const themes = {
       background: ${darken(0.1, colors.primary)};
       box-shadow: ${colors.shadowActive};
       transform: translateY(-2px);
+    }
+  `,
+  tertiary: () => `
+    color: ${colors.secondary};
+    background: transparent;
+    border-color: transparent;
+    opacity: ${opacity};
+    &:hover {
+      color: ${colors.secondary}
+      border-color: transparent;
+      background: ${colors.grayLightest};
+      opacity: 1;
     }
   `,
 

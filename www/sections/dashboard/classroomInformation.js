@@ -4,31 +4,32 @@ import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import { NetworkStatus } from 'apollo-client'
 import styled from 'styled-components'
-import moment from 'moment-timezone'
 
 import { EditableComponent } from 'hocs/EditableComponent'
 import { ClassroomHeader } from 'sections/dashboard/classroomHeader'
 import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
 import { Loading } from 'components/Loading'
-import { Link } from 'components/Link'
+import { Button } from 'components/Button'
 import { Text } from 'components/Text'
 import { Breadcrumb } from 'components/Breadcrumb'
-import { Icon } from 'components/Icon'
-import { TextStyle } from 'components/TextStyle'
-import { Button } from 'components/Button'
 import { IconHeader } from 'components/IconHeader'
-import { ProfileLinks } from 'components/ProfileLinks'
 import { Label } from 'components/Label'
 import { Input } from 'components/Input'
 import { Textarea } from 'components/Textarea'
 import { ImagePicker } from 'components/ImagePicker'
 import { VideoPicker } from 'components/VideoPicker'
+import { ClassCardSmall } from 'components/ClassCard'
 
-import { colors, spacing, outline, shadow } from 'utils/theme'
-import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
-import clockGrayIcon from 'static/assets/icons/ui/clock-gray.svg'
-import calendarGrayIcon from 'static/assets/icons/ui/calendar-gray.svg'
+import {
+  colors,
+  spacing,
+  outline,
+  shadow,
+  transition,
+  fontSizes,
+  fontWeights,
+} from 'utils/theme'
 import videoIcon from 'static/assets/icons/ui/video.svg'
 import iconInformation from 'static/assets/icons/ui/information.svg'
 import iconFile from 'static/assets/icons/ui/file.svg'
@@ -85,51 +86,6 @@ const ClassesCol = styled(FlexCol)`
   ${outline()};
   margin: ${spacing.medium} 0;
 `
-const ClassRow = styled(FlexRow)`
-  display: flex;
-  padding: ${spacing.regular};
-  text-decoration: none;
-  color: transparent;
-  &:hover {
-    color: transparent;
-    text-decoration: none;
-    background: ${colors.grayLightest};
-  }
-`
-const ClassImage = styled.img`
-  object-fit: contain;
-  border-radius: 4px;
-  width: 100%;
-  max-width: 128px;
-  max-height: 72px;
-  margin-right: ${spacing.regular};
-  background: ${colors.black};
-`
-const ClassTitle = styled(Link)`
-  color: ${colors.secondary};
-  &:hover {
-    color: ${colors.secondary};
-  }
-`
-const ClassMeta = styled(FlexCol)`
-  width: initial;
-`
-const ClassMetaItem = styled(Text)`
-  display: flex;
-  align-items: center;
-  margin-right: ${spacing.small};
-  margin-top: 2px;
-`
-const ClassIcon = styled(Icon)`
-  height: 16px;
-  margin-top: -2px;
-  margin-right: ${spacing.xsmall};
-`
-const ClassActions = styled(FlexRow)`
-  flex: 1;
-  justify-content: flex-end;
-  margin-left: auto;
-`
 const SectionRow = styled(FlexRow)`
   align-items: flex-start;
   width: initial;
@@ -139,7 +95,6 @@ const SectionCol = styled(FlexCol)`
   margin-bottom: ${spacing.medium};
 `
 const SectionBody = styled(FlexCol)`
-  min-height: 512px;
   padding: ${spacing.regular};
 `
 const SectionRightCol = styled(SectionCol)`
@@ -148,45 +103,14 @@ const SectionRightCol = styled(SectionCol)`
 const EditableLabel = styled(Label)`
   margin-bottom: ${spacing.regular};
 `
-
-const Class = ({ node, teachers }) => (
-  <ClassRow>
-    <ClassImage
-      src={
-        node.thumbnail
-          ? node.thumbnail.url
-          : 'https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale'
-      }
-    />
-    <ClassMeta>
-      <ProfileLinks users={teachers} />
-      <ClassTitle href={`/dashboard/classes/class/${node.id}`} weight="bold">
-        {node.name} <TextStyle color="primary">{node.price}</TextStyle>
-      </ClassTitle>
-      <FlexRow>
-        <ClassMetaItem color="gray" weight="bold" size="small">
-          <ClassIcon src={userGrayIcon} />
-          {0} Students
-        </ClassMetaItem>
-        <ClassMetaItem color="gray" weight="bold" size="small">
-          <ClassIcon src={calendarGrayIcon} />
-          {moment(node.schedule).format('M/D/YY')}
-        </ClassMetaItem>
-        <ClassMetaItem color="gray" weight="bold" size="small">
-          <ClassIcon src={clockGrayIcon} />
-          {moment(node.schedule)
-            .tz('America/New_York')
-            .format('LT z')}
-        </ClassMetaItem>
-      </FlexRow>
-    </ClassMeta>
-    <ClassActions>
-      <Link href={`/dashboard/classes/class/${node.id}`} textDecoration="none">
-        <Button color="primary">Edit</Button>
-      </Link>
-    </ClassActions>
-  </ClassRow>
-)
+const ShowMoreButton = styled(Button)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: 1px solid ${colors.grayLighter};
+`
 
 // Classroom Information
 
@@ -225,15 +149,17 @@ export const ClassroomInformation = withRouter(({ router }) => (
                 </IconHeader>
                 <div>
                   {data.classroom.classesConnection.edges.map(({ node }) => (
-                    <Class
+                    <ClassCardSmall
                       node={node}
                       key={node.id}
+                      href={`/dashboard/classes/class/${node.id}`}
                       teachers={data.classroom.teachersConnection.edges}
                     />
                   ))}
                 </div>
                 {data.classroom.classesConnection.pageInfo.hasNextPage && (
-                  <button
+                  <ShowMoreButton
+                    color="tertiary"
                     onClick={e => {
                       e.preventDefault()
 
@@ -269,8 +195,8 @@ export const ClassroomInformation = withRouter(({ router }) => (
                       })
                     }}
                   >
-                    More
-                  </button>
+                    Show More
+                  </ShowMoreButton>
                 )}
               </ClassesCol>
 

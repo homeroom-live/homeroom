@@ -12,7 +12,7 @@ class Teach extends React.Component {
   render() {
     return (
       <>
-        <Navigation />
+        <Navigation transparent />
         <Content />
         <Footer />
       </>

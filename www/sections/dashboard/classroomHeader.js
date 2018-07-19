@@ -63,7 +63,7 @@ export const ClassroomHeader = ({
           <ClassroomTitle size="xlarge">{name}</ClassroomTitle>
         </Link>
         <Text size="small" color="gray" weight="bold">
-          XXXXX Subscribers – {numberOfClasses} Classes
+          {numberOfClasses} Classes
         </Text>
       </ClassroomMeta>
     </MetaRow>

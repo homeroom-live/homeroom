@@ -5,9 +5,10 @@ import styled from 'styled-components'
 
 import { NETWORK_STATUS } from 'utils/constants'
 import { colors, spacing, fontSizes, fontWeights, opacity } from 'utils/theme'
-
 import logoLight from 'static/assets/images/logos/logo-light.svg'
+import logoDark from 'static/assets/images/logos/logo-dark.svg'
 import iconHelpWhite from 'static/assets/icons/ui/help-white.svg'
+import iconHelp from 'static/assets/icons/ui/help.svg'
 
 // Components
 
@@ -46,21 +47,20 @@ const activeLinkStyles = color => `
   opacity: 1;
   text-decoration: none;
 `
-const NavLink = color => styled(Link)`
+const NavLink = styled(Link)`
   margin: 0 ${spacing.small};
   font-size: ${fontSizes.small};
   font-weight: ${fontWeights.bold};
-  color: ${color};
+  color: ${props => props.color || colors.primary};
   white-space: nowrap;
   text-decoration: none;
   opacity: ${opacity};
   &:hover {
-    ${activeLinkStyles(color)};
+    ${props => activeLinkStyles(props.color || colors.primary)};
   }
-  ${({ active }) => (active ? activeLinkStyles(color) : null)};
+  ${props =>
+    props.active ? activeLinkStyles(props.color || colors.primary) : null};
 `
-const NavLinkWhite = NavLink(colors.white)
-const NavLinkGreen = NavLink(colors.primary)
 const NavRight = styled(FlexRow)`
   flex: 0;
   align-items: center;
@@ -109,24 +109,32 @@ const viewer = gql`
 
 export const Navigation = ({ transparent, activePage }) => (
   <Navbar transparent={transparent}>
-    <NavLeft css={{ alignItems: 'center', flex: 1 }}>
+    <NavLeft>
       <Link href="/" prefetch>
         <ImageLinkContainer>
-          <Logo src={logoLight} />
+          <Logo src={transparent ? logoDark : logoLight} />
         </ImageLinkContainer>
       </Link>
-      <NavLinkWhite href="/explore" active={activePage === 'explore'}>
+      <NavLink
+        color={transparent ? colors.secondary : colors.white}
+        href="/explore"
+        active={activePage === 'explore'}
+      >
         Explore
-      </NavLinkWhite>
-      <NavLinkWhite href="/dashboard" active={activePage === 'dashboard'}>
+      </NavLink>
+      <NavLink
+        color={transparent ? colors.secondary : colors.white}
+        href="/dashboard"
+        active={activePage === 'dashboard'}
+      >
         Teach
-      </NavLinkWhite>
+      </NavLink>
     </NavLeft>
 
     <NavRight>
       <Link href="mailto:team@homeroom.live">
         <ImageLinkContainer>
-          <HelpIcon src={iconHelpWhite} />
+          <HelpIcon src={transparent ? iconHelp : iconHelpWhite} />
         </ImageLinkContainer>
       </Link>
       <Query
@@ -153,7 +161,9 @@ export const Navigation = ({ transparent, activePage }) => (
                 )
               } else {
                 return (
-                  <NavLinkGreen href="/signup">Sign up & Login</NavLinkGreen>
+                  <NavLink color={colors.primary} href="/signup">
+                    Sign up & Login
+                  </NavLink>
                 )
               }
             }
