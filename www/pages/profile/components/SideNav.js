@@ -10,13 +10,11 @@ import { Icon } from 'components/Icon'
 import { Loading } from 'components/Loading'
 import { Link } from 'components/Link'
 import { Container } from 'components/Container'
-import { TextStyle } from 'components/TextStyle'
 
-import iconGraphBarWhite from 'static/assets/icons/ui/graph-bar-white.svg'
 import iconUserWhite from 'static/assets/icons/ui/user-white.svg'
 import iconCurrencyDollarWhite from 'static/assets/icons/ui/currency-dollar-white.svg'
 import iconVideoWhite from 'static/assets/icons/ui/video-white.svg'
-import iconFileWhite from 'static/assets/icons/ui/file.svg'
+import iconFileWhite from 'static/assets/icons/ui/file-white.svg'
 
 import { spacing, colors, opacity, HEIGHT_MINUS_NAVBAR } from 'utils/theme'
 
@@ -100,7 +98,7 @@ export const SideNav = ({ children, activeSection, data }) => (
         <SideNavLink
           size="small"
           weight="bold"
-          href="/lessons"
+          href="/profile/lessons"
           active={activeSection === 'lessons'}
         >
           <SideNavIcon src={iconVideoWhite} />
@@ -109,7 +107,7 @@ export const SideNav = ({ children, activeSection, data }) => (
         <SideNavLink
           size="small"
           weight="bold"
-          href="/courses"
+          href="/profile/courses"
           active={activeSection === 'courses'}
         >
           <SideNavIcon src={iconFileWhite} />
@@ -128,7 +126,8 @@ export const SideNav = ({ children, activeSection, data }) => (
           <SideNavIcon src={iconCurrencyDollarWhite} />
           Stripe Account
         </SideNavLink>
-        <SideNavLink
+        {/*
+          <SideNavLink
           size="small"
           weight="bold"
           href="/dashboard"
@@ -141,6 +140,7 @@ export const SideNav = ({ children, activeSection, data }) => (
             Insights
           </FlexCol>
         </SideNavLink>
+        */}
       </SideNavSticky>
     </SideNavContainer>
     {/*
