@@ -1,2 +1,2 @@
-import Explore from 'pages/explore'
-export default Explore
+import ExplorePage from 'pages/explore'
+export default ExplorePage

@@ -8,7 +8,7 @@ import { Navbar } from 'components/Navbar'
 import { explore } from 'data/explore'
 import { viewer } from 'data/viewer'
 
-class Explore extends React.Component {
+class ExplorePage extends React.Component {
   static async getInitialProps(ctx) {
     return {}
   }
@@ -25,4 +25,4 @@ class Explore extends React.Component {
   }
 }
 
-export default Explore
+export default ExplorePage

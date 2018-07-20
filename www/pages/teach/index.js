@@ -4,7 +4,7 @@ import { Body } from 'pages/teach/components/Body'
 import { Navbar } from 'components/Navbar'
 import { Footer } from 'components/Footer'
 
-class Teach extends React.Component {
+class TeachPage extends React.Component {
   render() {
     return (
       <>
@@ -16,4 +16,4 @@ class Teach extends React.Component {
   }
 }
 
-export default Teach
+export default TeachPage
