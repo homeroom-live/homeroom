@@ -1,4 +1,4 @@
-# endpoint: ${env:PRISMA_ENDPOINT}
+endpoint: ${env:PRISMA_ENDPOINT}
 
 datamodel: 
   - datamodel/types.graphql
@@ -10,5 +10,3 @@ hooks:
     - graphql codegen
 
 secret: ${env:PRISMA_SECRET}
-
-endpoint: https://eu1.prisma.sh/matic-zavadlal-03c51f/homeroom-refactor/development
