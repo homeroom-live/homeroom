@@ -6,15 +6,11 @@ const app = express()
 
 // Routes --------------------------------------------------------------------
 
-app.get('/purchase', (req, res) => {
-  res.send('purchase')
+app.get('*', (req, res) => {
+  res.send('Homeroom payments server.')
 })
 
-app.get('/subscribe', (req, res) => {
-  res.send('subscribe')
-})
-
-app.get('/unsubscribe', (req, res) => {
+app.post('/subscriptions', (req, res) => {
   res.send('subscribe')
 })
 

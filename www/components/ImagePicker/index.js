@@ -59,7 +59,9 @@ export class ImagePicker extends React.Component {
             multiple={false}
             onDrop={this.handleDrop}
             accept="image/*"
-            onClick={e => e.preventDefault()}
+            onClick={e => {
+              e.preventDefault()
+            }}
           >
             <PlaceholderIcon src={iconCamera} />
             <PlaceholderText size="small" weight="bold">

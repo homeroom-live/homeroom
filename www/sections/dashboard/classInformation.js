@@ -353,10 +353,13 @@ export const ClassInformation = withRouter(({ router }) => (
                           {({ status, value, onChange, onSubmit }) => (
                             <ImagePicker
                               value={value}
-                              onBlur={onSubmit}
                               onChange={thumbnail => {
                                 onChange(thumbnail)
-                                onSubmit()
+
+                                console.log(thumbnail)
+                                if (thumbnail) {
+                                  onSubmit()
+                                }
                               }}
                             />
                           )}

@@ -2324,9 +2324,9 @@ graphql-import@^0.6.0:
   dependencies:
     lodash "^4.17.4"
 
-graphql-middleware-apollo-upload-server@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/graphql-middleware-apollo-upload-server/-/graphql-middleware-apollo-upload-server-1.0.7.tgz#fca5f063eef657ace87be9f2d905b0f4a7a5dbd4"
+graphql-middleware-apollo-upload-server@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/graphql-middleware-apollo-upload-server/-/graphql-middleware-apollo-upload-server-1.0.8.tgz#8f758240eae7c04c1bbf2d9c2fe16a8325aab927"
   dependencies:
     apollo-upload-server "^5.0.0"
 

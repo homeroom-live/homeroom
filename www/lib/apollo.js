@@ -5,6 +5,7 @@ import { ApolloLink, from } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { createUploadLink } from 'apollo-upload-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
+import apolloLogger from 'apollo-link-logger'
 import { onError } from 'apollo-link-error'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { getMainDefinition } from 'apollo-utilities'
@@ -84,7 +85,7 @@ function create(initialState, { getToken }) {
   return new ApolloClient({
     connectToDevTools: process.browser,
     ssrMode: !process.browser,
-    link: from([authLink, errorLink, endpointLinks]),
+    link: from([authLink, apolloLogger, errorLink, endpointLinks]),
     cache: new InMemoryCache().restore(initialState),
   })
 }

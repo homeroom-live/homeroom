@@ -17,11 +17,35 @@ yarn
 yarn dev
 ```
 
+```bash
+NODE_ENV="dev"
+
+STRIPE_ID=""
+STRIPE_SECRET=""
+
+PROXY_ENDPOINT="http://localhost:2000"
+```
+
 ## Webpage
 
 ```bash
 yarn
 yarn dev
+```
+
+```bash
+NODE_ENV="dev"
+
+AUTH0_CLIENT_ID="wgs42OsBgiU2mtfle0ZVVXe6oC7EwqVM"
+AUTH0_DOMAIN="homeroom.auth0.com"
+AUTH0_REDIRECT_URL="http://localhost:3000/callback"
+
+PRISMA_ENDPOINT="http://localhost:4000"
+PRISMA_WS_ENDPOINT="ws://localhost:4000"
+
+STRIPE_KEY=pk_test_38SQAjAQtgRWeHZ4ku9qYxlk
+STRIPE_ID=ca_CBUYuNLPtAOQ2fcA3npklS9HaWZGXKzk
+STRIPE_CALLBACK=http://localhost:3000/profile/settings/stripe
 ```
 
 ## Proxy

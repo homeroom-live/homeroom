@@ -4,100 +4,90 @@ type User {
   updatedAt: DateTime!
 
   # Info
+
   auth0Id: String! @unique
   username: String! @unique
   email: String! @unique
   email_verified: Boolean! @default(value: false)
 
   # Meta
+
   name: String
   gender: Gender!
   bio: String!
   picture: File @relation(name: "UserPicture", onDelete: CASCADE)
-  video: File @relation(name: "UserVideo", onDelete: CASCADE)
+  price: Float @default(value: "10")
+  live: Lesson
+
+  # Subscriptions
+
+  subscriptions: [TeacherSubscription!]! @relation(name: "TeacherSubscription")
+  subscribers: [TeacherSubscription!]! @relation(name: "TeacherSubscriber")
 
   # Stripe
+
   stripeId: String @unique
   stripeCustomerId: String @unique
 
-  teaching_classrooms: [Classroom!]!
-    @relation(name: "ClassroomTeacher", onDelete: CASCADE)
-  studying_classrooms: [Classroom!]!
-    @relation(name: "ClassroomStudent", onDelete: SET_NULL)
-  participating_classes: [Class!]!
-    @relation(name: "ClassParticipant", onDelete: SET_NULL)
+  # Social
 
-  followers: [Follow!]! @relation(name: "UserFollowed", onDelete: CASCADE)
-  following: [Follow!]! @relation(name: "UserFollowing", onDelete: CASCADE)
-  messages: [Message!]! @relation(name: "UserMessages", onDelete: CASCADE)
-  charges: [Charge!]! @relation(name: "UserCharges", onDelete: CASCADE)
+  messages: [Message!]! @relation(name: "UserMessage", onDelete: CASCADE)
 
   # Settings
+
   receiveNotifications: Boolean! @default(value: "true")
 
   # System
+
   archived: Boolean! @default(value: "false")
 }
 
-type Follow {
+type TeacherSubscription {
   id: ID! @unique
   createdAt: DateTime!
   updatedAt: DateTime!
 
-  user_following: User! @relation(name: "UserFollowing", onDelete: SET_NULL)
-  user_followed: User! @relation(name: "UserFollowed", onDelete: SET_NULL)
+  teacher: User! @relation(name: "TeacherSubscription")
+  subscriber: User! @relation(name: "TeacherSubscriber")
 }
 
-type Classroom {
+type Lesson {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  # Info
+
+  name: String!
+  description: String!
+  thumbnail: String!
+  schedule: DateTime!
+  premium: Boolean! @default(value: "false")
+
+  course: Course @relation(name: "CourseLesson")
+
+  # Stream
+
+  streamKey: String!
+
+  # Extras
+
+  messages: [Message!]! @relation(name: "LessonMessage", onDelete: CASCADE)
+  files: [File!]! @relation(name: "LessonFile", onDelete: CASCADE)
+
+  # System
+
+  archived: Boolean! @default(value: "false")
+}
+
+type Course {
   id: ID! @unique
   createdAt: DateTime!
   updatedAt: DateTime!
 
   # Meta
   name: String!
-  description: String!
-  price: Float! @default(value: "0")
-  thumbnail: File @relation(name: "ClassroomThumbnail", onDelete: CASCADE)
-  video: File @relation(name: "ClassroomVideo", onDelete: CASCADE)
-
-  # Content
-  classes: [Class!]! @relation(name: "ClassroomClass", onDelete: CASCADE)
-
-  # Extras
-  # files: [File!]! @relation(name: "ClassroomFile", onDelete: CASCADE)
-
-  # Social
-  teachers: [User!]! @relation(name: "ClassroomTeacher", onDelete: SET_NULL)
-  students: [User!]! @relation(name: "ClassroomStudent", onDelete: SET_NULL)
-
-  # System
-  archived: Boolean! @default(value: "false")
-}
-
-type Class {
-  id: ID! @unique
-  createdAt: DateTime!
-  updatedAt: DateTime!
-
-  # Info
-  name: String!
-  description: String!
-  price: Float! @default(value: "0")
-  thumbnail: File @relation(name: "ClassThumbnail", onDelete: CASCADE)
-  video: File @relation(name: "ClassVideo", onDelete: CASCADE)
-
-  classroom: Classroom! @relation(name: "ClassroomClass", onDelete: SET_NULL)
-  participants: [User!]! @relation(name: "ClassParticipant", onDelete: SET_NULL)
-
-  # Stream
-  schedule: DateTime
-  duration: Int # in minutes
-  live: Boolean! @default(value: "false")
-  vod: File @relation(name: "ClassVod", onDelete: CASCADE)
-
-  # Extras
-  messages: [Message!]! @relation(name: "ClassMessage", onDelete: CASCADE)
-  files: [File!]! @relation(name: "ClassFile", onDelete: CASCADE)
+  lessons: [Lesson!]! @relation(name: "CourseLesson", onDelete: SET_NULL)
 
   # System
   archived: Boolean! @default(value: "false")
@@ -113,8 +103,7 @@ type File {
   contentType: String!
 
   # Connections
-  class: Class @relation(name: "ClassFile", onDelete: SET_NULL)
-  # classroom: Classroom @relation(name: "ClassroomFile", onDelete: SET_NULL)
+  lesson: Lesson @relation(name: "LessonFile", onDelete: SET_NULL)
 
   # System
   archived: Boolean! @default(value: "false")
@@ -126,62 +115,10 @@ type Message {
   updatedAt: DateTime!
 
   text: String!
-  sender: User! @relation(name: "UserMessages", onDelete: SET_NULL)
-  class: Class! @relation(name: "ClassMessage", onDelete: SET_NULL)
 
-  # file: File @relation(name: "MessageFile", onDelete: CASCADE)
-
-  # response: Response @relation(name: "MessageResponse", onDelete: CASCADE)
+  sender: User! @relation(name: "UserMessage", onDelete: SET_NULL)
+  lesson: Lesson! @relation(name: "LessonMessage", onDelete: SET_NULL)
 
   # System
   archived: Boolean! @default(value: "false")
 }
-
-# type Response {
-#   id: ID! @unique
-#   createdAt: DateTime!
-#   updatedAt: DateTime!
-
-#   time: Int!
-
-# # System
-#   archived: Boolean! @default(value: "false")
-# }
-
-type Charge {
-  id: ID! @unique
-  createdAt: DateTime!
-  updatedAt: DateTime!
-
-  amount: Float!
-  stripeId: String! @unique
-
-  class: Class! @relation(name: "ClassCharges", onDelete: SET_NULL)
-  user: User! @relation(name: "UserCharges", onDelete: SET_NULL)
-
-  refund: Refund @relation(name: "ChargeRefund", onDelete: CASCADE)
-
-  # System
-  archived: Boolean! @default(value: "false")
-}
-
-type Refund {
-  id: ID! @unique
-  createdAt: DateTime!
-  updatedAt: DateTime!
-
-  stripeId: String! @unique
-  amount: Float!
-  charge: Charge! @relation(name: "ChargeRefund", onDelete: SET_NULL)
-
-  # System
-  archived: Boolean! @default(value: "false")
-}
-
-#
-# type Activity {
-#   text: String!
-#   user: User! @relation(name: "UserActivities")
-#   classroom: Classroom! @relation(name: "ClassroomActivities")
-#   class: Class! @relation(name: "ClassActivities")
-# }

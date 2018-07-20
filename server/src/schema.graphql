@@ -4,36 +4,8 @@ scalar Upload
 
 type Query {
   viewer: Viewer
-  # User
   user(username: String!): User!
-  # Classroom
-  classroom(id: ID!): Classroom
-  # Class
-  class(id: ID!): Class
-  allClasses(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): AllClassesConnection!
-  liveClasses(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): LiveClassesConnection!
-  upcomingClasses(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): UpcomingClassesConnection!
-  recordedClasses(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): RecordedClassesConnection!
+  lesson(id: ID!): Lesson
 }
 
 type Mutation {
@@ -42,79 +14,87 @@ type Mutation {
     name: String!
     bio: String!
     picture: Upload
-    video: Upload
+    price: Float
     receiveNotifications: Boolean!
   ): Viewer
   updateUser(
-    name: String
-    bio: String
+    name: String!
+    bio: String!
     picture: Upload
-    video: Upload
-    receiveNotifications: Boolean
+    price: Float
+    receiveNotifications: Boolean!
   ): Viewer
   deleteUser: User
-  follow(username: String!): Viewer
-  unfollow(username: String!): Viewer
   # Stripe - TODO: Might cause problems
   createStripeAccount(code: String!): Viewer
   createStripeCustomer(token: String!): Viewer
   updateStripeCustomer(token: String!): Viewer
-  # Classroom
-  createClassroom(
-    name: String!
-    description: String!
-    price: Float!
-    thumbnail: Upload
-    video: Upload
-  ): Classroom
-  updateClassroom(
-    id: ID!
-    name: String
-    description: String
-    price: Float
-    thumbnail: Upload
-    video: Upload
-  ): Classroom
-  deleteClassroom(id: ID!): Classroom
-  joinClassroom(id: ID!): Classroom
-  leaveClassroom(id: ID): Classroom
-  # addClassroomTeacher(classroomId: ID!, teacherId: ID!): Classroom
-  # removeClassroomTeacher(classroomId: ID!, teacherId: ID!): Classroom
-  # Classes
-  createClass(
-    classroomId: ID!
+  # Lessons
+  createLesson(
     name: String!
     description: String!
     thumbnail: Upload
-    video: Upload
-    price: Float!
     schedule: DateTime
+    premium: Boolean
     files: [Upload!]!
-  ): Class!
-  updateClass(
+    course: CourseInput
+  ): Lesson
+  updateLesson(
     id: ID!
-    name: String
-    description: String
+    name: String!
+    description: String!
     thumbnail: Upload
-    video: Upload
-    live: Boolean
-    price: Float
     schedule: DateTime
-    files: [Upload!]
-  ): Class
-  deleteClass(id: ID!): Class
+    premium: Boolean
+    files: [Upload!]!
+    course: CourseInput
+  ): Lesson
+  deleteLesson(id: ID!): Lesson
+  goLive(id: ID!): Lesson
   # Message
-  createMessage(classId: ID!, text: String!): Message!
-  # Charges
-  createCharge(amount: Float!, teacherId: ID!, classId: ID!): Charge! # Why do we need createCharge
-  createRefund(chargeId: ID!): Refund # Needs work
+  createMessage(lessonId: ID!, text: String!): Message
 }
 
 # Payloads -------------------------------------------------------------------
 
 type Viewer {
   user: User
+  explore: Explore!
   requiresSetup: Boolean!
+}
+
+type Explore {
+  featuredTeachersConnection(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): FeaturedTeachersConnection!
+  liveLessonsConnection(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): LiveLessonsConnection!
+  hottestLessonsConnection(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): HottestLessonsConnection!
+  subscribedLessonsConnection(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): SubscribedLessonsConnection
+}
+
+# Inputs ---------------------------------------------------------------------
+
+input CourseInput {
+  create: String
+  connect: ID
 }
 
 # Types ----------------------------------------------------------------------
@@ -122,63 +102,52 @@ type Viewer {
 type User {
   id: ID!
 
-  # Meta
-  username: String!
-  email: String!
-  email_verified: Boolean
-  gender: Gender!
+  # Live
+
+  live: Lesson
 
   # Info
+
   name: String!
+  email: String!
   bio: String
   picture: Picture
-  video: File
+  price: Float
 
   # Stripe
+
   stripeId: String
   stripeCustomerId: String
   stripeURL: String
   defaultCard: DefaultCard
-  chargesConnection(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): UserChargesConnection!
-  refundsConnection(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): UserRefundsConnection!
 
-  # Teacher
-  teachingClassroomsConnection(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): UserTeachingClassroomsConnection!
-  studyingClassroomsConnection(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): UserStudyingClassroomsConnection!
+  # Lessons
 
-  # Social
-  followersConnection(
+  lessonsConnection(
     after: String
     before: String
     first: Int
     last: Int
-  ): UserFollowersConnection!
-  followingConnection(
+  ): UserLessonsConnection!
+  coursesConnection(
     after: String
     before: String
     first: Int
     last: Int
-  ): UserFollowingConnection!
+  ): UserCoursesConnection!
+
+  # Subscriptions
+
+  teacherSubscriptionsConnection(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): UserTeacherSubscriptionsConnection!
+
+  # Viewer
+
+  is_viewer_subscribed_to: Boolean!
 }
 
 type DefaultCard {
@@ -188,100 +157,49 @@ type DefaultCard {
   brand: String!
 }
 
-type Classroom {
-  id: ID!
-
-  name: String!
-  description: String!
-  price: Float!
-  thumbnail: Picture
-  video: File
-
-  classesConnection(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): ClassroomClassesConnection!
-  teachersConnection(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): ClassroomTeachersConnection!
-  studentsConnection(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): ClassroomStudentsConnection!
-}
-
-type Class {
+type Lesson {
   id: ID!
 
   # Info
+
   name: String!
   description: String!
-  price: Float!
   thumbnail: Picture
   schedule: DateTime
+  premium: Boolean!
 
-  classroom: Classroom!
-  participantsConnection(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): ClassParticipantsConnection!
+  course: Course
 
   # Stream
-  live: Boolean!
-  duration: Int
-  video: File
 
-  # Specs
-  filesConnection(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): ClassFilesConnection!
-  vod: File
+  streamURL: String!
 
-  # Social
+  # Extras
+
   messagesConnection(
     after: String
     before: String
     first: Int
     last: Int
-  ): ClassMessagesConnection!
+  ): LessonMessagesConnection!
+  filesConnection(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): LessonFilesConnection!
 }
 
-# Sub Types
-
-type Message {
+type Course {
   id: ID!
-  createdAt: DateTime!
-  text: String!
-  sender: User!
-  is_viewer_message: Boolean!
-}
 
-type Charge {
-  id: ID!
-  createdAt: DateTime!
-  amount: Float!
-  class: Class!
-  user: User!
-  refund: Refund
-}
-
-type Refund {
-  id: ID!
-  createdAt: DateTime!
-  amount: Float!
-  charge: Charge!
+  name: String!
+  lessonsConnection(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): CourseLessonsConnection!
 }
 
 type File {
@@ -298,185 +216,130 @@ type Picture {
   url(height: Int, width: Int): String!
 }
 
-# Connections and Edges ------------------------------------------------------
+type Message {
+  id: ID!
+  createdAt: DateTime!
+  text: String!
+  sender: User!
+  is_viewer_message: Boolean!
+}
+
+# Connections ----------------------------------------------------------------
 
 # Explore
 
-type AllClassesConnection {
+type FeaturedTeachersConnection {
   pageInfo: PageInfo!
-  edges: [ClassEdge!]!
-  aggregate: AggregateClass!
+  edges: [UserEdge!]!
+  aggregate: AggregateUser!
 }
 
-type LiveClassesConnection {
+type LiveLessonsConnection {
   pageInfo: PageInfo!
-  edges: [ClassEdge!]!
-  aggregate: AggregateClass!
+  edges: [LessonEdge!]!
+  aggregate: AggregateLesson!
 }
 
-type RecordedClassesConnection {
+type HottestLessonsConnection {
   pageInfo: PageInfo!
-  edges: [ClassEdge!]!
-  aggregate: AggregateClass!
+  edges: [LessonEdge!]!
+  aggregate: AggregateLesson!
 }
 
-type UpcomingClassesConnection {
+type SubscribedLessonsConnection {
   pageInfo: PageInfo!
-  edges: [ClassEdge!]!
-  aggregate: AggregateClass!
+  edges: [LessonEdge!]!
+  aggregate: AggregateLesson!
 }
 
 # User
 
-type UserTeachingClassroomsConnection {
+type UserLessonsConnection {
   pageInfo: PageInfo!
-  edges: [ClassroomEdge]!
-  aggregate: AggregateClassroom!
+  edges: [LessonEdge]!
+  aggregate: AggregateLesson!
 }
 
-type UserStudyingClassroomsConnection {
+type UserCoursesConnection {
   pageInfo: PageInfo!
-  classrooms: [ClassroomEdge!]!
-  aggregate: AggregateClassroom!
+  classrooms: [CourseEdge!]!
+  aggregate: AggregateCourse!
 }
 
-type UserFollowersConnection {
+type UserTeacherSubscriptionsConnection {
   pageInfo: PageInfo!
-  edges: [UserEdge!]!
-  followed_by_viewer: Boolean!
+  classrooms: [UserEdge!]!
   aggregate: AggregateUser!
 }
 
-type UserFollowingConnection {
+# Lesson
+
+type LessonMessagesConnection {
   pageInfo: PageInfo!
-  edges: [UserEdge!]!
-  following_viewer: Boolean!
-  aggregate: AggregateUser!
+  edges: [MessageEdge!]!
+  aggregate: AggregateMessage!
 }
 
-type UserChargesConnection {
+type LessonFilesConnection {
   pageInfo: PageInfo!
-  edges: [ChargeEdge!]
-  aggregate: AggregateCharge!
+  edges: [FileEdge!]!
+  aggregate: AggregateFile!
 }
 
-type UserRefundsConnection {
+# Course
+
+type CourseLessonsConnection {
   pageInfo: PageInfo!
-  edges: [RefundEdge!]!
-  aggregate: AggregateRefund!
+  edges: [LessonEdge!]!
+  aggregate: AggregateLesson!
 }
+
+# Edges ----------------------------------------------------------------------
 
 type UserEdge {
   cursor: String!
   node: User!
 }
 
-type AggregateUser {
-  count: Int!
-}
-
-# Class
-
-type ClassParticipantsConnection {
-  pageInfo: PageInfo!
-  edges: [UserEdge!]!
-  is_viewer_participating: Boolean!
-  aggregate: AggregateUser!
-}
-
-type ClassMessagesConnection {
-  pageInfo: PageInfo!
-  edges: [MessageEdge!]!
-  aggregate: AggregateMessage!
-}
-
-type ClassFilesConnection {
-  pageInfo: PageInfo!
-  edges: [FileEdge!]!
-  aggregate: AggregateFile!
-}
-
-type ClassEdge {
-  node: Class!
+type LessonEdge {
+  node: Lesson!
   cursor: String!
 }
 
-type AggregateClass {
-  count: Int!
-}
-
-# Classroom
-
-type ClassroomStudentsConnection {
-  pageInfo: PageInfo!
-  edges: [UserEdge!]!
-  studied_by_viewer: Boolean!
-  aggregate: AggregateUser!
-}
-
-type ClassroomTeachersConnection {
-  pageInfo: PageInfo!
-  edges: [UserEdge!]!
-  taught_by_viewer: Boolean!
-  aggregate: AggregateUser!
-}
-
-type ClassroomClassesConnection {
-  pageInfo: PageInfo!
-  edges: [ClassEdge!]!
-  aggregate: AggregateClass!
-}
-
-type ClassroomEdge {
-  node: Classroom!
+type CourseEdge {
+  node: Course!
   cursor: String!
 }
-
-type AggregateClassroom {
-  count: Int!
-}
-
-# Charges
-
-type AggregateCharge {
-  count: Int!
-}
-
-type ChargeEdge {
-  cursor: String!
-  node: Charge!
-}
-
-# Refunds
-
-type RefundEdge {
-  cursor: String!
-  node: Refund!
-}
-
-type AggregateRefund {
-  count: Int!
-}
-
-# Messages
-
-type MessageEdge {
-  cursor: String!
-  node: Message!
-}
-
-type AggregateMessage {
-  count: Int!
-}
-
-# Files
 
 type FileEdge {
   cursor: String!
   node: File!
 }
 
+type MessageEdge {
+  cursor: String!
+  node: Message!
+}
+
+# Aggregations ---------------------------------------------------------------
+
+type AggregateUser {
+  count: Int!
+}
+
+type AggregateLesson {
+  count: Int!
+}
+
+type AggregateCourse {
+  count: Int!
+}
+
 type AggregateFile {
+  count: Int!
+}
+
+type AggregateMessage {
   count: Int!
 }
 
