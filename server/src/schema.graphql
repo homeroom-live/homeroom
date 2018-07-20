@@ -29,11 +29,13 @@ type Mutation {
   createStripeAccount(code: String!): Viewer
   createStripeCustomer(token: String!): Viewer
   updateStripeCustomer(token: String!): Viewer
+  # Subscriptions
+  subscribe(teacherId: ID!): User # TODO
+  unsubscribe(teacherId: ID!): User # TODO
   # Lessons
   createLesson(
     name: String!
     description: String!
-    thumbnail: Upload
     schedule: DateTime
     premium: Boolean
     files: [Upload!]!
@@ -43,7 +45,6 @@ type Mutation {
     id: ID!
     name: String!
     description: String!
-    thumbnail: Upload
     schedule: DateTime
     premium: Boolean
     files: [Upload!]!
@@ -222,6 +223,7 @@ type Message {
   text: String!
   sender: User!
   is_viewer_message: Boolean!
+  is_teacher_message: Boolean!
 }
 
 # Connections ----------------------------------------------------------------

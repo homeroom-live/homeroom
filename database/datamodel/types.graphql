@@ -17,7 +17,9 @@ type User {
   bio: String!
   picture: File @relation(name: "UserPicture", onDelete: CASCADE)
   price: Float @default(value: "10")
-  live: Lesson
+  live: Lesson @relation(name: "LiveLesson", onDelete: SET_NULL)
+
+  lessons: [Lesson!]! @relation(name: "UserLesson", onDelete: CASCADE)
 
   # Subscriptions
 
@@ -58,13 +60,16 @@ type Lesson {
 
   # Info
 
+  teacher: User! @relation(name: "UserLesson", onDelete: SET_NULL)
+
   name: String!
   description: String!
   thumbnail: String!
   schedule: DateTime!
   premium: Boolean! @default(value: "false")
-
   course: Course @relation(name: "CourseLesson")
+
+  live: User @relation(name: "LiveLesson", onDelete: SET_NULL)
 
   # Stream
 
