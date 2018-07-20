@@ -1,0 +1,19 @@
+subscription ClassroomSubscription {
+  classroomSubscription(where: { mutation_in: [CREATED, DELETED] }) {
+    mutation
+    node {
+      id
+      teacher {
+        id
+        stripeId
+        stripeCustomerId
+        price
+      }
+      subscriber {
+        id
+        stripeId
+        stripeCustomerId
+      }
+    }
+  }
+}

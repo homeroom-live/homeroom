@@ -8,6 +8,14 @@ Our main goal is to let anyone be able to present their ideas and connect with t
 
 The core of our platform is a classroom which is a meeting point for all the students and teachers working on specific project.
 
+## Deployment Cycle
+
+1.  Stripe Payments Webhook
+1.  Database Sync
+1.  File Proxy
+1.  Homeroom Server
+1.  Homeroom Webpage
+
 ## Server
 
 ### Development setup
