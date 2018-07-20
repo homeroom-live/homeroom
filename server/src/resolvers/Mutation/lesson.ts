@@ -9,6 +9,7 @@ export const lesson = {
   ) {
     const auth0Id = ctx.request.user.sub
 
+    const streamID = ''
     const streamKey = ''
     const thumbnail = ''
 
@@ -22,6 +23,7 @@ export const lesson = {
           schedule: schedule ? schedule : new Date().toString(),
           premium,
           course,
+          streamID,
           streamKey,
           files: files ? { create: files } : null,
         },

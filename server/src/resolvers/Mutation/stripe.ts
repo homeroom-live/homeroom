@@ -42,14 +42,14 @@ export const stripe = {
 
     return {}
   },
-  updateStripeCustomer: {
-    fragment: `fragment UserStripeCustomerID on User { stripeCustomerId }`,
-    resolve: async ({ stripeCustomerId }, { token }, ctx: Context, info) => {
-      const auth0Id = ctx.request.user.sub
-      await _stripe.customers.update(stripeCustomerId, {
-        source: token,
-      })
-      return {}
-    },
+  async updateStripeCustomer(parent, { token }, ctx: Context, info) {
+    const user = await ctx.db.query.user({
+      where: { auth0Id: ctx.request.user.sub },
+    })
+
+    const res = await _stripe.customers.update(user.stripeCustomerId, {
+      source: token,
+    })
+    return {}
   },
 }

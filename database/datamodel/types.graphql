@@ -23,8 +23,9 @@ type User {
 
   # Subscriptions
 
-  subscriptions: [TeacherSubscription!]! @relation(name: "TeacherSubscription")
-  subscribers: [TeacherSubscription!]! @relation(name: "TeacherSubscriber")
+  subscriptions: [ClassroomSubscription!]!
+    @relation(name: "ClassroomSubscription")
+  subscribers: [ClassroomSubscription!]! @relation(name: "ClassroomSubscriber")
 
   # Stripe
 
@@ -44,13 +45,13 @@ type User {
   archived: Boolean! @default(value: "false")
 }
 
-type TeacherSubscription {
+type ClassroomSubscription {
   id: ID! @unique
   createdAt: DateTime!
   updatedAt: DateTime!
 
-  teacher: User! @relation(name: "TeacherSubscription")
-  subscriber: User! @relation(name: "TeacherSubscriber")
+  teacher: User! @relation(name: "ClassroomSubscription")
+  subscriber: User! @relation(name: "ClassroomSubscriber")
 }
 
 type Lesson {
@@ -73,6 +74,7 @@ type Lesson {
 
   # Stream
 
+  streamID: String!
   streamKey: String!
 
   # Extras

@@ -25,13 +25,13 @@ type Mutation {
     receiveNotifications: Boolean!
   ): Viewer
   deleteUser: User
-  # Stripe - TODO: Might cause problems
+  # Stripe
   createStripeAccount(code: String!): Viewer
   createStripeCustomer(token: String!): Viewer
   updateStripeCustomer(token: String!): Viewer
   # Subscriptions
-  subscribe(teacherId: ID!): User # TODO
-  unsubscribe(teacherId: ID!): User # TODO
+  subscribe(classroomID: ID!): User # TODO
+  unsubscribe(classroomID: ID!): User # TODO
   # Lessons
   createLesson(
     name: String!
@@ -59,18 +59,18 @@ type Mutation {
 # Payloads -------------------------------------------------------------------
 
 type Viewer {
-  user: User
   explore: Explore!
+  user: User
   requiresSetup: Boolean!
 }
 
 type Explore {
-  featuredTeachersConnection(
+  featuredClassroomsConnection(
     after: String
     before: String
     first: Int
     last: Int
-  ): FeaturedTeachersConnection!
+  ): FeaturedClassroomsConnection!
   liveLessonsConnection(
     after: String
     before: String
@@ -139,12 +139,12 @@ type User {
 
   # Subscriptions
 
-  teacherSubscriptionsConnection(
+  classroomSubscriptionsConnection(
     after: String
     before: String
     first: Int
     last: Int
-  ): UserTeacherSubscriptionsConnection!
+  ): UserClassroomSubscriptionsConnection!
 
   # Viewer
 
@@ -173,6 +173,7 @@ type Lesson {
 
   # Stream
 
+  streamKey: String!
   streamURL: String!
 
   # Extras
@@ -230,7 +231,7 @@ type Message {
 
 # Explore
 
-type FeaturedTeachersConnection {
+type FeaturedClassroomsConnection {
   pageInfo: PageInfo!
   edges: [UserEdge!]!
   aggregate: AggregateUser!
@@ -268,7 +269,7 @@ type UserCoursesConnection {
   aggregate: AggregateCourse!
 }
 
-type UserTeacherSubscriptionsConnection {
+type UserClassroomSubscriptionsConnection {
   pageInfo: PageInfo!
   classrooms: [UserEdge!]!
   aggregate: AggregateUser!
