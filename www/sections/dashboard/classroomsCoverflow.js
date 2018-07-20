@@ -148,7 +148,7 @@ export const ClassroomsCoverflow = () => (
           return (
             <ClassroomsCol>
               <ClassroomsHeader src={iconHome} value="Classrooms">
-                <Text color="gray" weight="bold" margin="0">
+                <Text color="gray" weight="bold" margin="0 3px">
                   {user.teachingClassroomsConnection.aggregate.count}
                 </Text>
                 <NewLink href="/dashboard/classrooms/new">

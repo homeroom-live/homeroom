@@ -1,4 +1,4 @@
-export const mockClasses = [
+export const mockLessons = [
   {
     id: '123',
     name: 'My Test Class',

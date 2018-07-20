@@ -2,9 +2,11 @@ import React from 'react'
 import { withRouter } from 'next/router'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
+import { NetworkStatus } from 'apollo-client'
 import styled from 'styled-components'
 import moment from 'moment-timezone'
 
+import { LessonNavigation } from 'sections/class/navigation'
 import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
 import { Player } from 'components/Player'
@@ -30,7 +32,6 @@ import {
   transition,
   opacity,
 } from 'utils/theme'
-import { NETWORK_STATUS } from 'utils/constants'
 import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
 import clockGrayIcon from 'static/assets/icons/ui/clock-gray.svg'
 import calendarGrayIcon from 'static/assets/icons/ui/calendar-gray.svg'
@@ -41,6 +42,9 @@ import iconVideo from 'static/assets/icons/ui/video.svg'
 import iconPlusCircle from 'static/assets/icons/ui/plus-circle.svg'
 import iconMinusCircle from 'static/assets/icons/ui/minus-circle.svg'
 import iconChat from 'static/assets/icons/ui/chat.svg'
+import iconHeart from 'static/assets/icons/ui/heart.svg'
+import iconTwitter from 'static/assets/icons/ui/twitter.svg'
+import iconInstagram from 'static/assets/icons/ui/instagram.svg'
 
 // GraphQL
 
@@ -164,7 +168,7 @@ const ClassPlayer = styled(Player)`
 const ClassHeader = styled(FlexRow)`
   position: sticky;
   bottom: 0;
-  padding: ${spacing.regular} ${spacing.large};
+  padding: ${spacing.regular} ${spacing.medium};
   background: ${colors.white};
   border-top: 1px solid ${colors.grayLighter};
   box-shadow: 0 -15px 30px 0 rgba(66, 75, 84, 0.1);
@@ -211,6 +215,22 @@ const RelatedRow = styled(FlexRow)`
 const RelatedBody = styled(FlexRow)``
 const CardLabel = styled(Label)`
   margin: 0;
+`
+const SocialLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  padding: ${spacing.regular};
+  opacity: ${opacity};
+  &:hover {
+    opacity: 1;
+    background: ${colors.grayLightest};
+    text-decoration: none;
+  }
+`
+const SocialIcon = styled(Icon)`
+  height: 18px;
+  margin-top: -2px;
+  margin-right: ${spacing.small};
 `
 const ActionHeaderRow = styled(FlexRow)`
   padding: ${spacing.regular};
@@ -269,21 +289,39 @@ const testData = {
     {
       node: {
         id: '123',
-        name: 'Secret_Access_Codez',
+        name: 'Access_Codes',
         secret: '123',
       },
     },
     {
       node: {
         id: '123',
-        name: 'Secret_Access_Codez',
+        name: 'Access_Codes',
         secret: '123',
+      },
+    },
+  ],
+  social: [
+    {
+      node: {
+        id: '123',
+        username: 'SantaClaws',
+        src: iconTwitter,
+        url: '123',
+      },
+    },
+    {
+      node: {
+        id: '123',
+        username: 'EasterBunny',
+        src: iconInstagram,
+        url: '123',
       },
     },
   ],
 }
 
-export const ClassInformation = withRouter(({ router }) => (
+export const ClassSection = withRouter(({ router }) => (
   <Query
     query={classQuery}
     variables={{ classId: router.query.classId }}
@@ -291,10 +329,10 @@ export const ClassInformation = withRouter(({ router }) => (
   >
     {({ networkStatus, data }) => {
       switch (networkStatus) {
-        case NETWORK_STATUS.LOADING: {
+        case NetworkStatus.loading: {
           return <Loading />
         }
-        case NETWORK_STATUS.READY: {
+        case NetworkStatus.ready: {
           return (
             <ClassRow>
               <ClassBodyCol>
@@ -302,6 +340,9 @@ export const ClassInformation = withRouter(({ router }) => (
                   <ClassPlayer />
                 </FlexCol>
 
+                <LessonNavigation activeSection="" />
+
+                {/*CLASS INFORMATION*/}
                 <CardRow>
                   <CardColLeft>
                     <IconHeader src={iconInformation} value="Information" />
@@ -334,6 +375,44 @@ export const ClassInformation = withRouter(({ router }) => (
                   </CardCol>
                 </CardRow>
 
+                {/*USER PROFILE*/}
+                <CardRow>
+                  <CardColLeft>
+                    <IconHeader
+                      src={iconInformation}
+                      value={`About USER NAME`}
+                    />
+                    <CardBody>
+                      <CardLabel>
+                        Subscribers
+                        <Text margin="5px 0">123</Text>
+                      </CardLabel>
+                      <CardLabel>
+                        Description
+                        <Text margin="5px 0">USER PROFILE DESCRIPTION/BIO</Text>
+                      </CardLabel>
+                    </CardBody>
+                  </CardColLeft>
+                  <CardCol>
+                    <IconHeader src={iconHeart} value="Social" />
+                    <FlexCol>
+                      {testData.social.map(({ node }) => (
+                        <SocialLink
+                          target="_blank"
+                          href={node.url}
+                          size="small"
+                          weight="bold"
+                          color="secondary"
+                        >
+                          <SocialIcon src={node.src} />
+                          {node.username}
+                        </SocialLink>
+                      ))}
+                    </FlexCol>
+                  </CardCol>
+                </CardRow>
+
+                {/*
                 <RelatedRow>
                   <CardCol>
                     <IconHeader src={iconVideo} value="Related Classes" />
@@ -353,6 +432,7 @@ export const ClassInformation = withRouter(({ router }) => (
                     </RelatedBody>
                   </CardCol>
                 </RelatedRow>
+                    */}
 
                 <ClassHeader>
                   <ClassroomThumbnail

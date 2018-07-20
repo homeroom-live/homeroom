@@ -75,7 +75,7 @@ const FooterButton = styled(Button)`
   margin-top: ${spacing.regular};
 `
 
-export const Content = () => (
+export const TeachSection = () => (
   <TeachContainer>
     <TeachRow>
       <TeachCol>

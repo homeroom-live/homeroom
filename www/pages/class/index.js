@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 
 // Sections
 
-import { ClassInformation } from 'sections/class/classInformation'
+import { ClassSection } from 'sections/class'
 import { Navigation } from 'sections/navigation'
 import { Footer } from 'sections/footer'
 
@@ -17,7 +17,7 @@ class Class extends React.Component {
     return (
       <Fragment>
         <Navigation activePage="class" />
-        <ClassInformation />
+        <ClassSection />
         <Footer />
       </Fragment>
     )

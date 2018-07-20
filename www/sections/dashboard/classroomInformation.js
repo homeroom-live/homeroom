@@ -21,15 +21,7 @@ import { ImagePicker } from 'components/ImagePicker'
 import { VideoPicker } from 'components/VideoPicker'
 import { ClassCardSmall } from 'components/ClassCard'
 
-import {
-  colors,
-  spacing,
-  outline,
-  shadow,
-  transition,
-  fontSizes,
-  fontWeights,
-} from 'utils/theme'
+import { colors, spacing, outline, shadow } from 'utils/theme'
 import videoIcon from 'static/assets/icons/ui/video.svg'
 import iconInformation from 'static/assets/icons/ui/information.svg'
 import iconFile from 'static/assets/icons/ui/file.svg'
@@ -143,7 +135,7 @@ export const ClassroomInformation = withRouter(({ router }) => (
 
               <ClassesCol>
                 <IconHeader src={videoIcon} value="Classes">
-                  <Text weight="bold" margin="0" color="gray">
+                  <Text weight="bold" margin="0 3px" color="gray">
                     {data.classroom.classesConnection.aggregate.count}
                   </Text>
                 </IconHeader>
