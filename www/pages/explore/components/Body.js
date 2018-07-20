@@ -29,21 +29,21 @@ export const Body = ({ data }) => (
       <Lessons
         id="liveLessons"
         icon={iconVideo}
-        lessons={data.liveLessons}
+        lessons={data.explore.liveLessons}
         label="Live Lessons"
         query={''}
       />
       <Lessons
         id="popularLessons"
         icon={iconGraphBar}
-        lessons={data.popularLessons}
+        lessons={data.explore.popularLessons}
         label="Popular Lessons"
         query={''}
       />
       <Lessons
         id="subscribedLessons"
         icon={iconHome}
-        lessons={data.subscribedLessons}
+        lessons={data.explore.subscribedLessons}
         label="Subscribed Lessons"
         query={''}
       />

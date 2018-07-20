@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 
 import { FlexCol } from 'components/FlexCol'
@@ -55,15 +55,19 @@ export const Lessons = ({ query, lessons, label, icon, id }) => (
           value="There aren’t any lessons right now!"
         />
       ) : (
-        lessons.map(node => (
-          <LessonCardLarge
-            node={node}
-            key={node.id}
-            href={`/${node.user.username}/${node.id}`}
-          />
-        ))
+        <Fragment>
+          {lessons.map(node => (
+            <LessonCardLarge
+              node={node}
+              key={node.id}
+              href={`/${node.user.username}/${node.id}`}
+            />
+          ))}
+          <ShowMoreButton onClick={query} color="tertiary">
+            Show More
+          </ShowMoreButton>
+        </Fragment>
       )}
-      <ShowMoreButton color="tertiary">Show More</ShowMoreButton>
     </SectionRow>
   </SectionCol>
 )

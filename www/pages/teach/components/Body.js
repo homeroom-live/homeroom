@@ -10,7 +10,7 @@ import { Button } from 'components/Button'
 import { Link } from 'components/Link'
 import { Icon } from 'components/Icon'
 
-import { spacing, colors } from 'utils/theme'
+import { spacing } from 'utils/theme'
 import illustrationWelcome from 'static/assets/images/illustrations/teach-welcome.svg'
 import illustrationEducate from 'static/assets/images/illustrations/teach-educate.svg'
 import illustrationEngage from 'static/assets/images/illustrations/teach-engage.svg'
@@ -75,7 +75,7 @@ const FooterButton = styled(Button)`
   margin-top: ${spacing.regular};
 `
 
-export const TeachSection = () => (
+export const Body = () => (
   <TeachContainer>
     <TeachRow>
       <TeachCol>
@@ -160,7 +160,7 @@ export const TeachSection = () => (
         <TeachBulletCol>
           <TeachBulletItem
             src={iconCheck}
-            value="Sell your educational streams and videos"
+            value="Sell and share your educational streams and videos"
           />
           <TeachBulletItem
             src={iconCheck}

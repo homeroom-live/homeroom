@@ -6,6 +6,7 @@ import { Footer } from 'components/Footer'
 import { Navbar } from 'components/Navbar'
 
 import { explore } from 'data/explore'
+import { viewer } from 'data/viewer'
 
 class Explore extends React.Component {
   static async getInitialProps(ctx) {
@@ -15,9 +16,9 @@ class Explore extends React.Component {
   render() {
     return (
       <>
-        <Navbar activePage="explore" />
-        <Welcome />
-        <Body data={explore} />
+        <Navbar activePage="" />
+        {viewer.requiresSetup && <Welcome />}
+        <Body data={{ explore }} />
         <Footer />
       </>
     )

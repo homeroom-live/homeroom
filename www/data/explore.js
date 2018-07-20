@@ -3,7 +3,7 @@ import { user } from 'data/user'
 
 export const explore = {
   featuredClassrooms: [user],
-  liveLessons: lessons,
+  liveLessons: [],
   popularLessons: lessons,
   subscribedLessons: lessons,
   newLessons: lessons,

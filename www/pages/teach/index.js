@@ -1,19 +1,15 @@
 import React from 'react'
 
-// Sections
-
-import { Navigation } from 'sections/navigation'
-import { TeachSection } from 'sections/teach'
-import { Footer } from 'sections/footer'
-
-// Explore
+import { Body } from 'pages/teach/components/Body'
+import { Navbar } from 'components/Navbar'
+import { Footer } from 'components/Footer'
 
 class Teach extends React.Component {
   render() {
     return (
       <>
-        <Navigation transparent />
-        <TeachSection />
+        <Navbar transparent />
+        <Body />
         <Footer />
       </>
     )

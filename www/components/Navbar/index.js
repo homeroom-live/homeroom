@@ -121,8 +121,8 @@ export const Navbar = ({ transparent, activePage }) => (
       </Link>
       <NavLink
         color={transparent ? colors.secondary : colors.white}
-        href="/explore"
-        active={activePage === 'explore'}
+        href="/"
+        active={activePage === ''}
       >
         Explore
       </NavLink>
