@@ -7,7 +7,6 @@ import { FlexCol } from 'components/FlexCol'
 import { Link } from 'components/Link'
 import { Text } from 'components/Text'
 import { Header } from 'components/Header'
-import { ProfileLinks } from 'components/ProfileLinks'
 import { Player } from 'components/Player'
 
 import { spacing, colors } from 'utils/theme'
@@ -149,12 +148,19 @@ const ClassVideoLarge = styled(Player)`
   background: ${colors.black};
 `
 
-export const ClassCardLarge = ({ node, teachers, href, className, size }) => (
+export const ClassCardLarge = ({ node, href, className }) => (
   <ClassCardLargeContainer href={href} className={className}>
-    <ClassVideoLarge src="http://techslides.com/demos/sample-videos/small.mp4" />
+    <ClassVideoLarge src={node.video.url} />
     <ClassMeta>
-      <ProfileLinks users={teachers} />
-      <ClassTitle size={size} margin="0">
+      <Link
+        key={node.user.id}
+        href={`/${node.user.username}`}
+        size="small"
+        weight="bold"
+      >
+        {node.user.name}
+      </Link>
+      <ClassTitle size="medium" margin="0">
         {node.name}
       </ClassTitle>
       <ClassMetaStatsRow>

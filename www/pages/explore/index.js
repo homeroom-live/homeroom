@@ -1,47 +1,27 @@
 import React from 'react'
-import gql from 'graphql-tag'
 
-// Sections
+import { Welcome } from 'pages/explore/components/Welcome'
+import { Body } from 'pages/explore/components/Body'
+import { Footer } from 'components/Footer'
+import { Navbar } from 'components/Navbar'
 
-import { Navigation } from 'sections/navigation'
-import { Footer } from 'sections/footer'
-import { ExploreSection } from 'sections/explore'
-import { Welcome } from 'sections/explore/welcome'
+import { explore } from 'data/explore'
 
-// Explore
-
-class Suggestions extends React.Component {
+class Explore extends React.Component {
   static async getInitialProps(ctx) {
     return {}
   }
 
-  query = gql`
-    query {
-      classes: allClasses(first: 10) {
-        edges {
-          node {
-            id
-            name
-            description
-          }
-        }
-        aggregate {
-          count
-        }
-      }
-    }
-  `
-
   render() {
     return (
       <>
-        <Navigation activePage="explore" />
+        <Navbar activePage="explore" />
         <Welcome />
-        <ExploreSection />
+        <Body data={explore} />
         <Footer />
       </>
     )
   }
 }
 
-export default Suggestions
+export default Explore

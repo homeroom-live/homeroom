@@ -1,39 +1,27 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
-// Components
+import { Welcome } from 'pages/explore/components/Welcome'
+import { Body } from 'pages/explore/components/Body'
+import { Footer } from 'components/Footer'
+import { Navbar } from 'components/Navbar'
 
-// import { Container } from 'reactstrap'
+import { explore } from 'data/explore'
 
-// Sections
-
-import { Navigation } from 'sections/navigation'
-import { Hero } from 'sections/homeroom/hero'
-import { About } from 'sections/homeroom/about'
-import { Testimonials } from 'sections/homeroom/testimonials'
-import { Invite } from 'sections/homeroom/invite'
-import { Footer } from 'sections/footer'
-
-// Homeroom
-
-class Homeroom extends React.Component {
-  static async getInitialProps() {
+class Explore extends React.Component {
+  static async getInitialProps(ctx) {
     return {}
   }
 
   render() {
     return (
-      <div>
-        <Navigation transparent />
-        <div>
-          <Hero />
-          <About />
-          {/*<Testimonials />*/}
-        </div>
-        <div>{/*<Invite />*/}</div>
+      <>
+        <Navbar activePage="explore" />
+        <Welcome />
+        <Body data={explore} />
         <Footer />
-      </div>
+      </>
     )
   }
 }
 
-export default Homeroom
+export default Explore

@@ -2,8 +2,8 @@ import React from 'react'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
+import { NetworkStatus } from 'apollo-client'
 
-import { NETWORK_STATUS } from 'utils/constants'
 import { colors, spacing, fontSizes, fontWeights, opacity } from 'utils/theme'
 import logoLight from 'static/assets/images/logos/logo-light.svg'
 import logoDark from 'static/assets/images/logos/logo-dark.svg'
@@ -17,7 +17,11 @@ import { Icon } from 'components/Icon'
 import { Link } from 'components/Link'
 import { Dropdown, DropdownOption } from 'components/Dropdown'
 
-const Navbar = styled.nav`
+// Mock
+import { viewer } from 'data/viewer'
+const data = { viewer }
+
+const NavbarContainer = styled.nav`
   position: relative;
   display: flex;
   flex-wrap: nowrap;
@@ -92,7 +96,7 @@ const LoadingPlaceholder = styled.span`
 
 // Queries
 
-const viewer = gql`
+const viewerQuery = gql`
   query {
     viewer {
       user {
@@ -105,10 +109,10 @@ const viewer = gql`
   }
 `
 
-// Navigation
+// Navbar
 
-export const Navigation = ({ transparent, activePage }) => (
-  <Navbar transparent={transparent}>
+export const Navbar = ({ transparent, activePage }) => (
+  <NavbarContainer transparent={transparent}>
     <NavLeft>
       <Link href="/" prefetch>
         <ImageLinkContainer>
@@ -127,7 +131,7 @@ export const Navigation = ({ transparent, activePage }) => (
         href="/dashboard"
         active={activePage === 'dashboard'}
       >
-        Teach
+        Profile
       </NavLink>
     </NavLeft>
 
@@ -137,6 +141,15 @@ export const Navigation = ({ transparent, activePage }) => (
           <HelpIcon src={transparent ? iconHelp : iconHelpWhite} />
         </ImageLinkContainer>
       </Link>
+      <Dropdown image={data.viewer.user.picture.url}>
+        <DropdownLink href="/profile">
+          <DropdownOption>Profile</DropdownOption>
+        </DropdownLink>
+        <DropdownLink href="/logout">
+          <DropdownOption>Logout</DropdownOption>
+        </DropdownLink>
+      </Dropdown>
+      {/*
       <Query
         query={viewer}
         fetchPolicy="network-only"
@@ -145,12 +158,9 @@ export const Navigation = ({ transparent, activePage }) => (
       >
         {({ networkStatus, data }) => {
           switch (networkStatus) {
-            case NETWORK_STATUS.READY: {
+            case NetworkStatus.ready: {
               if (data.viewer) {
-                return (
-                  <Dropdown // image={data.viewer.user.picture.url}
-                    image="https://janecanblogdotcom.files.wordpress.com/2014/09/ashley-square-profile.jpg"
-                  >
+                return <Dropdown image={data.viewer.user.picture.url}>
                     <DropdownLink href="/profile">
                       <DropdownOption>Profile</DropdownOption>
                     </DropdownLink>
@@ -158,7 +168,6 @@ export const Navigation = ({ transparent, activePage }) => (
                       <DropdownOption>Logout</DropdownOption>
                     </DropdownLink>
                   </Dropdown>
-                )
               } else {
                 return (
                   <NavLink color={colors.primary} href="/signup">
@@ -168,15 +177,14 @@ export const Navigation = ({ transparent, activePage }) => (
               }
             }
 
-            case NETWORK_STATUS.LOADING:
-              return <LoadingPlaceholder />
-
+            case NetworkStatus.loading:
             default: {
               return <LoadingPlaceholder />
             }
           }
         }}
       </Query>
+      */}
     </NavRight>
-  </Navbar>
+  </NavbarContainer>
 )
