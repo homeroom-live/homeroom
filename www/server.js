@@ -15,9 +15,15 @@ app.prepare().then(() => {
   server.use(compression())
 
   // Routes
-
   server.get('/profile/lessons/lesson/:lessonId', (req, res) => {
     return app.render(req, res, '/profile/lessons/live', {
+      lessonId: req.params.lessonId,
+    })
+  })
+
+  server.get('/:username/:lessonId', (req, res) => {
+    return app.render(req, res, '/live', {
+      username: req.params.username,
       lessonId: req.params.lessonId,
     })
   })
