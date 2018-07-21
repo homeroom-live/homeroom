@@ -16,33 +16,9 @@ app.prepare().then(() => {
 
   // Routes
 
-  server.get('/class/:classId', (req, res) => {
-    return app.render(req, res, '/class', {
-      classId: req.params.classId,
-    })
-  })
-
-  server.get('/classroom/:classroomId', (req, res) => {
-    return app.render(req, res, '/classroom', {
-      classroomId: req.params.classroomId,
-    })
-  })
-
-  server.get('/dashboard/classes/new/:classroomId', (req, res) => {
-    return app.render(req, res, '/dashboard/classes/new', {
-      classroomId: req.params.classroomId,
-    })
-  })
-
-  server.get('/dashboard/classes/class/:classId', (req, res) => {
-    return app.render(req, res, '/dashboard/classes/class', {
-      classId: req.params.classId,
-    })
-  })
-
-  server.get('/dashboard/classrooms/classroom/:classroomId', (req, res) => {
-    return app.render(req, res, '/dashboard/classrooms/classroom', {
-      classroomId: req.params.classroomId,
+  server.get('/profile/lessons/:lessonId', (req, res) => {
+    return app.render(req, res, '/profile/lessons/live', {
+      lessonId: req.params.lessonId,
     })
   })
 

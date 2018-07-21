@@ -17,7 +17,7 @@ class UserProfilePage extends React.Component {
   render() {
     return (
       <>
-        <Navbar activePage="dashboard" />
+        <Navbar activePage="profile" />
         <SideNav data={{ viewer }} activeSection="">
           <UserForm />
         </SideNav>
