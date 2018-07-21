@@ -1,4 +1,3 @@
-import { course } from 'data/course'
 import { thumbnail } from 'data/picture'
 import { messages } from 'data/messages'
 import { files } from 'data/files'
@@ -14,7 +13,6 @@ export const lessons = [
     thumbnail,
     schedule: new Date(),
     premium: false,
-    course,
     // # Stream
     streamKey: 'live1',
     video,
@@ -31,7 +29,6 @@ export const lessons = [
     thumbnail,
     schedule: new Date(),
     premium: false,
-    course,
     // # Stream
     streamKey: 'live1',
     video,
@@ -48,7 +45,6 @@ export const lessons = [
     thumbnail,
     schedule: new Date(),
     premium: false,
-    course,
     // # Stream
     streamKey: 'live1',
     video,
@@ -65,7 +61,6 @@ export const lessons = [
     thumbnail,
     schedule: new Date(),
     premium: false,
-    course,
     // # Stream
     streamKey: 'live1',
     video,
@@ -82,7 +77,6 @@ export const lessons = [
     thumbnail,
     schedule: new Date(),
     premium: false,
-    course,
     // # Stream
     streamKey: 'live1',
     video,
@@ -99,7 +93,6 @@ export const lessons = [
     thumbnail,
     schedule: new Date(),
     premium: false,
-    course,
     // # Stream
     streamKey: 'live1',
     video,

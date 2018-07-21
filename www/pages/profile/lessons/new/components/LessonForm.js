@@ -44,13 +44,6 @@ const NewLessonForm = styled.form`
 const NewLessonFormCol = styled(FlexCol)`
   margin-right: ${spacing.xlarge};
 `
-const ThumbnailCol = styled(FlexCol)`
-  flex: 0;
-  margin-right: ${spacing.medium};
-`
-const NewLessonMetaRow = styled(FlexRow)`
-  align-items: flex-start;
-`
 const LessonNameLabel = styled(Label)`
   margin-bottom: ${spacing.regular};
 `
