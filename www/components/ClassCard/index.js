@@ -57,7 +57,6 @@ export const ClassCardSmall = ({ node, teachers, href, className }) => (
   <ClassCardContainer href={href} className={className}>
     <ClassImage src="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
     <ClassMeta>
-      <ProfileLinks users={teachers} />
       <ClassTitle size="medium" margin="0">
         {node.name}
       </ClassTitle>
@@ -104,7 +103,6 @@ export const ClassCardMedium = ({ node, teachers, href, className }) => (
   <ClassCardMediumContainer href={href} className={className}>
     <ClassVideo src="http://techslides.com/demos/sample-videos/small.mp4" />
     <ClassMeta>
-      <ProfileLinks users={teachers} />
       <ClassTitle size="regular" margin="0">
         {node.name}
       </ClassTitle>

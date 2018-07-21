@@ -67,7 +67,7 @@ export const Body = ({ query, data }) => (
               <LessonCardLarge
                 node={node}
                 key={node.id}
-                href={`/profile/lessons/lesson/${node.id}`}
+                href={`/profile/lessons/${node.id}`}
               />
             ))}
             <ShowMoreButton onClick={query} color="tertiary">

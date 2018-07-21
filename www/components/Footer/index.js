@@ -77,8 +77,10 @@ export const Footer = () => (
         <Text color="grayDarker" weight="bold">
           TEACH & LEARN
         </Text>
+        <FooterLink href="/">Explore Lessons</FooterLink>
         <FooterLink href="/teach">Become a Teacher</FooterLink>
-        <FooterLink href="/explore">Explore Classes</FooterLink>
+        <FooterLink href="/profile">Manage Profile</FooterLink>
+        <FooterLink href="/profile/lessons">Manage Lessons</FooterLink>
       </FooterCol>
 
       <FooterCol>

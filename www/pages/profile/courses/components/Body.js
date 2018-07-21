@@ -106,7 +106,7 @@ const Course = ({ node }) => (
         <LessonCardLarge
           node={lesson}
           key={lesson.id}
-          href={`/profile/lessons/lesson/${lesson.id}`}
+          href={`/profile/lessons/${lesson.id}`}
         />
       ))}
     </LessonsRow>
