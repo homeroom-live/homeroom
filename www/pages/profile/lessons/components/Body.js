@@ -5,6 +5,7 @@ import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
 import { IconHeader } from 'components/IconHeader'
 import { Button } from 'components/Button'
+import { Link } from 'components/Link'
 import { EmptyState } from 'components/EmptyState'
 import { ClassCardLarge } from 'components/ClassCard'
 
@@ -34,7 +35,7 @@ const ShowMoreButton = styled(Button)`
   border-top-right-radius: 0;
   border-top: 1px solid ${colors.grayLighter};
 `
-const NewLessonButton = styled(Button)`
+const NewLessonLink = styled(Link)`
   margin-left: auto;
 `
 const StickyHeader = styled(IconHeader)`
@@ -50,7 +51,9 @@ export const Body = ({ query, data }) => (
   <Container>
     <SectionCol>
       <StickyHeader src={iconVideo} value="Lessons">
-        <NewLessonButton color="primary">New Lesson</NewLessonButton>
+        <NewLessonLink href="/profile/lessons/new">
+          <Button color="primary">New Lesson</Button>
+        </NewLessonLink>
       </StickyHeader>
       <SectionRow>
         {data.lessons.length === 0 ? (
@@ -64,7 +67,7 @@ export const Body = ({ query, data }) => (
               <LessonCardLarge
                 node={node}
                 key={node.id}
-                href={`/profile/lessons/${node.id}`}
+                href={`/profile/lessons/lesson/${node.id}`}
               />
             ))}
             <ShowMoreButton onClick={query} color="tertiary">
