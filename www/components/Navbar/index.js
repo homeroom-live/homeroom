@@ -145,7 +145,7 @@ export const Navbar = ({ transparent, activePage }) => (
         <DropdownLink href="/profile">
           <DropdownOption>Profile</DropdownOption>
         </DropdownLink>
-        <DropdownLink href="/logout">
+        <DropdownLink href="/auth/logout">
           <DropdownOption>Logout</DropdownOption>
         </DropdownLink>
       </Dropdown>
@@ -170,7 +170,7 @@ export const Navbar = ({ transparent, activePage }) => (
                   </Dropdown>
               } else {
                 return (
-                  <NavLink color={colors.primary} href="/signup">
+                  <NavLink color={colors.primary} href="/auth/signup">
                     Sign up & Login
                   </NavLink>
                 )
