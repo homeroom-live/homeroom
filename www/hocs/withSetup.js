@@ -23,13 +23,12 @@ export const withSetup = ComposedComponent =>
     static async getInitialProps(ctx) {
       const res = await ctx.apolloClient.query({
         query: viewerQuery,
+        fetchPolicy: 'network-only',
         errorPolicy: 'ignore',
       })
 
-      console.log('setup', { res })
-
       if (res.data.viewer.requiresSetup) {
-        return redirect(ctx, '/setup')
+        return redirect(ctx, '/profile')
       }
 
       let composedInitialProps = {}

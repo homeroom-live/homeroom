@@ -1,5 +1,9 @@
 import React, { Fragment } from 'react'
+import { Query } from 'apollo-client'
+import gql from 'graphql-tag'
 import styled from 'styled-components'
+
+// Components
 
 import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
@@ -8,8 +12,15 @@ import { Button } from 'components/Button'
 import { EmptyState } from 'components/EmptyState'
 import { ClassCardLarge } from 'components/ClassCard'
 
+// Theme
+
 import { colors, spacing, shadow, borderRadius } from 'utils/theme'
+
+// Icons
+
 import iconVideoGray from 'static/assets/icons/ui/video-gray.svg'
+
+// Elements
 
 const StickyHeader = styled(IconHeader)`
   position: sticky;
@@ -45,29 +56,39 @@ const ShowMoreButton = styled(Button)`
   border-top: 1px solid ${colors.grayLighter};
 `
 
-export const Lessons = ({ query, lessons, label, icon, id }) => (
-  <SectionCol id={id}>
-    <StickyHeader src={icon} value={label} />
-    <SectionRow>
-      {lessons.length === 0 ? (
-        <EmptyState
-          src={iconVideoGray}
-          value="There aren’t any lessons right now!"
-        />
-      ) : (
-        <Fragment>
-          {lessons.map(node => (
-            <LessonCardLarge
-              node={node}
-              key={node.id}
-              href={`/${node.user.username}/${node.id}`}
+// Lessons
+
+export class Lessons extends React.Component {
+  render() {
+    const { query, label, icon, id } = this.props
+
+    const lessons = []
+
+    return (
+      <SectionCol id={id}>
+        <StickyHeader src={icon} value={label} />
+        <SectionRow>
+          {lessons.length === 0 ? (
+            <EmptyState
+              src={iconVideoGray}
+              value="There aren’t any lessons right now!"
             />
-          ))}
-          <ShowMoreButton onClick={query} color="tertiary">
-            Show More
-          </ShowMoreButton>
-        </Fragment>
-      )}
-    </SectionRow>
-  </SectionCol>
-)
+          ) : (
+            <Fragment>
+              {lessons.map(node => (
+                <LessonCardLarge
+                  node={node}
+                  key={node.id}
+                  href={`/${node.user.username}/${node.id}`}
+                />
+              ))}
+              <ShowMoreButton onClick={query} color="tertiary">
+                Show More
+              </ShowMoreButton>
+            </Fragment>
+          )}
+        </SectionRow>
+      </SectionCol>
+    )
+  }
+}

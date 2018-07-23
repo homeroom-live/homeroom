@@ -23,10 +23,9 @@ export const withLogin = ComposedComponent =>
     static async getInitialProps(ctx) {
       const res = await ctx.apolloClient.query({
         query: viewerQuery,
+        fetchPolicy: 'network-only',
         errorPolicy: 'ignore',
       })
-
-      console.log('login', { res })
 
       if (!res.data.viewer) {
         return redirect(ctx, '/signup')

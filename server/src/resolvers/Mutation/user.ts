@@ -2,24 +2,25 @@ import { Context } from '../../utils'
 import { Gender } from '../../generated/prisma'
 
 export const user = {
-  async createUser(
+  async updateProfile(
     parent,
-    { name, bio, picture, price, receiveNotifications },
+    { name, username, bio, picture, price, receiveNotifications },
     ctx: Context,
     info,
   ) {
     const {
       sub: auth0Id,
-      nickname: username,
+      nickname: auth0Username,
       email,
       email_verified,
       gender,
     } = ctx.request.user
 
-    return ctx.db.mutation.createUser({
-      data: {
+    return ctx.db.mutation.upsertUser({
+      where: { auth0Id },
+      create: {
         auth0Id,
-        username,
+        username: username ? username : auth0Username,
         email,
         email_verified,
         name,
@@ -29,21 +30,7 @@ export const user = {
         price,
         receiveNotifications,
       },
-    })
-  },
-  async updateUser(
-    parent,
-    { name, bio, picture, price, receiveNotifications },
-    ctx: Context,
-    info,
-  ) {
-    const { sub: auth0Id } = ctx.request.user
-
-    return ctx.db.mutation.updateUser({
-      where: {
-        auth0Id,
-      },
-      data: {
+      update: {
         name,
         bio,
         picture: picture ? { create: picture } : null,
@@ -52,7 +39,7 @@ export const user = {
       },
     })
   },
-  async deleteUser(parent, args, ctx: Context, info) {
+  async deleteProfile(parent, args, ctx: Context, info) {
     const { sub: auth0Id } = ctx.request.user
 
     return ctx.db.mutation.updateUser({

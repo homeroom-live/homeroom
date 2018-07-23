@@ -14,6 +14,8 @@ export const Viewer = {
   },
   async requiresSetup(parent, args, ctx: Context, info) {
     const auth0Id = ctx.request.user.sub
-    return ctx.db.exists.User({ auth0Id })
+    const exists = await ctx.db.exists.User({ auth0Id })
+
+    return !exists
   },
 }

@@ -10,21 +10,15 @@ type Query {
 
 type Mutation {
   # User
-  createUser(
+  updateProfile(
     name: String!
+    username: String
     bio: String!
     picture: Upload
     price: Float
     receiveNotifications: Boolean!
-  ): Viewer
-  updateUser(
-    name: String!
-    bio: String!
-    picture: Upload
-    price: Float
-    receiveNotifications: Boolean!
-  ): Viewer
-  deleteUser: User
+  ): User
+  deleteProfile: User
   # Stripe
   createStripeAccount(code: String!): Viewer
   createStripeCustomer(token: String!): Viewer
@@ -61,7 +55,7 @@ type Mutation {
 type Viewer {
   explore: Explore!
   user: User
-  requiresSetup: Boolean!
+  requiresSetup: Boolean
 }
 
 type Explore {
@@ -145,6 +139,10 @@ type User {
     first: Int
     last: Int
   ): UserClassroomSubscriptionsConnection!
+
+  # Settings
+
+  receiveNotifications: Boolean!
 
   # Viewer
 

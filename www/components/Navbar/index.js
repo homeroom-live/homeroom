@@ -17,10 +17,6 @@ import { Icon } from 'components/Icon'
 import { Link } from 'components/Link'
 import { Dropdown, DropdownOption } from 'components/Dropdown'
 
-// Mock
-import { viewer } from 'data/viewer'
-const data = { viewer }
-
 const NavbarContainer = styled.nav`
   position: relative;
   display: flex;
@@ -105,6 +101,7 @@ const viewerQuery = gql`
           url
         }
       }
+      requiresSetup
     }
   }
 `
@@ -141,17 +138,8 @@ export const Navbar = ({ transparent, activePage }) => (
           <HelpIcon src={transparent ? iconHelp : iconHelpWhite} />
         </ImageLinkContainer>
       </Link>
-      <Dropdown image={data.viewer.user.picture.url}>
-        <DropdownLink href="/profile">
-          <DropdownOption>Profile</DropdownOption>
-        </DropdownLink>
-        <DropdownLink href="/auth/logout">
-          <DropdownOption>Logout</DropdownOption>
-        </DropdownLink>
-      </Dropdown>
-      {/*
       <Query
-        query={viewer}
+        query={viewerQuery}
         fetchPolicy="network-only"
         errorPolicy="ignore"
         notifyOnNetworkStatusChange
@@ -159,8 +147,9 @@ export const Navbar = ({ transparent, activePage }) => (
         {({ networkStatus, data }) => {
           switch (networkStatus) {
             case NetworkStatus.ready: {
-              if (data.viewer) {
-                return <Dropdown image={data.viewer.user.picture.url}>
+              if (data.viewer && data.viewer.user) {
+                return (
+                  <Dropdown image={data.viewer.user.picture.url}>
                     <DropdownLink href="/profile">
                       <DropdownOption>Profile</DropdownOption>
                     </DropdownLink>
@@ -168,9 +157,12 @@ export const Navbar = ({ transparent, activePage }) => (
                       <DropdownOption>Logout</DropdownOption>
                     </DropdownLink>
                   </Dropdown>
+                )
+              } else if (data.viewer.requiresSetup) {
+                return <LoadingPlaceholder />
               } else {
                 return (
-                  <NavLink color={colors.primary} href="/auth/signup">
+                  <NavLink color={colors.primary} href="/signup">
                     Sign up & Login
                   </NavLink>
                 )
@@ -184,7 +176,6 @@ export const Navbar = ({ transparent, activePage }) => (
           }
         }}
       </Query>
-      */}
     </NavRight>
   </NavbarContainer>
 )

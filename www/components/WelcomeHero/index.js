@@ -36,7 +36,7 @@ const WelcomeLink = styled(Link)`
   }
 `
 
-export const Welcome = () => (
+export const WelcomeHero = () => (
   <WelcomeRow>
     <WelcomeContainer>
       <WelcomeCol>

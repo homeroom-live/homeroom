@@ -23,6 +23,7 @@
     "babel-plugin-module-resolver": "^3.1.1",
     "bootstrap": "^4.1.1",
     "compression": "^1.7.2",
+    "deep-eql": "^3.0.1",
     "express": "^4.16.3",
     "glamor": "^2.20.40",
     "glamorous": "^4.13.1",

@@ -2,13 +2,14 @@ import { GraphQLServer } from 'graphql-yoga'
 import { Prisma } from './generated/prisma'
 
 import { auth0 } from './auth0'
+import { permissions } from './permissions'
 import { apolloUploadMiddleware } from './files'
 import { resolvers, fragmentReplacements } from './resolvers'
 
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
-  middlewares: [apolloUploadMiddleware],
+  middlewares: [permissions, apolloUploadMiddleware],
   context: req => ({
     ...req,
     db: new Prisma({
