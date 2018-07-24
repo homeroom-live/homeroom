@@ -9,10 +9,11 @@ import { viewer } from 'data/viewer'
 
 // Components
 
+import { FlexCol } from 'components/FlexCol'
+import { FlexRow } from 'components/FlexRow'
 import { Navbar } from 'components/Navbar'
 import { SideNav } from 'components/SideNav'
 import { ImagePicker } from 'components/ImagePicker'
-import { FlexCol } from 'components/FlexCol'
 import { IconHeader } from 'components/IconHeader'
 import { Button } from 'components/Button'
 import { Label } from 'components/Label'
@@ -100,11 +101,13 @@ const SaveButton = styled(Button)`
 const NewUserForm = styled.form`
   display: flex;
   align-items: flex-start;
+  flex-direction: column;
 `
 const NewUserFormCol = styled(FlexCol)`
   margin-right: ${spacing.xlarge};
 `
 const BigSaveButton = styled(Button)`
+  width: 100%;
   padding: ${spacing.regular};
   border: 1px solid ${colors.grayLighter};
 `
@@ -193,77 +196,81 @@ class Profile extends React.Component {
               </SaveButton>
             </NewUserHeader>
             <NewUserForm onSubmit={updateUser}>
-              <NewUserFormCol>
-                <Label>
-                  Name
-                  <Input
-                    type="text"
-                    autocomplete="name"
-                    onChange={this.handleNameChange}
-                    value={this.state.name}
-                  />
-                </Label>
-                <Label>
-                  Email
-                  <Input
-                    type="email"
-                    autocomplete="email"
-                    onChange={this.handleEmailChange}
-                    value={this.state.email}
-                  />
-                </Label>
-                <Label>
-                  Username
-                  <Input
-                    type="text"
-                    autocomplete="username"
-                    onChange={this.handleUsernameChange}
-                    value={this.state.username}
-                  />
-                </Label>
-                <Label>
-                  Description
-                  <Textarea
-                    onChange={this.handleDescriptionChange}
-                    value={this.state.bio}
-                  />
-                </Label>
-              </NewUserFormCol>
+              <FlexRow>
+                <NewUserFormCol>
+                  <Label>
+                    Name
+                    <Input
+                      type="text"
+                      autocomplete="name"
+                      onChange={this.handleNameChange}
+                      value={this.state.name}
+                    />
+                  </Label>
+                  <Label>
+                    Email
+                    <Input
+                      type="email"
+                      autocomplete="email"
+                      onChange={this.handleEmailChange}
+                      value={this.state.email}
+                    />
+                  </Label>
+                  <Label>
+                    Username
+                    <Input
+                      type="text"
+                      autocomplete="username"
+                      onChange={this.handleUsernameChange}
+                      value={this.state.username}
+                    />
+                  </Label>
+                  <Label>
+                    Description
+                    <Textarea
+                      onChange={this.handleDescriptionChange}
+                      value={this.state.bio}
+                    />
+                  </Label>
+                </NewUserFormCol>
 
-              <FlexCol>
-                <Label size="regular">
-                  Picture
-                  <ImagePicker
-                    value={this.state.picture}
-                    onChange={this.handlePictureChange}
-                  />
-                </Label>
-                <Label size="small">
-                  Subscription Price
-                  <Input
-                    type="number"
-                    onChange={this.handlePriceChange}
-                    value={this.state.price}
-                  />
-                </Label>
-                <Label>
-                  Credit Card
-                  <Input
-                    type="text"
-                    onChange={this.handlePriceChange}
-                    autocomplete="creditcard"
-                    value={this.state.price}
-                  />
-                </Label>
-              </FlexCol>
+                <FlexCol>
+                  <Label size="regular">
+                    Picture
+                    <ImagePicker
+                      value={this.state.picture}
+                      onChange={this.handlePictureChange}
+                    />
+                  </Label>
+                  <Label size="small">
+                    Subscription Price
+                    <Input
+                      type="number"
+                      onChange={this.handlePriceChange}
+                      value={this.state.price}
+                    />
+                  </Label>
+                  <Label>
+                    Credit Card
+                    <Input
+                      type="text"
+                      onChange={this.handlePriceChange}
+                      autocomplete="creditcard"
+                      value={this.state.price}
+                    />
+                  </Label>
+                </FlexCol>
+              </FlexRow>
+              <FlexRow>
+                <BigSaveButton
+                  color="tertiary"
+                  type="submit"
+                  disabled={!this.shouldBeSaved()}
+                >
+                  Save Profile
+                </BigSaveButton>
+              </FlexRow>
             </NewUserForm>
-            <BigSaveButton
-              color="tertiary"
-              type="submit"
-              disabled={!this.shouldBeSaved()}
-            >
-              Save Profile
-            </BigSaveButton>
             {loading && 'Loading'}
           </NewUserCol>
         )}

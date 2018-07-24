@@ -51,9 +51,13 @@ const themes = {
     border-color: transparent;
     opacity: ${opacity};
     &:hover {
-      color: ${colors.secondary}
+      color: ${colors.secondary};
       border-color: transparent;
       background: ${colors.grayLightest};
+      opacity: 1;
+    }
+    &:focus {
+      border: 2px solid ${colors.secondary};
       opacity: 1;
     }
   `,
