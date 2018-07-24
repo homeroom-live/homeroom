@@ -1,8 +1,28 @@
 import React from 'react'
 import * as nookies from 'nookies'
-
 import { redirect } from 'lib/redirect'
 import { parseHash } from 'lib/auth0'
+import styled from 'styled-components'
+
+import { Navbar } from 'components/Navbar'
+import { FlexCol } from 'components/FlexCol'
+import { Header } from 'components/Header'
+
+import { spacing } from 'utils/theme'
+
+import illustrationAuth from 'static/assets/images/illustrations/callback-auth.svg'
+
+const ContainerCol = styled(FlexCol)`
+  justify-content: center;
+  align-items: center;
+  padding: ${spacing.large};
+`
+const CallbackIllustration = styled.img`
+  width: 512px;
+  margin-top: ${spacing.xlarge};
+  margin-bottom: ${spacing.regular};
+  object-fit: contain;
+`
 
 class Callback extends React.Component {
   static async getInitialProps(ctx) {
@@ -28,7 +48,18 @@ class Callback extends React.Component {
   }
 
   render() {
-    return null
+    return (
+      <>
+        <Navbar transparent />
+        <ContainerCol>
+          <CallbackIllustration src={illustrationAuth} />
+          <Header>Entering Homeroom...</Header>
+          <Header size="regular" color="gray">
+            Beam me up, Scotty!
+          </Header>
+        </ContainerCol>
+      </>
+    )
   }
 }
 

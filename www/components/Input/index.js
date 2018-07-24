@@ -32,8 +32,10 @@ const InputContainer = styled(FlexRow)`
 const _Input = styled.input`
   width: 100%;
   margin-top: 2px;
+  padding: 0;
   font-size: ${fontSizes.regular};
   font-family: ${fontFamily};
+  text-align: left;
   outline: none;
   border: none;
   transition: ${transition};

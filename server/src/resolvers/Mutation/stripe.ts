@@ -6,6 +6,7 @@ export const stripe = {
   async createStripeAccount(parent, { code }, ctx: Context, info) {
     const auth0Id = ctx.request.user.sub
     // Why is this implemented so? Couldn't we just use Stripe API
+    // Probably! – LB 7/24/18
     const { stripe_user_id } = await request.post(
       'https://connect.stripe.com/oauth/token',
       {

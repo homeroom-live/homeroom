@@ -87,23 +87,23 @@ const updateProfileMutation = gql`
 
 // Elements
 
-const NewUserCol = styled(FlexCol)`
+const UserCol = styled(FlexCol)`
   margin: ${spacing.medium};
   margin-bottom: ${spacing.xlarge};
 `
-const NewUserHeader = styled(IconHeader)`
+const UserHeader = styled(IconHeader)`
   ${outline()};
   margin-bottom: ${spacing.regular};
 `
 const SaveButton = styled(Button)`
   margin-left: auto;
 `
-const NewUserForm = styled.form`
+const UserForm = styled.form`
   display: flex;
   align-items: flex-start;
   flex-direction: column;
 `
-const NewUserFormCol = styled(FlexCol)`
+const UserFormCol = styled(FlexCol)`
   margin-right: ${spacing.xlarge};
 `
 const BigSaveButton = styled(Button)`
@@ -189,15 +189,15 @@ class Profile extends React.Component {
         }}
       >
         {(updateUser, { loading, error, data }) => (
-          <NewUserCol>
-            <NewUserHeader src={iconUser} value="Profile">
+          <UserCol>
+            <UserHeader src={iconUser} value="Profile">
               <SaveButton color="primary" onClick={updateUser}>
                 Save Profile
               </SaveButton>
-            </NewUserHeader>
-            <NewUserForm onSubmit={updateUser}>
+            </UserHeader>
+            <UserForm onSubmit={updateUser}>
               <FlexRow>
-                <NewUserFormCol>
+                <UserFormCol>
                   <Label>
                     Name
                     <Input
@@ -230,9 +230,10 @@ class Profile extends React.Component {
                     <Textarea
                       onChange={this.handleDescriptionChange}
                       value={this.state.bio}
+                      rows={5}
                     />
                   </Label>
-                </NewUserFormCol>
+                </UserFormCol>
 
                 <FlexCol>
                   <Label size="regular">
@@ -270,9 +271,9 @@ class Profile extends React.Component {
                   Save Profile
                 </BigSaveButton>
               </FlexRow>
-            </NewUserForm>
+            </UserForm>
             {loading && 'Loading'}
-          </NewUserCol>
+          </UserCol>
         )}
       </Mutation>
     )

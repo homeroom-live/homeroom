@@ -54,9 +54,13 @@ const SaveButton = styled(Button)`
 const NewLessonForm = styled.form`
   display: flex;
   align-items: flex-start;
+  flex-direction: column;
 `
 const NewLessonFormCol = styled(FlexCol)`
   margin-right: ${spacing.xlarge};
+`
+const NewLessonFormRow = styled(FlexRow)`
+  align-items: flex-start;
 `
 const LessonNameLabel = styled(Label)`
   margin-bottom: ${spacing.regular};
@@ -91,6 +95,7 @@ const LiveLink = styled(Link)`
   margin-left: ${spacing.small};
 `
 const BigSaveButton = styled(Button)`
+  width: 100%;
   padding: ${spacing.regular};
   border: 1px solid ${colors.grayLighter};
 `
@@ -257,49 +262,54 @@ class LessonForm extends React.Component {
                       </SaveButton>
                     </NewLessonHeader>
                     <NewLessonForm onSubmit={create}>
-                      <NewLessonFormCol>
-                        <LessonNameLabel>
-                          Lesson Name
-                          <Input
-                            type="text"
-                            onChange={this.handleNameChange}
-                            value={this.state.name}
-                          />
-                        </LessonNameLabel>
-                        <Label size="regular">
-                          Lesson Date & Time{' '}
-                          <DatePicker
-                            showTimeSelect
-                            name="schedule"
-                            type="date"
-                            dateFormat="M/D/YY – h:mma"
-                            timeFormat="h:mm a"
-                            customInput={<Input type="text" />}
-                            selected={this.state.schedule}
-                            onChange={this.handleScheduleChange}
-                          />
-                        </Label>
-                        <Label>
-                          Lesson Description
-                          <Textarea
-                            onChange={this.handleDescriptionChange}
-                            value={this.state.description}
-                          />
-                        </Label>
-                      </NewLessonFormCol>
-                      <FlexCol>
-                        <Label>
-                          Lesson Files
-                          <FilePicker
-                            value={this.state.files}
-                            onChange={this.handleFilesChange}
-                          />
-                        </Label>
-                      </FlexCol>
+                      <NewLessonFormRow>
+                        <NewLessonFormCol>
+                          <LessonNameLabel>
+                            Lesson Name
+                            <Input
+                              type="text"
+                              onChange={this.handleNameChange}
+                              value={this.state.name}
+                            />
+                          </LessonNameLabel>
+                          <Label size="regular">
+                            Lesson Date & Time{' '}
+                            <DatePicker
+                              showTimeSelect
+                              name="schedule"
+                              type="date"
+                              dateFormat="M/D/YY – h:mma"
+                              timeFormat="h:mma"
+                              customInput={<Input type="button" />}
+                              selected={this.state.schedule}
+                              onChange={this.handleScheduleChange}
+                            />
+                          </Label>
+                          <Label>
+                            Lesson Description
+                            <Textarea
+                              value={this.state.description}
+                              onChange={this.handleDescriptionChange}
+                              rows={5}
+                            />
+                          </Label>
+                        </NewLessonFormCol>
+                        <FlexCol>
+                          <Label>
+                            Lesson Files
+                            <FilePicker
+                              value={this.state.files}
+                              onChange={this.handleFilesChange}
+                            />
+                          </Label>
+                        </FlexCol>
+                      </NewLessonFormRow>
+                      <FlexRow>
+                        <BigSaveButton color="tertiary" type="submit">
+                          Save Profile
+                        </BigSaveButton>
+                      </FlexRow>
                     </NewLessonForm>
-                    <BigSaveButton color="tertiary" type="submit">
-                      Save Profile
-                    </BigSaveButton>
                   </NewLessonCol>
                 )
               }

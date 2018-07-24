@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import { colors } from 'utils/theme'
+
 const sizes = {
   xsmall: '14px',
   small: '24px',
@@ -17,4 +19,5 @@ export const Thumbnail = styled.img`
   width: ${props => sizes[props.size || 'regular'] || '100%'};
   max-height: ${props => sizes[props.size || 'regular'] || '100%'};
   max-width: ${props => sizes[props.size || 'regular'] || '100%'};
+  background: ${colors.grayDarkest};
 `

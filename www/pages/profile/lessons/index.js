@@ -60,6 +60,7 @@ const viewerLessonsQuery = gql`
 // Elements
 
 const Container = styled.section`
+  width: 100%;
   padding: ${spacing.medium};
   margin-bottom: ${spacing.medium};
 `
