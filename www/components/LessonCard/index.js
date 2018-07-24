@@ -23,6 +23,8 @@ const fragments = {
     fragment LessonCard on Lesson {
       id
       name
+      thumbnail
+      private
       schedule
       teacher {
         id
@@ -80,9 +82,16 @@ const LessonMetaItem = styled(Text)`
   letter-spacing: 0.2px;
 `
 
-const LessonCardSmall = ({ node, teachers, href, className }) => (
-  <LessonCardContainer href={href} className={className}>
-    <LessonImage src="https://img.huffingtonpost.com/asset/585be1aa1600002400bdf2a6.jpeg?ops=scalefit_970_noupscale" />
+const LessonCardSmall = ({ node, className }) => (
+  <LessonCardContainer
+    href={{
+      pathname: '/profile/lessons/lesson',
+      query: { lessonId: node.id },
+    }}
+    as={`/profile/lessons/lesson/${node.id}`}
+    className={className}
+  >
+    <LessonImage src={node.thumbnail} />
     <LessonMeta>
       <LessonTitle size="medium" margin="0">
         {node.name}
@@ -128,7 +137,14 @@ const LessonVideo = styled(Player)`
 `
 
 const LessonCardMedium = ({ node, teachers, href, className }) => (
-  <LessonCardMediumContainer href={href} className={className}>
+  <LessonCardMediumContainer
+    href={{
+      pathname: '/profile/lessons/lesson',
+      query: { lessonId: node.id },
+    }}
+    as={`/profile/lessons/lesson/${node.id}`}
+    className={className}
+  >
     {/* <LessonVideo src="http://techslides.com/demos/sample-videos/small.mp4" /> */}
     <LessonMeta>
       <LessonTitle size="regular" margin="0">
@@ -151,7 +167,7 @@ const LessonCardMedium = ({ node, teachers, href, className }) => (
   </LessonCardMediumContainer>
 )
 
-const LessonCardLargeContainer = styled(Link)`
+const LessonCardLargeContainer = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -174,8 +190,15 @@ const LessonVideoLarge = styled(Player)`
   background: ${colors.black};
 `
 
-const LessonCardLarge = ({ node, href, className }) => (
-  <LessonCardLargeContainer href={href} className={className}>
+const LessonCardLarge = ({ node, className }) => (
+  <LessonCardLargeContainer
+    href={{
+      pathname: '/profile/lessons/lesson',
+      query: { lessonId: node.id },
+    }}
+    as={`/profile/lessons/lesson/${node.id}`}
+    className={className}
+  >
     {/* <LessonVideoLarge src={node.video.url} /> */}
     <LessonMeta>
       <Link

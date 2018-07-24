@@ -98,6 +98,7 @@ const viewerQuery = gql`
       user {
         id
         picture {
+          id
           url
         }
       }
@@ -149,7 +150,13 @@ export const Navbar = ({ transparent, activePage }) => (
             case NetworkStatus.ready: {
               if (data.viewer && data.viewer.user) {
                 return (
-                  <Dropdown image={data.viewer.user.picture.url}>
+                  <Dropdown
+                    image={
+                      data.viewer.user.picture
+                        ? data.viewer.user.picture.url
+                        : ''
+                    }
+                  >
                     <DropdownLink href="/profile">
                       <DropdownOption>Profile</DropdownOption>
                     </DropdownLink>

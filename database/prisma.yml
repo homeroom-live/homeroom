@@ -4,10 +4,10 @@ datamodel:
   - datamodel/types.graphql
   - datamodel/enums.graphql
 
-subscriptions:
-  userClassroomSubscriptions:
-      query: payment/subscriptions/classroomSubscriptionSubscription.graphql
-      webhook: ${env:PAYMENTS_WEBHOOK_ENDPOINT}
+# subscriptions:
+#   userClassroomSubscriptions:
+#       query: payment/subscriptions/classroomSubscriptionSubscription.graphql
+#       webhook: ${env:PAYMENTS_WEBHOOK_ENDPOINT}
 
 hooks:
   post-deploy:

@@ -100,7 +100,39 @@ class LessonsPage extends React.Component {
     return {}
   }
 
-  handleFetchMore = () => {}
+  handleFetchMore = (fetchMore, cursor) => e => {
+    e.preventDefault()
+
+    fetchMore({
+      variables: { cursor },
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        const previousEdges = previousResult.viewer.user.lessonsConnection.edges
+        const newEdges = fetchMoreResult.viewer.user.lessonsConnection.edges
+        const pageInfo = fetchMoreResult.viewer.user.lessonsConnection.pageInfo
+        const aggregate =
+          fetchMoreResult.viewer.user.lessonsConnection.aggregate
+
+        const newLessonsConnection = {
+          ...previousResult.viewer.user.lessonsConnection,
+          pageInfo,
+          edges: [...previousEdges, ...newEdges],
+          aggregate,
+        }
+
+        const newUser = {
+          ...previousResult.viewer.user,
+          lessonsConnection: newLessonsConnection,
+        }
+
+        return newEdges.length
+          ? {
+              ...previousResult.viewer,
+              user: newUser,
+            }
+          : previousResult
+      },
+    })
+  }
 
   render() {
     return (
@@ -136,15 +168,14 @@ class LessonsPage extends React.Component {
                         } else {
                           return (
                             <Fragment>
-                              {lessons.edges.map(node => (
-                                <LessonCardLarge
-                                  node={node}
-                                  key={node.id}
-                                  href={`/profile/lessons/${node.id}`}
-                                />
+                              {lessons.edges.map(({ node }) => (
+                                <LessonCardLarge key={node.id} node={node} />
                               ))}
                               <ShowMoreButton
-                                onClick={this.handleFetchMore(fetchMore)}
+                                onClick={this.handleFetchMore(
+                                  fetchMore,
+                                  lessons.pageInfo.endCursor,
+                                )}
                                 color="tertiary"
                               >
                                 Show More

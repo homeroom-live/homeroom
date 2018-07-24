@@ -1,8 +1,13 @@
+import React from 'react'
 import NextLink from 'next/link'
 import styled from 'styled-components'
 import { darken } from 'polished'
 
+// Utils
+
 import { colors, fontSizes, fontWeights, transition } from 'utils/theme'
+
+// Elements
 
 export const StyledLink = styled.a`
   text-decoration: none;
@@ -17,6 +22,8 @@ export const StyledLink = styled.a`
       props.color ? colors[props.color] : darken(0.1, colors.primary)};
   }
 `
+
+// Links
 
 export const Link = ({ href, children, ...props }) => (
   <NextLink prefetch href={href} passHref>
