@@ -2,6 +2,10 @@ import getConfig from 'next/config'
 import * as qs from 'qs'
 import auth0 from 'auth0-js'
 
+// Lib
+
+import { redirect } from 'lib/redirect'
+
 // Config
 
 const { publicRuntimeConfig } = getConfig()
@@ -23,6 +27,27 @@ export const parseHash = ({ hash }) => {
   const normalizedHash = hash.replace('#', '')
   const parsedHash = qs.parse(normalizedHash)
   return parsedHash.id_token
+}
+
+export const facebookLogin = () => {
+  auth0Client.authorize({ connection: 'facebook' })
+}
+
+export const googleLogin = () => {
+  auth0Client.authorize({ connection: 'google' })
+}
+
+export const databaseLogin = ({ email, password }) => {
+  auth0Client.login(
+    {
+      realm: 'Username-Password-Authentication',
+      username: email,
+      password,
+    },
+    (err, data) => {
+      console.log(err, data)
+    },
+  )
 }
 
 // export const parseHash = options =>

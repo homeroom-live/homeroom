@@ -47,6 +47,7 @@
     "react-dropzone": "^4.2.12",
     "react-helmet": "^5.2.0",
     "react-linkify": "^0.2.2",
+    "react-motion": "^0.5.2",
     "react-onclickoutside": "^6.7.1",
     "react-stripe-elements": "^2.0.0",
     "reactstrap": "^6.2.0",

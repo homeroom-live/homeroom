@@ -159,13 +159,13 @@ export const Navbar = ({ transparent, activePage }) => (
                   </Dropdown>
                 )
               } else if (data.viewer.requiresSetup) {
-                return <LoadingPlaceholder />
-              } else {
                 return (
                   <NavLink color={colors.primary} href="/signup">
                     Sign up & Login
                   </NavLink>
                 )
+              } else {
+                return <LoadingPlaceholder />
               }
             }
 

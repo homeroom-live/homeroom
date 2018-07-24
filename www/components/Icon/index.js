@@ -9,9 +9,5 @@ const inlineIcon = () => `
 
 export const Icon = styled.img`
   transition: all 0.25s ease-out;
-
-  &:hover {
-    cursor: pointer;
-  }
   ${props => (props.inline ? inlineIcon() : null)};
 `
