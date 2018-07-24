@@ -24,7 +24,7 @@ const fragments = {
       id
       name
       thumbnail
-      private
+      premium
       schedule
       teacher {
         id
