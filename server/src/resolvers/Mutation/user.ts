@@ -16,36 +16,42 @@ export const user = {
       gender,
     } = ctx.request.user
 
-    return ctx.db.mutation.upsertUser({
-      where: { auth0Id },
-      create: {
-        auth0Id,
-        username: username ? username : auth0Username,
-        email,
-        email_verified,
-        name,
-        gender: normalizeGender(gender),
-        bio,
-        picture: picture ? { create: picture } : null,
-        price,
-        receiveNotifications,
+    return ctx.db.mutation.upsertUser(
+      {
+        where: { auth0Id },
+        create: {
+          auth0Id,
+          username: username ? username : auth0Username,
+          email,
+          email_verified,
+          name,
+          gender: normalizeGender(gender),
+          bio,
+          picture: picture ? { create: picture } : null,
+          price,
+          receiveNotifications,
+        },
+        update: {
+          name,
+          bio,
+          picture: picture ? { create: picture } : null,
+          price,
+          receiveNotifications,
+        },
       },
-      update: {
-        name,
-        bio,
-        picture: picture ? { create: picture } : null,
-        price,
-        receiveNotifications,
-      },
-    })
+      info,
+    )
   },
   async deleteProfile(parent, args, ctx: Context, info) {
     const { sub: auth0Id } = ctx.request.user
 
-    return ctx.db.mutation.updateUser({
-      where: { auth0Id },
-      data: { archived: true },
-    })
+    return ctx.db.mutation.updateUser(
+      {
+        where: { auth0Id },
+        data: { archived: true },
+      },
+      info,
+    )
   },
 }
 
@@ -53,10 +59,10 @@ export const user = {
 
 function normalizeGender(input: string): Gender {
   switch (input) {
-    case 'MALE': {
+    case 'male': {
       return 'MALE'
     }
-    case 'FEMALE': {
+    case 'female': {
       return 'FEMALE'
     }
     default: {

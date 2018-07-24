@@ -104,6 +104,7 @@ type User {
   # Info
 
   name: String!
+  username: String!
   email: String!
   bio: String
   picture: Picture
@@ -163,9 +164,11 @@ type Lesson {
 
   name: String!
   description: String!
-  thumbnail: Picture
+  thumbnail: String!
   schedule: DateTime
   premium: Boolean!
+
+  teacher: User!
 
   course: Course
 

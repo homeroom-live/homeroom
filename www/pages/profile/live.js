@@ -1,11 +1,11 @@
 import React from 'react'
-import { withRouter } from 'next/router'
-import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
+import gql from 'graphql-tag'
 import styled from 'styled-components'
 import moment from 'moment-timezone'
 
-import { EditableComponent } from 'hocs/EditableComponent'
+// Components
+
 import { Loading } from 'components/Loading'
 import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
@@ -26,14 +26,8 @@ import { Input } from 'components/Input'
 import { Textarea } from 'components/Textarea'
 import { DatePicker } from 'components/DatePicker'
 
-import {
-  spacing,
-  shadow,
-  outline,
-  colors,
-  opacity,
-  HEIGHT_MINUS_NAVBAR,
-} from 'utils/theme'
+// Icons
+
 import userGrayIcon from 'static/assets/icons/ui/user-gray.svg'
 import clockGrayIcon from 'static/assets/icons/ui/clock-gray.svg'
 import calendarGrayIcon from 'static/assets/icons/ui/calendar-gray.svg'
@@ -44,68 +38,28 @@ import iconHelpWhite from 'static/assets/icons/ui/help-white.svg'
 import iconInformation from 'static/assets/icons/ui/information.svg'
 import iconFile from 'static/assets/icons/ui/file.svg'
 
+// HOCs
+
+import { EditableComponent } from 'hocs/EditableComponent'
+
+// Utils
+
+import {
+  spacing,
+  shadow,
+  outline,
+  colors,
+  opacity,
+  HEIGHT_MINUS_NAVBAR,
+} from 'utils/theme'
+
 // GraphQL
 
-const classQuery = gql`
-  query ClassQuery($classId: ID!) {
-    class(id: $classId) {
-      id
-      name
-      description
-      price
-      thumbnail {
+const liveLessonQuery = gql`
+  query {
+    viewer {
+      user {
         id
-        url
-      }
-      schedule
-      live
-      duration
-      video {
-        id
-        url
-      }
-      filesConnection {
-        edges {
-          node {
-            id
-            name
-            url
-          }
-        }
-        aggregate {
-          count
-        }
-      }
-      vod {
-        id
-        url
-      }
-      classroom {
-        id
-        name
-        teachersConnection {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-      }
-      messagesConnection {
-        aggregate {
-          count
-        }
-        edges {
-          node {
-            id
-            text
-            # sender {
-            #   id
-            #   name
-            # }
-          }
-        }
       }
     }
   }
@@ -207,7 +161,7 @@ const VideoSettingsLink = styled(Link)`
 
 /*
   <Query
-  query={classQuery}
+  query={lesson}
   variables={{ classId: router.query.classId }}
   notifyOnNetworkStatusChange
 >
@@ -554,3 +508,35 @@ export const Body = withRouter(({ router, data }) => (
     </ClassInformationCol>
   </>
 ))
+
+import React from 'react'
+
+import { SideNav } from 'pages/profile/components/SideNav'
+import { Body } from 'pages/profile/lessons/live/components/Body'
+import { Navbar } from 'components/Navbar'
+import { Footer } from 'components/Footer'
+import { withLogin } from 'hocs/withLogin'
+import { withSetup } from 'hocs/withSetup'
+
+import { viewer } from 'data/viewer'
+import { lessons } from 'data/lessons'
+
+class LiveLessonPage extends React.Component {
+  static async getInitialProps(ctx) {
+    return {}
+  }
+
+  render() {
+    return (
+      <>
+        <Navbar activePage="profile" />
+        <SideNav data={{ viewer }} activeSection="lessons">
+          <Body data={{ lesson: lessons[0] }} />
+        </SideNav>
+        <Footer />
+      </>
+    )
+  }
+}
+
+export default withLogin(withSetup(LiveLessonPage))

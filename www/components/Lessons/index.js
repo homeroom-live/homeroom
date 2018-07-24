@@ -10,7 +10,7 @@ import { FlexRow } from 'components/FlexRow'
 import { IconHeader } from 'components/IconHeader'
 import { Button } from 'components/Button'
 import { EmptyState } from 'components/EmptyState'
-import { ClassCardLarge } from 'components/ClassCard'
+import { LessonCardLarge as LessonCard } from 'components/LessonCard'
 
 // Theme
 
@@ -30,7 +30,7 @@ const StickyHeader = styled(IconHeader)`
   border-top-right-radius: ${borderRadius};
   border-top-left-radius: ${borderRadius};
 `
-const LessonCardLarge = styled(ClassCardLarge)`
+const LessonCardLarge = styled(LessonCard)`
   max-width: 33.333333333333333%;
   &:first-child,
   &:nth-child(2) {

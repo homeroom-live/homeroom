@@ -27,7 +27,7 @@ export const withLogin = ComposedComponent =>
         errorPolicy: 'ignore',
       })
 
-      if (!res.data.viewer) {
+      if (!res.data.viewer.user) {
         return redirect(ctx, '/signup')
       }
 

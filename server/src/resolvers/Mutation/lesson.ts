@@ -20,7 +20,7 @@ export const lesson = {
           name,
           description,
           thumbnail,
-          schedule: schedule ? schedule : new Date().toString(),
+          schedule: schedule ? schedule : new Date().toISOString(),
           premium,
           course,
           streamID,

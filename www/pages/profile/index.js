@@ -10,6 +10,7 @@ import { viewer } from 'data/viewer'
 // Components
 
 import { Navbar } from 'components/Navbar'
+import { SideNav } from 'components/SideNav'
 import { ImagePicker } from 'components/ImagePicker'
 import { FlexCol } from 'components/FlexCol'
 import { IconHeader } from 'components/IconHeader'
@@ -18,8 +19,6 @@ import { Label } from 'components/Label'
 import { Input } from 'components/Input'
 import { Textarea } from 'components/Textarea'
 import { Footer } from 'components/Footer'
-
-import { SideNav } from 'pages/profile/components/SideNav'
 
 // Icons
 
@@ -41,6 +40,8 @@ const profileQuery = gql`
       user {
         id
         name
+        username
+        email
         bio
         price
         picture {
@@ -53,9 +54,10 @@ const profileQuery = gql`
   }
 `
 
-const updateUserMutation = gql`
+const updateProfileMutation = gql`
   mutation CreateOrUpdateProfile(
     $name: String!
+    $username: String
     $bio: String!
     $picture: Upload
     $price: Float!
@@ -63,6 +65,7 @@ const updateUserMutation = gql`
   ) {
     updateProfile(
       name: $name
+      username: $username
       bio: $bio
       picture: $picture
       price: $price
@@ -166,15 +169,16 @@ class Profile extends React.Component {
   }
 
   shouldBeSaved = () => {
-    return equal(this.props, this.state)
+    return !equal(this.props, this.state)
   }
 
   render() {
     return (
       <Mutation
-        mutation={updateUserMutation}
+        mutation={updateProfileMutation}
         variables={{
           name: this.state.name,
+          username: this.state.username,
           bio: this.state.bio,
           picture: this.state.picture,
           price: this.state.price,
@@ -286,6 +290,8 @@ class ProfilePage extends React.Component {
                     return (
                       <Profile
                         name=""
+                        username=""
+                        email=""
                         bio=""
                         picture={null}
                         price={0}
@@ -296,6 +302,8 @@ class ProfilePage extends React.Component {
                     return (
                       <Profile
                         name={data.viewer.user.name}
+                        username={data.viewer.user.username}
+                        email={data.viewer.user.email}
                         bio={data.viewer.user.bio}
                         picture={data.viewer.user.picture}
                         price={data.viewer.user.price}
@@ -308,15 +316,7 @@ class ProfilePage extends React.Component {
                 }
 
                 default: {
-                  return (
-                    <Profile
-                      name=""
-                      bio=""
-                      picture={null}
-                      price={0}
-                      receiveNotifications={false}
-                    />
-                  )
+                  return null
                 }
               }
             }}
