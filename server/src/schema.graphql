@@ -266,13 +266,13 @@ type UserLessonsConnection {
 
 type UserCoursesConnection {
   pageInfo: PageInfo!
-  classrooms: [CourseEdge!]!
+  edges: [CourseEdge!]!
   aggregate: AggregateCourse!
 }
 
 type UserClassroomSubscriptionsConnection {
   pageInfo: PageInfo!
-  classrooms: [UserEdge!]!
+  edges: [UserEdge!]!
   aggregate: AggregateUser!
 }
 

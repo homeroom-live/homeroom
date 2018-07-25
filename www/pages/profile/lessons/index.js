@@ -4,6 +4,8 @@ import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 
+// Components
+
 import { Navbar } from 'components/Navbar'
 import { SideNav } from 'components/SideNav'
 import { FlexCol } from 'components/FlexCol'
@@ -23,7 +25,6 @@ import iconVideo from 'static/assets/icons/ui/video.svg'
 // HOCs
 
 import { withLogin } from 'hocs/withLogin'
-import { withSetup } from 'hocs/withSetup'
 
 // Utils
 
@@ -202,4 +203,4 @@ class LessonsPage extends React.Component {
   }
 }
 
-export default withLogin(withSetup(LessonsPage))
+export default withLogin(LessonsPage, { setup: true })

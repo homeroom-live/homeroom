@@ -32,7 +32,6 @@ import iconVideo from 'static/assets/icons/ui/video.svg'
 // HOCs
 
 import { withLogin } from 'hocs/withLogin'
-import { withSetup } from 'hocs/withSetup'
 
 // Utils
 
@@ -322,4 +321,4 @@ class LessonForm extends React.Component {
   }
 }
 
-export default withLogin(withSetup(LessonForm))
+export default withLogin(LessonForm, { setup: true })

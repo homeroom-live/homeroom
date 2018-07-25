@@ -27,7 +27,7 @@ import { spacing, colors, opacity, HEIGHT_MINUS_NAVBAR } from 'utils/theme'
 // GraphQL
 
 const stripeAccountUrl = gql`
-  query {
+  query Viewer {
     viewer {
       user {
         id

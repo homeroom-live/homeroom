@@ -6,7 +6,7 @@ import { redirect } from 'lib/redirect'
 // GraphQL
 
 const viewerQuery = gql`
-  query Viewer {
+  query ViewerLogin {
     viewer {
       user {
         id
@@ -18,7 +18,7 @@ const viewerQuery = gql`
 
 // Wrapper
 
-export const withLogin = ComposedComponent =>
+export const withLogin = (ComposedComponent, options) =>
   class WithLogin extends React.Component {
     static async getInitialProps(ctx) {
       const res = await ctx.apolloClient.query({
@@ -29,6 +29,10 @@ export const withLogin = ComposedComponent =>
 
       if (!res.data.viewer.user) {
         return redirect(ctx, '/signup')
+      }
+
+      if (res.data.viewer.requiresSetup && options.setup) {
+        return redirect(ctx, '/profile')
       }
 
       let composedInitialProps = {}

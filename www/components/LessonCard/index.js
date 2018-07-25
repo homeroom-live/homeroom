@@ -191,14 +191,7 @@ const LessonVideoLarge = styled(Player)`
 `
 
 const LessonCardLarge = ({ node, className }) => (
-  <LessonCardLargeContainer
-    href={{
-      pathname: '/profile/lessons/lesson',
-      query: { lessonId: node.id },
-    }}
-    as={`/profile/lessons/lesson/${node.id}`}
-    className={className}
-  >
+  <LessonCardLargeContainer>
     {/* <LessonVideoLarge src={node.video.url} /> */}
     <LessonMeta>
       <Link
@@ -210,7 +203,16 @@ const LessonCardLarge = ({ node, className }) => (
         {node.teacher.name}
       </Link>
       <LessonTitle size="medium" margin="0">
-        {node.name}
+        <Link
+          href={{
+            pathname: '/profile/lessons/lesson',
+            query: { lessonId: node.id },
+          }}
+          as={`/profile/lessons/lesson/${node.id}`}
+          className={className}
+        >
+          {node.name}
+        </Link>
       </LessonTitle>
       <LessonMetaStatsRow>
         <LessonMetaItem color="gray" weight="bold" size="xsmall">

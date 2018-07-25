@@ -56,7 +56,7 @@ import {
 // GraphQL
 
 const liveLessonQuery = gql`
-  query {
+  query Viwer {
     viewer {
       user {
         id

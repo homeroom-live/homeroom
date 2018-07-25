@@ -93,7 +93,7 @@ const LoadingPlaceholder = styled.span`
 // Queries
 
 const viewerQuery = gql`
-  query {
+  query Viewer {
     viewer {
       user {
         id
