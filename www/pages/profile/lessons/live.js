@@ -157,6 +157,14 @@ const VideoSettingsLink = styled(Link)`
 
 const lessonQuery = gql`
   query lesson($id: ID!) {
+    viewer {
+      user {
+        id
+        live {
+          id
+        }
+      }
+    }
     lesson(id: $id) {
       id
       name
@@ -170,14 +178,18 @@ const lessonQuery = gql`
       }
       streamKey
       streamURL
+      # isLive
     }
   }
 `
 const updateLessonLiveMutation = gql`
   mutation UpdateLessonLive($lessonId: ID!, $data: Boolean) {
-    updateLesson(id: $lessonId, live: $data) {
+    goLive(id: $lessonId) {
       id
-      live
+    }
+    updateLesson(id: $lessonId, isLive: $data) {
+      id
+      isLive
     }
   }
 `
@@ -219,9 +231,14 @@ const updateLessonFilesMutation = gql`
 `
 
 class Body extends React.Component {
+  // TODO: REMOVE
+  state = {
+    testIsLive: true,
+  }
+  //
+
   render() {
     const { data, lessonId } = this.props
-
     return (
       <Container>
         <ClassHeader>
@@ -256,7 +273,7 @@ class Body extends React.Component {
           <EditableComponent
             mutation={updateLessonLiveMutation}
             variables={{ lessonId }}
-            value={data.lesson.live}
+            value={data.lesson.isLive || this.state.testIsLive}
           >
             {({ status, value, onChange, onSubmit }) => (
               <ClassToggle
@@ -264,9 +281,12 @@ class Body extends React.Component {
                 inactiveLabel="Offline"
                 onChange={e => {
                   e.preventDefault()
-                  console.log(e, e.target.checked)
-                  onChange(true)
+                  // TODO: REMOVE
+                  this.setState({ testIsLive: !this.state.testIsLive })
+                  //
+                  onChange(data.lesson.isLive || !this.state.testIsLive)
                 }}
+                onClick={onSubmit}
                 onBlur={onSubmit}
                 value={value}
               />

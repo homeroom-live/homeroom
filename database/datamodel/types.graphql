@@ -71,6 +71,7 @@ type Lesson {
   course: Course @relation(name: "CourseLesson")
 
   live: User @relation(name: "LiveLesson", onDelete: SET_NULL)
+  isLive: Boolean! @default(value: "false")
 
   # Stream
 

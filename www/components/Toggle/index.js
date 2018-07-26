@@ -38,18 +38,18 @@ const ToggleLabel = styled(Label)`
 `
 
 export const Toggle = ({
-  checked,
+  value,
   activeLabel,
   inactiveLabel,
   onChange,
   onBlur,
   ...props
 }) => (
-  <ToggleLabel checked={checked} onClick={onChange} {...props}>
-    {checked ? activeLabel : inactiveLabel}
-    <ToggleContainer checked={checked}>
-      <ToggleIndicator checked={checked} />
-      <_Toggle checked={checked} onChange={onChange} onBlur={onBlur} />
+  <ToggleLabel checked={value} onClick={onChange} {...props}>
+    {value ? activeLabel : inactiveLabel}
+    <ToggleContainer checked={value}>
+      <ToggleIndicator checked={value} />
+      <_Toggle checked={value} onChange={onChange} onBlur={onBlur} />
     </ToggleContainer>
   </ToggleLabel>
 )

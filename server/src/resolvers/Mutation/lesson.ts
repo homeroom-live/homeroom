@@ -33,7 +33,7 @@ export const lesson = {
   },
   async updateLesson(
     parent,
-    { id, name, description, schedule, premium, files, course },
+    { id, name, description, schedule, premium, files, course, isLive },
     ctx: Context,
     info,
   ) {
@@ -48,6 +48,7 @@ export const lesson = {
           schedule,
           premium,
           course,
+          // isLive,
           files: files ? { create: files } : null,
         },
       },

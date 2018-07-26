@@ -43,6 +43,7 @@ type Mutation {
     premium: Boolean
     files: [Upload!]
     course: CourseInput
+    isLive: Boolean
   ): Lesson
   deleteLesson(id: ID!): Lesson
   goLive(id: ID!): Lesson
