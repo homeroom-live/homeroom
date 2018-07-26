@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import getConfig from 'next/config'
 import styled from 'styled-components'
 import { lighten } from 'polished'
+import { NetworkStatus } from 'apollo-client'
 
 // Components
 
@@ -41,6 +42,7 @@ const stripeAccountUrl = gql`
 const SideNavContainer = styled(FlexCol)`
   min-height: ${HEIGHT_MINUS_NAVBAR};
   width: 250px;
+  max-width: 250px;
   background: ${colors.grayDarkest};
 `
 const SideNavSticky = styled(FlexCol)`
@@ -90,10 +92,10 @@ export const SideNav = ({ children, activeSection }) => (
     <Query query={stripeAccountUrl} notifyOnNetworkStatusChange>
       {({ networkStatus, data }) => {
         switch (networkStatus) {
-          case 1: {
+          case NetworkStatus.loading: {
             return <Loading />
           }
-          case 7: {
+          case NetworkStatus.ready: {
             return (
               <SideNavContainer>
                 <SideNavSticky>
@@ -137,20 +139,6 @@ export const SideNav = ({ children, activeSection }) => (
                     <SideNavIcon src={iconCurrencyDollarWhite} />
                     Stripe Account
                   </SideNavLink>
-
-                  {/* <SideNavLink
-                    size="small"
-                    weight="bold"
-                    href="/dashboard"
-                    active={false}
-                    disabled
-                  >
-                    <SideNavIcon src={iconGraphBarWhite} />
-                    <FlexCol>
-                      <TextStyle size="xxsmall">Coming Soon</TextStyle>
-                      Insights
-                    </FlexCol>
-                  </SideNavLink> */}
                 </SideNavSticky>
               </SideNavContainer>
             )

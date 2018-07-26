@@ -17,7 +17,7 @@ app.prepare().then(() => {
   // Routes
 
   server.get('/profile/lessons/lesson/:lessonId', (req, res) => {
-    return app.render(req, res, '/profile/lessons/lesson', {
+    return app.render(req, res, '/profile/lessons/live', {
       lessonId: req.params.lessonId,
     })
   })

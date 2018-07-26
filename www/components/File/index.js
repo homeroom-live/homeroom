@@ -25,6 +25,7 @@ const DownloadWrapper = styled.a`
   &:focus {
     opacity: 1;
     background: ${colors.grayLightest};
+    cursor: pointer;
   }
 `
 const DownloadIcon = styled(Icon)`
@@ -70,7 +71,7 @@ export const File = ({ name, url, updatedAt, onRemove }) => (
   <DownloadWrapper href={url} download={name} target="_blank">
     <DownloadIcon src={iconDownload} />
 
-    <Filename size="small" weight="bold">
+    <Filename size="small" weight="bold" margin="0">
       {name}
     </Filename>
 
