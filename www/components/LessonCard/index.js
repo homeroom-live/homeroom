@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import moment from 'moment-timezone'
+import Router from 'next/router'
 
 // Components
 
@@ -180,6 +181,7 @@ const LessonCardLargeContainer = styled.div`
     color: transparent;
     text-decoration: none;
     background: ${colors.grayLightest};
+    cursor: pointer;
   }
 `
 const LessonVideoLarge = styled(Player)`
@@ -191,7 +193,10 @@ const LessonVideoLarge = styled(Player)`
 `
 
 const LessonCardLarge = ({ node, className }) => (
-  <LessonCardLargeContainer>
+  <LessonCardLargeContainer
+    onClick={() => Router.push(`/profile/lessons/lesson/${node.id}`)}
+    className={className}
+  >
     {/* <LessonVideoLarge src={node.video.url} /> */}
     <LessonMeta>
       <Link
@@ -202,18 +207,17 @@ const LessonCardLarge = ({ node, className }) => (
       >
         {node.teacher.name}
       </Link>
-      <LessonTitle size="medium" margin="0">
-        <Link
-          href={{
-            pathname: '/profile/lessons/lesson',
-            query: { lessonId: node.id },
-          }}
-          as={`/profile/lessons/lesson/${node.id}`}
-          className={className}
-        >
+      <Link
+        href={{
+          pathname: '/profile/lessons/lesson',
+          query: { lessonId: node.id },
+        }}
+        as={`/profile/lessons/lesson/${node.id}`}
+      >
+        <LessonTitle size="medium" margin="0" color="secondary">
           {node.name}
-        </Link>
-      </LessonTitle>
+        </LessonTitle>
+      </Link>
       <LessonMetaStatsRow>
         <LessonMetaItem color="gray" weight="bold" size="xsmall">
           {0} Students

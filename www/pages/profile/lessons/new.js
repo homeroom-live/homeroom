@@ -305,7 +305,7 @@ class LessonForm extends React.Component {
                       </NewLessonFormRow>
                       <FlexRow>
                         <BigSaveButton color="tertiary" type="submit">
-                          Save Profile
+                          Save Lesson
                         </BigSaveButton>
                       </FlexRow>
                     </NewLessonForm>

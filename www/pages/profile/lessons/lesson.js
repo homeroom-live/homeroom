@@ -147,6 +147,7 @@ const lessonQuery = gql`
       isLive
       streamKey
       streamURL
+      isLive
       course {
         id
         name
@@ -286,6 +287,7 @@ class LessonPage extends React.Component {
                               inactiveLabel="Offline"
                               onChange={e => {
                                 e.preventDefault()
+                                onChange(!data.lesson.isLive)
                                 // onChange(
                                 //   data.lesson.isLive || !this.state.testIsLive,
                                 // )

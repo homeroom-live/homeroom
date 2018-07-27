@@ -12,12 +12,14 @@ import { Button } from 'components/Button'
 import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
 import { Footer } from 'components/Footer'
+import { TextStyle } from 'components/TextStyle'
 import * as LessonCard from 'components/LessonCard'
 import { IconHeader } from 'components/IconHeader'
 
 // Icons
 
 import iconFile from 'static/assets/icons/ui/file.svg'
+import iconHome from 'static/assets/icons/ui/home.svg'
 
 // HOCs
 
@@ -59,6 +61,10 @@ const viewerCoursesQuery = gql`
 const ClassroomsCol = styled(FlexCol)`
   margin: ${spacing.medium} ${spacing.medium} ${spacing.xxxlarge};
 `
+const CoursesHeader = styled(IconHeader)`
+  margin-bottom: ${spacing.medium};
+  border: 1px solid ${colors.grayLighter};
+`
 const StickyHeader = styled(IconHeader)`
   position: sticky;
   top: 0;
@@ -97,7 +103,6 @@ class CoursesPage extends React.Component {
       <>
         <Navbar activePage="profile" />
         <SideNav activeSection="courses">
-          <StickyHeader src={iconFile} value="Courses" />
           <ClassroomsCol>
             <Query query={viewerCoursesQuery} notifyOnNetworkStatusChange>
               {({ networkStatus, data }) => {
@@ -107,6 +112,11 @@ class CoursesPage extends React.Component {
 
                     return (
                       <Fragment>
+                        <CoursesHeader src={iconHome} value="Courses">
+                          <TextStyle color="gray" weight="bold">
+                            {data.viewer.user.coursesConnection.aggregate.count}
+                          </TextStyle>
+                        </CoursesHeader>
                         {courses.map(({ node }) => (
                           <CourseContainer key={node.id}>
                             <StickyHeader src={iconFile} value={node.name}>
