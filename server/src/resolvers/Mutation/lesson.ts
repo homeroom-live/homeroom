@@ -62,13 +62,13 @@ export const lesson = {
       info,
     )
   },
-  async addLessonFile(parent, { id, file }, ctx: Context, info) {
+  async addLessonFiles(parent, { id, files }, ctx: Context, info) {
     return ctx.db.mutation.updateLesson(
       {
         where: { id },
         data: {
           files: {
-            create: file,
+            create: files,
           },
         },
       },

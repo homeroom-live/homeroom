@@ -43,7 +43,7 @@ type Mutation {
     premium: Boolean
     course: CourseInput
   ): Lesson
-  addLessonFile(id: ID!, file: Upload!): Lesson
+  addLessonFiles(id: ID!, files: [Upload!]!): Lesson
   removeLessonFile(id: ID!, fileId: ID!): Lesson
   deleteLesson(id: ID!): Lesson
   goLive(id: ID!): Lesson
@@ -213,6 +213,9 @@ type Course {
 
 type File {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
   name: String!
   contentType: String!
   url: String!
@@ -220,6 +223,9 @@ type File {
 
 type Picture {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
   name: String!
   contentType: String!
   url(height: Int, width: Int): String!
