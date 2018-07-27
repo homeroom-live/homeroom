@@ -11,7 +11,8 @@ import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
 import { Textarea } from 'components/Textarea'
 import { Loading } from 'components/Loading'
-import { Message } from './Message'
+import { Button } from 'components/Button'
+import { Message, MessageFragment } from './Message'
 
 // Utils
 
@@ -35,29 +36,26 @@ const ChatTextarea = styled(Textarea)`
   resize: none;
   z-index: 10;
 `
+const EndOfChat = styled.span`
+  float: left;
+`
+const ShowMoreButton = styled(Button)`
+  flex-shrink: 0;
+`
 
 // GraphQL
 
 const messagesQuery = gql`
-  query LessonMessages($id: ID!) {
+  query LessonMessages($id: ID!, $cursor: String) {
     lesson(id: $id) {
       id
-      messagesConnection(last: 30) {
+      messagesConnection(last: 3, after: $cursor) {
+        pageInfo {
+          endCursor
+        }
         edges {
           node {
-            id
-            createdAt
-            text
-            is_viewer_message
-            is_teacher_message
-            sender {
-              id
-              name
-              username
-              picture {
-                id
-              }
-            }
+            ...ChatMessage
           }
         }
       }
@@ -73,6 +71,7 @@ const messagesQuery = gql`
       }
     }
   }
+  ${MessageFragment}
 `
 const createMessageMutation = gql`
   mutation createMessage($id: ID!, $text: String!) {
@@ -86,12 +85,16 @@ const createMessageMutation = gql`
 `
 
 export class Chat extends React.Component {
-  static propTypes = {
-    lessonId: PropTypes.string.isRequired,
-  }
-
   state = {
     message: '',
+  }
+
+  componentDidUpdate() {
+    if (this.endOfChat) {
+      this.endOfChat.scrollIntoView({
+        behavior: 'smooth',
+      })
+    }
   }
 
   handleSubmit = e => {}
@@ -109,6 +112,38 @@ export class Chat extends React.Component {
     }
   }
 
+  handleFetchMore = (fetchMore, cursor) => e => {
+    e.preventDefault()
+
+    // Not functional
+    // fetchMore({
+    //   variables: { cursor },
+    //   updateQuery: (previousResult, { fetchMoreResult }) => {
+    //     const previousEdges = previousResult.lesson.messagesConnection.edges
+    //     const newEdges = fetchMoreResult.lesson.messagesConnection.edges
+    //     const pageInfo = fetchMoreResult.lesson.messagesConnection.pageInfo
+
+    //     const newMessagesConnection = {
+    //       ...previousResult.lesson.messagesConnection,
+    //       pageInfo,
+    //       edges: [...previousEdges, ...newEdges],
+    //     }
+
+    //     const newLesson = {
+    //       ...previousResult.lesson,
+    //       messagesConnection: newMessagesConnection,
+    //     }
+
+    //     return newEdges.length
+    //       ? {
+    //           ...previousResult.lesson,
+    //           lesson: newLesson,
+    //         }
+    //       : previousResult
+    //   },
+    // })
+  }
+
   render() {
     return (
       <Query
@@ -117,7 +152,7 @@ export class Chat extends React.Component {
         // pollInterval={300}
         notifyOnNetworkStatusChange
       >
-        {({ networkStatus, data, refetch }) => {
+        {({ networkStatus, data, refetch, fetchMore }) => {
           switch (networkStatus) {
             case NetworkStatus.loading: {
               return <Loading />
@@ -126,13 +161,26 @@ export class Chat extends React.Component {
             case NetworkStatus.poll:
             case NetworkStatus.refetch:
             case NetworkStatus.ready: {
-              console.log(data)
               return (
                 <Container>
                   <MessagesCol>
+                    <ShowMoreButton
+                      onClick={this.handleFetchMore(
+                        fetchMore,
+                        data.lesson.messagesConnection.pageInfo.endCursor,
+                      )}
+                      color="tertiary"
+                    >
+                      Show More
+                    </ShowMoreButton>
                     {data.lesson.messagesConnection.edges.map(({ node }) => (
                       <Message key={node.id} node={node} />
                     ))}
+                    <EndOfChat
+                      innerRef={el => {
+                        this.endOfChat = el
+                      }}
+                    />
                   </MessagesCol>
                   <TextareaRow>
                     <Mutation
@@ -146,13 +194,13 @@ export class Chat extends React.Component {
                         createMessage: {
                           __typename: 'MessageEdge',
                           node: {
+                            __typename: 'Message',
                             id: -1,
                             text: this.state.message,
                             createdAt: new Date(),
                             is_viewer_message: true,
                             is_teacher_message: true,
                             sender: data.viewer.user,
-                            __typename: 'Message',
                           },
                         },
                       }}
@@ -161,9 +209,7 @@ export class Chat extends React.Component {
                           query: messagesQuery,
                           variables: { id: this.props.lessonId },
                         })
-                        console.log(createMessage)
                         data.lesson.messagesConnection.edges.push(createMessage)
-                        console.log(data.lesson.messagesConnection)
                         proxy.writeQuery({
                           query: messagesQuery,
                           data,
