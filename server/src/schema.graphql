@@ -47,6 +47,8 @@ type Mutation {
   deleteLesson(id: ID!): Lesson
   goLive(id: ID!): Lesson
   # Course
+  createCourse(name: String!, lessons: [ID!]!): Course
+  updateCourse(id: ID!, name: String, lessons: [ID!]!): Course
   deleteCourse(id: ID!): Course
   # Message
   createMessage(lessonId: ID!, text: String!): Message
