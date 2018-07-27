@@ -41,9 +41,10 @@ type Mutation {
     description: String
     schedule: DateTime
     premium: Boolean
-    files: [Upload!]
     course: CourseInput
   ): Lesson
+  addLessonFile(id: ID!, file: Upload!): Lesson
+  removeLessonFile(id: ID!, fileId: ID!): Lesson
   deleteLesson(id: ID!): Lesson
   goLive(id: ID!): Lesson
   # Course

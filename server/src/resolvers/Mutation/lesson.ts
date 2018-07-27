@@ -33,7 +33,7 @@ export const lesson = {
   },
   async updateLesson(
     parent,
-    { id, name, description, schedule, premium, files, course },
+    { id, name, description, schedule, premium, course },
     ctx: Context,
     info,
   ) {
@@ -48,7 +48,6 @@ export const lesson = {
           schedule,
           premium,
           course,
-          files: files ? { create: files } : null,
         },
       },
       info,
@@ -62,6 +61,29 @@ export const lesson = {
       },
       info,
     )
+  },
+  async addLessonFile(parent, { id, file }, ctx: Context, info) {
+    return ctx.db.mutation.updateLesson(
+      {
+        where: { id },
+        data: {
+          files: {
+            create: file,
+          },
+        },
+      },
+      info,
+    )
+  },
+  async removeLessonFile(parent, { id, fileId }, ctx: Context, info) {
+    const file = await ctx.db.mutation.updateFile({
+      where: { id: fileId },
+      data: {
+        archived: false,
+      },
+    })
+
+    return ctx.db.query.lesson({ where: { id } }, info)
   },
   async goLive(parent, { id }, ctx: Context, info) {
     const auth0Id = ctx.request.user.sub

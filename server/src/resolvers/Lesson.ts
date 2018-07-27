@@ -28,7 +28,10 @@ export const Lesson = {
     ) {
       return ctx.db.query.messagesConnection(
         {
-          where: { lesson: { id } },
+          where: {
+            lesson: { id },
+            archived: false,
+          },
           orderBy: 'createdAt_ASC',
           after,
           before,
@@ -49,7 +52,10 @@ export const Lesson = {
     ) {
       return ctx.db.query.filesConnection(
         {
-          where: { lesson: { id } },
+          where: {
+            lesson: { id },
+            archived: false,
+          },
           orderBy: 'createdAt_DESC',
           after,
           before,
