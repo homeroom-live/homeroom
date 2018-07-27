@@ -103,6 +103,9 @@ const UserForm = styled.form`
   align-items: flex-start;
   flex-direction: column;
 `
+const UserFormRow = styled(FlexRow)`
+  align-items: flex-start;
+`
 const UserFormCol = styled(FlexCol)`
   margin-right: ${spacing.xlarge};
 `
@@ -196,7 +199,7 @@ class Profile extends React.Component {
               </SaveButton>
             </UserHeader>
             <UserForm onSubmit={updateUser}>
-              <FlexRow>
+              <UserFormRow>
                 <UserFormCol>
                   <Label>
                     Name
@@ -261,7 +264,7 @@ class Profile extends React.Component {
                     />
                   </Label>
                 </FlexCol>
-              </FlexRow>
+              </UserFormRow>
               <FlexRow>
                 <BigSaveButton
                   color="tertiary"

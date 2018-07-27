@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import TextareaAutosize from 'react-textarea-autosize'
 
 import {
   colors,
@@ -9,7 +10,7 @@ import {
   borderRadius,
 } from 'utils/theme'
 
-export const Textarea = styled.textarea`
+export const Textarea = styled(TextareaAutosize)`
   padding: ${spacing.small};
   color: ${colors.secondary};
   font-size: ${fontSizes.regular};
