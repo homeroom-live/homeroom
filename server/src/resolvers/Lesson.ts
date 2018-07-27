@@ -7,6 +7,17 @@ export const Lesson = {
       return ``
     },
   },
+  isLive: {
+    fragment: `fragment LessonID on Lesson { id }`,
+    resolve: async function({ id }, args, ctx: Context, info) {
+      return ctx.db.exists.Lesson({
+        id,
+        live: {
+          id_not: null,
+        },
+      })
+    },
+  },
   messagesConnection: {
     fragment: `fragment LessonID on Lesson { id }`,
     resolve: async function(

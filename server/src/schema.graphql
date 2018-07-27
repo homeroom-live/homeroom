@@ -46,6 +46,8 @@ type Mutation {
   ): Lesson
   deleteLesson(id: ID!): Lesson
   goLive(id: ID!): Lesson
+  # Course
+  deleteCourse(id: ID!): Course
   # Message
   createMessage(lessonId: ID!, text: String!): Message
 }
@@ -176,6 +178,7 @@ type Lesson {
 
   streamKey: String!
   streamURL: String!
+  isLive: Boolean!
 
   # Extras
 
