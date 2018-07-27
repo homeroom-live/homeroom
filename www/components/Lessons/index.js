@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
-import { Query } from 'apollo-client'
+import { NetworkStatus } from 'apollo-client'
+import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 
@@ -10,7 +11,7 @@ import { FlexRow } from 'components/FlexRow'
 import { IconHeader } from 'components/IconHeader'
 import { Button } from 'components/Button'
 import { EmptyState } from 'components/EmptyState'
-import { LessonCardLarge as LessonCard } from 'components/LessonCard'
+import * as LessonCard from 'components/LessonCard'
 
 // Theme
 
@@ -30,7 +31,7 @@ const StickyHeader = styled(IconHeader)`
   border-top-right-radius: ${borderRadius};
   border-top-left-radius: ${borderRadius};
 `
-const LessonCardLarge = styled(LessonCard)`
+const LessonCardLarge = styled(LessonCard.LessonCardLarge)`
   max-width: 33.333333333333333%;
   &:first-child,
   &:nth-child(2) {
@@ -59,34 +60,61 @@ const ShowMoreButton = styled(Button)`
 // Lessons
 
 export class Lessons extends React.Component {
-  render() {
-    const { query, label, icon, id } = this.props
+  getQuery = query => gql`
+    ${this.props.query}
+    ${LessonCard.fragments.card}
+  `
 
-    const lessons = []
+  handleFetchMore = (fetchMore, data) => {
+    return 0
+  }
+
+  render() {
+    const { id, label, icon } = this.props
 
     return (
       <SectionCol id={id}>
         <StickyHeader src={icon} value={label} />
         <SectionRow>
-          {lessons.length === 0 ? (
-            <EmptyState
-              src={iconVideoGray}
-              value="There aren’t any lessons right now!"
-            />
-          ) : (
-            <Fragment>
-              {lessons.map(node => (
-                <LessonCardLarge
-                  node={node}
-                  key={node.id}
-                  href={`/${node.user.username}/${node.id}`}
-                />
-              ))}
-              <ShowMoreButton onClick={query} color="tertiary">
-                Show More
-              </ShowMoreButton>
-            </Fragment>
-          )}
+          <Query query={this.getQuery()} notifyOnNetworkStatusChange>
+            {({ networkStatus, data, fetchMore }) => {
+              switch (networkStatus) {
+                case NetworkStatus.loading: {
+                  return (
+                    <EmptyState
+                      src={iconVideoGray}
+                      value="Stay put, lessons incoming!"
+                    />
+                  )
+                }
+
+                case NetworkStatus.fetchMore:
+                case NetworkStatus.ready: {
+                  return (
+                    <Fragment>
+                      {data.lessons.map(node => (
+                        <LessonCardLarge
+                          node={node}
+                          key={node.id}
+                          href={`/${node.user.username}/${node.id}`}
+                        />
+                      ))}
+                      <ShowMoreButton
+                        onClick={this.handleFetchMore(fetchMore, data)}
+                        color="tertiary"
+                      >
+                        Show More
+                      </ShowMoreButton>
+                    </Fragment>
+                  )
+                }
+
+                default: {
+                  return null
+                }
+              }
+            }}
+          </Query>
         </SectionRow>
       </SectionCol>
     )

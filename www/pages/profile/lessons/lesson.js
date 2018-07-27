@@ -4,6 +4,8 @@ import { Query, Mutation } from 'react-apollo'
 import styled from 'styled-components'
 import moment from 'moment'
 
+import { redirect } from 'lib/redirect'
+
 // Components
 
 import { Navbar } from 'components/Navbar'
@@ -14,7 +16,7 @@ import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
 import { IconHeader } from 'components/IconHeader'
 import { Button } from 'components/Button'
-import { Label } from 'components/Label'
+import { Label } from 'components/Label
 import { Input } from 'components/Input'
 import { Textarea } from 'components/Textarea'
 import { Breadcrumb } from 'components/Breadcrumb'
@@ -253,6 +255,10 @@ class LessonForm extends React.Component {
 class Lesson extends React.Component {
   static getInitialProps(ctx) {
     const lessonId = ctx.query.lessonId
+
+    if (!lessonId) {
+      return redirect(ctx, '/profile/lessons')
+    }
 
     return { lessonId }
   }

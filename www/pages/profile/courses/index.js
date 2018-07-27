@@ -22,7 +22,6 @@ import iconFile from 'static/assets/icons/ui/file.svg'
 // HOCs
 
 import { withLogin } from 'hocs/withLogin'
-import { withSetup } from 'hocs/withSetup'
 
 // Utils
 
@@ -147,4 +146,4 @@ class CoursesPage extends React.Component {
   }
 }
 
-export default withLogin(withSetup(CoursesPage))
+export default withLogin(CoursesPage, { setup: true })
