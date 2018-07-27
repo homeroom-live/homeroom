@@ -1,10 +1,9 @@
 import React from 'react'
+import { NetworkStatus } from 'apollo-client'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 import moment from 'moment-timezone'
-import { withRouter } from 'next/router'
-import { NetworkStatus } from 'apollo-client'
 
 import { redirect } from 'lib/redirect'
 
@@ -50,9 +49,10 @@ import { withLogin } from 'hocs/withLogin'
 
 // Utils
 
-import { spacing, shadow, outline, colors, opacity } from 'utils/theme'
+import { spacing, shadow, colors } from 'utils/theme'
 
-// margin: ${spacing.medium};
+// Elements
+
 const Container = styled(FlexCol)``
 const LessonHeader = styled(FlexRow)`
   position: sticky;
@@ -137,14 +137,6 @@ const ChatCol = styled(FlexCol)`
 
 const lessonQuery = gql`
   query Lesson($id: ID!) {
-    viewer {
-      user {
-        id
-        live {
-          id
-        }
-      }
-    }
     lesson(id: $id) {
       id
       name
@@ -152,54 +144,56 @@ const lessonQuery = gql`
       thumbnail
       schedule
       premium
+      isLive
+      streamKey
+      streamURL
       course {
         id
         name
       }
-      streamKey
-      streamURL
-      # isLive
     }
   }
 `
+
 const updateLessonLiveMutation = gql`
-  mutation UpdateLessonLive($lessonId: ID!, $data: Boolean) {
-    goLive(id: $lessonId) {
-      id
-    }
-    updateLesson(id: $lessonId, isLive: $data) {
+  mutation UpdateLessonLive($id: ID!) {
+    goLive(id: $id) {
       id
       isLive
     }
   }
 `
+
 const updateLessonNameMutation = gql`
-  mutation UpdateLessonName($lessonId: ID!, $data: String) {
-    updateLesson(id: $lessonId, name: $data) {
+  mutation UpdateLessonName($id: ID!, $data: String) {
+    updateLesson(id: $id, name: $data) {
       id
       name
     }
   }
 `
+
 const updateLessonDescriptionMutation = gql`
-  mutation UpdateLessonDescription($lessonId: ID!, $data: String) {
-    updateLesson(id: $lessonId, description: $data) {
+  mutation UpdateLessonDescription($id: ID!, $data: String) {
+    updateLesson(id: $id, description: $data) {
       id
       description
     }
   }
 `
+
 const updateLessonScheduleMutation = gql`
-  mutation UpdateLessonSchedule($lessonId: ID!, $data: DateTime) {
-    updateLesson(id: $lessonId, schedule: $data) {
+  mutation UpdateLessonSchedule($id: ID!, $data: DateTime) {
+    updateLesson(id: $id, schedule: $data) {
       id
       schedule
     }
   }
 `
+
 const updateLessonFilesMutation = gql`
-  mutation UpdateLessonFiles($lessonId: ID!, $data: [Upload!]) {
-    updateLesson(id: $lessonId, files: $data) {
+  mutation UpdateLessonFiles($id: ID!, $data: [Upload!]) {
+    updateLesson(id: $id, files: $data) {
       id
       files {
         id
@@ -209,213 +203,6 @@ const updateLessonFilesMutation = gql`
     }
   }
 `
-
-class Lesson extends React.Component {
-  // TODO: REMOVE
-  state = {
-    testIsLive: true,
-  }
-  //
-
-  render() {
-    const { data, lessonId } = this.props
-    return (
-      <Container>
-        <LessonHeader>
-          <LessonMeta>
-            <LessonTitle>
-              <LessonBreadcrumb href="/profile/lessons">
-                Back to Lessons
-              </LessonBreadcrumb>
-              {data.lesson.name}
-            </LessonTitle>
-            <FlexRow>
-              <LessonMetaItem color="gray" weight="bold" size="small">
-                <LessonIcon src={userGrayIcon} />
-                {0} Students
-              </LessonMetaItem>
-              <LessonMetaItem color="gray" weight="bold" size="small">
-                <LessonIcon src={calendarGrayIcon} />
-                {data.lesson.schedule
-                  ? moment(data.lesson.schedule).format('M/D/YY')
-                  : 'No date set'}
-              </LessonMetaItem>
-              <LessonMetaItem color="gray" weight="bold" size="small">
-                <LessonIcon src={clockGrayIcon} />
-                {data.lesson.schedule
-                  ? moment(data.lesson.schedule)
-                      .tz('America/New_York')
-                      .format('LT z')
-                  : 'No date set'}
-              </LessonMetaItem>
-            </FlexRow>
-          </LessonMeta>
-          <EditableComponent
-            mutation={updateLessonLiveMutation}
-            variables={{ lessonId }}
-            value={data.lesson.isLive || this.state.testIsLive}
-          >
-            {({ status, value, onChange, onSubmit }) => (
-              <LessonToggle
-                activeLabel="Live"
-                inactiveLabel="Offline"
-                onChange={e => {
-                  e.preventDefault()
-                  // TODO: REMOVE
-                  this.setState({ testIsLive: !this.state.testIsLive })
-                  //
-                  onChange(data.lesson.isLive || !this.state.testIsLive)
-                }}
-                onClick={onSubmit}
-                onBlur={onSubmit}
-                value={value}
-              />
-            )}
-          </EditableComponent>
-        </LessonHeader>
-
-        <LessonBody>
-          <SectionRow>
-            <SectionCol>
-              <IconHeader src={iconVideo} value="Video" />
-              <SectionBody>
-                <LessonPlayer
-                  autoPlay={data.lesson.live}
-                  src="https://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"
-                />
-                <VideoSettingsRow>
-                  <VideoSettingsLabelsRow>
-                    <VideoSettingsLabel>
-                      Server Url
-                      <Text>https://stream.homeroom.live</Text>
-                    </VideoSettingsLabel>
-                    <VideoSettingsLabel>
-                      Live Stream Key
-                      <Text>Super-Secret-Streams</Text>
-                    </VideoSettingsLabel>
-                    <VideoSettingsLabel>
-                      Preview Stream Key
-                      <Text>Preview-Streams</Text>
-                    </VideoSettingsLabel>
-                  </VideoSettingsLabelsRow>
-                  <VideoSettingsLink href="/dashboard/howtostream" prefetch>
-                    <Button color="primary" src={iconHelpWhite}>
-                      How to Stream
-                    </Button>
-                  </VideoSettingsLink>
-                </VideoSettingsRow>
-              </SectionBody>
-            </SectionCol>
-
-            <SectionRightCol>
-              <IconHeader src={iconChat} value="Chat" />
-              <ChatCol>
-                <Chat lessonId={lessonId} />
-              </ChatCol>
-            </SectionRightCol>
-          </SectionRow>
-
-          <SectionRow>
-            <SectionCol>
-              <IconHeader src={iconInformation} value="Information" />
-              <SectionBody>
-                <EditableLabel>
-                  Name
-                  <EditableComponent
-                    mutation={updateLessonNameMutation}
-                    variables={{ lessonId }}
-                    value={data.lesson.name}
-                  >
-                    {({ status, value, onChange, onSubmit }) => (
-                      <Input
-                        type="text"
-                        value={value}
-                        onChange={e => {
-                          e.preventDefault()
-                          onChange(e.target.value)
-                        }}
-                        onBlur={onSubmit}
-                      />
-                    )}
-                  </EditableComponent>
-                </EditableLabel>
-
-                <EditableLabel size="regular">
-                  Date & Time
-                  <EditableComponent
-                    mutation={updateLessonScheduleMutation}
-                    variables={{ lessonId }}
-                    value={data.lesson.schedule}
-                  >
-                    {({ status, value, onChange, onSubmit }) => (
-                      <DatePicker
-                        showTimeSelect
-                        name="schedule"
-                        type="date"
-                        dateFormat="M/D/YY – h:mma"
-                        timeFormat="h:mm a"
-                        customInput={<Input type="button" />}
-                        selected={value && moment(value)}
-                        onChange={onChange}
-                        onBlur={onSubmit}
-                      />
-                    )}
-                  </EditableComponent>
-                </EditableLabel>
-
-                <EditableLabel>
-                  Description
-                  <EditableComponent
-                    mutation={updateLessonDescriptionMutation}
-                    variables={{ lessonId }}
-                    value={data.lesson.description}
-                  >
-                    {({ status, value, onChange, onSubmit }) => (
-                      <Textarea
-                        type="text"
-                        rows={5}
-                        value={value}
-                        onChange={e => {
-                          e.preventDefault()
-                          onChange(e.target.value)
-                        }}
-                        onBlur={onSubmit}
-                      />
-                    )}
-                  </EditableComponent>
-                </EditableLabel>
-              </SectionBody>
-            </SectionCol>
-
-            <SectionRightCol>
-              <IconHeader src={iconFile} value="Files" />
-              <SectionBody>
-                <EditableLabel>
-                  Files
-                  <EditableComponent
-                    mutation={updateLessonFilesMutation}
-                    variables={{ lessonId }}
-                    value={data.lesson.files}
-                  >
-                    {({ status, value, onChange, onSubmit }) => (
-                      <FilePicker
-                        value={value}
-                        onChange={files => {
-                          onChange(files)
-                          onSubmit()
-                        }}
-                      />
-                    )}
-                  </EditableComponent>
-                </EditableLabel>
-              </SectionBody>
-            </SectionRightCol>
-          </SectionRow>
-        </LessonBody>
-      </Container>
-    )
-  }
-}
 
 class LessonPage extends React.Component {
   static getInitialProps(ctx) {
@@ -445,7 +232,219 @@ class LessonPage extends React.Component {
                 }
 
                 case NetworkStatus.ready: {
-                  return <Lesson data={data} lessonId={this.props.lessonId} />
+                  return (
+                    <Container>
+                      <LessonHeader>
+                        <LessonMeta>
+                          <LessonTitle>
+                            <LessonBreadcrumb href="/profile/lessons">
+                              Back to Lessons
+                            </LessonBreadcrumb>
+                            {data.lesson.name}
+                          </LessonTitle>
+                          <FlexRow>
+                            <LessonMetaItem
+                              color="gray"
+                              weight="bold"
+                              size="small"
+                            >
+                              <LessonIcon src={userGrayIcon} />
+                              {0} Students
+                            </LessonMetaItem>
+                            <LessonMetaItem
+                              color="gray"
+                              weight="bold"
+                              size="small"
+                            >
+                              <LessonIcon src={calendarGrayIcon} />
+                              {data.lesson.schedule
+                                ? moment(data.lesson.schedule).format('M/D/YY')
+                                : 'No date set'}
+                            </LessonMetaItem>
+                            <LessonMetaItem
+                              color="gray"
+                              weight="bold"
+                              size="small"
+                            >
+                              <LessonIcon src={clockGrayIcon} />
+                              {data.lesson.schedule
+                                ? moment(data.lesson.schedule)
+                                    .tz('America/New_York')
+                                    .format('LT z')
+                                : 'No date set'}
+                            </LessonMetaItem>
+                          </FlexRow>
+                        </LessonMeta>
+                        <EditableComponent
+                          mutation={updateLessonLiveMutation}
+                          variables={{ id: this.props.lessonId }}
+                          value={data.lesson.isLive}
+                        >
+                          {({ status, value, onChange, onSubmit }) => (
+                            <LessonToggle
+                              activeLabel="Live"
+                              inactiveLabel="Offline"
+                              onChange={e => {
+                                e.preventDefault()
+                                // onChange(
+                                //   data.lesson.isLive || !this.state.testIsLive,
+                                // )
+                              }}
+                              onClick={onSubmit}
+                              onBlur={onSubmit}
+                              value={value}
+                            />
+                          )}
+                        </EditableComponent>
+                      </LessonHeader>
+
+                      <LessonBody>
+                        <SectionRow>
+                          <SectionCol>
+                            <IconHeader src={iconVideo} value="Video" />
+                            <SectionBody>
+                              <LessonPlayer
+                                autoPlay={data.lesson.live}
+                                src="https://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"
+                              />
+                              <VideoSettingsRow>
+                                <VideoSettingsLabelsRow>
+                                  <VideoSettingsLabel>
+                                    Server Url
+                                    <Text>https://stream.homeroom.live</Text>
+                                  </VideoSettingsLabel>
+                                  <VideoSettingsLabel>
+                                    Live Stream Key
+                                    <Text>Super-Secret-Streams</Text>
+                                  </VideoSettingsLabel>
+                                  <VideoSettingsLabel>
+                                    Preview Stream Key
+                                    <Text>Preview-Streams</Text>
+                                  </VideoSettingsLabel>
+                                </VideoSettingsLabelsRow>
+                                <VideoSettingsLink
+                                  href="/dashboard/howtostream"
+                                  prefetch
+                                >
+                                  <Button color="primary" src={iconHelpWhite}>
+                                    How to Stream
+                                  </Button>
+                                </VideoSettingsLink>
+                              </VideoSettingsRow>
+                            </SectionBody>
+                          </SectionCol>
+
+                          <SectionRightCol>
+                            <IconHeader src={iconChat} value="Chat" />
+                            <ChatCol>
+                              <Chat lessonId={this.props.lessonId} />
+                            </ChatCol>
+                          </SectionRightCol>
+                        </SectionRow>
+
+                        <SectionRow>
+                          <SectionCol>
+                            <IconHeader
+                              src={iconInformation}
+                              value="Information"
+                            />
+                            <SectionBody>
+                              <EditableLabel>
+                                Name
+                                <EditableComponent
+                                  mutation={updateLessonNameMutation}
+                                  variables={{ id: this.props.lessonId }}
+                                  value={data.lesson.name}
+                                >
+                                  {({ status, value, onChange, onSubmit }) => (
+                                    <Input
+                                      type="text"
+                                      value={value}
+                                      onChange={e => {
+                                        e.preventDefault()
+                                        onChange(e.target.value)
+                                      }}
+                                      onBlur={onSubmit}
+                                    />
+                                  )}
+                                </EditableComponent>
+                              </EditableLabel>
+
+                              <EditableLabel size="regular">
+                                Date & Time
+                                <EditableComponent
+                                  mutation={updateLessonScheduleMutation}
+                                  variables={{ id: this.props.lessonId }}
+                                  value={data.lesson.schedule}
+                                >
+                                  {({ status, value, onChange, onSubmit }) => (
+                                    <DatePicker
+                                      showTimeSelect
+                                      name="schedule"
+                                      type="date"
+                                      dateFormat="M/D/YY – h:mma"
+                                      timeFormat="h:mm a"
+                                      customInput={<Input type="button" />}
+                                      selected={value && moment(value)}
+                                      onChange={onChange}
+                                      onBlur={onSubmit}
+                                    />
+                                  )}
+                                </EditableComponent>
+                              </EditableLabel>
+
+                              <EditableLabel>
+                                Description
+                                <EditableComponent
+                                  mutation={updateLessonDescriptionMutation}
+                                  variables={{ id: this.props.lessonId }}
+                                  value={data.lesson.description}
+                                >
+                                  {({ status, value, onChange, onSubmit }) => (
+                                    <Textarea
+                                      type="text"
+                                      rows={5}
+                                      minRows={5}
+                                      value={value}
+                                      onChange={e => {
+                                        e.preventDefault()
+                                        onChange(e.target.value)
+                                      }}
+                                      onBlur={onSubmit}
+                                    />
+                                  )}
+                                </EditableComponent>
+                              </EditableLabel>
+                            </SectionBody>
+                          </SectionCol>
+
+                          <SectionRightCol>
+                            <IconHeader src={iconFile} value="Files" />
+                            <SectionBody>
+                              <EditableLabel>
+                                Files
+                                <EditableComponent
+                                  mutation={updateLessonFilesMutation}
+                                  variables={{ id: this.props.lessonId }}
+                                  value={data.lesson.files}
+                                >
+                                  {({ status, value, onChange, onSubmit }) => (
+                                    <FilePicker
+                                      value={value}
+                                      onChange={files => {
+                                        onChange(files)
+                                        onSubmit()
+                                      }}
+                                    />
+                                  )}
+                                </EditableComponent>
+                              </EditableLabel>
+                            </SectionBody>
+                          </SectionRightCol>
+                        </SectionRow>
+                      </LessonBody>
+                    </Container>
+                  )
                 }
 
                 default: {
@@ -461,4 +460,4 @@ class LessonPage extends React.Component {
   }
 }
 
-export default withLogin(withRouter(LessonPage))
+export default withLogin(LessonPage, { setup: true })

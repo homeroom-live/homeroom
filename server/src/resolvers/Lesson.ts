@@ -29,7 +29,7 @@ export const Lesson = {
       return ctx.db.query.messagesConnection(
         {
           where: { lesson: { id } },
-          orderBy: 'createdAt_DESC',
+          orderBy: 'createdAt_ASC',
           after,
           before,
           first,

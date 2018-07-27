@@ -118,7 +118,6 @@ export class Chat extends React.Component {
         notifyOnNetworkStatusChange
       >
         {({ networkStatus, data, refetch }) => {
-          console.log(networkStatus)
           switch (networkStatus) {
             case NetworkStatus.loading: {
               return <Loading />

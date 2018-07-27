@@ -61,6 +61,13 @@ const ShowMoreButton = styled(Button)`
 
 export class Lessons extends React.Component {
   getQuery = query => gql`
+    query {
+      viewer {
+        user {
+          id
+        }
+      }
+    }
     ${this.props.query}
     ${LessonCard.fragments.card}
   `
@@ -92,7 +99,7 @@ export class Lessons extends React.Component {
                 case NetworkStatus.ready: {
                   return (
                     <Fragment>
-                      {data.lessons.map(node => (
+                      {[].map(node => (
                         <LessonCardLarge
                           node={node}
                           key={node.id}

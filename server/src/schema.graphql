@@ -37,11 +37,11 @@ type Mutation {
   ): Lesson
   updateLesson(
     id: ID!
-    name: String!
-    description: String!
+    name: String
+    description: String
     schedule: DateTime
     premium: Boolean
-    files: [Upload!]!
+    files: [Upload!]
     course: CourseInput
   ): Lesson
   deleteLesson(id: ID!): Lesson
