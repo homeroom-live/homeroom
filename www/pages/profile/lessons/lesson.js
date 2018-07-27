@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { NetworkStatus } from 'apollo-client'
-import { Query } from 'react-apollo'
+import { Query, Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 import moment from 'moment-timezone'
@@ -22,7 +22,8 @@ import { Icon } from 'components/Icon'
 import { Link } from 'components/Link'
 import { Button } from 'components/Button'
 import { Player } from 'components/Player'
-import { FilePicker } from 'components/FilePicker'
+import { FileDropzone } from 'components/FileDropzone'
+import { File } from 'components/File'
 import { IconHeader } from 'components/IconHeader'
 import { Label } from 'components/Label'
 import { Toggle } from 'components/Toggle'
@@ -152,6 +153,16 @@ const lessonQuery = gql`
         id
         name
       }
+      filesConnection {
+        edges {
+          node {
+            id
+            updatedAt
+            name
+            url
+          }
+        }
+      }
     }
   }
 `
@@ -192,9 +203,22 @@ const updateLessonScheduleMutation = gql`
   }
 `
 
-const updateLessonFilesMutation = gql`
-  mutation UpdateLessonFiles($id: ID!, $data: [Upload!]) {
-    updateLesson(id: $id, files: $data) {
+const addLessonFilesMutation = gql`
+  mutation AddLessonFiles($id: ID!, $data: Upload!) {
+    addLessonFiles(id: $id, file: $data) {
+      id
+      files {
+        id
+        contentType
+        url
+      }
+    }
+  }
+`
+
+const removeLessonFileMutation = gql`
+  mutation RemoveLessonFile($id: ID!, $data: ID!) {
+    addLessonFile(id: $id, fileId: $data) {
       id
       files {
         id
@@ -218,7 +242,7 @@ class LessonPage extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <Navbar activePage="profile" />
         <SideNav activeSection="lessons">
           <Query
@@ -425,21 +449,50 @@ class LessonPage extends React.Component {
                             <SectionBody>
                               <EditableLabel>
                                 Files
+                                {/* TODO */}
                                 <EditableComponent
-                                  mutation={updateLessonFilesMutation}
+                                  mutation={addLessonFilesMutation}
                                   variables={{ id: this.props.lessonId }}
-                                  value={data.lesson.files}
+                                  value={[]}
                                 >
                                   {({ status, value, onChange, onSubmit }) => (
-                                    <FilePicker
-                                      value={value}
-                                      onChange={files => {
-                                        onChange(files)
-                                        onSubmit()
-                                      }}
-                                    />
+                                    <Fragment>
+                                      <FileDropzone
+                                        value={value}
+                                        onChange={onChange}
+                                        onBlur={onSubmit}
+                                      />
+                                      {value.map(file => (
+                                        <File
+                                          key={file.name}
+                                          name={file.name}
+                                          loading={status === 0}
+                                        />
+                                      ))}
+                                    </Fragment>
                                   )}
                                 </EditableComponent>
+                                {data.lesson.filesConnection.edges.map(
+                                  ({ node }) => (
+                                    <Mutation
+                                      key={node.id}
+                                      mutation={removeLessonFileMutation}
+                                      variables={{
+                                        id: this.props.lessonId,
+                                        fileId: node.id,
+                                      }}
+                                    >
+                                      {(handleRemove, { loading, data }) => (
+                                        <File
+                                          name={node.name}
+                                          url={node.url}
+                                          updatedAt={node.updatedAt}
+                                          onRemove={handleRemove}
+                                        />
+                                      )}
+                                    </Mutation>
+                                  ),
+                                )}
                               </EditableLabel>
                             </SectionBody>
                           </SectionRightCol>
@@ -457,7 +510,7 @@ class LessonPage extends React.Component {
           </Query>
         </SideNav>
         <Footer />
-      </React.Fragment>
+      </Fragment>
     )
   }
 }
