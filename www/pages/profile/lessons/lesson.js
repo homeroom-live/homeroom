@@ -12,7 +12,7 @@ import { redirect } from 'lib/redirect'
 import { Navbar } from 'components/Navbar'
 import { Footer } from 'components/Footer'
 import { SideNav } from 'components/SideNav'
-import { Loading } from 'components/Loading'
+import { LoadingIllustration } from 'components/Loading'
 import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
 import { Breadcrumb } from 'components/Breadcrumb'
@@ -253,7 +253,7 @@ class LessonPage extends React.Component {
             {({ networkStatus, data }) => {
               switch (networkStatus) {
                 case NetworkStatus.loading: {
-                  return <Loading />
+                  return <LoadingIllustration />
                 }
 
                 case NetworkStatus.ready: {

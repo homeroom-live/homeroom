@@ -34,7 +34,7 @@ const ChatTextarea = styled(Textarea)`
   width: 100%;
   background: white;
   resize: none;
-  z-index: 10;
+  z-index: 3;
 `
 const EndOfChat = styled.span`
   float: left;
@@ -49,7 +49,7 @@ const messagesQuery = gql`
   query LessonMessages($id: ID!, $cursor: String) {
     lesson(id: $id) {
       id
-      messagesConnection(last: 3, after: $cursor) {
+      messagesConnection(last: 10, after: $cursor) {
         pageInfo {
           endCursor
         }
@@ -77,9 +77,18 @@ const createMessageMutation = gql`
   mutation createMessage($id: ID!, $text: String!) {
     createMessage(lessonId: $id, text: $text) {
       id
-      text
       createdAt
+      text
       is_viewer_message
+      is_teacher_message
+      sender {
+        id
+        name
+        username
+        picture {
+          id
+        }
+      }
     }
   }
 `
@@ -87,6 +96,7 @@ const createMessageMutation = gql`
 export class Chat extends React.Component {
   state = {
     message: '',
+    endCursor: null,
   }
 
   componentDidUpdate() {
@@ -112,47 +122,18 @@ export class Chat extends React.Component {
     }
   }
 
-  handleFetchMore = (fetchMore, cursor) => e => {
-    e.preventDefault()
-
-    // Not functional
-    // fetchMore({
-    //   variables: { cursor },
-    //   updateQuery: (previousResult, { fetchMoreResult }) => {
-    //     const previousEdges = previousResult.lesson.messagesConnection.edges
-    //     const newEdges = fetchMoreResult.lesson.messagesConnection.edges
-    //     const pageInfo = fetchMoreResult.lesson.messagesConnection.pageInfo
-
-    //     const newMessagesConnection = {
-    //       ...previousResult.lesson.messagesConnection,
-    //       pageInfo,
-    //       edges: [...previousEdges, ...newEdges],
-    //     }
-
-    //     const newLesson = {
-    //       ...previousResult.lesson,
-    //       messagesConnection: newMessagesConnection,
-    //     }
-
-    //     return newEdges.length
-    //       ? {
-    //           ...previousResult.lesson,
-    //           lesson: newLesson,
-    //         }
-    //       : previousResult
-    //   },
-    // })
-  }
-
   render() {
     return (
       <Query
         query={messagesQuery}
-        variables={{ id: this.props.lessonId }}
+        variables={{ id: this.props.lessonId, cursor: this.state.endCursor }}
         // pollInterval={300}
-        notifyOnNetworkStatusChange
+        // notifyOnNetworkStatusChange
       >
-        {({ networkStatus, data, refetch, fetchMore }) => {
+        {({ networkStatus, data, refetch, updateQuery }) => {
+          console.log(networkStatus)
+          console.log(data)
+
           switch (networkStatus) {
             case NetworkStatus.loading: {
               return <Loading />
@@ -164,13 +145,7 @@ export class Chat extends React.Component {
               return (
                 <Container>
                   <MessagesCol>
-                    <ShowMoreButton
-                      onClick={this.handleFetchMore(
-                        fetchMore,
-                        data.lesson.messagesConnection.pageInfo.endCursor,
-                      )}
-                      color="tertiary"
-                    >
+                    <ShowMoreButton onClick={() => {}} color="tertiary">
                       Show More
                     </ShowMoreButton>
                     {data.lesson.messagesConnection.edges.map(({ node }) => (
@@ -192,24 +167,32 @@ export class Chat extends React.Component {
                       optimisticResponse={{
                         __typename: 'Mutation',
                         createMessage: {
-                          __typename: 'MessageEdge',
-                          node: {
-                            __typename: 'Message',
-                            id: -1,
-                            text: this.state.message,
-                            createdAt: new Date(),
-                            is_viewer_message: true,
-                            is_teacher_message: true,
-                            sender: data.viewer.user,
-                          },
+                          // __typename: 'MessageEdge',
+                          // node: {
+                          __typename: 'Message',
+                          id: -1,
+                          text: this.state.message,
+                          createdAt: new Date(),
+                          is_viewer_message: true,
+                          is_teacher_message: true,
+                          sender: { ...data.viewer.user },
+                          // },
                         },
                       }}
                       update={(proxy, { data: { createMessage } }) => {
+                        console.log('IN UPDATE AFTER OPTIMISTIC')
                         const data = proxy.readQuery({
                           query: messagesQuery,
-                          variables: { id: this.props.lessonId },
+                          variables: {
+                            id: this.props.lessonId,
+                            cursor: this.state.endCursor,
+                          },
                         })
-                        data.lesson.messagesConnection.edges.push(createMessage)
+                        console.log(data)
+                        data.lesson.messagesConnection.edges.unshift(
+                          createMessage,
+                        )
+
                         proxy.writeQuery({
                           query: messagesQuery,
                           data,

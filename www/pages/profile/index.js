@@ -194,7 +194,11 @@ class Profile extends React.Component {
         {(updateUser, { loading, error, data }) => (
           <UserCol>
             <UserHeader src={iconUser} value="Profile">
-              <SaveButton color="primary" onClick={updateUser}>
+              <SaveButton
+                color="primary"
+                onClick={updateUser}
+                disabled={!this.shouldBeSaved()}
+              >
                 Save Profile
               </SaveButton>
             </UserHeader>
