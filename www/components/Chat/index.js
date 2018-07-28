@@ -46,11 +46,12 @@ const ShowMoreButton = styled(Button)`
 // GraphQL
 
 const messagesQuery = gql`
-  query LessonMessages($id: ID!, $cursor: String) {
+  query LessonMessages($id: ID!, $endCursor: String, $startCursor: String) {
     lesson(id: $id) {
       id
-      messagesConnection(last: 10, after: $cursor) {
+      messagesConnection(last: 10, after: $endCursor, before: $startCursor) {
         pageInfo {
+          startCursor
           endCursor
         }
         edges {
@@ -76,48 +77,81 @@ const messagesQuery = gql`
 const createMessageMutation = gql`
   mutation createMessage($id: ID!, $text: String!) {
     createMessage(lessonId: $id, text: $text) {
-      id
-      createdAt
-      text
-      is_viewer_message
-      is_teacher_message
-      sender {
-        id
-        name
-        username
-        picture {
-          id
-        }
-      }
+      ...ChatMessage
     }
   }
+  ${MessageFragment}
 `
 
 export class Chat extends React.Component {
   state = {
     message: '',
+    startCursor: null,
     endCursor: null,
   }
 
   componentDidUpdate() {
     if (this.endOfChat) {
-      this.endOfChat.scrollIntoView({
-        behavior: 'smooth',
-      })
+      this.scrollToBottom()
     }
   }
 
-  handleSubmit = e => {}
+  scrollToBottom = () => {
+    this.endOfChat.scrollIntoView({
+      behavior: 'smooth',
+    })
+  }
 
   handleInputChange = e => {
     this.setState({ message: e.target.value })
   }
 
-  handleEnterKey = (submit, refetch) => e => {
+  handleCacheUpdate = (proxy, { data: { createMessage } }) => {
+    const queryArgs = {
+      query: messagesQuery,
+      variables: {
+        id: this.props.lessonId,
+        cursor: this.state.endCursor,
+      },
+    }
+
+    const data = proxy.readQuery(queryArgs)
+    data.lesson.messagesConnection.edges.push({
+      __typename: 'MessageEdge',
+      node: createMessage,
+    })
+    proxy.writeQuery({
+      ...queryArgs,
+      data,
+    })
+
+    this.scrollToBottom()
+  }
+
+  handleSubmit = (mutate, data) => e => {
     if (e.keyCode === 13) {
       e.preventDefault()
-      submit()
-      refetch()
+
+      mutate({
+        variables: {
+          id: this.props.lessonId,
+          text: this.state.message,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          createMessage: {
+            __typename: 'Message',
+            id: -1,
+            text: this.state.message,
+            createdAt: new Date(),
+            is_viewer_message: true,
+            is_teacher_message: true,
+            sender: { ...data.viewer.user },
+          },
+        },
+        update: this.handleCacheUpdate,
+      })
+
       this.setState({ message: '' })
     }
   }
@@ -130,9 +164,8 @@ export class Chat extends React.Component {
         // pollInterval={300}
         // notifyOnNetworkStatusChange
       >
-        {({ networkStatus, data, refetch, updateQuery }) => {
-          console.log(networkStatus)
-          console.log(data)
+        {({ networkStatus, data, fetchMore, updateQuery }) => {
+          // console.log(networkStatus, data)
 
           switch (networkStatus) {
             case NetworkStatus.loading: {
@@ -140,7 +173,6 @@ export class Chat extends React.Component {
             }
 
             case NetworkStatus.poll:
-            case NetworkStatus.refetch:
             case NetworkStatus.ready: {
               return (
                 <Container>
@@ -158,54 +190,14 @@ export class Chat extends React.Component {
                     />
                   </MessagesCol>
                   <TextareaRow>
-                    <Mutation
-                      mutation={createMessageMutation}
-                      variables={{
-                        id: this.props.lessonId,
-                        text: this.state.message,
-                      }}
-                      optimisticResponse={{
-                        __typename: 'Mutation',
-                        createMessage: {
-                          // __typename: 'MessageEdge',
-                          // node: {
-                          __typename: 'Message',
-                          id: -1,
-                          text: this.state.message,
-                          createdAt: new Date(),
-                          is_viewer_message: true,
-                          is_teacher_message: true,
-                          sender: { ...data.viewer.user },
-                          // },
-                        },
-                      }}
-                      update={(proxy, { data: { createMessage } }) => {
-                        console.log('IN UPDATE AFTER OPTIMISTIC')
-                        const data = proxy.readQuery({
-                          query: messagesQuery,
-                          variables: {
-                            id: this.props.lessonId,
-                            cursor: this.state.endCursor,
-                          },
-                        })
-                        console.log(data)
-                        data.lesson.messagesConnection.edges.unshift(
-                          createMessage,
-                        )
-
-                        proxy.writeQuery({
-                          query: messagesQuery,
-                          data,
-                        })
-                      }}
-                    >
-                      {(submit, { loading, error, data }) => (
+                    <Mutation mutation={createMessageMutation}>
+                      {(mutate, { loading, error }) => (
                         <ChatTextarea
                           type="text"
                           maxRows={2}
                           value={this.state.message}
                           onChange={this.handleInputChange}
-                          onKeyDown={this.handleEnterKey(submit, refetch)}
+                          onKeyDown={this.handleSubmit(mutate, data)}
                         />
                       )}
                     </Mutation>

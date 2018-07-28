@@ -1,9 +1,5 @@
-import React from 'react'
 import styled from 'styled-components'
-
-// Components
-
-import DatePickerComponent from 'react-datepicker'
+import _DatePicker from 'react-datepicker'
 
 // Styles
 
@@ -12,20 +8,6 @@ import './index.css'
 
 // Elements
 
-const DatePickerWrapper = styled.span`
-  coursor: pointer;
+export const DatePicker = styled(_DatePicker)`
+  cursor: pointer;
 `
-
-// DatePicker
-
-export class DatePicker extends React.Component {
-  state = {}
-
-  render() {
-    return (
-      <DatePickerWrapper>
-        <DatePickerComponent {...this.props} />
-      </DatePickerWrapper>
-    )
-  }
-}
