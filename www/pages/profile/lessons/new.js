@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 import { Navbar } from 'components/Navbar'
 import { SideNav } from 'components/SideNav'
-import { FilePicker } from 'components/FilePicker'
+import { FileDropzone } from 'components/FileDropzone'
 import { DatePicker } from 'components/DatePicker'
 import { Loading } from 'components/Loading'
 import { FlexCol } from 'components/FlexCol'
@@ -186,6 +186,11 @@ class LessonForm extends React.Component {
     })
   }
 
+  handleSubmit = create => e => {
+    e.preventDefault()
+    create()
+  }
+
   render() {
     return (
       <>
@@ -203,11 +208,7 @@ class LessonForm extends React.Component {
             }}
           >
             {(create, { loading, error, data }) => {
-              if (loading) {
-                return <Loading />
-              } else if (error) {
-                return 'something went wrong'
-              } else if (data) {
+              if (data) {
                 return (
                   <CardCol>
                     <Card>
@@ -226,22 +227,12 @@ class LessonForm extends React.Component {
                         </CardTitleLink>
                         <CardText>{data.lesson.description}</CardText>
                         <CardFooter>
-                          <Link
-                            href={{
-                              pathname: `/profile/lessons/lesson/`,
-                              query: { lessonId: data.lesson.id },
-                            }}
-                            as={`/profile/lessons/lesson/${data.lesson.id}`}
-                            textDecoration="none"
-                          >
-                            <Button color="secondary">Preview Lesson</Button>
-                          </Link>
                           <LiveLink
                             href={`/profile/lessons/lesson/${data.lesson.id}`}
                           >
                             <Button color="primary">
                               <Icon src={iconVideoWhite} inline />
-                              Go Live
+                              View Lesson
                             </Button>
                           </LiveLink>
                         </CardFooter>
@@ -256,11 +247,15 @@ class LessonForm extends React.Component {
                       Back to Lessons
                     </Breadcrumb>
                     <NewLessonHeader src={iconVideo} value="Create New Lesson">
-                      <SaveButton color="primary" onClick={create}>
+                      <SaveButton
+                        color="primary"
+                        status={{ loading, error }}
+                        onClick={this.handleSubmit(create)}
+                      >
                         Save Lesson
                       </SaveButton>
                     </NewLessonHeader>
-                    <NewLessonForm onSubmit={create}>
+                    <NewLessonForm onSubmit={this.handleSubmit(create)}>
                       <NewLessonFormRow>
                         <NewLessonFormCol>
                           <LessonNameLabel>
@@ -289,14 +284,14 @@ class LessonForm extends React.Component {
                             <Textarea
                               value={this.state.description}
                               onChange={this.handleDescriptionChange}
-                              rows={5}
+                              minRows={5}
                             />
                           </Label>
                         </NewLessonFormCol>
                         <FlexCol>
                           <Label>
                             Lesson Files
-                            <FilePicker
+                            <FileDropzone
                               value={this.state.files}
                               onChange={this.handleFilesChange}
                             />
@@ -304,7 +299,11 @@ class LessonForm extends React.Component {
                         </FlexCol>
                       </NewLessonFormRow>
                       <FlexRow>
-                        <BigSaveButton color="tertiary" type="submit">
+                        <BigSaveButton
+                          color="tertiary"
+                          status={{ loading, error }}
+                          type="submit"
+                        >
                           Save Lesson
                         </BigSaveButton>
                       </FlexRow>

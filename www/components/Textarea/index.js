@@ -1,5 +1,8 @@
+import React from 'react'
 import styled from 'styled-components'
 import TextareaAutosize from 'react-textarea-autosize'
+
+import { Status } from 'components/Status'
 
 import {
   colors,
@@ -10,7 +13,12 @@ import {
   borderRadius,
 } from 'utils/theme'
 
-export const Textarea = styled(TextareaAutosize)`
+const TextareaContainer = styled.div`
+  position: relative;
+  width: 100%;
+`
+const _Textarea = styled(TextareaAutosize)`
+  width: 100%;
   padding: ${spacing.small};
   color: ${colors.secondary};
   font-size: ${fontSizes.regular};
@@ -30,3 +38,10 @@ export const Textarea = styled(TextareaAutosize)`
     color: ${colors.gray};
   }
 `
+
+export const Textarea = ({ status, ...props }) => (
+  <TextareaContainer>
+    <_Textarea {...props} />
+    {status && <Status status={status} />}
+  </TextareaContainer>
+)

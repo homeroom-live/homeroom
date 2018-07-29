@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { Icon } from 'components/Icon'
 import { FlexRow } from 'components/FlexRow'
+import { Status } from 'components/Status'
 
 import {
   colors,
@@ -15,6 +16,7 @@ import {
 } from 'utils/theme'
 
 const InputContainer = styled(FlexRow)`
+  position: relative;
   padding: ${spacing.small};
   color: ${colors.secondary};
   outline: none;
@@ -49,9 +51,10 @@ const InputIcon = styled(Icon)`
   margin-right: ${spacing.small};
 `
 
-export const Input = ({ icon, ...props }) => (
+export const Input = ({ icon, status, ...props }) => (
   <InputContainer>
     {icon && <InputIcon src={icon} />}
     <_Input {...props} />
+    {status && <Status status={status} />}
   </InputContainer>
 )

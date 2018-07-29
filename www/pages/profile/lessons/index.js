@@ -16,6 +16,7 @@ import { Button } from 'components/Button'
 import { Link } from 'components/Link'
 import { EmptyState } from 'components/EmptyState'
 import { Footer } from 'components/Footer'
+import { LoadingIllustration } from 'components/Loading'
 
 // Icons
 
@@ -153,7 +154,7 @@ class LessonsPage extends React.Component {
                   {({ networkStatus, data, fetchMore }) => {
                     switch (networkStatus) {
                       case NetworkStatus.loading: {
-                        return null
+                        return <LoadingIllustration />
                       }
 
                       case NetworkStatus.fetchMore:

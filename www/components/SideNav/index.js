@@ -117,7 +117,8 @@ export const SideNav = ({ children, activeSection }) => (
                     <SideNavIcon src={iconVideoWhite} />
                     Lessons
                   </SideNavLink>
-                  <SideNavLink
+                  {/*
+                    <SideNavLink
                     size="small"
                     weight="bold"
                     href="/profile/courses"
@@ -126,6 +127,7 @@ export const SideNav = ({ children, activeSection }) => (
                     <SideNavIcon src={iconFileWhite} />
                     Courses
                   </SideNavLink>
+                  */}
                   <SideNavLink
                     size="small"
                     weight="bold"

@@ -10,9 +10,7 @@ import { Dropzone } from 'components/Dropzone'
 import { spacing } from 'utils/theme'
 import iconFile from 'static/assets/icons/ui/file-plus.svg'
 
-const FilePickerContainer = styled(FlexCol)`
-  margin: 10px 0;
-`
+const FilePickerContainer = styled(FlexCol)``
 const PlaceholderIcon = styled(Icon)`
   margin-bottom: ${spacing.small};
 `
@@ -50,9 +48,9 @@ export class FileDropzone extends React.Component {
     return (
       <FilePickerContainer>
         <Dropzone
-          onDrop={this.handleChange}
-          accept={accept}
           multiple
+          accept={accept}
+          onDrop={this.handleChange}
           onClick={this.handleClick}
         >
           <PlaceholderIcon src={iconFile} />

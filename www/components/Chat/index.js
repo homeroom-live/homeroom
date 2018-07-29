@@ -191,6 +191,7 @@ export class Chat extends React.Component {
                       {(mutate, { loading, error }) => (
                         <ChatTextarea
                           type="text"
+                          minRows={1}
                           maxRows={2}
                           value={this.state.message}
                           onChange={this.handleInputChange}

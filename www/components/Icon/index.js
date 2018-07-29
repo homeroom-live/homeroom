@@ -8,6 +8,7 @@ const inlineIcon = () => `
 `
 
 export const Icon = styled.img`
+  height: ${props => props.height || 'initial'};
   transition: all 0.25s ease-out;
   ${props => (props.inline ? inlineIcon() : null)};
 `

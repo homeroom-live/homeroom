@@ -45,6 +45,5 @@ const Illustration = styled.img.attrs({
 export const LoadingIllustration = () => (
   <ContainerCol>
     <Illustration />
-    <Text>Insert Quote here</Text>
   </ContainerCol>
 )

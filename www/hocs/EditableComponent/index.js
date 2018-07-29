@@ -1,25 +1,6 @@
 import React from 'react'
 import { Mutation } from 'react-apollo'
 
-export const STATUS = {
-  NOT_CHANGED: 'STATUS_NOT_CHANGED',
-  SUCCESS: 'STATUS_SUCCESS',
-  ERROR: 'STATUS_ERROR',
-  LOADING: 'STATUS_LOADING',
-}
-
-function getStatusFromLED({ loading, error, data }) {
-  if (loading) {
-    return STATUS.LOADING
-  } else if (error) {
-    return STATUS.ERROR
-  } else if (data) {
-    return STATUS.SUCCESS
-  } else {
-    return STATUS.NOT_CHANGED
-  }
-}
-
 export class EditableComponent extends React.Component {
   state = {
     data: this.props.value,
@@ -27,6 +8,11 @@ export class EditableComponent extends React.Component {
 
   handleChange = data => {
     this.setState({ data })
+  }
+
+  handleSubmit = submit => e => {
+    e.preventDefault()
+    submit()
   }
 
   render() {
@@ -40,9 +26,9 @@ export class EditableComponent extends React.Component {
       >
         {(submit, { loading, error, data }) =>
           this.props.children({
-            status: getStatusFromLED({ loading, error, data }),
+            status: { loading, error, data },
             onChange: this.handleChange,
-            onSubmit: submit,
+            onSubmit: this.handleSubmit(submit),
             value: this.state.data,
           })
         }

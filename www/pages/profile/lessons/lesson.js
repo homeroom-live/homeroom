@@ -403,6 +403,7 @@ class LessonPage extends React.Component {
                                         e.preventDefault()
                                         onChange(e.target.value)
                                       }}
+                                      status={status}
                                       onBlur={onSubmit}
                                     />
                                   )}
@@ -423,7 +424,9 @@ class LessonPage extends React.Component {
                                       type="date"
                                       dateFormat="M/D/YY – h:mma"
                                       timeFormat="h:mm a"
-                                      customInput={<Input type="button" />}
+                                      customInput={
+                                        <Input status={status} type="button" />
+                                      }
                                       selected={value && moment(value)}
                                       onChange={onChange}
                                       onBlur={onSubmit}
@@ -445,6 +448,7 @@ class LessonPage extends React.Component {
                                       rows={5}
                                       minRows={5}
                                       value={value}
+                                      status={status}
                                       onChange={e => {
                                         e.preventDefault()
                                         onChange(e.target.value)
