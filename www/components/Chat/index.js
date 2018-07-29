@@ -106,6 +106,13 @@ export class Chat extends React.Component {
     this.setState({ message: e.target.value })
   }
 
+  handleUpdateQuery = (previousResult, { variables }) => {
+    console.log('IN UPDATE QUERY', previousResult)
+    return {
+      ...previousResult,
+    }
+  }
+
   handleCacheUpdate = (proxy, { data: { createMessage } }) => {
     const queryArgs = {
       query: messagesQuery,
@@ -124,8 +131,6 @@ export class Chat extends React.Component {
       ...queryArgs,
       data,
     })
-
-    this.scrollToBottom()
   }
 
   handleSubmit = (mutate, data) => e => {
@@ -141,7 +146,7 @@ export class Chat extends React.Component {
           __typename: 'Mutation',
           createMessage: {
             __typename: 'Message',
-            id: -1,
+            id: `${new Date().toISOString}${Math.floor(Math.random() * 100)}`,
             text: this.state.message,
             createdAt: new Date(),
             is_viewer_message: true,
@@ -152,6 +157,7 @@ export class Chat extends React.Component {
         update: this.handleCacheUpdate,
       })
 
+      this.scrollToBottom()
       this.setState({ message: '' })
     }
   }
@@ -164,9 +170,7 @@ export class Chat extends React.Component {
         // pollInterval={300}
         // notifyOnNetworkStatusChange
       >
-        {({ networkStatus, data, fetchMore, updateQuery }) => {
-          // console.log(networkStatus, data)
-
+        {({ networkStatus, data }) => {
           switch (networkStatus) {
             case NetworkStatus.loading: {
               return <Loading />

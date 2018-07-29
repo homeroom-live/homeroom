@@ -20,6 +20,8 @@ import { Label } from 'components/Label'
 import { Input } from 'components/Input'
 import { Textarea } from 'components/Textarea'
 import { Footer } from 'components/Footer'
+import { Loading } from 'components/Loading'
+import { TextStyle } from 'components/TextStyle'
 
 // Icons
 
@@ -202,7 +204,12 @@ class Profile extends React.Component {
                 Save Profile
               </SaveButton>
             </UserHeader>
-            <UserForm onSubmit={updateUser}>
+            <UserForm
+              onSubmit={e => {
+                e.preventDefault()
+                updateUser()
+              }}
+            >
               <UserFormRow>
                 <UserFormCol>
                   <Label>
@@ -273,13 +280,13 @@ class Profile extends React.Component {
                 <BigSaveButton
                   color="tertiary"
                   type="submit"
+                  loading={loading}
                   disabled={!this.shouldBeSaved()}
                 >
                   Save Profile
                 </BigSaveButton>
               </FlexRow>
             </UserForm>
-            {loading && 'Loading'}
           </UserCol>
         )}
       </Mutation>

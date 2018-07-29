@@ -7,7 +7,7 @@ import { Text } from 'components/Text'
 import { spacing } from 'utils/theme'
 
 import loadingIllustration from 'static/assets/images/illustrations/loading.svg'
-import loadingIcon from 'static/assets/icons/loading.svg'
+import loadingIcon from 'static/assets/icons/loading-white.svg'
 
 export const Loading = styled.img.attrs({
   src: loadingIcon,
@@ -17,7 +17,6 @@ export const Loading = styled.img.attrs({
   align-items: center;
   justify-content: center;
   height: ${props => props.height || `100%`};
-  width: 100%;
 `
 
 const ContainerCol = styled(FlexCol)`

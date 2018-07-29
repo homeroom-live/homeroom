@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { darken } from 'polished'
 
 import { Icon } from 'components/Icon'
+import { Loading } from 'components/Loading'
 
 import {
   colors,
@@ -20,6 +21,25 @@ const ButtonIcon = styled(Icon)`
   margin-top: -2px;
   margin-right: ${spacing.small};
 `
+
+const loading = {
+  primary: () => `
+    opacity: 1;
+    background: ${colors.primary} !important;
+  `,
+  secondary: () => `
+    opacity: 1;
+    background: ${colors.primary} !important;
+  `,
+  tertiary: () => `
+    opacity: 1;
+    background: ${colors.secondary} !important;
+  `,
+  danger: () => `
+    opacity: 1;
+    background: ${colors.danger} !important;
+  `,
+}
 
 const themes = {
   primary: () => `
@@ -61,27 +81,15 @@ const themes = {
       opacity: 1;
     }
   `,
-
-  danger: {
-    color: colors.white,
-    background: colors.danger,
-    borderColor: colors.danger,
-    ':hover': {
-      borderColor: darken(0.1, colors.danger),
-      background: darken(0.1, colors.danger),
-    },
-  },
-
-  cancel: {
-    color: colors.grayDarker,
-    background: 'transparent',
-    borderColor: 'transparent',
-    ':hover': {
-      color: colors.white,
-      borderColor: darken(0.1, colors.grayDarker),
-      background: darken(0.1, colors.grayDarker),
-    },
-  },
+  danger: () => `
+    color: ${colors.white};
+    background: ${colors.danger};
+    border-color: ${colors.danger};
+    &:hover {
+      border-color: ${darken(0.1, colors.danger)};
+      background: ${darken(0.1, colors.danger)},
+    }
+  `,
 }
 
 const _Button = styled.button`
@@ -102,11 +110,12 @@ const _Button = styled.button`
   cursor: pointer;
   transition: ${transition};
   ${props => (props.color ? themes[props.color]() : themes.primary())};
+  ${props => (props.loading ? loading[props.color || 'primary']() : null)};
 `
 
-export const Button = ({ src, children, ...props }) => (
-  <_Button {...props}>
+export const Button = ({ src, children, loading, ...props }) => (
+  <_Button loading={loading} {...props}>
     {src && <ButtonIcon src={src} />}
-    {children}
+    {loading ? <Loading height="16px" /> : children}
   </_Button>
 )
