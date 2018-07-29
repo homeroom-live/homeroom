@@ -21,23 +21,34 @@ const viewerQuery = gql`
 export const withLogin = (ComposedComponent, options) =>
   class WithLogin extends React.Component {
     static async getInitialProps(ctx) {
-      const res = await ctx.apolloClient.query({
-        query: viewerQuery,
-        fetchPolicy: 'network-only',
-        errorPolicy: 'ignore',
-      })
+      // Init
 
-      if (!res.data.viewer.user) {
+      let auth = {}
+      let composedInitialProps = {}
+
+      if (ComposedComponent.getInitialProps) {
+        ;[auth, composedInitialProps] = await Promise.all([
+          ctx.apolloClient.query({
+            query: viewerQuery,
+            fetchPolicy: 'cache-first',
+            errorPolicy: 'ignore',
+          }),
+          ComposedComponent.getInitialProps(ctx),
+        ])
+      } else {
+        auth = await ctx.apolloClient.query({
+          query: viewerQuery,
+          fetchPolicy: 'cache-first',
+          errorPolicy: 'ignore',
+        })
+      }
+
+      if (!auth.data.viewer.user) {
         return redirect(ctx, '/signup')
       }
 
-      if (res.data.viewer.requiresSetup && options.setup) {
+      if (auth.data.viewer.requiresSetup && options.setup) {
         return redirect(ctx, '/profile')
-      }
-
-      let composedInitialProps = {}
-      if (ComposedComponent.getInitialProps) {
-        composedInitialProps = await ComposedComponent.getInitialProps(ctx)
       }
 
       return {

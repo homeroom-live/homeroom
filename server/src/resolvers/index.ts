@@ -5,6 +5,7 @@ import { Query } from './Query'
 import { user } from './Mutation/user'
 import { message } from './Mutation/message'
 import { lesson } from './Mutation/lesson'
+import { course } from './Mutation/course'
 import { stripe } from './Mutation/stripe'
 // Types
 import { Viewer } from './Viewer'
@@ -23,6 +24,7 @@ export const resolvers = {
     ...stripe,
     ...lesson,
     ...message,
+    ...course,
   },
   Viewer,
   Explore,

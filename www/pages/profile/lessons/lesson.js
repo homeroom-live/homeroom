@@ -45,7 +45,10 @@ import iconFile from 'static/assets/icons/ui/file.svg'
 
 // HOCs
 
-import { EditableComponent } from 'hocs/EditableComponent'
+import {
+  EditableComponent,
+  STATUS as EditableStatus,
+} from 'hocs/EditableComponent'
 import { withLogin } from 'hocs/withLogin'
 
 // Utils
@@ -204,26 +207,36 @@ const updateLessonScheduleMutation = gql`
 `
 
 const addLessonFilesMutation = gql`
-  mutation AddLessonFiles($id: ID!, $data: Upload!) {
-    addLessonFiles(id: $id, file: $data) {
+  mutation AddLessonFiles($id: ID!, $data: [Upload!]!) {
+    addLessonFiles(id: $id, files: $data) {
       id
-      files {
-        id
-        contentType
-        url
+      filesConnection {
+        edges {
+          node {
+            id
+            updatedAt
+            name
+            url
+          }
+        }
       }
     }
   }
 `
 
 const removeLessonFileMutation = gql`
-  mutation RemoveLessonFile($id: ID!, $data: ID!) {
-    addLessonFile(id: $id, fileId: $data) {
+  mutation RemoveLessonFile($id: ID!, $fileId: ID!) {
+    removeLessonFile(id: $id, fileId: $fileId) {
       id
-      files {
-        id
-        contentType
-        url
+      filesConnection {
+        edges {
+          node {
+            id
+            updatedAt
+            name
+            url
+          }
+        }
       }
     }
   }
@@ -449,7 +462,6 @@ class LessonPage extends React.Component {
                             <SectionBody>
                               <EditableLabel>
                                 Files
-                                {/* TODO */}
                                 <EditableComponent
                                   mutation={addLessonFilesMutation}
                                   variables={{ id: this.props.lessonId }}
@@ -460,13 +472,16 @@ class LessonPage extends React.Component {
                                       <FileDropzone
                                         value={value}
                                         onChange={onChange}
-                                        onBlur={onSubmit}
+                                        onSubmit={onSubmit}
                                       />
                                       {value.map(file => (
                                         <File
                                           key={file.name}
                                           name={file.name}
-                                          loading={status === 0}
+                                          url={file.preview}
+                                          loading={
+                                            status === EditableStatus.LOADING
+                                          }
                                         />
                                       ))}
                                     </Fragment>

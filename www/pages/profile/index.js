@@ -5,8 +5,6 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 import equal from 'deep-eql'
 
-import { viewer } from 'data/viewer'
-
 // Components
 
 import { FlexCol } from 'components/FlexCol'
@@ -245,6 +243,7 @@ class Profile extends React.Component {
                       onChange={this.handleDescriptionChange}
                       value={this.state.bio}
                       rows={5}
+                      minRows={5}
                     />
                   </Label>
                 </UserFormCol>
@@ -299,7 +298,7 @@ class ProfilePage extends React.Component {
     return (
       <>
         <Navbar activePage="profile" />
-        <SideNav data={{ viewer }} activeSection="">
+        <SideNav activeSection="">
           <Query
             query={profileQuery}
             notifyOnNetworkStatusChange

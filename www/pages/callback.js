@@ -27,6 +27,7 @@ const CallbackIllustration = styled.img`
 class Callback extends React.Component {
   static async getInitialProps(ctx) {
     // Removes all existing Query results from cache
+    await ctx.apolloClient.cache.reset()
     await ctx.apolloClient.resetStore()
 
     return {}

@@ -8,9 +8,9 @@ import { Icon } from 'components/Icon'
 import { Text } from 'components/Text'
 import { FlexRow } from 'components/FlexRow'
 
-import { spacing, opacity, colors, shadow } from 'utils/theme'
+import { spacing, opacity, colors } from 'utils/theme'
 import iconDownload from 'static/assets/icons/ui/download.svg'
-import iconX from 'static/assets/icons/ui/x-circle.svg'
+import iconRemove from 'static/assets/icons/ui/x-circle.svg'
 
 // ${shadow()};
 const Container = styled.div``
@@ -47,7 +47,7 @@ const MetaRow = styled(FlexRow)`
   flex: 0;
   margin-left: auto;
 `
-const XIcon = styled(DownloadIcon)`
+const RemoveIcon = styled(DownloadIcon)`
   margin-left: ${spacing.medium};
 `
 
@@ -67,30 +67,37 @@ const XIcon = styled(DownloadIcon)`
 //   file: propType(File.fragments.file)
 // }
 
-export const File = ({ name, url, updatedAt, onRemove }) => (
-  <DownloadWrapper href={url} download={name} target="_blank">
-    <DownloadIcon src={iconDownload} />
+export class File extends React.Component {
+  handleRemove = e => {
+    e.preventDefault()
 
-    <Filename size="small" weight="bold" margin="0">
-      {name}
-    </Filename>
+    const { name } = this.props
+    this.props.onRemove(name)
+  }
 
-    <MetaRow>
-      {updatedAt && (
-        <Text size="small" weight="medium" margin="0">
-          {moment(updatedAt).format('M/D/YY')}
-        </Text>
-      )}
+  render() {
+    const { name, url, updatedAt, onRemove } = this.props
 
-      {onRemove && (
-        <XIcon
-          src={iconX}
-          onClick={e => {
-            e.preventDefault()
-            onRemove()
-          }}
-        />
-      )}
-    </MetaRow>
-  </DownloadWrapper>
-)
+    return (
+      <DownloadWrapper href={url} download={name} target="_blank">
+        <DownloadIcon src={iconDownload} />
+
+        <Filename size="small" weight="bold" margin="0">
+          {name}
+        </Filename>
+
+        <MetaRow>
+          {updatedAt && (
+            <Text size="small" weight="medium" margin="0">
+              {moment(updatedAt).format('M/D/YY')}
+            </Text>
+          )}
+
+          {onRemove && (
+            <RemoveIcon src={iconRemove} onClick={this.handleRemove} />
+          )}
+        </MetaRow>
+      </DownloadWrapper>
+    )
+  }
+}

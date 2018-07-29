@@ -1,9 +1,9 @@
-import RawDropzone from 'react-dropzone'
+import DropzoneComponent from 'react-dropzone'
 import styled from 'styled-components'
 
 import { spacing, colors, borderRadius, transition } from 'utils/theme'
 
-export const Dropzone = styled(RawDropzone)`
+export const Dropzone = styled(DropzoneComponent)`
   display: flex;
   flex-direction: column;
   align-items: center;

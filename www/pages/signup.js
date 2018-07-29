@@ -28,7 +28,6 @@ import { opacity, transition, spacing, outline, colors } from 'utils/theme'
 
 // Lib
 
-import { redirect } from 'lib/redirect'
 import {
   buildAuthorizeURL,
   facebookLogin,
@@ -220,6 +219,7 @@ class Auth extends React.Component {
                   Email
                   <Input
                     required
+                    autocomplete="email"
                     type="text"
                     icon={iconMail}
                     value={this.state.email}
@@ -231,6 +231,7 @@ class Auth extends React.Component {
                   <Input
                     required
                     type="password"
+                    autocomplete="new-password"
                     icon={iconKey}
                     value={this.state.password}
                     onChange={this.handlePasswordChange}
@@ -242,6 +243,7 @@ class Auth extends React.Component {
                     <Input
                       required
                       type="password"
+                      autocomplete="new-password"
                       icon={iconKey}
                       value={this.state.rePassword}
                       onChange={this.handleRePasswordChange}

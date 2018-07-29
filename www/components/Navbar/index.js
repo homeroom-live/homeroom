@@ -141,7 +141,7 @@ export const Navbar = ({ transparent, activePage }) => (
       </Link>
       <Query
         query={viewerQuery}
-        fetchPolicy="network-only"
+        fetchPolicy="cache-and-network"
         errorPolicy="ignore"
         notifyOnNetworkStatusChange
       >

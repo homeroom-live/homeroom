@@ -72,8 +72,8 @@ export class Lessons extends React.Component {
     ${LessonCard.fragments.card}
   `
 
-  handleFetchMore = (fetchMore, data) => {
-    return 0
+  handleFetchMore = (fetchMore, data) => e => {
+    e.preventDefault()
   }
 
   render() {

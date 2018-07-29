@@ -32,7 +32,7 @@ type Mutation {
     description: String!
     schedule: DateTime
     premium: Boolean
-    files: [Upload!]!
+    files: [Upload!]
     course: CourseInput
   ): Lesson
   updateLesson(

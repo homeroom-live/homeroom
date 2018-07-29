@@ -38,16 +38,14 @@ export class EditableComponent extends React.Component {
           data: this.state.data,
         }}
       >
-        {(submit, { loading, error, data }) => {
-          const status = getStatusFromLED({ loading, error, data })
-
-          return this.props.children({
-            status,
+        {(submit, { loading, error, data }) =>
+          this.props.children({
+            status: getStatusFromLED({ loading, error, data }),
             onChange: this.handleChange,
             onSubmit: submit,
             value: this.state.data,
           })
-        }}
+        }
       </Mutation>
     )
   }

@@ -81,7 +81,9 @@ class ExplorePage extends React.Component {
     return {}
   }
 
-  scrollToId = () => {}
+  scrollToId = id => e => {
+    e.preventDefault()
+  }
 
   render() {
     return (
@@ -112,21 +114,21 @@ class ExplorePage extends React.Component {
             <SideNavigationButton
               color="tertiary"
               src={iconVideo}
-              onClick={() => this.scrollToId('#liveLessons')}
+              onClick={this.scrollToId('#liveLessons')}
             >
               Live
             </SideNavigationButton>
             <SideNavigationButton
               color="tertiary"
               src={iconGraphBar}
-              onClick={() => this.scrollToId('#popularLessons')}
+              onClick={this.scrollToId('#popularLessons')}
             >
               Popular
             </SideNavigationButton>
             <SideNavigationButton
               color="tertiary"
               src={iconHome}
-              onClick={() => this.scrollToId('#subscribedLessons')}
+              onClick={this.scrollToId('#subscribedLessons')}
             >
               Subscribed
             </SideNavigationButton>
