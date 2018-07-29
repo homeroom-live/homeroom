@@ -46,6 +46,7 @@ const profileQuery = gql`
         bio
         price
         picture {
+          id
           url
         }
         receiveNotifications
@@ -197,7 +198,8 @@ class Profile extends React.Component {
               <SaveButton
                 color="primary"
                 onClick={updateUser}
-                disabled={!this.shouldBeSaved()}
+                status={{ loading, error }}
+                disabled={loading || !this.shouldBeSaved()}
               >
                 Save Profile
               </SaveButton>
@@ -279,8 +281,8 @@ class Profile extends React.Component {
                 <BigSaveButton
                   color="tertiary"
                   type="submit"
-                  loading={loading}
-                  disabled={!this.shouldBeSaved()}
+                  status={{ loading, error }}
+                  disabled={loading || !this.shouldBeSaved()}
                 >
                   Save Profile
                 </BigSaveButton>

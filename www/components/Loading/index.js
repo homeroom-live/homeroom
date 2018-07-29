@@ -7,10 +7,19 @@ import { Text } from 'components/Text'
 import { spacing } from 'utils/theme'
 
 import loadingIllustration from 'static/assets/images/illustrations/loading.svg'
-import loadingIcon from 'static/assets/icons/loading-white.svg'
+import loadingPrimary from 'static/assets/icons/loading-primary.svg'
+import loadingSecondary from 'static/assets/icons/loading-secondary.svg'
+import loadingWhite from 'static/assets/icons/loading-white.svg'
+
+const loadingIcons = {
+  primary: loadingWhite,
+  secondary: loadingPrimary,
+  tertiary: loadingSecondary,
+  white: loadingWhite,
+}
 
 export const Loading = styled.img.attrs({
-  src: loadingIcon,
+  src: props => loadingIcons[props.color || 'secondary'],
   alt: 'Loading...',
 })`
   display: flex;

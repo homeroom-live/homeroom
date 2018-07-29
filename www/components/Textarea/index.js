@@ -15,6 +15,7 @@ export const Textarea = styled(TextareaAutosize)`
   color: ${colors.secondary};
   font-size: ${fontSizes.regular};
   font-family: ${fontFamily};
+  white-space: pre-wrap;
   outline: none;
   border: 2px solid ${colors.grayLighter};
   border-radius: ${borderRadius};

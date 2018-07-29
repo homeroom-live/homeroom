@@ -4,6 +4,9 @@ import { darken } from 'polished'
 
 import { Icon } from 'components/Icon'
 import { Loading } from 'components/Loading'
+import { TextStyle } from 'components/TextStyle'
+
+import iconXCircleRed from 'static/assets/icons/ui/x-circle-red.svg'
 
 import {
   colors,
@@ -22,24 +25,20 @@ const ButtonIcon = styled(Icon)`
   margin-right: ${spacing.small};
 `
 
-const loading = {
-  primary: () => `
-    opacity: 1;
-    background: ${colors.primary} !important;
-  `,
-  secondary: () => `
-    opacity: 1;
-    background: ${colors.primary} !important;
-  `,
-  tertiary: () => `
-    opacity: 1;
-    background: ${colors.secondary} !important;
-  `,
-  danger: () => `
-    opacity: 1;
-    background: ${colors.danger} !important;
-  `,
-}
+const loadingStyles = () => `
+  opacity: 1;
+  cursor: progress;
+`
+
+const errorStyles = () => `
+  opacity: 1;
+  background: ${colors.white};
+  border-color: ${colors.danger};
+  &:hover {
+    border-color: ${colors.danger};
+    background: ${colors.grayLightest};
+  }
+`
 
 const themes = {
   primary: () => `
@@ -110,12 +109,44 @@ const _Button = styled.button`
   cursor: pointer;
   transition: ${transition};
   ${props => (props.color ? themes[props.color]() : themes.primary())};
-  ${props => (props.loading ? loading[props.color || 'primary']() : null)};
+  ${props => (props.status && props.status.loading ? loadingStyles() : null)};
+  ${props => (props.status && props.status.error ? errorStyles() : null)};
 `
 
-export const Button = ({ src, children, loading, ...props }) => (
-  <_Button loading={loading} {...props}>
+const Status = ({ status, color, children }) => {
+  if (status.error) {
+    return (
+      <React.Fragment>
+        <ButtonIcon src={iconXCircleRed} />
+        <TextStyle color="danger" weight="bold" size="small">
+          Error! Try again
+        </TextStyle>
+      </React.Fragment>
+    )
+  } else if (status.loading) {
+    return <Loading color={color} height="16px" />
+  } else {
+    return children
+  }
+}
+
+export const Button = ({
+  className,
+  src,
+  children,
+  color,
+  loading,
+  status,
+  ...props
+}) => (
+  <_Button className={className} status={status} color={color} {...props}>
     {src && <ButtonIcon src={src} />}
-    {loading ? <Loading height="16px" /> : children}
+    {status ? (
+      <Status status={status} color={color}>
+        {children}
+      </Status>
+    ) : (
+      children
+    )}
   </_Button>
 )

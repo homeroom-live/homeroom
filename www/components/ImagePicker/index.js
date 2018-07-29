@@ -22,7 +22,7 @@ const PlaceholderText = styled(Text)`
   margin: 0;
   text-align: center;
 `
-const XIcon = styled(Icon)`
+const RemoveIcon = styled(Icon)`
   position: absolute;
   top: ${spacing.regular};
   right: ${spacing.regular};
@@ -31,12 +31,14 @@ const XIcon = styled(Icon)`
   height: 20px;
   width: 20px;
   opacity: ${opacity};
-  ':hover': {
+  &:hover {
+    cursor: pointer;
     opacity: 1;
   }
 `
 const PreviewImage = styled.img`
   width: 100%;
+  border-radius: ${borderRadius};
 `
 
 export class ImagePicker extends React.Component {
@@ -73,7 +75,7 @@ export class ImagePicker extends React.Component {
         {value && (
           <ImageContainer>
             <PreviewImage src={value.preview || value.url} />
-            <XIcon src={iconXWhite} onClick={this.handleRemove} />
+            <RemoveIcon src={iconXWhite} onClick={this.handleRemove} />
           </ImageContainer>
         )}
       </ImagePickerContainer>

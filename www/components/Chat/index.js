@@ -106,13 +106,6 @@ export class Chat extends React.Component {
     this.setState({ message: e.target.value })
   }
 
-  handleUpdateQuery = (previousResult, { variables }) => {
-    console.log('IN UPDATE QUERY', previousResult)
-    return {
-      ...previousResult,
-    }
-  }
-
   handleCacheUpdate = (proxy, { data: { createMessage } }) => {
     const queryArgs = {
       query: messagesQuery,
