@@ -1,5 +1,4 @@
 endpoint: ${env:PRISMA_ENDPOINT}
-# endpoint: https://homeroom-api_team.prisma.sh/v1/dev
 
 datamodel: 
   - datamodel/types.graphql

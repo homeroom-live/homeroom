@@ -1,5 +1,4 @@
 import React from 'react'
-import * as nookies from 'nookies'
 import styled from 'styled-components'
 import { Motion, spring } from 'react-motion'
 
@@ -28,13 +27,7 @@ import { opacity, transition, spacing, outline, colors } from 'utils/theme'
 
 // Lib
 
-import {
-  buildAuthorizeURL,
-  facebookLogin,
-  googleLogin,
-  databaseLogin,
-} from 'lib/auth0'
-import { redirect } from 'lib/redirect'
+import { facebookLogin, googleLogin, databaseLogin } from 'lib/auth0'
 
 // Styles
 
@@ -98,15 +91,6 @@ class Auth extends React.Component {
     email: '',
     password: '',
     rePassword: '',
-  }
-
-  static async getInitialProps(ctx) {
-    const token = nookies.parseCookies(ctx).token
-    if (token) {
-      return redirect(ctx, '/')
-    } else {
-      // return redirect(ctx, buildAuthorizeURL({ nonce: 'homeroom' }))
-    }
   }
 
   handleEmailChange = e => {
