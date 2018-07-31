@@ -36,12 +36,15 @@ export class Status extends React.Component {
   }
 
   render() {
-    const { status, inline } = this.props
+    const { status, inline, className } = this.props
+    console.log('status')
     return (
-      <StatusContainer inline={inline}>
+      <StatusContainer inline={inline} className={className}>
         {status.loading && <Loading color={'tertiary'} height="16px" />}
         {status.error && <Icon src={iconXCircleRed} height="16px" />}
-        {this.state.showSuccess && <Icon src={iconCheckGreen} height="16px" />}
+        {!status.loading &&
+          !status.error &&
+          this.state.showSuccess && <Icon src={iconCheckGreen} height="16px" />}
       </StatusContainer>
     )
   }

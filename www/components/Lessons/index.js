@@ -31,7 +31,7 @@ const StickyHeader = styled(IconHeader)`
   border-top-right-radius: ${borderRadius};
   border-top-left-radius: ${borderRadius};
 `
-const LessonCardLarge = styled(LessonCard.LessonCardLarge)`
+const LessonCardLarge = styled(LessonCard.LessonCard)`
   max-width: 33.333333333333333%;
   &:first-child,
   &:nth-child(2) {

@@ -11,7 +11,6 @@ export const lesson = {
 
     const streamID = ''
     const streamKey = ''
-    // const thumbnail = ''
 
     return ctx.db.mutation.createLesson(
       {
@@ -19,8 +18,7 @@ export const lesson = {
           teacher: { connect: { auth0Id } },
           name,
           description,
-          thumbnail: '',
-          // thumbnail: thumbnail ? { create: thumbnail } : null,
+          thumbnail: thumbnail ? { create: thumbnail } : null,
           schedule: schedule ? schedule : new Date().toISOString(),
           premium,
           course,
@@ -40,17 +38,14 @@ export const lesson = {
   ) {
     return ctx.db.mutation.updateLesson(
       {
-        where: {
-          id,
-        },
+        where: { id },
         data: {
           name,
           description,
           schedule,
           premium,
           course,
-          thumbnail,
-          // thumbnail: thumbnail && !thumbnail.id ? { create: thumbnail } : null,
+          thumbnail: thumbnail && !thumbnail.id ? { create: thumbnail } : null,
         },
       },
       info,
@@ -58,23 +53,13 @@ export const lesson = {
   },
   async deleteLesson(parent, { id }, ctx: Context, info) {
     return ctx.db.mutation.updateLesson(
-      {
-        where: { id },
-        data: { archived: true },
-      },
+      { where: { id }, data: { archived: true } },
       info,
     )
   },
   async addLessonFiles(parent, { id, files }, ctx: Context, info) {
     return ctx.db.mutation.updateLesson(
-      {
-        where: { id },
-        data: {
-          files: {
-            create: files,
-          },
-        },
-      },
+      { where: { id }, data: { files: { create: files } } },
       info,
     )
   },
@@ -88,18 +73,17 @@ export const lesson = {
 
     return ctx.db.query.lesson({ where: { id } }, info)
   },
-  async toggleLive(parent, { id, isLive }, ctx: Context, info) {
+  async startLessonStream(parent, { id }, ctx: Context, info) {
     const auth0Id = ctx.request.user.sub
     return ctx.db.mutation.updateLesson(
-      {
-        where: { id },
-        data: {
-          // isLive,
-          live: {
-            connect: { auth0Id },
-          },
-        },
-      },
+      { where: { id }, data: { live: { connect: { auth0Id } } } },
+      info,
+    )
+  },
+  async endLessonStream(parent, { id }, ctx: Context, info) {
+    const auth0Id = ctx.request.user.sub
+    return ctx.db.mutation.updateLesson(
+      { where: { id }, data: { live: { disconnect: true } } },
       info,
     )
   },

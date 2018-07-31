@@ -76,7 +76,6 @@ const themes = {
       opacity: 1;
     }
     &:focus {
-      border: 2px solid ${colors.secondary};
       opacity: 1;
     }
   `,

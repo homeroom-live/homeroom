@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { FlexCol } from 'components/FlexCol'
-import { Text } from 'components/Text'
 
 import { spacing } from 'utils/theme'
 
@@ -29,7 +28,6 @@ export const Loading = styled.img.attrs({
 `
 
 const ContainerCol = styled(FlexCol)`
-  justify-content: center;
   align-items: center;
   padding: ${spacing.large};
 `

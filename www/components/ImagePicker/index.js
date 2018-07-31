@@ -1,17 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
-import debounce from 'lodash.debounce'
 
 import { FlexCol } from 'components/FlexCol'
 import { Icon } from 'components/Icon'
 import { Text } from 'components/Text'
 import { Dropzone } from 'components/Dropzone'
+import { Status } from 'components/Status'
 
 import { borderRadius, colors, spacing, opacity } from 'utils/theme'
 import iconCamera from 'static/assets/icons/ui/camera.svg'
 import iconXWhite from 'static/assets/icons/ui/x-circle-white.svg'
 
-const ImagePickerContainer = styled(FlexCol)``
+const ImagePickerContainer = styled(FlexCol)`
+  position: relative;
+`
 const ImageContainer = styled.div`
   position: relative;
   margin-top: 1px;
@@ -48,7 +50,10 @@ export class ImagePicker extends React.Component {
     this.props.onChange(files[0])
 
     if (this.props.onSubmit) {
-      this.props.onSubmit()
+      // Ensure file is in state before uploading
+      setTimeout(() => {
+        this.props.onSubmit()
+      }, 1000)
     }
   }
 
@@ -62,6 +67,7 @@ export class ImagePicker extends React.Component {
 
     return (
       <ImagePickerContainer>
+        {status && <Status status={status} />}
         {!value && (
           <Dropzone
             multiple={false}
@@ -70,7 +76,6 @@ export class ImagePicker extends React.Component {
             onClick={e => {
               e.preventDefault()
             }}
-            status={status}
           >
             <PlaceholderIcon src={iconCamera} />
             <PlaceholderText size="small" weight="bold">

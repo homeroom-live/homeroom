@@ -60,6 +60,8 @@ const ToggleIcon = styled(Icon)`
   margin-right: ${props => (props.margin ? spacing.small : 0)};
 `
 const ToggleImage = styled(Thumbnail)`
+  min-height: 32px;
+  min-width: 32px;
   margin-right: ${props => (props.margin ? spacing.small : 0)};
 `
 const ToggleLabel = styled.p`

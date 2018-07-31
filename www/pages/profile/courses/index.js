@@ -87,7 +87,7 @@ const ShowMoreButton = styled(Button)`
 const LessonsRow = styled(FlexRow)`
   flex-wrap: wrap;
 `
-const LessonCardLarge = styled(LessonCard.LessonCardLarge)`
+const LessonCardLarge = styled(LessonCard.LessonCard)`
   max-width: 33.33333333333333333%;
 `
 

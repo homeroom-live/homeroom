@@ -105,7 +105,7 @@ const createLessonMutation = gql`
     $description: String!
     $schedule: DateTime
     $premium: Boolean
-    # $thumbnail: Upload
+    $thumbnail: Upload
     $files: [Upload!]!
     $course: CourseInput
   ) {
@@ -114,17 +114,17 @@ const createLessonMutation = gql`
       description: $description
       schedule: $schedule
       premium: $premium
-      # thumbnail: $thumbnail
+      thumbnail: $thumbnail
       files: $files
       course: $course
     ) {
       id
       name
       description
-      # thumbnail {
-      #   id
-      #   url
-      # }
+      thumbnail {
+        id
+        url
+      }
       schedule
       premium
       # course {
@@ -220,7 +220,7 @@ class LessonForm extends React.Component {
               description: this.state.description,
               schedule: this.state.schedule,
               premium: this.state.premium,
-              // thumbnail: this.state.thumbnail,
+              thumbnail: this.state.thumbnail,
               files: this.state.files,
               // course: this.state.course,
             }}

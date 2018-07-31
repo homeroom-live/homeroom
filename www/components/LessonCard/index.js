@@ -24,12 +24,16 @@ const fragments = {
     fragment LessonCard on Lesson {
       id
       name
-      thumbnail
+      thumbnail {
+        id
+        url
+      }
       premium
       schedule
       teacher {
         id
         name
+        username
         live {
           id
           name
@@ -41,28 +45,21 @@ const fragments = {
 
 // Elements
 
-const LessonCardContainer = styled(Link)`
+const LessonCardContainer = styled.div`
+  box-sizing: border-box;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
+  max-width: 50%;
   padding: ${spacing.regular};
-  text-decoration: none;
   color: transparent;
-  border-radius: 0;
+  text-decoration: none;
   &:hover {
     color: transparent;
     text-decoration: none;
     background: ${colors.grayLightest};
+    cursor: pointer;
   }
-`
-const LessonImage = styled.img`
-  object-fit: contain;
-  border-radius: 4px;
-  width: 100%;
-  max-width: 128px;
-  max-height: 72px;
-  margin-right: ${spacing.regular};
-  background: ${colors.black};
 `
 const LessonTitle = styled(Header)`
   &:hover {
@@ -82,109 +79,7 @@ const LessonMetaItem = styled(Text)`
   margin-top: 0;
   letter-spacing: 0.2px;
 `
-
-const LessonCardSmall = ({ node, className }) => (
-  <LessonCardContainer
-    href={{
-      pathname: '/profile/lessons/lesson',
-      query: { lessonId: node.id },
-    }}
-    as={`/profile/lessons/lesson/${node.id}`}
-    className={className}
-  >
-    <LessonImage src={node.thumbnail} />
-    <LessonMeta>
-      <LessonTitle size="medium" margin="0">
-        {node.name}
-      </LessonTitle>
-      <LessonMetaStatsRow>
-        {/* <LessonMetaItem color="gray" weight="bold" size="xsmall">
-          {0} Students
-        </LessonMetaItem> */}
-        <LessonMetaItem color="gray" weight="bold" size="xsmall">
-          {moment(node.schedule).format('M/D/YY')}
-        </LessonMetaItem>
-        <LessonMetaItem color="gray" weight="bold" size="xsmall">
-          {moment(node.schedule)
-            .tz('America/New_York')
-            .format('LT z')}
-        </LessonMetaItem>
-      </LessonMetaStatsRow>
-    </LessonMeta>
-  </LessonCardContainer>
-)
-
-const LessonCardMediumContainer = styled(Link)`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  flex: 1;
-  flex-basis: 30%;
-  padding: ${spacing.regular};
-  color: transparent;
-  text-decoration: none;
-  &:hover {
-    color: transparent;
-    text-decoration: none;
-    background: ${colors.grayLightest};
-  }
-`
 const LessonVideo = styled(Player)`
-  object-fit: contain;
-  border-radius: 4px;
-  width: 100%;
-  margin-bottom: ${spacing.small};
-  background: ${colors.black};
-`
-
-const LessonCardMedium = ({ node, teachers, href, className }) => (
-  <LessonCardMediumContainer
-    href={{
-      pathname: '/profile/lessons/lesson',
-      query: { lessonId: node.id },
-    }}
-    as={`/profile/lessons/lesson/${node.id}`}
-    className={className}
-  >
-    {/* <LessonVideo src="http://techslides.com/demos/sample-videos/small.mp4" /> */}
-    <LessonMeta>
-      <LessonTitle size="regular" margin="0">
-        {node.name}
-      </LessonTitle>
-      <LessonMetaStatsRow>
-        <LessonMetaItem color="gray" weight="bold" size="xsmall">
-          {0} Students
-        </LessonMetaItem>
-        <LessonMetaItem color="gray" weight="bold" size="xsmall">
-          {moment(node.schedule).format('M/D/YY')}
-        </LessonMetaItem>
-        <LessonMetaItem color="gray" weight="bold" size="xsmall">
-          {moment(node.schedule)
-            .tz('America/New_York')
-            .format('LT z')}
-        </LessonMetaItem>
-      </LessonMetaStatsRow>
-    </LessonMeta>
-  </LessonCardMediumContainer>
-)
-
-const LessonCardLargeContainer = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  max-width: 50%;
-  padding: ${spacing.regular};
-  color: transparent;
-  text-decoration: none;
-  &:hover {
-    color: transparent;
-    text-decoration: none;
-    background: ${colors.grayLightest};
-    cursor: pointer;
-  }
-`
-const LessonVideoLarge = styled(Player)`
   object-fit: contain;
   max-height: 300px;
   margin-bottom: ${spacing.small};
@@ -192,28 +87,22 @@ const LessonVideoLarge = styled(Player)`
   background: ${colors.black};
 `
 
-const LessonCardLarge = ({ node, className }) => (
-  <LessonCardLargeContainer
-    onClick={() => Router.push(`/profile/lessons/lesson/${node.id}`)}
-    className={className}
-  >
-    {/* <LessonVideoLarge src={node.video.url} /> */}
+const LessonCard = ({ node, href, className }) => (
+  <LessonCardContainer onClick={() => Router.push(href)} className={className}>
+    <LessonVideo
+      src={null} // node.live.url || node.vod.url
+      poster={node.thumbnail ? node.thumbnail.url : ''}
+    />
     <LessonMeta>
       <Link
         key={node.teacher.id}
-        href={`/user/${node.teacher.username}`}
+        href={`/${node.teacher.username}`}
         size="small"
         weight="bold"
       >
         {node.teacher.name}
       </Link>
-      <Link
-        href={{
-          pathname: '/profile/lessons/lesson',
-          query: { lessonId: node.id },
-        }}
-        as={`/profile/lessons/lesson/${node.id}`}
-      >
+      <Link href={href}>
         <LessonTitle size="medium" margin="0" color="secondary">
           {node.name}
         </LessonTitle>
@@ -232,7 +121,7 @@ const LessonCardLarge = ({ node, className }) => (
         </LessonMetaItem>
       </LessonMetaStatsRow>
     </LessonMeta>
-  </LessonCardLargeContainer>
+  </LessonCardContainer>
 )
 
-export { LessonCardSmall, LessonCardMedium, LessonCardLarge, fragments }
+export { LessonCard, fragments }

@@ -88,7 +88,7 @@ class ExplorePage extends React.Component {
   render() {
     return (
       <>
-        <Navbar activePage="explore" />
+        <Navbar activePage="" />
         <Query
           query={viewerQuery}
           errorPolicy="ignore"

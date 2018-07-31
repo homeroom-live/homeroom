@@ -19,13 +19,8 @@ const Video = styled.video`
   background: ${colors.black};
 `
 
-export const Player = ({ src, type, className, autoPlay }) => (
-  <Video
-    controls
-    poster={src ? null : offlinePoster}
-    className={className}
-    autoPlay={autoPlay}
-  >
+export const Player = ({ src, poster, type, className, autoPlay }) => (
+  <Video controls poster={poster} className={className} autoPlay={autoPlay}>
     <source src={src} type={type} />
   </Video>
 )

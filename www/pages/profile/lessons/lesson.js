@@ -143,10 +143,12 @@ const lessonQuery = gql`
       id
       name
       description
-      thumbnail
+      thumbnail {
+        id
+        url
+      }
       schedule
       premium
-      isLive
       streamKey
       streamURL
       isLive
@@ -168,9 +170,18 @@ const lessonQuery = gql`
   }
 `
 
-const updateLessonLiveMutation = gql`
-  mutation UpdateLessonLive($id: ID!, $data: Boolean!) {
-    toggleLive(id: $id, isLive: $data) {
+const startLessonStreamMutation = gql`
+  mutation StartLessonStream($id: ID!) {
+    startLessonStream(id: $id) {
+      id
+      isLive
+    }
+  }
+`
+
+const endLessonStreamMutation = gql`
+  mutation EndLessonStream($id: ID!) {
+    endLessonStream(id: $id) {
       id
       isLive
     }
@@ -274,6 +285,7 @@ class LessonPage extends React.Component {
             notifyOnNetworkStatusChange
           >
             {({ networkStatus, data }) => {
+              console.log(data)
               switch (networkStatus) {
                 case NetworkStatus.loading: {
                   return <LoadingIllustration />
@@ -325,7 +337,11 @@ class LessonPage extends React.Component {
                         </LessonMeta>
                         {data.lesson.isLive}
                         <EditableComponent
-                          mutation={updateLessonLiveMutation}
+                          mutation={
+                            data.lesson.isLive
+                              ? endLessonStreamMutation
+                              : startLessonStreamMutation
+                          }
                           variables={{ id: this.props.lessonId }}
                           value={data.lesson.isLive}
                         >
@@ -333,13 +349,11 @@ class LessonPage extends React.Component {
                             <LessonToggle
                               activeLabel="Live"
                               inactiveLabel="Offline"
-                              onChange={e => {
-                                e.preventDefault()
-                                onChange(!data.lesson.isLive)
-                              }}
+                              onChange={onChange}
                               onClick={onSubmit}
                               onBlur={onSubmit}
-                              value={value}
+                              status={status}
+                              value={data.lesson.isLive}
                             />
                           )}
                         </EditableComponent>
@@ -481,8 +495,7 @@ class LessonPage extends React.Component {
                           <SectionRightCol>
                             <IconHeader src={iconFile} value="Files" />
                             <SectionBody>
-                              {/*
-                                <EditableLabel size="regular">
+                              <EditableLabel size="regular">
                                 Thumbnail
                                 <EditableComponent
                                   mutation={updateLessonThumbnailMutation}
@@ -499,7 +512,7 @@ class LessonPage extends React.Component {
                                   )}
                                 </EditableComponent>
                               </EditableLabel>
-                                */}
+
                               <EditableLabel>
                                 Files
                                 <EditableComponent

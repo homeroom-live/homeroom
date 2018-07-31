@@ -675,6 +675,7 @@ type File implements Node {
   name: String!
   secret: String!
   contentType: String!
+  lessonThumbnail(where: LessonWhereInput): Lesson
   lesson(where: LessonWhereInput): Lesson
   archived: Boolean!
 }
@@ -694,6 +695,7 @@ input FileCreateInput {
   secret: String!
   contentType: String!
   archived: Boolean
+  lessonThumbnail: LessonCreateOneWithoutThumbnailInput
   lesson: LessonCreateOneWithoutFilesInput
 }
 
@@ -707,11 +709,25 @@ input FileCreateOneInput {
   connect: FileWhereUniqueInput
 }
 
+input FileCreateOneWithoutLessonThumbnailInput {
+  create: FileCreateWithoutLessonThumbnailInput
+  connect: FileWhereUniqueInput
+}
+
 input FileCreateWithoutLessonInput {
   name: String!
   secret: String!
   contentType: String!
   archived: Boolean
+  lessonThumbnail: LessonCreateOneWithoutThumbnailInput
+}
+
+input FileCreateWithoutLessonThumbnailInput {
+  name: String!
+  secret: String!
+  contentType: String!
+  archived: Boolean
+  lesson: LessonCreateOneWithoutFilesInput
 }
 
 """An edge in a connection."""
@@ -794,6 +810,7 @@ input FileUpdateDataInput {
   secret: String
   contentType: String
   archived: Boolean
+  lessonThumbnail: LessonUpdateOneWithoutThumbnailInput
   lesson: LessonUpdateOneWithoutFilesInput
 }
 
@@ -802,6 +819,7 @@ input FileUpdateInput {
   secret: String
   contentType: String
   archived: Boolean
+  lessonThumbnail: LessonUpdateOneWithoutThumbnailInput
   lesson: LessonUpdateOneWithoutFilesInput
 }
 
@@ -823,11 +841,29 @@ input FileUpdateOneInput {
   upsert: FileUpsertNestedInput
 }
 
+input FileUpdateOneWithoutLessonThumbnailInput {
+  create: FileCreateWithoutLessonThumbnailInput
+  connect: FileWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: FileUpdateWithoutLessonThumbnailDataInput
+  upsert: FileUpsertWithoutLessonThumbnailInput
+}
+
 input FileUpdateWithoutLessonDataInput {
   name: String
   secret: String
   contentType: String
   archived: Boolean
+  lessonThumbnail: LessonUpdateOneWithoutThumbnailInput
+}
+
+input FileUpdateWithoutLessonThumbnailDataInput {
+  name: String
+  secret: String
+  contentType: String
+  archived: Boolean
+  lesson: LessonUpdateOneWithoutFilesInput
 }
 
 input FileUpdateWithWhereUniqueWithoutLessonInput {
@@ -838,6 +874,11 @@ input FileUpdateWithWhereUniqueWithoutLessonInput {
 input FileUpsertNestedInput {
   update: FileUpdateDataInput!
   create: FileCreateInput!
+}
+
+input FileUpsertWithoutLessonThumbnailInput {
+  update: FileUpdateWithoutLessonThumbnailDataInput!
+  create: FileCreateWithoutLessonThumbnailInput!
 }
 
 input FileUpsertWithWhereUniqueWithoutLessonInput {
@@ -1063,10 +1104,8 @@ input FileWhereInput {
 
   """All values that are not equal to given value."""
   archived_not: Boolean
+  lessonThumbnail: LessonWhereInput
   lesson: LessonWhereInput
-  _MagicalBackRelation_UserPicture_every: UserWhereInput
-  _MagicalBackRelation_UserPicture_some: UserWhereInput
-  _MagicalBackRelation_UserPicture_none: UserWhereInput
 }
 
 input FileWhereUniqueInput {
@@ -1087,10 +1126,11 @@ type Lesson implements Node {
   teacher(where: UserWhereInput): User!
   name: String!
   description: String!
-  thumbnail: String!
+  thumbnail(where: FileWhereInput): File
   schedule: DateTime!
   premium: Boolean!
   course(where: CourseWhereInput): Course
+  isLive: Boolean!
   live(where: UserWhereInput): User
   streamID: String!
   streamKey: String!
@@ -1112,13 +1152,14 @@ type LessonConnection {
 input LessonCreateInput {
   name: String!
   description: String!
-  thumbnail: String!
   schedule: DateTime!
   premium: Boolean
+  isLive: Boolean
   streamID: String!
   streamKey: String!
   archived: Boolean
   teacher: UserCreateOneWithoutLessonsInput!
+  thumbnail: FileCreateOneWithoutLessonThumbnailInput
   course: CourseCreateOneWithoutLessonsInput
   live: UserCreateOneWithoutLiveInput
   messages: MessageCreateManyWithoutLessonInput
@@ -1150,16 +1191,22 @@ input LessonCreateOneWithoutMessagesInput {
   connect: LessonWhereUniqueInput
 }
 
+input LessonCreateOneWithoutThumbnailInput {
+  create: LessonCreateWithoutThumbnailInput
+  connect: LessonWhereUniqueInput
+}
+
 input LessonCreateWithoutCourseInput {
   name: String!
   description: String!
-  thumbnail: String!
   schedule: DateTime!
   premium: Boolean
+  isLive: Boolean
   streamID: String!
   streamKey: String!
   archived: Boolean
   teacher: UserCreateOneWithoutLessonsInput!
+  thumbnail: FileCreateOneWithoutLessonThumbnailInput
   live: UserCreateOneWithoutLiveInput
   messages: MessageCreateManyWithoutLessonInput
   files: FileCreateManyWithoutLessonInput
@@ -1168,13 +1215,14 @@ input LessonCreateWithoutCourseInput {
 input LessonCreateWithoutFilesInput {
   name: String!
   description: String!
-  thumbnail: String!
   schedule: DateTime!
   premium: Boolean
+  isLive: Boolean
   streamID: String!
   streamKey: String!
   archived: Boolean
   teacher: UserCreateOneWithoutLessonsInput!
+  thumbnail: FileCreateOneWithoutLessonThumbnailInput
   course: CourseCreateOneWithoutLessonsInput
   live: UserCreateOneWithoutLiveInput
   messages: MessageCreateManyWithoutLessonInput
@@ -1183,13 +1231,14 @@ input LessonCreateWithoutFilesInput {
 input LessonCreateWithoutLiveInput {
   name: String!
   description: String!
-  thumbnail: String!
   schedule: DateTime!
   premium: Boolean
+  isLive: Boolean
   streamID: String!
   streamKey: String!
   archived: Boolean
   teacher: UserCreateOneWithoutLessonsInput!
+  thumbnail: FileCreateOneWithoutLessonThumbnailInput
   course: CourseCreateOneWithoutLessonsInput
   messages: MessageCreateManyWithoutLessonInput
   files: FileCreateManyWithoutLessonInput
@@ -1198,13 +1247,14 @@ input LessonCreateWithoutLiveInput {
 input LessonCreateWithoutMessagesInput {
   name: String!
   description: String!
-  thumbnail: String!
   schedule: DateTime!
   premium: Boolean
+  isLive: Boolean
   streamID: String!
   streamKey: String!
   archived: Boolean
   teacher: UserCreateOneWithoutLessonsInput!
+  thumbnail: FileCreateOneWithoutLessonThumbnailInput
   course: CourseCreateOneWithoutLessonsInput
   live: UserCreateOneWithoutLiveInput
   files: FileCreateManyWithoutLessonInput
@@ -1213,12 +1263,29 @@ input LessonCreateWithoutMessagesInput {
 input LessonCreateWithoutTeacherInput {
   name: String!
   description: String!
-  thumbnail: String!
   schedule: DateTime!
   premium: Boolean
+  isLive: Boolean
   streamID: String!
   streamKey: String!
   archived: Boolean
+  thumbnail: FileCreateOneWithoutLessonThumbnailInput
+  course: CourseCreateOneWithoutLessonsInput
+  live: UserCreateOneWithoutLiveInput
+  messages: MessageCreateManyWithoutLessonInput
+  files: FileCreateManyWithoutLessonInput
+}
+
+input LessonCreateWithoutThumbnailInput {
+  name: String!
+  description: String!
+  schedule: DateTime!
+  premium: Boolean
+  isLive: Boolean
+  streamID: String!
+  streamKey: String!
+  archived: Boolean
+  teacher: UserCreateOneWithoutLessonsInput!
   course: CourseCreateOneWithoutLessonsInput
   live: UserCreateOneWithoutLiveInput
   messages: MessageCreateManyWithoutLessonInput
@@ -1245,12 +1312,12 @@ enum LessonOrderByInput {
   name_DESC
   description_ASC
   description_DESC
-  thumbnail_ASC
-  thumbnail_DESC
   schedule_ASC
   schedule_DESC
   premium_ASC
   premium_DESC
+  isLive_ASC
+  isLive_DESC
   streamID_ASC
   streamID_DESC
   streamKey_ASC
@@ -1265,9 +1332,9 @@ type LessonPreviousValues {
   updatedAt: DateTime!
   name: String!
   description: String!
-  thumbnail: String!
   schedule: DateTime!
   premium: Boolean!
+  isLive: Boolean!
   streamID: String!
   streamKey: String!
   archived: Boolean!
@@ -1315,13 +1382,14 @@ input LessonSubscriptionWhereInput {
 input LessonUpdateInput {
   name: String
   description: String
-  thumbnail: String
   schedule: DateTime
   premium: Boolean
+  isLive: Boolean
   streamID: String
   streamKey: String
   archived: Boolean
   teacher: UserUpdateOneWithoutLessonsInput
+  thumbnail: FileUpdateOneWithoutLessonThumbnailInput
   course: CourseUpdateOneWithoutLessonsInput
   live: UserUpdateOneWithoutLiveInput
   messages: MessageUpdateManyWithoutLessonInput
@@ -1372,16 +1440,26 @@ input LessonUpdateOneWithoutMessagesInput {
   upsert: LessonUpsertWithoutMessagesInput
 }
 
+input LessonUpdateOneWithoutThumbnailInput {
+  create: LessonCreateWithoutThumbnailInput
+  connect: LessonWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: LessonUpdateWithoutThumbnailDataInput
+  upsert: LessonUpsertWithoutThumbnailInput
+}
+
 input LessonUpdateWithoutCourseDataInput {
   name: String
   description: String
-  thumbnail: String
   schedule: DateTime
   premium: Boolean
+  isLive: Boolean
   streamID: String
   streamKey: String
   archived: Boolean
   teacher: UserUpdateOneWithoutLessonsInput
+  thumbnail: FileUpdateOneWithoutLessonThumbnailInput
   live: UserUpdateOneWithoutLiveInput
   messages: MessageUpdateManyWithoutLessonInput
   files: FileUpdateManyWithoutLessonInput
@@ -1390,13 +1468,14 @@ input LessonUpdateWithoutCourseDataInput {
 input LessonUpdateWithoutFilesDataInput {
   name: String
   description: String
-  thumbnail: String
   schedule: DateTime
   premium: Boolean
+  isLive: Boolean
   streamID: String
   streamKey: String
   archived: Boolean
   teacher: UserUpdateOneWithoutLessonsInput
+  thumbnail: FileUpdateOneWithoutLessonThumbnailInput
   course: CourseUpdateOneWithoutLessonsInput
   live: UserUpdateOneWithoutLiveInput
   messages: MessageUpdateManyWithoutLessonInput
@@ -1405,13 +1484,14 @@ input LessonUpdateWithoutFilesDataInput {
 input LessonUpdateWithoutLiveDataInput {
   name: String
   description: String
-  thumbnail: String
   schedule: DateTime
   premium: Boolean
+  isLive: Boolean
   streamID: String
   streamKey: String
   archived: Boolean
   teacher: UserUpdateOneWithoutLessonsInput
+  thumbnail: FileUpdateOneWithoutLessonThumbnailInput
   course: CourseUpdateOneWithoutLessonsInput
   messages: MessageUpdateManyWithoutLessonInput
   files: FileUpdateManyWithoutLessonInput
@@ -1420,13 +1500,14 @@ input LessonUpdateWithoutLiveDataInput {
 input LessonUpdateWithoutMessagesDataInput {
   name: String
   description: String
-  thumbnail: String
   schedule: DateTime
   premium: Boolean
+  isLive: Boolean
   streamID: String
   streamKey: String
   archived: Boolean
   teacher: UserUpdateOneWithoutLessonsInput
+  thumbnail: FileUpdateOneWithoutLessonThumbnailInput
   course: CourseUpdateOneWithoutLessonsInput
   live: UserUpdateOneWithoutLiveInput
   files: FileUpdateManyWithoutLessonInput
@@ -1435,12 +1516,29 @@ input LessonUpdateWithoutMessagesDataInput {
 input LessonUpdateWithoutTeacherDataInput {
   name: String
   description: String
-  thumbnail: String
   schedule: DateTime
   premium: Boolean
+  isLive: Boolean
   streamID: String
   streamKey: String
   archived: Boolean
+  thumbnail: FileUpdateOneWithoutLessonThumbnailInput
+  course: CourseUpdateOneWithoutLessonsInput
+  live: UserUpdateOneWithoutLiveInput
+  messages: MessageUpdateManyWithoutLessonInput
+  files: FileUpdateManyWithoutLessonInput
+}
+
+input LessonUpdateWithoutThumbnailDataInput {
+  name: String
+  description: String
+  schedule: DateTime
+  premium: Boolean
+  isLive: Boolean
+  streamID: String
+  streamKey: String
+  archived: Boolean
+  teacher: UserUpdateOneWithoutLessonsInput
   course: CourseUpdateOneWithoutLessonsInput
   live: UserUpdateOneWithoutLiveInput
   messages: MessageUpdateManyWithoutLessonInput
@@ -1470,6 +1568,11 @@ input LessonUpsertWithoutLiveInput {
 input LessonUpsertWithoutMessagesInput {
   update: LessonUpdateWithoutMessagesDataInput!
   create: LessonCreateWithoutMessagesInput!
+}
+
+input LessonUpsertWithoutThumbnailInput {
+  update: LessonUpdateWithoutThumbnailDataInput!
+  create: LessonCreateWithoutThumbnailInput!
 }
 
 input LessonUpsertWithWhereUniqueWithoutCourseInput {
@@ -1657,46 +1760,6 @@ input LessonWhereInput {
 
   """All values not ending with the given string."""
   description_not_ends_with: String
-  thumbnail: String
-
-  """All values that are not equal to given value."""
-  thumbnail_not: String
-
-  """All values that are contained in given list."""
-  thumbnail_in: [String!]
-
-  """All values that are not contained in given list."""
-  thumbnail_not_in: [String!]
-
-  """All values less than the given value."""
-  thumbnail_lt: String
-
-  """All values less than or equal the given value."""
-  thumbnail_lte: String
-
-  """All values greater than the given value."""
-  thumbnail_gt: String
-
-  """All values greater than or equal the given value."""
-  thumbnail_gte: String
-
-  """All values containing the given string."""
-  thumbnail_contains: String
-
-  """All values not containing the given string."""
-  thumbnail_not_contains: String
-
-  """All values starting with the given string."""
-  thumbnail_starts_with: String
-
-  """All values not starting with the given string."""
-  thumbnail_not_starts_with: String
-
-  """All values ending with the given string."""
-  thumbnail_ends_with: String
-
-  """All values not ending with the given string."""
-  thumbnail_not_ends_with: String
   schedule: DateTime
 
   """All values that are not equal to given value."""
@@ -1723,6 +1786,10 @@ input LessonWhereInput {
 
   """All values that are not equal to given value."""
   premium_not: Boolean
+  isLive: Boolean
+
+  """All values that are not equal to given value."""
+  isLive_not: Boolean
   streamID: String
 
   """All values that are not equal to given value."""
@@ -1808,6 +1875,7 @@ input LessonWhereInput {
   """All values that are not equal to given value."""
   archived_not: Boolean
   teacher: UserWhereInput
+  thumbnail: FileWhereInput
   course: CourseWhereInput
   live: UserWhereInput
   messages_every: MessageWhereInput
@@ -3208,12 +3276,12 @@ export type LessonOrderByInput =   'id_ASC' |
   'name_DESC' |
   'description_ASC' |
   'description_DESC' |
-  'thumbnail_ASC' |
-  'thumbnail_DESC' |
   'schedule_ASC' |
   'schedule_DESC' |
   'premium_ASC' |
   'premium_DESC' |
+  'isLive_ASC' |
+  'isLive_DESC' |
   'streamID_ASC' |
   'streamID_DESC' |
   'streamKey_ASC' |
@@ -3273,9 +3341,20 @@ export type MutationType =   'CREATED' |
   'UPDATED' |
   'DELETED'
 
-export interface LessonCreateManyWithoutCourseInput {
-  create?: LessonCreateWithoutCourseInput[] | LessonCreateWithoutCourseInput
-  connect?: LessonWhereUniqueInput[] | LessonWhereUniqueInput
+export interface LessonCreateWithoutCourseInput {
+  name: String
+  description: String
+  schedule: DateTime
+  premium?: Boolean
+  isLive?: Boolean
+  streamID: String
+  streamKey: String
+  archived?: Boolean
+  teacher: UserCreateOneWithoutLessonsInput
+  thumbnail?: FileCreateOneWithoutLessonThumbnailInput
+  live?: UserCreateOneWithoutLiveInput
+  messages?: MessageCreateManyWithoutLessonInput
+  files?: FileCreateManyWithoutLessonInput
 }
 
 export interface UserWhereInput {
@@ -3444,12 +3523,13 @@ export interface UserWhereInput {
   messages_none?: MessageWhereInput
 }
 
-export interface FileUpdateDataInput {
-  name?: String
-  secret?: String
-  contentType?: String
-  archived?: Boolean
-  lesson?: LessonUpdateOneWithoutFilesInput
+export interface LessonUpdateOneWithoutThumbnailInput {
+  create?: LessonCreateWithoutThumbnailInput
+  connect?: LessonWhereUniqueInput
+  disconnect?: Boolean
+  delete?: Boolean
+  update?: LessonUpdateWithoutThumbnailDataInput
+  upsert?: LessonUpsertWithoutThumbnailInput
 }
 
 export interface MessageWhereInput {
@@ -3506,13 +3586,20 @@ export interface MessageWhereInput {
   lesson?: LessonWhereInput
 }
 
-export interface LessonUpdateOneWithoutFilesInput {
-  create?: LessonCreateWithoutFilesInput
-  connect?: LessonWhereUniqueInput
-  disconnect?: Boolean
-  delete?: Boolean
-  update?: LessonUpdateWithoutFilesDataInput
-  upsert?: LessonUpsertWithoutFilesInput
+export interface LessonUpdateWithoutThumbnailDataInput {
+  name?: String
+  description?: String
+  schedule?: DateTime
+  premium?: Boolean
+  isLive?: Boolean
+  streamID?: String
+  streamKey?: String
+  archived?: Boolean
+  teacher?: UserUpdateOneWithoutLessonsInput
+  course?: CourseUpdateOneWithoutLessonsInput
+  live?: UserUpdateOneWithoutLiveInput
+  messages?: MessageUpdateManyWithoutLessonInput
+  files?: FileUpdateManyWithoutLessonInput
 }
 
 export interface CourseWhereInput {
@@ -3570,59 +3657,32 @@ export interface CourseWhereInput {
   lessons_none?: LessonWhereInput
 }
 
-export interface UserCreateWithoutSubscribersInput {
-  auth0Id: String
-  username: String
-  email: String
-  email_verified?: Boolean
-  name?: String
-  gender: Gender
-  bio: String
-  price?: Float
-  stripeId?: String
-  stripeCustomerId?: String
-  receiveNotifications?: Boolean
-  archived?: Boolean
-  picture?: FileCreateOneInput
-  live?: LessonCreateOneWithoutLiveInput
-  lessons?: LessonCreateManyWithoutTeacherInput
-  subscriptions?: ClassroomSubscriptionCreateManyWithoutTeacherInput
-  messages?: MessageCreateManyWithoutSenderInput
-}
-
-export interface ClassroomSubscriptionUpdateManyWithoutSubscriberInput {
-  create?: ClassroomSubscriptionCreateWithoutSubscriberInput[] | ClassroomSubscriptionCreateWithoutSubscriberInput
-  connect?: ClassroomSubscriptionWhereUniqueInput[] | ClassroomSubscriptionWhereUniqueInput
-  disconnect?: ClassroomSubscriptionWhereUniqueInput[] | ClassroomSubscriptionWhereUniqueInput
-  delete?: ClassroomSubscriptionWhereUniqueInput[] | ClassroomSubscriptionWhereUniqueInput
-  update?: ClassroomSubscriptionUpdateWithWhereUniqueWithoutSubscriberInput[] | ClassroomSubscriptionUpdateWithWhereUniqueWithoutSubscriberInput
-  upsert?: ClassroomSubscriptionUpsertWithWhereUniqueWithoutSubscriberInput[] | ClassroomSubscriptionUpsertWithWhereUniqueWithoutSubscriberInput
-}
-
 export interface MessageCreateManyWithoutSenderInput {
   create?: MessageCreateWithoutSenderInput[] | MessageCreateWithoutSenderInput
   connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
 }
 
-export interface LessonUpdateWithoutFilesDataInput {
-  name?: String
-  description?: String
-  thumbnail?: String
-  schedule?: DateTime
-  premium?: Boolean
-  streamID?: String
-  streamKey?: String
-  archived?: Boolean
-  teacher?: UserUpdateOneWithoutLessonsInput
-  course?: CourseUpdateOneWithoutLessonsInput
-  live?: UserUpdateOneWithoutLiveInput
-  messages?: MessageUpdateManyWithoutLessonInput
+export interface ClassroomSubscriptionUpdateWithoutSubscriberDataInput {
+  teacher?: UserUpdateOneWithoutSubscriptionsInput
 }
 
 export interface MessageCreateWithoutSenderInput {
   text: String
   archived?: Boolean
   lesson: LessonCreateOneWithoutMessagesInput
+}
+
+export interface UserUpdateOneWithoutLessonsInput {
+  create?: UserCreateWithoutLessonsInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutLessonsDataInput
+  upsert?: UserUpsertWithoutLessonsInput
+}
+
+export interface LessonCreateOneWithoutMessagesInput {
+  create?: LessonCreateWithoutMessagesInput
+  connect?: LessonWhereUniqueInput
 }
 
 export interface MessageSubscriptionWhereInput {
@@ -3636,9 +3696,20 @@ export interface MessageSubscriptionWhereInput {
   node?: MessageWhereInput
 }
 
-export interface LessonCreateOneWithoutMessagesInput {
-  create?: LessonCreateWithoutMessagesInput
-  connect?: LessonWhereUniqueInput
+export interface LessonCreateWithoutMessagesInput {
+  name: String
+  description: String
+  schedule: DateTime
+  premium?: Boolean
+  isLive?: Boolean
+  streamID: String
+  streamKey: String
+  archived?: Boolean
+  teacher: UserCreateOneWithoutLessonsInput
+  thumbnail?: FileCreateOneWithoutLessonThumbnailInput
+  course?: CourseCreateOneWithoutLessonsInput
+  live?: UserCreateOneWithoutLiveInput
+  files?: FileCreateManyWithoutLessonInput
 }
 
 export interface LessonWhereInput {
@@ -3703,20 +3774,6 @@ export interface LessonWhereInput {
   description_not_starts_with?: String
   description_ends_with?: String
   description_not_ends_with?: String
-  thumbnail?: String
-  thumbnail_not?: String
-  thumbnail_in?: String[] | String
-  thumbnail_not_in?: String[] | String
-  thumbnail_lt?: String
-  thumbnail_lte?: String
-  thumbnail_gt?: String
-  thumbnail_gte?: String
-  thumbnail_contains?: String
-  thumbnail_not_contains?: String
-  thumbnail_starts_with?: String
-  thumbnail_not_starts_with?: String
-  thumbnail_ends_with?: String
-  thumbnail_not_ends_with?: String
   schedule?: DateTime
   schedule_not?: DateTime
   schedule_in?: DateTime[] | DateTime
@@ -3727,6 +3784,8 @@ export interface LessonWhereInput {
   schedule_gte?: DateTime
   premium?: Boolean
   premium_not?: Boolean
+  isLive?: Boolean
+  isLive_not?: Boolean
   streamID?: String
   streamID_not?: String
   streamID_in?: String[] | String
@@ -3758,6 +3817,7 @@ export interface LessonWhereInput {
   archived?: Boolean
   archived_not?: Boolean
   teacher?: UserWhereInput
+  thumbnail?: FileWhereInput
   course?: CourseWhereInput
   live?: UserWhereInput
   messages_every?: MessageWhereInput
@@ -3768,19 +3828,9 @@ export interface LessonWhereInput {
   files_none?: FileWhereInput
 }
 
-export interface LessonCreateWithoutMessagesInput {
-  name: String
-  description: String
-  thumbnail: String
-  schedule: DateTime
-  premium?: Boolean
-  streamID: String
-  streamKey: String
-  archived?: Boolean
-  teacher: UserCreateOneWithoutLessonsInput
-  course?: CourseCreateOneWithoutLessonsInput
-  live?: UserCreateOneWithoutLiveInput
-  files?: FileCreateManyWithoutLessonInput
+export interface FileCreateManyWithoutLessonInput {
+  create?: FileCreateWithoutLessonInput[] | FileCreateWithoutLessonInput
+  connect?: FileWhereUniqueInput[] | FileWhereUniqueInput
 }
 
 export interface LessonSubscriptionWhereInput {
@@ -3794,9 +3844,12 @@ export interface LessonSubscriptionWhereInput {
   node?: LessonWhereInput
 }
 
-export interface FileCreateManyWithoutLessonInput {
-  create?: FileCreateWithoutLessonInput[] | FileCreateWithoutLessonInput
-  connect?: FileWhereUniqueInput[] | FileWhereUniqueInput
+export interface FileCreateWithoutLessonInput {
+  name: String
+  secret: String
+  contentType: String
+  archived?: Boolean
+  lessonThumbnail?: LessonCreateOneWithoutThumbnailInput
 }
 
 export interface UserSubscriptionWhereInput {
@@ -3810,11 +3863,9 @@ export interface UserSubscriptionWhereInput {
   node?: UserWhereInput
 }
 
-export interface FileCreateWithoutLessonInput {
-  name: String
-  secret: String
-  contentType: String
-  archived?: Boolean
+export interface ClassroomSubscriptionCreateManyWithoutSubscriberInput {
+  create?: ClassroomSubscriptionCreateWithoutSubscriberInput[] | ClassroomSubscriptionCreateWithoutSubscriberInput
+  connect?: ClassroomSubscriptionWhereUniqueInput[] | ClassroomSubscriptionWhereUniqueInput
 }
 
 export interface MessageUpdateInput {
@@ -3824,20 +3875,11 @@ export interface MessageUpdateInput {
   lesson?: LessonUpdateOneWithoutMessagesInput
 }
 
-export interface ClassroomSubscriptionCreateManyWithoutSubscriberInput {
-  create?: ClassroomSubscriptionCreateWithoutSubscriberInput[] | ClassroomSubscriptionCreateWithoutSubscriberInput
-  connect?: ClassroomSubscriptionWhereUniqueInput[] | ClassroomSubscriptionWhereUniqueInput
-}
-
-export interface ClassroomSubscriptionWhereUniqueInput {
-  id?: ID_Input
-}
-
 export interface ClassroomSubscriptionCreateWithoutSubscriberInput {
   teacher: UserCreateOneWithoutSubscriptionsInput
 }
 
-export interface CourseWhereUniqueInput {
+export interface ClassroomSubscriptionWhereUniqueInput {
   id?: ID_Input
 }
 
@@ -3846,9 +3888,8 @@ export interface UserCreateOneWithoutSubscriptionsInput {
   connect?: UserWhereUniqueInput
 }
 
-export interface FileWhereUniqueInput {
+export interface CourseWhereUniqueInput {
   id?: ID_Input
-  secret?: String
 }
 
 export interface UserCreateWithoutSubscriptionsInput {
@@ -3871,24 +3912,47 @@ export interface UserCreateWithoutSubscriptionsInput {
   messages?: MessageCreateManyWithoutSenderInput
 }
 
-export interface LessonUpdateWithoutCourseDataInput {
-  name?: String
-  description?: String
-  thumbnail?: String
-  schedule?: DateTime
-  premium?: Boolean
-  streamID?: String
-  streamKey?: String
-  archived?: Boolean
-  teacher?: UserUpdateOneWithoutLessonsInput
-  live?: UserUpdateOneWithoutLiveInput
-  messages?: MessageUpdateManyWithoutLessonInput
-  files?: FileUpdateManyWithoutLessonInput
+export interface FileWhereUniqueInput {
+  id?: ID_Input
+  secret?: String
 }
 
 export interface ClassroomSubscriptionCreateInput {
   teacher: UserCreateOneWithoutSubscriptionsInput
   subscriber: UserCreateOneWithoutSubscribersInput
+}
+
+export interface LessonUpdateWithoutCourseDataInput {
+  name?: String
+  description?: String
+  schedule?: DateTime
+  premium?: Boolean
+  isLive?: Boolean
+  streamID?: String
+  streamKey?: String
+  archived?: Boolean
+  teacher?: UserUpdateOneWithoutLessonsInput
+  thumbnail?: FileUpdateOneWithoutLessonThumbnailInput
+  live?: UserUpdateOneWithoutLiveInput
+  messages?: MessageUpdateManyWithoutLessonInput
+  files?: FileUpdateManyWithoutLessonInput
+}
+
+export interface LessonCreateInput {
+  name: String
+  description: String
+  schedule: DateTime
+  premium?: Boolean
+  isLive?: Boolean
+  streamID: String
+  streamKey: String
+  archived?: Boolean
+  teacher: UserCreateOneWithoutLessonsInput
+  thumbnail?: FileCreateOneWithoutLessonThumbnailInput
+  course?: CourseCreateOneWithoutLessonsInput
+  live?: UserCreateOneWithoutLiveInput
+  messages?: MessageCreateManyWithoutLessonInput
+  files?: FileCreateManyWithoutLessonInput
 }
 
 export interface LessonUpdateManyWithoutCourseInput {
@@ -3900,42 +3964,32 @@ export interface LessonUpdateManyWithoutCourseInput {
   upsert?: LessonUpsertWithWhereUniqueWithoutCourseInput[] | LessonUpsertWithWhereUniqueWithoutCourseInput
 }
 
-export interface LessonCreateInput {
+export interface CourseCreateInput {
   name: String
-  description: String
-  thumbnail: String
-  schedule: DateTime
-  premium?: Boolean
-  streamID: String
-  streamKey: String
   archived?: Boolean
-  teacher: UserCreateOneWithoutLessonsInput
-  course?: CourseCreateOneWithoutLessonsInput
-  live?: UserCreateOneWithoutLiveInput
-  messages?: MessageCreateManyWithoutLessonInput
-  files?: FileCreateManyWithoutLessonInput
+  lessons?: LessonCreateManyWithoutCourseInput
 }
 
 export interface LessonUpdateInput {
   name?: String
   description?: String
-  thumbnail?: String
   schedule?: DateTime
   premium?: Boolean
+  isLive?: Boolean
   streamID?: String
   streamKey?: String
   archived?: Boolean
   teacher?: UserUpdateOneWithoutLessonsInput
+  thumbnail?: FileUpdateOneWithoutLessonThumbnailInput
   course?: CourseUpdateOneWithoutLessonsInput
   live?: UserUpdateOneWithoutLiveInput
   messages?: MessageUpdateManyWithoutLessonInput
   files?: FileUpdateManyWithoutLessonInput
 }
 
-export interface CourseCreateInput {
-  name: String
-  archived?: Boolean
-  lessons?: LessonCreateManyWithoutCourseInput
+export interface LessonCreateManyWithoutCourseInput {
+  create?: LessonCreateWithoutCourseInput[] | LessonCreateWithoutCourseInput
+  connect?: LessonWhereUniqueInput[] | LessonWhereUniqueInput
 }
 
 export interface FileUpsertNestedInput {
@@ -3943,34 +3997,29 @@ export interface FileUpsertNestedInput {
   create: FileCreateInput
 }
 
-export interface ClassroomSubscriptionUpdateWithoutSubscriberDataInput {
-  teacher?: UserUpdateOneWithoutSubscriptionsInput
+export interface UserUpdateWithoutSubscriptionsDataInput {
+  auth0Id?: String
+  username?: String
+  email?: String
+  email_verified?: Boolean
+  name?: String
+  gender?: Gender
+  bio?: String
+  price?: Float
+  stripeId?: String
+  stripeCustomerId?: String
+  receiveNotifications?: Boolean
+  archived?: Boolean
+  picture?: FileUpdateOneInput
+  live?: LessonUpdateOneWithoutLiveInput
+  lessons?: LessonUpdateManyWithoutTeacherInput
+  subscribers?: ClassroomSubscriptionUpdateManyWithoutSubscriberInput
+  messages?: MessageUpdateManyWithoutSenderInput
 }
 
 export interface UserUpsertWithoutLessonsInput {
   update: UserUpdateWithoutLessonsDataInput
   create: UserCreateWithoutLessonsInput
-}
-
-export interface LessonCreateWithoutCourseInput {
-  name: String
-  description: String
-  thumbnail: String
-  schedule: DateTime
-  premium?: Boolean
-  streamID: String
-  streamKey: String
-  archived?: Boolean
-  teacher: UserCreateOneWithoutLessonsInput
-  live?: UserCreateOneWithoutLiveInput
-  messages?: MessageCreateManyWithoutLessonInput
-  files?: FileCreateManyWithoutLessonInput
-}
-
-export interface MessageUpsertWithWhereUniqueWithoutLessonInput {
-  where: MessageWhereUniqueInput
-  update: MessageUpdateWithoutLessonDataInput
-  create: MessageCreateWithoutLessonInput
 }
 
 export interface MessageCreateInput {
@@ -3980,10 +4029,9 @@ export interface MessageCreateInput {
   lesson: LessonCreateOneWithoutMessagesInput
 }
 
-export interface LessonUpsertWithWhereUniqueWithoutTeacherInput {
-  where: LessonWhereUniqueInput
-  update: LessonUpdateWithoutTeacherDataInput
-  create: LessonCreateWithoutTeacherInput
+export interface FileUpsertWithoutLessonThumbnailInput {
+  update: FileUpdateWithoutLessonThumbnailDataInput
+  create: FileCreateWithoutLessonThumbnailInput
 }
 
 export interface UserUpdateInput {
@@ -4007,10 +4055,9 @@ export interface UserUpdateInput {
   messages?: MessageUpdateManyWithoutSenderInput
 }
 
-export interface ClassroomSubscriptionUpsertWithWhereUniqueWithoutSubscriberInput {
-  where: ClassroomSubscriptionWhereUniqueInput
-  update: ClassroomSubscriptionUpdateWithoutSubscriberDataInput
-  create: ClassroomSubscriptionCreateWithoutSubscriberInput
+export interface UserUpsertWithoutLiveInput {
+  update: UserUpdateWithoutLiveDataInput
+  create: UserCreateWithoutLiveInput
 }
 
 export interface FileUpdateOneInput {
@@ -4022,24 +4069,25 @@ export interface FileUpdateOneInput {
   upsert?: FileUpsertNestedInput
 }
 
-export interface UserUpdateWithoutSubscriptionsDataInput {
-  auth0Id?: String
-  username?: String
-  email?: String
-  email_verified?: Boolean
+export interface MessageUpsertWithWhereUniqueWithoutLessonInput {
+  where: MessageWhereUniqueInput
+  update: MessageUpdateWithoutLessonDataInput
+  create: MessageCreateWithoutLessonInput
+}
+
+export interface FileUpdateDataInput {
   name?: String
-  gender?: Gender
-  bio?: String
-  price?: Float
-  stripeId?: String
-  stripeCustomerId?: String
-  receiveNotifications?: Boolean
+  secret?: String
+  contentType?: String
   archived?: Boolean
-  picture?: FileUpdateOneInput
-  live?: LessonUpdateOneWithoutLiveInput
-  lessons?: LessonUpdateManyWithoutTeacherInput
-  subscribers?: ClassroomSubscriptionUpdateManyWithoutSubscriberInput
-  messages?: MessageUpdateManyWithoutSenderInput
+  lessonThumbnail?: LessonUpdateOneWithoutThumbnailInput
+  lesson?: LessonUpdateOneWithoutFilesInput
+}
+
+export interface ClassroomSubscriptionUpsertWithWhereUniqueWithoutSubscriberInput {
+  where: ClassroomSubscriptionWhereUniqueInput
+  update: ClassroomSubscriptionUpdateWithoutSubscriberDataInput
+  create: ClassroomSubscriptionCreateWithoutSubscriberInput
 }
 
 export interface ClassroomSubscriptionWhereInput {
@@ -4101,9 +4149,12 @@ export interface UserCreateInput {
   messages?: MessageCreateManyWithoutSenderInput
 }
 
-export interface ClassroomSubscriptionUpdateWithWhereUniqueWithoutSubscriberInput {
-  where: ClassroomSubscriptionWhereUniqueInput
-  data: ClassroomSubscriptionUpdateWithoutSubscriberDataInput
+export interface UserUpdateOneWithoutSubscriptionsInput {
+  create?: UserCreateWithoutSubscriptionsInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutSubscriptionsDataInput
+  upsert?: UserUpsertWithoutSubscriptionsInput
 }
 
 export interface FileCreateInput {
@@ -4111,15 +4162,16 @@ export interface FileCreateInput {
   secret: String
   contentType: String
   archived?: Boolean
+  lessonThumbnail?: LessonCreateOneWithoutThumbnailInput
   lesson?: LessonCreateOneWithoutFilesInput
 }
 
-export interface LessonCreateWithoutFilesInput {
+export interface LessonCreateWithoutThumbnailInput {
   name: String
   description: String
-  thumbnail: String
   schedule: DateTime
   premium?: Boolean
+  isLive?: Boolean
   streamID: String
   streamKey: String
   archived?: Boolean
@@ -4127,6 +4179,7 @@ export interface LessonCreateWithoutFilesInput {
   course?: CourseCreateOneWithoutLessonsInput
   live?: UserCreateOneWithoutLiveInput
   messages?: MessageCreateManyWithoutLessonInput
+  files?: FileCreateManyWithoutLessonInput
 }
 
 export interface UserCreateWithoutLessonsInput {
@@ -4149,29 +4202,6 @@ export interface UserCreateWithoutLessonsInput {
   messages?: MessageCreateManyWithoutSenderInput
 }
 
-export interface UserUpdateOneWithoutLessonsInput {
-  create?: UserCreateWithoutLessonsInput
-  connect?: UserWhereUniqueInput
-  delete?: Boolean
-  update?: UserUpdateWithoutLessonsDataInput
-  upsert?: UserUpsertWithoutLessonsInput
-}
-
-export interface LessonCreateWithoutLiveInput {
-  name: String
-  description: String
-  thumbnail: String
-  schedule: DateTime
-  premium?: Boolean
-  streamID: String
-  streamKey: String
-  archived?: Boolean
-  teacher: UserCreateOneWithoutLessonsInput
-  course?: CourseCreateOneWithoutLessonsInput
-  messages?: MessageCreateManyWithoutLessonInput
-  files?: FileCreateManyWithoutLessonInput
-}
-
 export interface UserUpdateWithoutLessonsDataInput {
   auth0Id?: String
   username?: String
@@ -4192,9 +4222,20 @@ export interface UserUpdateWithoutLessonsDataInput {
   messages?: MessageUpdateManyWithoutSenderInput
 }
 
-export interface CourseCreateWithoutLessonsInput {
+export interface LessonCreateWithoutLiveInput {
   name: String
+  description: String
+  schedule: DateTime
+  premium?: Boolean
+  isLive?: Boolean
+  streamID: String
+  streamKey: String
   archived?: Boolean
+  teacher: UserCreateOneWithoutLessonsInput
+  thumbnail?: FileCreateOneWithoutLessonThumbnailInput
+  course?: CourseCreateOneWithoutLessonsInput
+  messages?: MessageCreateManyWithoutLessonInput
+  files?: FileCreateManyWithoutLessonInput
 }
 
 export interface LessonUpdateOneWithoutLiveInput {
@@ -4206,74 +4247,66 @@ export interface LessonUpdateOneWithoutLiveInput {
   upsert?: LessonUpsertWithoutLiveInput
 }
 
-export interface MessageCreateWithoutLessonInput {
-  text: String
+export interface FileCreateWithoutLessonThumbnailInput {
+  name: String
+  secret: String
+  contentType: String
   archived?: Boolean
-  sender: UserCreateOneWithoutMessagesInput
+  lesson?: LessonCreateOneWithoutFilesInput
 }
 
 export interface LessonUpdateWithoutLiveDataInput {
   name?: String
   description?: String
-  thumbnail?: String
   schedule?: DateTime
   premium?: Boolean
+  isLive?: Boolean
   streamID?: String
   streamKey?: String
   archived?: Boolean
   teacher?: UserUpdateOneWithoutLessonsInput
+  thumbnail?: FileUpdateOneWithoutLessonThumbnailInput
   course?: CourseUpdateOneWithoutLessonsInput
   messages?: MessageUpdateManyWithoutLessonInput
   files?: FileUpdateManyWithoutLessonInput
 }
 
-export interface UserCreateWithoutMessagesInput {
-  auth0Id: String
-  username: String
-  email: String
-  email_verified?: Boolean
-  name?: String
-  gender: Gender
-  bio: String
-  price?: Float
-  stripeId?: String
-  stripeCustomerId?: String
-  receiveNotifications?: Boolean
-  archived?: Boolean
-  picture?: FileCreateOneInput
-  live?: LessonCreateOneWithoutLiveInput
-  lessons?: LessonCreateManyWithoutTeacherInput
-  subscriptions?: ClassroomSubscriptionCreateManyWithoutTeacherInput
-  subscribers?: ClassroomSubscriptionCreateManyWithoutSubscriberInput
-}
-
-export interface CourseUpdateOneWithoutLessonsInput {
-  create?: CourseCreateWithoutLessonsInput
-  connect?: CourseWhereUniqueInput
-  disconnect?: Boolean
-  delete?: Boolean
-  update?: CourseUpdateWithoutLessonsDataInput
-  upsert?: CourseUpsertWithoutLessonsInput
-}
-
-export interface LessonCreateWithoutTeacherInput {
+export interface LessonCreateWithoutFilesInput {
   name: String
   description: String
-  thumbnail: String
   schedule: DateTime
   premium?: Boolean
+  isLive?: Boolean
   streamID: String
   streamKey: String
   archived?: Boolean
+  teacher: UserCreateOneWithoutLessonsInput
+  thumbnail?: FileCreateOneWithoutLessonThumbnailInput
   course?: CourseCreateOneWithoutLessonsInput
   live?: UserCreateOneWithoutLiveInput
   messages?: MessageCreateManyWithoutLessonInput
-  files?: FileCreateManyWithoutLessonInput
 }
 
-export interface CourseUpdateWithoutLessonsDataInput {
-  name?: String
+export interface FileUpdateOneWithoutLessonThumbnailInput {
+  create?: FileCreateWithoutLessonThumbnailInput
+  connect?: FileWhereUniqueInput
+  disconnect?: Boolean
+  delete?: Boolean
+  update?: FileUpdateWithoutLessonThumbnailDataInput
+  upsert?: FileUpsertWithoutLessonThumbnailInput
+}
+
+export interface CourseCreateWithoutLessonsInput {
+  name: String
   archived?: Boolean
+}
+
+export interface FileUpdateWithoutLessonThumbnailDataInput {
+  name?: String
+  secret?: String
+  contentType?: String
+  archived?: Boolean
+  lesson?: LessonUpdateOneWithoutFilesInput
 }
 
 export interface UserCreateWithoutLiveInput {
@@ -4296,13 +4329,213 @@ export interface UserCreateWithoutLiveInput {
   messages?: MessageCreateManyWithoutSenderInput
 }
 
+export interface LessonUpdateOneWithoutFilesInput {
+  create?: LessonCreateWithoutFilesInput
+  connect?: LessonWhereUniqueInput
+  disconnect?: Boolean
+  delete?: Boolean
+  update?: LessonUpdateWithoutFilesDataInput
+  upsert?: LessonUpsertWithoutFilesInput
+}
+
+export interface LessonCreateWithoutTeacherInput {
+  name: String
+  description: String
+  schedule: DateTime
+  premium?: Boolean
+  isLive?: Boolean
+  streamID: String
+  streamKey: String
+  archived?: Boolean
+  thumbnail?: FileCreateOneWithoutLessonThumbnailInput
+  course?: CourseCreateOneWithoutLessonsInput
+  live?: UserCreateOneWithoutLiveInput
+  messages?: MessageCreateManyWithoutLessonInput
+  files?: FileCreateManyWithoutLessonInput
+}
+
+export interface LessonUpdateWithoutFilesDataInput {
+  name?: String
+  description?: String
+  schedule?: DateTime
+  premium?: Boolean
+  isLive?: Boolean
+  streamID?: String
+  streamKey?: String
+  archived?: Boolean
+  teacher?: UserUpdateOneWithoutLessonsInput
+  thumbnail?: FileUpdateOneWithoutLessonThumbnailInput
+  course?: CourseUpdateOneWithoutLessonsInput
+  live?: UserUpdateOneWithoutLiveInput
+  messages?: MessageUpdateManyWithoutLessonInput
+}
+
+export interface MessageCreateWithoutLessonInput {
+  text: String
+  archived?: Boolean
+  sender: UserCreateOneWithoutMessagesInput
+}
+
+export interface CourseUpdateOneWithoutLessonsInput {
+  create?: CourseCreateWithoutLessonsInput
+  connect?: CourseWhereUniqueInput
+  disconnect?: Boolean
+  delete?: Boolean
+  update?: CourseUpdateWithoutLessonsDataInput
+  upsert?: CourseUpsertWithoutLessonsInput
+}
+
+export interface UserCreateWithoutMessagesInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified?: Boolean
+  name?: String
+  gender: Gender
+  bio: String
+  price?: Float
+  stripeId?: String
+  stripeCustomerId?: String
+  receiveNotifications?: Boolean
+  archived?: Boolean
+  picture?: FileCreateOneInput
+  live?: LessonCreateOneWithoutLiveInput
+  lessons?: LessonCreateManyWithoutTeacherInput
+  subscriptions?: ClassroomSubscriptionCreateManyWithoutTeacherInput
+  subscribers?: ClassroomSubscriptionCreateManyWithoutSubscriberInput
+}
+
+export interface CourseUpdateWithoutLessonsDataInput {
+  name?: String
+  archived?: Boolean
+}
+
+export interface ClassroomSubscriptionCreateWithoutTeacherInput {
+  subscriber: UserCreateOneWithoutSubscribersInput
+}
+
 export interface CourseUpsertWithoutLessonsInput {
   update: CourseUpdateWithoutLessonsDataInput
   create: CourseCreateWithoutLessonsInput
 }
 
-export interface ClassroomSubscriptionCreateWithoutTeacherInput {
-  subscriber: UserCreateOneWithoutSubscribersInput
+export interface UserCreateWithoutSubscribersInput {
+  auth0Id: String
+  username: String
+  email: String
+  email_verified?: Boolean
+  name?: String
+  gender: Gender
+  bio: String
+  price?: Float
+  stripeId?: String
+  stripeCustomerId?: String
+  receiveNotifications?: Boolean
+  archived?: Boolean
+  picture?: FileCreateOneInput
+  live?: LessonCreateOneWithoutLiveInput
+  lessons?: LessonCreateManyWithoutTeacherInput
+  subscriptions?: ClassroomSubscriptionCreateManyWithoutTeacherInput
+  messages?: MessageCreateManyWithoutSenderInput
+}
+
+export interface UserUpdateOneWithoutLiveInput {
+  create?: UserCreateWithoutLiveInput
+  connect?: UserWhereUniqueInput
+  disconnect?: Boolean
+  delete?: Boolean
+  update?: UserUpdateWithoutLiveDataInput
+  upsert?: UserUpsertWithoutLiveInput
+}
+
+export interface CourseSubscriptionWhereInput {
+  AND?: CourseSubscriptionWhereInput[] | CourseSubscriptionWhereInput
+  OR?: CourseSubscriptionWhereInput[] | CourseSubscriptionWhereInput
+  NOT?: CourseSubscriptionWhereInput[] | CourseSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: CourseWhereInput
+}
+
+export interface UserUpdateWithoutLiveDataInput {
+  auth0Id?: String
+  username?: String
+  email?: String
+  email_verified?: Boolean
+  name?: String
+  gender?: Gender
+  bio?: String
+  price?: Float
+  stripeId?: String
+  stripeCustomerId?: String
+  receiveNotifications?: Boolean
+  archived?: Boolean
+  picture?: FileUpdateOneInput
+  lessons?: LessonUpdateManyWithoutTeacherInput
+  subscriptions?: ClassroomSubscriptionUpdateManyWithoutTeacherInput
+  subscribers?: ClassroomSubscriptionUpdateManyWithoutSubscriberInput
+  messages?: MessageUpdateManyWithoutSenderInput
+}
+
+export interface ClassroomSubscriptionSubscriptionWhereInput {
+  AND?: ClassroomSubscriptionSubscriptionWhereInput[] | ClassroomSubscriptionSubscriptionWhereInput
+  OR?: ClassroomSubscriptionSubscriptionWhereInput[] | ClassroomSubscriptionSubscriptionWhereInput
+  NOT?: ClassroomSubscriptionSubscriptionWhereInput[] | ClassroomSubscriptionSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: ClassroomSubscriptionWhereInput
+}
+
+export interface LessonUpdateManyWithoutTeacherInput {
+  create?: LessonCreateWithoutTeacherInput[] | LessonCreateWithoutTeacherInput
+  connect?: LessonWhereUniqueInput[] | LessonWhereUniqueInput
+  disconnect?: LessonWhereUniqueInput[] | LessonWhereUniqueInput
+  delete?: LessonWhereUniqueInput[] | LessonWhereUniqueInput
+  update?: LessonUpdateWithWhereUniqueWithoutTeacherInput[] | LessonUpdateWithWhereUniqueWithoutTeacherInput
+  upsert?: LessonUpsertWithWhereUniqueWithoutTeacherInput[] | LessonUpsertWithWhereUniqueWithoutTeacherInput
+}
+
+export interface UserWhereUniqueInput {
+  id?: ID_Input
+  auth0Id?: String
+  username?: String
+  email?: String
+  stripeId?: String
+  stripeCustomerId?: String
+}
+
+export interface LessonUpdateWithWhereUniqueWithoutTeacherInput {
+  where: LessonWhereUniqueInput
+  data: LessonUpdateWithoutTeacherDataInput
+}
+
+export interface MessageWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface LessonUpdateWithoutTeacherDataInput {
+  name?: String
+  description?: String
+  schedule?: DateTime
+  premium?: Boolean
+  isLive?: Boolean
+  streamID?: String
+  streamKey?: String
+  archived?: Boolean
+  thumbnail?: FileUpdateOneWithoutLessonThumbnailInput
+  course?: CourseUpdateOneWithoutLessonsInput
+  live?: UserUpdateOneWithoutLiveInput
+  messages?: MessageUpdateManyWithoutLessonInput
+  files?: FileUpdateManyWithoutLessonInput
+}
+
+export interface LessonUpdateWithWhereUniqueWithoutCourseInput {
+  where: LessonWhereUniqueInput
+  data: LessonUpdateWithoutCourseDataInput
 }
 
 export interface MessageUpdateManyWithoutLessonInput {
@@ -4312,6 +4545,151 @@ export interface MessageUpdateManyWithoutLessonInput {
   delete?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
   update?: MessageUpdateWithWhereUniqueWithoutLessonInput[] | MessageUpdateWithWhereUniqueWithoutLessonInput
   upsert?: MessageUpsertWithWhereUniqueWithoutLessonInput[] | MessageUpsertWithWhereUniqueWithoutLessonInput
+}
+
+export interface ClassroomSubscriptionUpdateInput {
+  teacher?: UserUpdateOneWithoutSubscriptionsInput
+  subscriber?: UserUpdateOneWithoutSubscribersInput
+}
+
+export interface MessageUpdateWithWhereUniqueWithoutLessonInput {
+  where: MessageWhereUniqueInput
+  data: MessageUpdateWithoutLessonDataInput
+}
+
+export interface LessonUpsertWithoutLiveInput {
+  update: LessonUpdateWithoutLiveDataInput
+  create: LessonCreateWithoutLiveInput
+}
+
+export interface MessageUpdateWithoutLessonDataInput {
+  text?: String
+  archived?: Boolean
+  sender?: UserUpdateOneWithoutMessagesInput
+}
+
+export interface LessonUpsertWithWhereUniqueWithoutTeacherInput {
+  where: LessonWhereUniqueInput
+  update: LessonUpdateWithoutTeacherDataInput
+  create: LessonCreateWithoutTeacherInput
+}
+
+export interface UserUpdateOneWithoutMessagesInput {
+  create?: UserCreateWithoutMessagesInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutMessagesDataInput
+  upsert?: UserUpsertWithoutMessagesInput
+}
+
+export interface UserUpsertWithoutSubscriptionsInput {
+  update: UserUpdateWithoutSubscriptionsDataInput
+  create: UserCreateWithoutSubscriptionsInput
+}
+
+export interface UserUpdateWithoutMessagesDataInput {
+  auth0Id?: String
+  username?: String
+  email?: String
+  email_verified?: Boolean
+  name?: String
+  gender?: Gender
+  bio?: String
+  price?: Float
+  stripeId?: String
+  stripeCustomerId?: String
+  receiveNotifications?: Boolean
+  archived?: Boolean
+  picture?: FileUpdateOneInput
+  live?: LessonUpdateOneWithoutLiveInput
+  lessons?: LessonUpdateManyWithoutTeacherInput
+  subscriptions?: ClassroomSubscriptionUpdateManyWithoutTeacherInput
+  subscribers?: ClassroomSubscriptionUpdateManyWithoutSubscriberInput
+}
+
+export interface LessonCreateOneWithoutThumbnailInput {
+  create?: LessonCreateWithoutThumbnailInput
+  connect?: LessonWhereUniqueInput
+}
+
+export interface ClassroomSubscriptionUpdateManyWithoutTeacherInput {
+  create?: ClassroomSubscriptionCreateWithoutTeacherInput[] | ClassroomSubscriptionCreateWithoutTeacherInput
+  connect?: ClassroomSubscriptionWhereUniqueInput[] | ClassroomSubscriptionWhereUniqueInput
+  disconnect?: ClassroomSubscriptionWhereUniqueInput[] | ClassroomSubscriptionWhereUniqueInput
+  delete?: ClassroomSubscriptionWhereUniqueInput[] | ClassroomSubscriptionWhereUniqueInput
+  update?: ClassroomSubscriptionUpdateWithWhereUniqueWithoutTeacherInput[] | ClassroomSubscriptionUpdateWithWhereUniqueWithoutTeacherInput
+  upsert?: ClassroomSubscriptionUpsertWithWhereUniqueWithoutTeacherInput[] | ClassroomSubscriptionUpsertWithWhereUniqueWithoutTeacherInput
+}
+
+export interface LessonCreateOneWithoutLiveInput {
+  create?: LessonCreateWithoutLiveInput
+  connect?: LessonWhereUniqueInput
+}
+
+export interface ClassroomSubscriptionUpdateWithWhereUniqueWithoutTeacherInput {
+  where: ClassroomSubscriptionWhereUniqueInput
+  data: ClassroomSubscriptionUpdateWithoutTeacherDataInput
+}
+
+export interface LessonCreateOneWithoutFilesInput {
+  create?: LessonCreateWithoutFilesInput
+  connect?: LessonWhereUniqueInput
+}
+
+export interface ClassroomSubscriptionUpdateWithoutTeacherDataInput {
+  subscriber?: UserUpdateOneWithoutSubscribersInput
+}
+
+export interface UserCreateOneWithoutLiveInput {
+  create?: UserCreateWithoutLiveInput
+  connect?: UserWhereUniqueInput
+}
+
+export interface UserUpdateOneWithoutSubscribersInput {
+  create?: UserCreateWithoutSubscribersInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutSubscribersDataInput
+  upsert?: UserUpsertWithoutSubscribersInput
+}
+
+export interface MessageCreateManyWithoutLessonInput {
+  create?: MessageCreateWithoutLessonInput[] | MessageCreateWithoutLessonInput
+  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
+}
+
+export interface UserUpdateWithoutSubscribersDataInput {
+  auth0Id?: String
+  username?: String
+  email?: String
+  email_verified?: Boolean
+  name?: String
+  gender?: Gender
+  bio?: String
+  price?: Float
+  stripeId?: String
+  stripeCustomerId?: String
+  receiveNotifications?: Boolean
+  archived?: Boolean
+  picture?: FileUpdateOneInput
+  live?: LessonUpdateOneWithoutLiveInput
+  lessons?: LessonUpdateManyWithoutTeacherInput
+  subscriptions?: ClassroomSubscriptionUpdateManyWithoutTeacherInput
+  messages?: MessageUpdateManyWithoutSenderInput
+}
+
+export interface ClassroomSubscriptionCreateManyWithoutTeacherInput {
+  create?: ClassroomSubscriptionCreateWithoutTeacherInput[] | ClassroomSubscriptionCreateWithoutTeacherInput
+  connect?: ClassroomSubscriptionWhereUniqueInput[] | ClassroomSubscriptionWhereUniqueInput
+}
+
+export interface MessageUpdateManyWithoutSenderInput {
+  create?: MessageCreateWithoutSenderInput[] | MessageCreateWithoutSenderInput
+  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
+  disconnect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
+  delete?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
+  update?: MessageUpdateWithWhereUniqueWithoutSenderInput[] | MessageUpdateWithWhereUniqueWithoutSenderInput
+  upsert?: MessageUpsertWithWhereUniqueWithoutSenderInput[] | MessageUpsertWithWhereUniqueWithoutSenderInput
 }
 
 export interface FileSubscriptionWhereInput {
@@ -4325,9 +4703,107 @@ export interface FileSubscriptionWhereInput {
   node?: FileWhereInput
 }
 
-export interface MessageUpdateWithWhereUniqueWithoutLessonInput {
+export interface MessageUpdateWithWhereUniqueWithoutSenderInput {
   where: MessageWhereUniqueInput
-  data: MessageUpdateWithoutLessonDataInput
+  data: MessageUpdateWithoutSenderDataInput
+}
+
+export interface FileUpdateInput {
+  name?: String
+  secret?: String
+  contentType?: String
+  archived?: Boolean
+  lessonThumbnail?: LessonUpdateOneWithoutThumbnailInput
+  lesson?: LessonUpdateOneWithoutFilesInput
+}
+
+export interface MessageUpdateWithoutSenderDataInput {
+  text?: String
+  archived?: Boolean
+  lesson?: LessonUpdateOneWithoutMessagesInput
+}
+
+export interface LessonUpsertWithWhereUniqueWithoutCourseInput {
+  where: LessonWhereUniqueInput
+  update: LessonUpdateWithoutCourseDataInput
+  create: LessonCreateWithoutCourseInput
+}
+
+export interface LessonUpdateOneWithoutMessagesInput {
+  create?: LessonCreateWithoutMessagesInput
+  connect?: LessonWhereUniqueInput
+  delete?: Boolean
+  update?: LessonUpdateWithoutMessagesDataInput
+  upsert?: LessonUpsertWithoutMessagesInput
+}
+
+export interface LessonUpsertWithoutThumbnailInput {
+  update: LessonUpdateWithoutThumbnailDataInput
+  create: LessonCreateWithoutThumbnailInput
+}
+
+export interface LessonUpdateWithoutMessagesDataInput {
+  name?: String
+  description?: String
+  schedule?: DateTime
+  premium?: Boolean
+  isLive?: Boolean
+  streamID?: String
+  streamKey?: String
+  archived?: Boolean
+  teacher?: UserUpdateOneWithoutLessonsInput
+  thumbnail?: FileUpdateOneWithoutLessonThumbnailInput
+  course?: CourseUpdateOneWithoutLessonsInput
+  live?: UserUpdateOneWithoutLiveInput
+  files?: FileUpdateManyWithoutLessonInput
+}
+
+export interface UserUpsertWithoutMessagesInput {
+  update: UserUpdateWithoutMessagesDataInput
+  create: UserCreateWithoutMessagesInput
+}
+
+export interface FileUpdateManyWithoutLessonInput {
+  create?: FileCreateWithoutLessonInput[] | FileCreateWithoutLessonInput
+  connect?: FileWhereUniqueInput[] | FileWhereUniqueInput
+  disconnect?: FileWhereUniqueInput[] | FileWhereUniqueInput
+  delete?: FileWhereUniqueInput[] | FileWhereUniqueInput
+  update?: FileUpdateWithWhereUniqueWithoutLessonInput[] | FileUpdateWithWhereUniqueWithoutLessonInput
+  upsert?: FileUpsertWithWhereUniqueWithoutLessonInput[] | FileUpsertWithWhereUniqueWithoutLessonInput
+}
+
+export interface UserCreateOneWithoutLessonsInput {
+  create?: UserCreateWithoutLessonsInput
+  connect?: UserWhereUniqueInput
+}
+
+export interface FileUpdateWithWhereUniqueWithoutLessonInput {
+  where: FileWhereUniqueInput
+  data: FileUpdateWithoutLessonDataInput
+}
+
+export interface CourseCreateOneWithoutLessonsInput {
+  create?: CourseCreateWithoutLessonsInput
+  connect?: CourseWhereUniqueInput
+}
+
+export interface FileUpdateWithoutLessonDataInput {
+  name?: String
+  secret?: String
+  contentType?: String
+  archived?: Boolean
+  lessonThumbnail?: LessonUpdateOneWithoutThumbnailInput
+}
+
+export interface UserCreateOneWithoutMessagesInput {
+  create?: UserCreateWithoutMessagesInput
+  connect?: UserWhereUniqueInput
+}
+
+export interface FileUpsertWithWhereUniqueWithoutLessonInput {
+  where: FileWhereUniqueInput
+  update: FileUpdateWithoutLessonDataInput
+  create: FileCreateWithoutLessonInput
 }
 
 export interface FileWhereInput {
@@ -4408,71 +4884,13 @@ export interface FileWhereInput {
   contentType_not_ends_with?: String
   archived?: Boolean
   archived_not?: Boolean
+  lessonThumbnail?: LessonWhereInput
   lesson?: LessonWhereInput
-  _MagicalBackRelation_UserPicture_every?: UserWhereInput
-  _MagicalBackRelation_UserPicture_some?: UserWhereInput
-  _MagicalBackRelation_UserPicture_none?: UserWhereInput
 }
 
-export interface MessageUpdateWithoutLessonDataInput {
-  text?: String
-  archived?: Boolean
-  sender?: UserUpdateOneWithoutMessagesInput
-}
-
-export interface FileUpdateInput {
-  name?: String
-  secret?: String
-  contentType?: String
-  archived?: Boolean
-  lesson?: LessonUpdateOneWithoutFilesInput
-}
-
-export interface UserUpdateOneWithoutMessagesInput {
-  create?: UserCreateWithoutMessagesInput
-  connect?: UserWhereUniqueInput
-  delete?: Boolean
-  update?: UserUpdateWithoutMessagesDataInput
-  upsert?: UserUpsertWithoutMessagesInput
-}
-
-export interface LessonWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface UserUpdateWithoutMessagesDataInput {
-  auth0Id?: String
-  username?: String
-  email?: String
-  email_verified?: Boolean
-  name?: String
-  gender?: Gender
-  bio?: String
-  price?: Float
-  stripeId?: String
-  stripeCustomerId?: String
-  receiveNotifications?: Boolean
-  archived?: Boolean
-  picture?: FileUpdateOneInput
-  live?: LessonUpdateOneWithoutLiveInput
-  lessons?: LessonUpdateManyWithoutTeacherInput
-  subscriptions?: ClassroomSubscriptionUpdateManyWithoutTeacherInput
-  subscribers?: ClassroomSubscriptionUpdateManyWithoutSubscriberInput
-}
-
-export interface LessonUpsertWithWhereUniqueWithoutCourseInput {
-  where: LessonWhereUniqueInput
-  update: LessonUpdateWithoutCourseDataInput
-  create: LessonCreateWithoutCourseInput
-}
-
-export interface LessonUpdateManyWithoutTeacherInput {
-  create?: LessonCreateWithoutTeacherInput[] | LessonCreateWithoutTeacherInput
-  connect?: LessonWhereUniqueInput[] | LessonWhereUniqueInput
-  disconnect?: LessonWhereUniqueInput[] | LessonWhereUniqueInput
-  delete?: LessonWhereUniqueInput[] | LessonWhereUniqueInput
-  update?: LessonUpdateWithWhereUniqueWithoutTeacherInput[] | LessonUpdateWithWhereUniqueWithoutTeacherInput
-  upsert?: LessonUpsertWithWhereUniqueWithoutTeacherInput[] | LessonUpsertWithWhereUniqueWithoutTeacherInput
+export interface LessonUpsertWithoutMessagesInput {
+  update: LessonUpdateWithoutMessagesDataInput
+  create: LessonCreateWithoutMessagesInput
 }
 
 export interface CourseUpdateInput {
@@ -4481,68 +4899,10 @@ export interface CourseUpdateInput {
   lessons?: LessonUpdateManyWithoutCourseInput
 }
 
-export interface LessonUpdateWithWhereUniqueWithoutTeacherInput {
-  where: LessonWhereUniqueInput
-  data: LessonUpdateWithoutTeacherDataInput
-}
-
-export interface LessonUpsertWithoutFilesInput {
-  update: LessonUpdateWithoutFilesDataInput
-  create: LessonCreateWithoutFilesInput
-}
-
-export interface LessonUpdateWithoutTeacherDataInput {
-  name?: String
-  description?: String
-  thumbnail?: String
-  schedule?: DateTime
-  premium?: Boolean
-  streamID?: String
-  streamKey?: String
-  archived?: Boolean
-  course?: CourseUpdateOneWithoutLessonsInput
-  live?: UserUpdateOneWithoutLiveInput
-  messages?: MessageUpdateManyWithoutLessonInput
-  files?: FileUpdateManyWithoutLessonInput
-}
-
-export interface UserUpsertWithoutMessagesInput {
-  update: UserUpdateWithoutMessagesDataInput
-  create: UserCreateWithoutMessagesInput
-}
-
-export interface UserUpdateOneWithoutLiveInput {
-  create?: UserCreateWithoutLiveInput
-  connect?: UserWhereUniqueInput
-  disconnect?: Boolean
-  delete?: Boolean
-  update?: UserUpdateWithoutLiveDataInput
-  upsert?: UserUpsertWithoutLiveInput
-}
-
-export interface UserUpsertWithoutSubscriptionsInput {
-  update: UserUpdateWithoutSubscriptionsDataInput
-  create: UserCreateWithoutSubscriptionsInput
-}
-
-export interface UserUpdateWithoutLiveDataInput {
-  auth0Id?: String
-  username?: String
-  email?: String
-  email_verified?: Boolean
-  name?: String
-  gender?: Gender
-  bio?: String
-  price?: Float
-  stripeId?: String
-  stripeCustomerId?: String
-  receiveNotifications?: Boolean
-  archived?: Boolean
-  picture?: FileUpdateOneInput
-  lessons?: LessonUpdateManyWithoutTeacherInput
-  subscriptions?: ClassroomSubscriptionUpdateManyWithoutTeacherInput
-  subscribers?: ClassroomSubscriptionUpdateManyWithoutSubscriberInput
-  messages?: MessageUpdateManyWithoutSenderInput
+export interface MessageUpsertWithWhereUniqueWithoutSenderInput {
+  where: MessageWhereUniqueInput
+  update: MessageUpdateWithoutSenderDataInput
+  create: MessageCreateWithoutSenderInput
 }
 
 export interface FileCreateOneInput {
@@ -4550,199 +4910,18 @@ export interface FileCreateOneInput {
   connect?: FileWhereUniqueInput
 }
 
-export interface ClassroomSubscriptionUpdateManyWithoutTeacherInput {
-  create?: ClassroomSubscriptionCreateWithoutTeacherInput[] | ClassroomSubscriptionCreateWithoutTeacherInput
+export interface ClassroomSubscriptionUpdateWithWhereUniqueWithoutSubscriberInput {
+  where: ClassroomSubscriptionWhereUniqueInput
+  data: ClassroomSubscriptionUpdateWithoutSubscriberDataInput
+}
+
+export interface ClassroomSubscriptionUpdateManyWithoutSubscriberInput {
+  create?: ClassroomSubscriptionCreateWithoutSubscriberInput[] | ClassroomSubscriptionCreateWithoutSubscriberInput
   connect?: ClassroomSubscriptionWhereUniqueInput[] | ClassroomSubscriptionWhereUniqueInput
   disconnect?: ClassroomSubscriptionWhereUniqueInput[] | ClassroomSubscriptionWhereUniqueInput
   delete?: ClassroomSubscriptionWhereUniqueInput[] | ClassroomSubscriptionWhereUniqueInput
-  update?: ClassroomSubscriptionUpdateWithWhereUniqueWithoutTeacherInput[] | ClassroomSubscriptionUpdateWithWhereUniqueWithoutTeacherInput
-  upsert?: ClassroomSubscriptionUpsertWithWhereUniqueWithoutTeacherInput[] | ClassroomSubscriptionUpsertWithWhereUniqueWithoutTeacherInput
-}
-
-export interface UserCreateOneWithoutLessonsInput {
-  create?: UserCreateWithoutLessonsInput
-  connect?: UserWhereUniqueInput
-}
-
-export interface ClassroomSubscriptionUpdateWithWhereUniqueWithoutTeacherInput {
-  where: ClassroomSubscriptionWhereUniqueInput
-  data: ClassroomSubscriptionUpdateWithoutTeacherDataInput
-}
-
-export interface CourseCreateOneWithoutLessonsInput {
-  create?: CourseCreateWithoutLessonsInput
-  connect?: CourseWhereUniqueInput
-}
-
-export interface ClassroomSubscriptionUpdateWithoutTeacherDataInput {
-  subscriber?: UserUpdateOneWithoutSubscribersInput
-}
-
-export interface UserCreateOneWithoutMessagesInput {
-  create?: UserCreateWithoutMessagesInput
-  connect?: UserWhereUniqueInput
-}
-
-export interface UserUpdateOneWithoutSubscribersInput {
-  create?: UserCreateWithoutSubscribersInput
-  connect?: UserWhereUniqueInput
-  delete?: Boolean
-  update?: UserUpdateWithoutSubscribersDataInput
-  upsert?: UserUpsertWithoutSubscribersInput
-}
-
-export interface UserCreateOneWithoutLiveInput {
-  create?: UserCreateWithoutLiveInput
-  connect?: UserWhereUniqueInput
-}
-
-export interface UserUpdateWithoutSubscribersDataInput {
-  auth0Id?: String
-  username?: String
-  email?: String
-  email_verified?: Boolean
-  name?: String
-  gender?: Gender
-  bio?: String
-  price?: Float
-  stripeId?: String
-  stripeCustomerId?: String
-  receiveNotifications?: Boolean
-  archived?: Boolean
-  picture?: FileUpdateOneInput
-  live?: LessonUpdateOneWithoutLiveInput
-  lessons?: LessonUpdateManyWithoutTeacherInput
-  subscriptions?: ClassroomSubscriptionUpdateManyWithoutTeacherInput
-  messages?: MessageUpdateManyWithoutSenderInput
-}
-
-export interface UserCreateOneWithoutSubscribersInput {
-  create?: UserCreateWithoutSubscribersInput
-  connect?: UserWhereUniqueInput
-}
-
-export interface MessageUpdateManyWithoutSenderInput {
-  create?: MessageCreateWithoutSenderInput[] | MessageCreateWithoutSenderInput
-  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
-  disconnect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
-  delete?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
-  update?: MessageUpdateWithWhereUniqueWithoutSenderInput[] | MessageUpdateWithWhereUniqueWithoutSenderInput
-  upsert?: MessageUpsertWithWhereUniqueWithoutSenderInput[] | MessageUpsertWithWhereUniqueWithoutSenderInput
-}
-
-export interface ClassroomSubscriptionSubscriptionWhereInput {
-  AND?: ClassroomSubscriptionSubscriptionWhereInput[] | ClassroomSubscriptionSubscriptionWhereInput
-  OR?: ClassroomSubscriptionSubscriptionWhereInput[] | ClassroomSubscriptionSubscriptionWhereInput
-  NOT?: ClassroomSubscriptionSubscriptionWhereInput[] | ClassroomSubscriptionSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: ClassroomSubscriptionWhereInput
-}
-
-export interface MessageUpdateWithWhereUniqueWithoutSenderInput {
-  where: MessageWhereUniqueInput
-  data: MessageUpdateWithoutSenderDataInput
-}
-
-export interface MessageWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface MessageUpdateWithoutSenderDataInput {
-  text?: String
-  archived?: Boolean
-  lesson?: LessonUpdateOneWithoutMessagesInput
-}
-
-export interface ClassroomSubscriptionUpdateInput {
-  teacher?: UserUpdateOneWithoutSubscriptionsInput
-  subscriber?: UserUpdateOneWithoutSubscribersInput
-}
-
-export interface LessonUpdateOneWithoutMessagesInput {
-  create?: LessonCreateWithoutMessagesInput
-  connect?: LessonWhereUniqueInput
-  delete?: Boolean
-  update?: LessonUpdateWithoutMessagesDataInput
-  upsert?: LessonUpsertWithoutMessagesInput
-}
-
-export interface UserUpsertWithoutLiveInput {
-  update: UserUpdateWithoutLiveDataInput
-  create: UserCreateWithoutLiveInput
-}
-
-export interface LessonUpdateWithoutMessagesDataInput {
-  name?: String
-  description?: String
-  thumbnail?: String
-  schedule?: DateTime
-  premium?: Boolean
-  streamID?: String
-  streamKey?: String
-  archived?: Boolean
-  teacher?: UserUpdateOneWithoutLessonsInput
-  course?: CourseUpdateOneWithoutLessonsInput
-  live?: UserUpdateOneWithoutLiveInput
-  files?: FileUpdateManyWithoutLessonInput
-}
-
-export interface LessonCreateOneWithoutFilesInput {
-  create?: LessonCreateWithoutFilesInput
-  connect?: LessonWhereUniqueInput
-}
-
-export interface FileUpdateManyWithoutLessonInput {
-  create?: FileCreateWithoutLessonInput[] | FileCreateWithoutLessonInput
-  connect?: FileWhereUniqueInput[] | FileWhereUniqueInput
-  disconnect?: FileWhereUniqueInput[] | FileWhereUniqueInput
-  delete?: FileWhereUniqueInput[] | FileWhereUniqueInput
-  update?: FileUpdateWithWhereUniqueWithoutLessonInput[] | FileUpdateWithWhereUniqueWithoutLessonInput
-  upsert?: FileUpsertWithWhereUniqueWithoutLessonInput[] | FileUpsertWithWhereUniqueWithoutLessonInput
-}
-
-export interface MessageCreateManyWithoutLessonInput {
-  create?: MessageCreateWithoutLessonInput[] | MessageCreateWithoutLessonInput
-  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
-}
-
-export interface FileUpdateWithWhereUniqueWithoutLessonInput {
-  where: FileWhereUniqueInput
-  data: FileUpdateWithoutLessonDataInput
-}
-
-export interface ClassroomSubscriptionCreateManyWithoutTeacherInput {
-  create?: ClassroomSubscriptionCreateWithoutTeacherInput[] | ClassroomSubscriptionCreateWithoutTeacherInput
-  connect?: ClassroomSubscriptionWhereUniqueInput[] | ClassroomSubscriptionWhereUniqueInput
-}
-
-export interface FileUpdateWithoutLessonDataInput {
-  name?: String
-  secret?: String
-  contentType?: String
-  archived?: Boolean
-}
-
-export interface UserWhereUniqueInput {
-  id?: ID_Input
-  auth0Id?: String
-  username?: String
-  email?: String
-  stripeId?: String
-  stripeCustomerId?: String
-}
-
-export interface FileUpsertWithWhereUniqueWithoutLessonInput {
-  where: FileWhereUniqueInput
-  update: FileUpdateWithoutLessonDataInput
-  create: FileCreateWithoutLessonInput
-}
-
-export interface LessonUpsertWithoutLiveInput {
-  update: LessonUpdateWithoutLiveDataInput
-  create: LessonCreateWithoutLiveInput
+  update?: ClassroomSubscriptionUpdateWithWhereUniqueWithoutSubscriberInput[] | ClassroomSubscriptionUpdateWithWhereUniqueWithoutSubscriberInput
+  upsert?: ClassroomSubscriptionUpsertWithWhereUniqueWithoutSubscriberInput[] | ClassroomSubscriptionUpsertWithWhereUniqueWithoutSubscriberInput
 }
 
 export interface ClassroomSubscriptionUpsertWithWhereUniqueWithoutTeacherInput {
@@ -4756,49 +4935,28 @@ export interface UserUpsertWithoutSubscribersInput {
   create: UserCreateWithoutSubscribersInput
 }
 
-export interface MessageUpsertWithWhereUniqueWithoutSenderInput {
-  where: MessageWhereUniqueInput
-  update: MessageUpdateWithoutSenderDataInput
-  create: MessageCreateWithoutSenderInput
+export interface FileCreateOneWithoutLessonThumbnailInput {
+  create?: FileCreateWithoutLessonThumbnailInput
+  connect?: FileWhereUniqueInput
 }
 
-export interface LessonUpsertWithoutMessagesInput {
-  update: LessonUpdateWithoutMessagesDataInput
-  create: LessonCreateWithoutMessagesInput
+export interface LessonUpsertWithoutFilesInput {
+  update: LessonUpdateWithoutFilesDataInput
+  create: LessonCreateWithoutFilesInput
 }
 
-export interface UserUpdateOneWithoutSubscriptionsInput {
-  create?: UserCreateWithoutSubscriptionsInput
+export interface LessonWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface UserCreateOneWithoutSubscribersInput {
+  create?: UserCreateWithoutSubscribersInput
   connect?: UserWhereUniqueInput
-  delete?: Boolean
-  update?: UserUpdateWithoutSubscriptionsDataInput
-  upsert?: UserUpsertWithoutSubscriptionsInput
-}
-
-export interface LessonUpdateWithWhereUniqueWithoutCourseInput {
-  where: LessonWhereUniqueInput
-  data: LessonUpdateWithoutCourseDataInput
-}
-
-export interface CourseSubscriptionWhereInput {
-  AND?: CourseSubscriptionWhereInput[] | CourseSubscriptionWhereInput
-  OR?: CourseSubscriptionWhereInput[] | CourseSubscriptionWhereInput
-  NOT?: CourseSubscriptionWhereInput[] | CourseSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: CourseWhereInput
 }
 
 export interface LessonCreateManyWithoutTeacherInput {
   create?: LessonCreateWithoutTeacherInput[] | LessonCreateWithoutTeacherInput
   connect?: LessonWhereUniqueInput[] | LessonWhereUniqueInput
-}
-
-export interface LessonCreateOneWithoutLiveInput {
-  create?: LessonCreateWithoutLiveInput
-  connect?: LessonWhereUniqueInput
 }
 
 /*
@@ -4881,6 +5039,7 @@ export interface File extends Node {
   name: String
   secret: String
   contentType: String
+  lessonThumbnail?: Lesson
   lesson?: Lesson
   archived: Boolean
 }
@@ -5001,10 +5160,11 @@ export interface Lesson extends Node {
   teacher: User
   name: String
   description: String
-  thumbnail: String
+  thumbnail?: File
   schedule: DateTime
   premium: Boolean
   course?: Course
+  isLive: Boolean
   live?: User
   streamID: String
   streamKey: String
@@ -5101,9 +5261,9 @@ export interface LessonPreviousValues {
   updatedAt: DateTime
   name: String
   description: String
-  thumbnail: String
   schedule: DateTime
   premium: Boolean
+  isLive: Boolean
   streamID: String
   streamKey: String
   archived: Boolean

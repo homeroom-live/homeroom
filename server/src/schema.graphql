@@ -32,6 +32,7 @@ type Mutation {
     description: String!
     schedule: DateTime
     premium: Boolean
+    thumbnail: Upload
     files: [Upload!]
     course: CourseInput
   ): Lesson
@@ -47,7 +48,8 @@ type Mutation {
   addLessonFiles(id: ID!, files: [Upload!]!): Lesson
   removeLessonFile(id: ID!, fileId: ID!): Lesson
   deleteLesson(id: ID!): Lesson
-  toggleLive(id: ID!, isLive: Boolean!): Lesson
+  startLessonStream(id: ID!): Lesson
+  endLessonStream(id: ID!): Lesson
   # Course
   createCourse(name: String!, lessons: [ID!]!): Course
   updateCourse(id: ID!, name: String, lessons: [ID!]!): Course
@@ -170,8 +172,7 @@ type Lesson {
 
   name: String!
   description: String!
-  thumbnail: String
-  # thumbnail: File @relation(name: "LessonThumbnail", onDelete: CASCADE)
+  thumbnail: File
   schedule: DateTime
   premium: Boolean!
 

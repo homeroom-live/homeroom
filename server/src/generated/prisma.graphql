@@ -1,5 +1,5 @@
-# source: https://eu1.prisma.sh/matic-zavadlal-03c51f/homeroom-refactor/development
-# timestamp: Fri Jul 20 2018 20:47:55 GMT+0200 (CEST)
+# source: https://us1.prisma.sh/homeroom-team/v1/dev
+# timestamp: Tue Jul 31 2018 14:45:45 GMT-0400 (EDT)
 
 type AggregateClassroomSubscription {
   count: Int!
@@ -572,6 +572,7 @@ type File implements Node {
   name: String!
   secret: String!
   contentType: String!
+  lessonThumbnail(where: LessonWhereInput): Lesson
   lesson(where: LessonWhereInput): Lesson
   archived: Boolean!
 }
@@ -591,6 +592,7 @@ input FileCreateInput {
   secret: String!
   contentType: String!
   archived: Boolean
+  lessonThumbnail: LessonCreateOneWithoutThumbnailInput
   lesson: LessonCreateOneWithoutFilesInput
 }
 
@@ -604,11 +606,25 @@ input FileCreateOneInput {
   connect: FileWhereUniqueInput
 }
 
+input FileCreateOneWithoutLessonThumbnailInput {
+  create: FileCreateWithoutLessonThumbnailInput
+  connect: FileWhereUniqueInput
+}
+
 input FileCreateWithoutLessonInput {
   name: String!
   secret: String!
   contentType: String!
   archived: Boolean
+  lessonThumbnail: LessonCreateOneWithoutThumbnailInput
+}
+
+input FileCreateWithoutLessonThumbnailInput {
+  name: String!
+  secret: String!
+  contentType: String!
+  archived: Boolean
+  lesson: LessonCreateOneWithoutFilesInput
 }
 
 """An edge in a connection."""
@@ -691,6 +707,7 @@ input FileUpdateDataInput {
   secret: String
   contentType: String
   archived: Boolean
+  lessonThumbnail: LessonUpdateOneWithoutThumbnailInput
   lesson: LessonUpdateOneWithoutFilesInput
 }
 
@@ -699,6 +716,7 @@ input FileUpdateInput {
   secret: String
   contentType: String
   archived: Boolean
+  lessonThumbnail: LessonUpdateOneWithoutThumbnailInput
   lesson: LessonUpdateOneWithoutFilesInput
 }
 
@@ -720,11 +738,29 @@ input FileUpdateOneInput {
   upsert: FileUpsertNestedInput
 }
 
+input FileUpdateOneWithoutLessonThumbnailInput {
+  create: FileCreateWithoutLessonThumbnailInput
+  connect: FileWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: FileUpdateWithoutLessonThumbnailDataInput
+  upsert: FileUpsertWithoutLessonThumbnailInput
+}
+
 input FileUpdateWithoutLessonDataInput {
   name: String
   secret: String
   contentType: String
   archived: Boolean
+  lessonThumbnail: LessonUpdateOneWithoutThumbnailInput
+}
+
+input FileUpdateWithoutLessonThumbnailDataInput {
+  name: String
+  secret: String
+  contentType: String
+  archived: Boolean
+  lesson: LessonUpdateOneWithoutFilesInput
 }
 
 input FileUpdateWithWhereUniqueWithoutLessonInput {
@@ -735,6 +771,11 @@ input FileUpdateWithWhereUniqueWithoutLessonInput {
 input FileUpsertNestedInput {
   update: FileUpdateDataInput!
   create: FileCreateInput!
+}
+
+input FileUpsertWithoutLessonThumbnailInput {
+  update: FileUpdateWithoutLessonThumbnailDataInput!
+  create: FileCreateWithoutLessonThumbnailInput!
 }
 
 input FileUpsertWithWhereUniqueWithoutLessonInput {
@@ -960,10 +1001,8 @@ input FileWhereInput {
 
   """All values that are not equal to given value."""
   archived_not: Boolean
+  lessonThumbnail: LessonWhereInput
   lesson: LessonWhereInput
-  _MagicalBackRelation_UserPicture_every: UserWhereInput
-  _MagicalBackRelation_UserPicture_some: UserWhereInput
-  _MagicalBackRelation_UserPicture_none: UserWhereInput
 }
 
 input FileWhereUniqueInput {
@@ -984,10 +1023,11 @@ type Lesson implements Node {
   teacher(where: UserWhereInput): User!
   name: String!
   description: String!
-  thumbnail: String!
+  thumbnail(where: FileWhereInput): File
   schedule: DateTime!
   premium: Boolean!
   course(where: CourseWhereInput): Course
+  isLive: Boolean!
   live(where: UserWhereInput): User
   streamID: String!
   streamKey: String!
@@ -1009,13 +1049,14 @@ type LessonConnection {
 input LessonCreateInput {
   name: String!
   description: String!
-  thumbnail: String!
   schedule: DateTime!
   premium: Boolean
+  isLive: Boolean
   streamID: String!
   streamKey: String!
   archived: Boolean
   teacher: UserCreateOneWithoutLessonsInput!
+  thumbnail: FileCreateOneWithoutLessonThumbnailInput
   course: CourseCreateOneWithoutLessonsInput
   live: UserCreateOneWithoutLiveInput
   messages: MessageCreateManyWithoutLessonInput
@@ -1047,16 +1088,22 @@ input LessonCreateOneWithoutMessagesInput {
   connect: LessonWhereUniqueInput
 }
 
+input LessonCreateOneWithoutThumbnailInput {
+  create: LessonCreateWithoutThumbnailInput
+  connect: LessonWhereUniqueInput
+}
+
 input LessonCreateWithoutCourseInput {
   name: String!
   description: String!
-  thumbnail: String!
   schedule: DateTime!
   premium: Boolean
+  isLive: Boolean
   streamID: String!
   streamKey: String!
   archived: Boolean
   teacher: UserCreateOneWithoutLessonsInput!
+  thumbnail: FileCreateOneWithoutLessonThumbnailInput
   live: UserCreateOneWithoutLiveInput
   messages: MessageCreateManyWithoutLessonInput
   files: FileCreateManyWithoutLessonInput
@@ -1065,13 +1112,14 @@ input LessonCreateWithoutCourseInput {
 input LessonCreateWithoutFilesInput {
   name: String!
   description: String!
-  thumbnail: String!
   schedule: DateTime!
   premium: Boolean
+  isLive: Boolean
   streamID: String!
   streamKey: String!
   archived: Boolean
   teacher: UserCreateOneWithoutLessonsInput!
+  thumbnail: FileCreateOneWithoutLessonThumbnailInput
   course: CourseCreateOneWithoutLessonsInput
   live: UserCreateOneWithoutLiveInput
   messages: MessageCreateManyWithoutLessonInput
@@ -1080,13 +1128,14 @@ input LessonCreateWithoutFilesInput {
 input LessonCreateWithoutLiveInput {
   name: String!
   description: String!
-  thumbnail: String!
   schedule: DateTime!
   premium: Boolean
+  isLive: Boolean
   streamID: String!
   streamKey: String!
   archived: Boolean
   teacher: UserCreateOneWithoutLessonsInput!
+  thumbnail: FileCreateOneWithoutLessonThumbnailInput
   course: CourseCreateOneWithoutLessonsInput
   messages: MessageCreateManyWithoutLessonInput
   files: FileCreateManyWithoutLessonInput
@@ -1095,13 +1144,14 @@ input LessonCreateWithoutLiveInput {
 input LessonCreateWithoutMessagesInput {
   name: String!
   description: String!
-  thumbnail: String!
   schedule: DateTime!
   premium: Boolean
+  isLive: Boolean
   streamID: String!
   streamKey: String!
   archived: Boolean
   teacher: UserCreateOneWithoutLessonsInput!
+  thumbnail: FileCreateOneWithoutLessonThumbnailInput
   course: CourseCreateOneWithoutLessonsInput
   live: UserCreateOneWithoutLiveInput
   files: FileCreateManyWithoutLessonInput
@@ -1110,12 +1160,29 @@ input LessonCreateWithoutMessagesInput {
 input LessonCreateWithoutTeacherInput {
   name: String!
   description: String!
-  thumbnail: String!
   schedule: DateTime!
   premium: Boolean
+  isLive: Boolean
   streamID: String!
   streamKey: String!
   archived: Boolean
+  thumbnail: FileCreateOneWithoutLessonThumbnailInput
+  course: CourseCreateOneWithoutLessonsInput
+  live: UserCreateOneWithoutLiveInput
+  messages: MessageCreateManyWithoutLessonInput
+  files: FileCreateManyWithoutLessonInput
+}
+
+input LessonCreateWithoutThumbnailInput {
+  name: String!
+  description: String!
+  schedule: DateTime!
+  premium: Boolean
+  isLive: Boolean
+  streamID: String!
+  streamKey: String!
+  archived: Boolean
+  teacher: UserCreateOneWithoutLessonsInput!
   course: CourseCreateOneWithoutLessonsInput
   live: UserCreateOneWithoutLiveInput
   messages: MessageCreateManyWithoutLessonInput
@@ -1142,12 +1209,12 @@ enum LessonOrderByInput {
   name_DESC
   description_ASC
   description_DESC
-  thumbnail_ASC
-  thumbnail_DESC
   schedule_ASC
   schedule_DESC
   premium_ASC
   premium_DESC
+  isLive_ASC
+  isLive_DESC
   streamID_ASC
   streamID_DESC
   streamKey_ASC
@@ -1162,9 +1229,9 @@ type LessonPreviousValues {
   updatedAt: DateTime!
   name: String!
   description: String!
-  thumbnail: String!
   schedule: DateTime!
   premium: Boolean!
+  isLive: Boolean!
   streamID: String!
   streamKey: String!
   archived: Boolean!
@@ -1212,13 +1279,14 @@ input LessonSubscriptionWhereInput {
 input LessonUpdateInput {
   name: String
   description: String
-  thumbnail: String
   schedule: DateTime
   premium: Boolean
+  isLive: Boolean
   streamID: String
   streamKey: String
   archived: Boolean
   teacher: UserUpdateOneWithoutLessonsInput
+  thumbnail: FileUpdateOneWithoutLessonThumbnailInput
   course: CourseUpdateOneWithoutLessonsInput
   live: UserUpdateOneWithoutLiveInput
   messages: MessageUpdateManyWithoutLessonInput
@@ -1269,16 +1337,26 @@ input LessonUpdateOneWithoutMessagesInput {
   upsert: LessonUpsertWithoutMessagesInput
 }
 
+input LessonUpdateOneWithoutThumbnailInput {
+  create: LessonCreateWithoutThumbnailInput
+  connect: LessonWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: LessonUpdateWithoutThumbnailDataInput
+  upsert: LessonUpsertWithoutThumbnailInput
+}
+
 input LessonUpdateWithoutCourseDataInput {
   name: String
   description: String
-  thumbnail: String
   schedule: DateTime
   premium: Boolean
+  isLive: Boolean
   streamID: String
   streamKey: String
   archived: Boolean
   teacher: UserUpdateOneWithoutLessonsInput
+  thumbnail: FileUpdateOneWithoutLessonThumbnailInput
   live: UserUpdateOneWithoutLiveInput
   messages: MessageUpdateManyWithoutLessonInput
   files: FileUpdateManyWithoutLessonInput
@@ -1287,13 +1365,14 @@ input LessonUpdateWithoutCourseDataInput {
 input LessonUpdateWithoutFilesDataInput {
   name: String
   description: String
-  thumbnail: String
   schedule: DateTime
   premium: Boolean
+  isLive: Boolean
   streamID: String
   streamKey: String
   archived: Boolean
   teacher: UserUpdateOneWithoutLessonsInput
+  thumbnail: FileUpdateOneWithoutLessonThumbnailInput
   course: CourseUpdateOneWithoutLessonsInput
   live: UserUpdateOneWithoutLiveInput
   messages: MessageUpdateManyWithoutLessonInput
@@ -1302,13 +1381,14 @@ input LessonUpdateWithoutFilesDataInput {
 input LessonUpdateWithoutLiveDataInput {
   name: String
   description: String
-  thumbnail: String
   schedule: DateTime
   premium: Boolean
+  isLive: Boolean
   streamID: String
   streamKey: String
   archived: Boolean
   teacher: UserUpdateOneWithoutLessonsInput
+  thumbnail: FileUpdateOneWithoutLessonThumbnailInput
   course: CourseUpdateOneWithoutLessonsInput
   messages: MessageUpdateManyWithoutLessonInput
   files: FileUpdateManyWithoutLessonInput
@@ -1317,13 +1397,14 @@ input LessonUpdateWithoutLiveDataInput {
 input LessonUpdateWithoutMessagesDataInput {
   name: String
   description: String
-  thumbnail: String
   schedule: DateTime
   premium: Boolean
+  isLive: Boolean
   streamID: String
   streamKey: String
   archived: Boolean
   teacher: UserUpdateOneWithoutLessonsInput
+  thumbnail: FileUpdateOneWithoutLessonThumbnailInput
   course: CourseUpdateOneWithoutLessonsInput
   live: UserUpdateOneWithoutLiveInput
   files: FileUpdateManyWithoutLessonInput
@@ -1332,12 +1413,29 @@ input LessonUpdateWithoutMessagesDataInput {
 input LessonUpdateWithoutTeacherDataInput {
   name: String
   description: String
-  thumbnail: String
   schedule: DateTime
   premium: Boolean
+  isLive: Boolean
   streamID: String
   streamKey: String
   archived: Boolean
+  thumbnail: FileUpdateOneWithoutLessonThumbnailInput
+  course: CourseUpdateOneWithoutLessonsInput
+  live: UserUpdateOneWithoutLiveInput
+  messages: MessageUpdateManyWithoutLessonInput
+  files: FileUpdateManyWithoutLessonInput
+}
+
+input LessonUpdateWithoutThumbnailDataInput {
+  name: String
+  description: String
+  schedule: DateTime
+  premium: Boolean
+  isLive: Boolean
+  streamID: String
+  streamKey: String
+  archived: Boolean
+  teacher: UserUpdateOneWithoutLessonsInput
   course: CourseUpdateOneWithoutLessonsInput
   live: UserUpdateOneWithoutLiveInput
   messages: MessageUpdateManyWithoutLessonInput
@@ -1367,6 +1465,11 @@ input LessonUpsertWithoutLiveInput {
 input LessonUpsertWithoutMessagesInput {
   update: LessonUpdateWithoutMessagesDataInput!
   create: LessonCreateWithoutMessagesInput!
+}
+
+input LessonUpsertWithoutThumbnailInput {
+  update: LessonUpdateWithoutThumbnailDataInput!
+  create: LessonCreateWithoutThumbnailInput!
 }
 
 input LessonUpsertWithWhereUniqueWithoutCourseInput {
@@ -1554,46 +1657,6 @@ input LessonWhereInput {
 
   """All values not ending with the given string."""
   description_not_ends_with: String
-  thumbnail: String
-
-  """All values that are not equal to given value."""
-  thumbnail_not: String
-
-  """All values that are contained in given list."""
-  thumbnail_in: [String!]
-
-  """All values that are not contained in given list."""
-  thumbnail_not_in: [String!]
-
-  """All values less than the given value."""
-  thumbnail_lt: String
-
-  """All values less than or equal the given value."""
-  thumbnail_lte: String
-
-  """All values greater than the given value."""
-  thumbnail_gt: String
-
-  """All values greater than or equal the given value."""
-  thumbnail_gte: String
-
-  """All values containing the given string."""
-  thumbnail_contains: String
-
-  """All values not containing the given string."""
-  thumbnail_not_contains: String
-
-  """All values starting with the given string."""
-  thumbnail_starts_with: String
-
-  """All values not starting with the given string."""
-  thumbnail_not_starts_with: String
-
-  """All values ending with the given string."""
-  thumbnail_ends_with: String
-
-  """All values not ending with the given string."""
-  thumbnail_not_ends_with: String
   schedule: DateTime
 
   """All values that are not equal to given value."""
@@ -1620,6 +1683,10 @@ input LessonWhereInput {
 
   """All values that are not equal to given value."""
   premium_not: Boolean
+  isLive: Boolean
+
+  """All values that are not equal to given value."""
+  isLive_not: Boolean
   streamID: String
 
   """All values that are not equal to given value."""
@@ -1705,6 +1772,7 @@ input LessonWhereInput {
   """All values that are not equal to given value."""
   archived_not: Boolean
   teacher: UserWhereInput
+  thumbnail: FileWhereInput
   course: CourseWhereInput
   live: UserWhereInput
   messages_every: MessageWhereInput

@@ -69,10 +69,11 @@ const Container = styled.section`
 const SectionCol = styled(FlexCol)`
   ${outline()};
 `
-const LessonCardLarge = styled(LessonCard.LessonCardLarge)`
+const LessonCardLarge = styled(LessonCard.LessonCard)`
   max-width: 33.333333333333333%;
 `
 const SectionRow = styled(FlexRow)`
+  align-items: stretch;
   flex-wrap: wrap;
 `
 const ShowMoreButton = styled(Button)`
@@ -151,7 +152,8 @@ class LessonsPage extends React.Component {
               </StickyHeader>
               <SectionRow>
                 <Query query={viewerLessonsQuery} notifyOnNetworkStatusChange>
-                  {({ networkStatus, data, fetchMore }) => {
+                  {({ networkStatus, data, fetchMore, ...props }) => {
+                    console.log(props)
                     switch (networkStatus) {
                       case NetworkStatus.loading: {
                         return <LoadingIllustration />
@@ -172,9 +174,17 @@ class LessonsPage extends React.Component {
                           return (
                             <Fragment>
                               {lessons.edges.map(({ node }) => (
-                                <LessonCardLarge key={node.id} node={node} />
+                                <LessonCardLarge
+                                  key={node.id}
+                                  node={node}
+                                  href={`/profile/lessons/lesson/${node.id}`}
+                                />
                               ))}
                               <ShowMoreButton
+                                status={{
+                                  loading:
+                                    networkStatus === NetworkStatus.fetchMore,
+                                }}
                                 onClick={this.handleFetchMore(
                                   fetchMore,
                                   lessons.pageInfo.endCursor,
