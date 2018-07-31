@@ -65,7 +65,7 @@ type Lesson {
 
   name: String!
   description: String!
-  thumbnail: File @relation(name: "LessonThumbnail", onDelete: SET_NULL)
+  thumbnail: File @relation(name: "LessonThumbnail", onDelete: CASCADE)
   schedule: DateTime!
   premium: Boolean! @default(value: "false")
   course: Course @relation(name: "CourseLesson")
@@ -109,7 +109,6 @@ type File {
   contentType: String!
 
   # Connections
-  lessonThumbnail: Lesson @relation(name: "LessonThumbnail", onDelete: SET_NULL)
   lesson: Lesson @relation(name: "LessonFile", onDelete: SET_NULL)
 
   # System
