@@ -34,6 +34,7 @@ import {
   googleLogin,
   databaseLogin,
 } from 'lib/auth0'
+import { redirect } from 'lib/redirect'
 
 // Styles
 
@@ -101,10 +102,8 @@ class Auth extends React.Component {
 
   static async getInitialProps(ctx) {
     const token = nookies.parseCookies(ctx).token
-
-    console.log(buildAuthorizeURL({ nonce: 'homeroom' }))
     if (token) {
-      // return redirect(ctx, '/')
+      return redirect(ctx, '/')
     } else {
       // return redirect(ctx, buildAuthorizeURL({ nonce: 'homeroom' }))
     }
@@ -128,7 +127,8 @@ class Auth extends React.Component {
     })
   }
 
-  handleDatabaseLogin = () => {
+  handleDatabaseLogin = e => {
+    e.preventDefault()
     const { email, password, rePassword } = this.state
     if (
       this.state.showLogin ||

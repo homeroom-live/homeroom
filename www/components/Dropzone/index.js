@@ -1,9 +1,15 @@
+import React from 'react'
 import DropzoneComponent from 'react-dropzone'
 import styled from 'styled-components'
 
+import { Status } from 'components/Status'
+
 import { spacing, colors, borderRadius, transition } from 'utils/theme'
 
-export const Dropzone = styled(DropzoneComponent)`
+const Container = styled.div`
+  position: relative;
+`
+const _Dropzone = styled(DropzoneComponent)`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,3 +25,10 @@ export const Dropzone = styled(DropzoneComponent)`
     opacity: 1;
   }
 `
+
+export const Dropzone = ({ status, ...props }) => (
+  <Container>
+    <_Dropzone {...props} />
+    {status && <Status status={status} />}
+  </Container>
+)

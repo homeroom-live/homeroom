@@ -8,7 +8,7 @@ import iconXCircleRed from 'static/assets/icons/ui/x-circle-red.svg'
 import iconCheckGreen from 'static/assets/icons/ui/check-green.svg'
 
 const StatusContainer = styled.div`
-  position: absolute;
+  position: ${props => (props.inline ? 'initial' : 'absolute')};
   top: -24px;
   right: 0;
 `
@@ -36,9 +36,9 @@ export class Status extends React.Component {
   }
 
   render() {
-    const { status } = this.props
+    const { status, inline } = this.props
     return (
-      <StatusContainer>
+      <StatusContainer inline={inline}>
         {status.loading && <Loading color={'tertiary'} height="16px" />}
         {status.error && <Icon src={iconXCircleRed} height="16px" />}
         {this.state.showSuccess && <Icon src={iconCheckGreen} height="16px" />}

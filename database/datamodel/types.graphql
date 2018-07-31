@@ -65,7 +65,8 @@ type Lesson {
 
   name: String!
   description: String!
-  thumbnail: String!
+  thumbnail: String
+  # thumbnail: File @relation(name: "LessonThumbnail", onDelete: CASCADE)
   schedule: DateTime!
   premium: Boolean! @default(value: "false")
   course: Course @relation(name: "CourseLesson")

@@ -8,8 +8,8 @@ import styled from 'styled-components'
 import { Navbar } from 'components/Navbar'
 import { SideNav } from 'components/SideNav'
 import { FileDropzone } from 'components/FileDropzone'
-import { DatePicker } from 'components/DatePicker'
-import { Loading } from 'components/Loading'
+import { DatePicker, InputWrapper } from 'components/DatePicker'
+import { ImagePicker } from 'components/ImagePicker'
 import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
 import { Text } from 'components/Text'
@@ -21,6 +21,7 @@ import { Label } from 'components/Label'
 import { Input } from 'components/Input'
 import { Textarea } from 'components/Textarea'
 import { Breadcrumb } from 'components/Breadcrumb'
+import { File } from 'components/File'
 import { Footer } from 'components/Footer'
 
 // Icons
@@ -35,7 +36,7 @@ import { withLogin } from 'hocs/withLogin'
 
 // Utils
 
-import { shadow, spacing, outline, colors } from 'utils/theme'
+import { spacing, outline, colors } from 'utils/theme'
 
 // Elements
 
@@ -61,10 +62,6 @@ const NewLessonFormCol = styled(FlexCol)`
 const NewLessonFormRow = styled(FlexRow)`
   align-items: flex-start;
 `
-const LessonNameLabel = styled(Label)`
-  margin-bottom: ${spacing.regular};
-`
-
 const CardCol = styled(FlexCol)`
   align-items: center;
   justify-content: flex-start;
@@ -72,8 +69,9 @@ const CardCol = styled(FlexCol)`
   margin-top: ${spacing.xxlarge};
 `
 const Card = styled(FlexCol)`
-  ${shadow()};
   max-width: 384px;
+  ${outline()};
+  box-shadow: ${colors.shadowActive};
 `
 const CardBody = styled(FlexCol)`
   padding: ${spacing.regular};
@@ -107,6 +105,7 @@ const createLessonMutation = gql`
     $description: String!
     $schedule: DateTime
     $premium: Boolean
+    # $thumbnail: Upload
     $files: [Upload!]!
     $course: CourseInput
   ) {
@@ -115,19 +114,23 @@ const createLessonMutation = gql`
       description: $description
       schedule: $schedule
       premium: $premium
+      # thumbnail: $thumbnail
       files: $files
       course: $course
     ) {
       id
       name
       description
-      thumbnail
+      # thumbnail {
+      #   id
+      #   url
+      # }
       schedule
       premium
-      course {
-        id
-        name
-      }
+      # course {
+      #   id
+      #   name
+      # }
       streamKey
       streamURL
     }
@@ -142,6 +145,7 @@ class LessonForm extends React.Component {
     description: '',
     schedule: null,
     premium: false,
+    thumbnail: null,
     files: [],
     course: null,
   }
@@ -174,9 +178,21 @@ class LessonForm extends React.Component {
     }))
   }
 
+  handleThumbnailChange = thumbnail => {
+    this.setState({
+      thumbnail,
+    })
+  }
+
   handleFilesChange = files => {
     this.setState({
-      files,
+      files: [...this.state.files, ...files],
+    })
+  }
+
+  handleFileRemove = filename => {
+    this.setState({
+      files: this.state.files.filter(file => file.name !== filename),
     })
   }
 
@@ -189,6 +205,7 @@ class LessonForm extends React.Component {
   handleSubmit = create => e => {
     e.preventDefault()
     create()
+    this.setState({ files: [] })
   }
 
   render() {
@@ -203,8 +220,9 @@ class LessonForm extends React.Component {
               description: this.state.description,
               schedule: this.state.schedule,
               premium: this.state.premium,
+              // thumbnail: this.state.thumbnail,
               files: this.state.files,
-              course: this.state.course,
+              // course: this.state.course,
             }}
           >
             {(create, { loading, error, data }) => {
@@ -249,7 +267,7 @@ class LessonForm extends React.Component {
                     <NewLessonHeader src={iconVideo} value="Create New Lesson">
                       <SaveButton
                         color="primary"
-                        status={{ loading, error }}
+                        status={{ loading, error, data }}
                         onClick={this.handleSubmit(create)}
                       >
                         Save Lesson
@@ -258,14 +276,14 @@ class LessonForm extends React.Component {
                     <NewLessonForm onSubmit={this.handleSubmit(create)}>
                       <NewLessonFormRow>
                         <NewLessonFormCol>
-                          <LessonNameLabel>
+                          <Label>
                             Lesson Name
                             <Input
                               type="text"
                               onChange={this.handleNameChange}
                               value={this.state.name}
                             />
-                          </LessonNameLabel>
+                          </Label>
                           <Label size="regular">
                             Lesson Date & Time{' '}
                             <DatePicker
@@ -274,7 +292,17 @@ class LessonForm extends React.Component {
                               type="date"
                               dateFormat="M/D/YY – h:mma"
                               timeFormat="h:mma"
-                              customInput={<Input type="button" />}
+                              customInput={
+                                <InputWrapper
+                                  render={props => (
+                                    <Input
+                                      {...props}
+                                      innerRef={props.ref}
+                                      type="button"
+                                    />
+                                  )}
+                                />
+                              }
                               selected={this.state.schedule}
                               onChange={this.handleScheduleChange}
                             />
@@ -289,19 +317,31 @@ class LessonForm extends React.Component {
                           </Label>
                         </NewLessonFormCol>
                         <FlexCol>
+                          <Label size="regular">
+                            Lesson Thumbnail
+                            <ImagePicker
+                              value={this.state.thumbnail}
+                              onChange={this.handleThumbnailChange}
+                            />
+                          </Label>
                           <Label>
                             Lesson Files
-                            <FileDropzone
-                              value={this.state.files}
-                              onChange={this.handleFilesChange}
-                            />
+                            <FileDropzone onChange={this.handleFilesChange} />
+                            {this.state.files.map(file => (
+                              <File
+                                key={file.name}
+                                name={file.name}
+                                url={file.preview}
+                                onRemove={this.handleFileRemove}
+                              />
+                            ))}
                           </Label>
                         </FlexCol>
                       </NewLessonFormRow>
                       <FlexRow>
                         <BigSaveButton
                           color="tertiary"
-                          status={{ loading, error }}
+                          status={{ loading, error, data }}
                           type="submit"
                         >
                           Save Lesson

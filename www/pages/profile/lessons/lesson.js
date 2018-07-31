@@ -29,7 +29,8 @@ import { Label } from 'components/Label'
 import { Toggle } from 'components/Toggle'
 import { Input } from 'components/Input'
 import { Textarea } from 'components/Textarea'
-import { DatePicker } from 'components/DatePicker'
+import { DatePicker, InputWrapper } from 'components/DatePicker'
+import { ImagePicker } from 'components/ImagePicker'
 import { Chat } from 'components/Chat'
 
 // Icons
@@ -45,10 +46,7 @@ import iconFile from 'static/assets/icons/ui/file.svg'
 
 // HOCs
 
-import {
-  EditableComponent,
-  STATUS as EditableStatus,
-} from 'hocs/EditableComponent'
+import { EditableComponent } from 'hocs/EditableComponent'
 import { withLogin } from 'hocs/withLogin'
 
 // Utils
@@ -61,7 +59,7 @@ const Container = styled(FlexCol)``
 const LessonHeader = styled(FlexRow)`
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 2;
   align-items: flex-start;
   padding: ${spacing.large} ${spacing.large} ${spacing.medium};
   background: ${colors.white};
@@ -171,8 +169,8 @@ const lessonQuery = gql`
 `
 
 const updateLessonLiveMutation = gql`
-  mutation UpdateLessonLive($id: ID!) {
-    goLive(id: $id) {
+  mutation UpdateLessonLive($id: ID!, $data: Boolean!) {
+    toggleLive(id: $id, isLive: $data) {
       id
       isLive
     }
@@ -202,6 +200,18 @@ const updateLessonScheduleMutation = gql`
     updateLesson(id: $id, schedule: $data) {
       id
       schedule
+    }
+  }
+`
+
+const updateLessonThumbnailMutation = gql`
+  mutation UpdateLessonThumbnail($id: ID!, $data: Upload) {
+    updateLesson(id: $id, thumbnail: $data) {
+      id
+      thumbnail {
+        id
+        url
+      }
     }
   }
 `
@@ -313,6 +323,7 @@ class LessonPage extends React.Component {
                             </LessonMetaItem>
                           </FlexRow>
                         </LessonMeta>
+                        {data.lesson.isLive}
                         <EditableComponent
                           mutation={updateLessonLiveMutation}
                           variables={{ id: this.props.lessonId }}
@@ -325,9 +336,6 @@ class LessonPage extends React.Component {
                               onChange={e => {
                                 e.preventDefault()
                                 onChange(!data.lesson.isLive)
-                                // onChange(
-                                //   data.lesson.isLive || !this.state.testIsLive,
-                                // )
                               }}
                               onClick={onSubmit}
                               onBlur={onSubmit}
@@ -425,7 +433,16 @@ class LessonPage extends React.Component {
                                       dateFormat="M/D/YY – h:mma"
                                       timeFormat="h:mm a"
                                       customInput={
-                                        <Input status={status} type="button" />
+                                        <InputWrapper
+                                          render={props => (
+                                            <Input
+                                              {...props}
+                                              innerRef={props.ref}
+                                              status={status}
+                                              type="button"
+                                            />
+                                          )}
+                                        />
                                       }
                                       selected={value && moment(value)}
                                       onChange={onChange}
@@ -464,6 +481,25 @@ class LessonPage extends React.Component {
                           <SectionRightCol>
                             <IconHeader src={iconFile} value="Files" />
                             <SectionBody>
+                              {/*
+                                <EditableLabel size="regular">
+                                Thumbnail
+                                <EditableComponent
+                                  mutation={updateLessonThumbnailMutation}
+                                  variables={{ id: this.props.lessonId }}
+                                  value={data.lesson.thumbnail}
+                                >
+                                  {({ status, value, onChange, onSubmit }) => (
+                                    <ImagePicker
+                                      value={value}
+                                      onChange={onChange}
+                                      onSubmit={onSubmit}
+                                      status={status}
+                                    />
+                                  )}
+                                </EditableComponent>
+                              </EditableLabel>
+                                */}
                               <EditableLabel>
                                 Files
                                 <EditableComponent
@@ -477,15 +513,13 @@ class LessonPage extends React.Component {
                                         value={value}
                                         onChange={onChange}
                                         onSubmit={onSubmit}
+                                        status={status}
                                       />
                                       {value.map(file => (
                                         <File
                                           key={file.name}
                                           name={file.name}
                                           url={file.preview}
-                                          loading={
-                                            status === EditableStatus.LOADING
-                                          }
                                         />
                                       ))}
                                     </Fragment>
@@ -501,11 +535,12 @@ class LessonPage extends React.Component {
                                         fileId: node.id,
                                       }}
                                     >
-                                      {(handleRemove, { loading, data }) => (
+                                      {(handleRemove, status) => (
                                         <File
                                           name={node.name}
                                           url={node.url}
                                           updatedAt={node.updatedAt}
+                                          status={status}
                                           onRemove={handleRemove}
                                         />
                                       )}

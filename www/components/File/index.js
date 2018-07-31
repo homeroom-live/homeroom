@@ -1,20 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
 import moment from 'moment'
-// import { propType } from 'graphql-anywhere'
-// import gql from 'graphql-tag'
 
 import { Icon } from 'components/Icon'
 import { Text } from 'components/Text'
 import { FlexRow } from 'components/FlexRow'
+import { Status } from 'components/Status'
 
 import { spacing, opacity, colors } from 'utils/theme'
 import iconDownload from 'static/assets/icons/ui/download.svg'
 import iconRemove from 'static/assets/icons/ui/x-circle.svg'
 
-// ${shadow()};
-const Container = styled.div``
 const DownloadWrapper = styled.a`
+  position: relative;
   display: flex;
   align-items: center;
   padding: ${spacing.regular};
@@ -70,13 +68,11 @@ const RemoveIcon = styled(DownloadIcon)`
 export class File extends React.Component {
   handleRemove = e => {
     e.preventDefault()
-
-    const { name } = this.props
-    this.props.onRemove(name)
+    this.props.onRemove(this.props.name)
   }
 
   render() {
-    const { name, url, updatedAt, onRemove } = this.props
+    const { name, url, updatedAt, status, onRemove } = this.props
 
     return (
       <DownloadWrapper href={url} download={name} target="_blank">
@@ -97,6 +93,7 @@ export class File extends React.Component {
             <RemoveIcon src={iconRemove} onClick={this.handleRemove} />
           )}
         </MetaRow>
+        {status && <Status status={status} inline />}
       </DownloadWrapper>
     )
   }

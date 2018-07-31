@@ -3,7 +3,7 @@ import { Context } from '../../utils'
 export const lesson = {
   async createLesson(
     parent,
-    { name, description, schedule, premium, files, course },
+    { name, description, schedule, premium, thumbnail, files, course },
     ctx: Context,
     info,
   ) {
@@ -11,7 +11,7 @@ export const lesson = {
 
     const streamID = ''
     const streamKey = ''
-    const thumbnail = ''
+    // const thumbnail = ''
 
     return ctx.db.mutation.createLesson(
       {
@@ -19,7 +19,8 @@ export const lesson = {
           teacher: { connect: { auth0Id } },
           name,
           description,
-          thumbnail,
+          thumbnail: '',
+          // thumbnail: thumbnail ? { create: thumbnail } : null,
           schedule: schedule ? schedule : new Date().toISOString(),
           premium,
           course,
@@ -33,7 +34,7 @@ export const lesson = {
   },
   async updateLesson(
     parent,
-    { id, name, description, schedule, premium, course },
+    { id, name, description, schedule, premium, course, thumbnail },
     ctx: Context,
     info,
   ) {
@@ -48,6 +49,8 @@ export const lesson = {
           schedule,
           premium,
           course,
+          thumbnail,
+          // thumbnail: thumbnail && !thumbnail.id ? { create: thumbnail } : null,
         },
       },
       info,
@@ -79,18 +82,19 @@ export const lesson = {
     const file = await ctx.db.mutation.updateFile({
       where: { id: fileId },
       data: {
-        archived: false,
+        archived: true,
       },
     })
 
     return ctx.db.query.lesson({ where: { id } }, info)
   },
-  async goLive(parent, { id }, ctx: Context, info) {
+  async toggleLive(parent, { id, isLive }, ctx: Context, info) {
     const auth0Id = ctx.request.user.sub
     return ctx.db.mutation.updateLesson(
       {
         where: { id },
         data: {
+          // isLive,
           live: {
             connect: { auth0Id },
           },

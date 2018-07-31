@@ -10,7 +10,9 @@ import { Dropzone } from 'components/Dropzone'
 import { spacing } from 'utils/theme'
 import iconFile from 'static/assets/icons/ui/file-plus.svg'
 
-const FilePickerContainer = styled(FlexCol)``
+const FilePickerContainer = styled(FlexCol)`
+  margin-bottom: ${spacing.regular};
+`
 const PlaceholderIcon = styled(Icon)`
   margin-bottom: ${spacing.small};
 `
@@ -30,8 +32,10 @@ export class FileDropzone extends React.Component {
    * Submit and reset after 500ms.
    */
   handleSubmit = debounce(() => {
-    this.props.onSubmit()
-    this.props.onChange([])
+    if (this.props.onSubmit) {
+      this.props.onSubmit()
+      this.props.onChange([])
+    }
   }, 500)
 
   /**
@@ -43,7 +47,7 @@ export class FileDropzone extends React.Component {
   }
 
   render() {
-    const { accept } = this.props
+    const { accept, status } = this.props
 
     return (
       <FilePickerContainer>
@@ -52,6 +56,7 @@ export class FileDropzone extends React.Component {
           accept={accept}
           onDrop={this.handleChange}
           onClick={this.handleClick}
+          status={status}
         >
           <PlaceholderIcon src={iconFile} />
           <PlaceholderText size="small" weight="bold">

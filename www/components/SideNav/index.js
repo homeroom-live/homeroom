@@ -132,7 +132,7 @@ export const SideNav = ({ children, activeSection }) => (
                     size="small"
                     weight="bold"
                     href={
-                      data.viewer.user.stripeId
+                      data.viewer.user && data.viewer.user.stripeId
                         ? data.viewer.user.stripeId
                         : publicRuntimeConfig.stripeSignupURL
                     }

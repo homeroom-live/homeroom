@@ -20,7 +20,6 @@ import { colors, spacing } from 'utils/theme'
 
 const Container = styled(FlexCol)`
   min-width: 256px;
-  border-left: 1px solid ${colors.grayLighter};
 `
 const MessagesCol = styled(FlexCol)`
   overflow: auto;

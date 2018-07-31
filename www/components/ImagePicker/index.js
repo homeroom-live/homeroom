@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import debounce from 'lodash.debounce'
 
 import { FlexCol } from 'components/FlexCol'
 import { Icon } from 'components/Icon'
@@ -13,6 +14,7 @@ import iconXWhite from 'static/assets/icons/ui/x-circle-white.svg'
 const ImagePickerContainer = styled(FlexCol)``
 const ImageContainer = styled.div`
   position: relative;
+  margin-top: 1px;
   border-radius: ${borderRadius};
 `
 const PlaceholderIcon = styled(Icon)`
@@ -44,6 +46,10 @@ const PreviewImage = styled.img`
 export class ImagePicker extends React.Component {
   handleDrop = files => {
     this.props.onChange(files[0])
+
+    if (this.props.onSubmit) {
+      this.props.onSubmit()
+    }
   }
 
   handleRemove = e => {
@@ -52,7 +58,7 @@ export class ImagePicker extends React.Component {
   }
 
   render() {
-    const { value } = this.props
+    const { value, status } = this.props
 
     return (
       <ImagePickerContainer>
@@ -64,6 +70,7 @@ export class ImagePicker extends React.Component {
             onClick={e => {
               e.preventDefault()
             }}
+            status={status}
           >
             <PlaceholderIcon src={iconCamera} />
             <PlaceholderText size="small" weight="bold">

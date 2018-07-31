@@ -11,7 +11,9 @@ export class EditableComponent extends React.Component {
   }
 
   handleSubmit = submit => e => {
-    e.preventDefault()
+    if (e && e.preventDefault) {
+      e.preventDefault()
+    }
     submit()
   }
 

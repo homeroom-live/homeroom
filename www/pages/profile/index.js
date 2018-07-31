@@ -18,8 +18,6 @@ import { Label } from 'components/Label'
 import { Input } from 'components/Input'
 import { Textarea } from 'components/Textarea'
 import { Footer } from 'components/Footer'
-import { Loading } from 'components/Loading'
-import { TextStyle } from 'components/TextStyle'
 
 // Icons
 
