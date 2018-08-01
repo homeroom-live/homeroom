@@ -3,7 +3,7 @@
 scalar Upload
 
 type Query {
-  viewer: Viewer
+  viewer: Viewer!
   user(username: String!): User!
   lesson(id: ID!): Lesson
 }
@@ -64,6 +64,7 @@ type Viewer {
   explore: Explore!
   user: User
   requiresSetup: Boolean
+  isLoggedIn: Boolean
 }
 
 type Explore {

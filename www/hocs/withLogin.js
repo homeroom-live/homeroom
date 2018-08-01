@@ -12,6 +12,7 @@ const viewerQuery = gql`
         id
       }
       requiresSetup
+      isLoggedIn
     }
   }
 `
@@ -30,7 +31,7 @@ export const withLogin = (ComposedComponent, options) =>
         ;[auth, composedInitialProps] = await Promise.all([
           ctx.apolloClient.query({
             query: viewerQuery,
-            fetchPolicy: 'cache-first',
+            fetchPolicy: 'no-cache',
             errorPolicy: 'ignore',
           }),
           ComposedComponent.getInitialProps(ctx),
@@ -38,21 +39,19 @@ export const withLogin = (ComposedComponent, options) =>
       } else {
         auth = await ctx.apolloClient.query({
           query: viewerQuery,
-          fetchPolicy: 'cache-first',
+          fetchPolicy: 'no-cache',
           errorPolicy: 'ignore',
         })
       }
 
-      if (!auth.data.viewer.user) {
+      if (!auth.data.viewer.isLoggedIn) {
         return redirect(ctx, '/signup')
-      }
-
-      if (auth.data.viewer.requiresSetup && options.setup) {
+      } else if (auth.data.viewer.requiresSetup && options.setup) {
         return redirect(ctx, '/profile')
-      }
-
-      return {
-        ...composedInitialProps,
+      } else {
+        return {
+          ...composedInitialProps,
+        }
       }
     }
 

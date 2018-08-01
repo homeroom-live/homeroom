@@ -19,4 +19,7 @@ export const Viewer = {
 
     return !exists
   },
+  async isLoggedIn(parent, args, ctx: Context, info) {
+    return ctx.request.user !== undefined
+  },
 }

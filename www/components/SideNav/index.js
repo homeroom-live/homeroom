@@ -30,6 +30,7 @@ import { spacing, colors, opacity, HEIGHT_MINUS_NAVBAR } from 'utils/theme'
 const stripeAccountUrl = gql`
   query Viewer {
     viewer {
+      requiresSetup
       user {
         id
       }
@@ -128,19 +129,21 @@ export const SideNav = ({ children, activeSection }) => (
                     Courses
                   </SideNavLink>
                   */}
-                  <SideNavLink
-                    size="small"
-                    weight="bold"
-                    href={
-                      data.viewer.user && data.viewer.user.stripeId
-                        ? data.viewer.user.stripeId
-                        : publicRuntimeConfig.stripeSignupURL
-                    }
-                    active={activeSection === 'stripe'}
-                  >
-                    <SideNavIcon src={iconCurrencyDollarWhite} />
-                    Stripe Account
-                  </SideNavLink>
+                  {!data.viewer.requiresSetup && (
+                    <SideNavLink
+                      size="small"
+                      weight="bold"
+                      href={
+                        data.viewer.user && data.viewer.user.stripeId
+                          ? data.viewer.user.stripeId
+                          : publicRuntimeConfig.stripeSignupURL
+                      }
+                      active={activeSection === 'stripe'}
+                    >
+                      <SideNavIcon src={iconCurrencyDollarWhite} />
+                      Stripe Account
+                    </SideNavLink>
+                  )}
                 </SideNavSticky>
               </SideNavContainer>
             )
