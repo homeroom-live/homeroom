@@ -4,6 +4,7 @@ import { Query, Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 import moment from 'moment-timezone'
+import Router from 'next/router'
 
 import { redirect } from 'lib/redirect'
 
@@ -43,6 +44,8 @@ import iconChat from 'static/assets/icons/ui/chat.svg'
 import iconHelpWhite from 'static/assets/icons/ui/help-white.svg'
 import iconInformation from 'static/assets/icons/ui/information.svg'
 import iconFile from 'static/assets/icons/ui/file.svg'
+import iconSettings from 'static/assets/icons/ui/settings.svg'
+import iconArchive from 'static/assets/icons/ui/archive.svg'
 
 // HOCs
 
@@ -100,7 +103,7 @@ const LessonBody = styled(FlexCol)`
   margin: ${spacing.medium};
 `
 const SectionRow = styled(FlexRow)`
-  align-items: flex-start;
+  align-items: stretch;
   width: initial;
 `
 const SectionCol = styled(FlexCol)`
@@ -112,6 +115,12 @@ const SectionBody = styled(FlexCol)`
 `
 const SectionRightCol = styled(SectionCol)`
   margin-left: ${spacing.medium};
+`
+const SectionLeftCol = styled(SectionCol)`
+  margin-right: ${spacing.medium};
+`
+const EmptySectionCol = styled(SectionCol)`
+  visibility: hidden;
 `
 const EditableLabel = styled(Label)`
   margin-bottom: ${spacing.regular};
@@ -133,6 +142,7 @@ const VideoSettingsLink = styled(Link)`
 `
 const ChatCol = styled(FlexCol)`
   max-height: 512px;
+  height: 100%;
 `
 
 // GraphQL
@@ -263,6 +273,14 @@ const removeLessonFileMutation = gql`
   }
 `
 
+const deleteLessonMutation = gql`
+  mutation DeleteLesson($id: ID!) {
+    deleteLesson(id: $id) {
+      id
+    }
+  }
+`
+
 class LessonPage extends React.Component {
   static getInitialProps(ctx) {
     const lessonId = ctx.query.lessonId
@@ -272,6 +290,12 @@ class LessonPage extends React.Component {
     }
 
     return { lessonId }
+  }
+
+  handleDeleteLesson = archive => e => {
+    e.preventDefault()
+    archive()
+    Router.replace('/profile/lessons')
   }
 
   render() {
@@ -365,7 +389,7 @@ class LessonPage extends React.Component {
                             <IconHeader src={iconVideo} value="Video" />
                             <SectionBody>
                               <LessonPlayer
-                                autoPlay={data.lesson.live}
+                                autoPlay={data.lesson.isLive}
                                 src="https://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"
                               />
                               <VideoSettingsRow>
@@ -563,6 +587,31 @@ class LessonPage extends React.Component {
                               </EditableLabel>
                             </SectionBody>
                           </SectionRightCol>
+                        </SectionRow>
+                        <SectionRow>
+                          <SectionLeftCol>
+                            <IconHeader src={iconSettings} value="Settings" />
+                            <SectionBody>
+                              <Mutation
+                                mutation={deleteLessonMutation}
+                                variables={{
+                                  id: this.props.lessonId,
+                                }}
+                              >
+                                {(archive, status) => (
+                                  <Button
+                                    color="tertiary"
+                                    src={iconArchive}
+                                    onClick={this.handleDeleteLesson(archive)}
+                                    status={status}
+                                  >
+                                    Archive Lesson
+                                  </Button>
+                                )}
+                              </Mutation>
+                            </SectionBody>
+                          </SectionLeftCol>
+                          <EmptySectionCol />
                         </SectionRow>
                       </LessonBody>
                     </Container>

@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -16,16 +15,18 @@ import { Message, MessageFragment } from './Message'
 
 // Utils
 
-import { colors, spacing } from 'utils/theme'
+import { spacing } from 'utils/theme'
 
 const Container = styled(FlexCol)`
   min-width: 256px;
+  height: 100%;
 `
 const MessagesCol = styled(FlexCol)`
   overflow: auto;
 `
 const TextareaRow = styled(FlexRow)`
   min-height: 76px;
+  margin-top: auto;
   padding: ${spacing.regular};
   box-sizing: border-box;
 `

@@ -153,7 +153,6 @@ class LessonsPage extends React.Component {
               <SectionRow>
                 <Query query={viewerLessonsQuery} notifyOnNetworkStatusChange>
                   {({ networkStatus, data, fetchMore, ...props }) => {
-                    console.log(props)
                     switch (networkStatus) {
                       case NetworkStatus.loading: {
                         return <LoadingIllustration />
