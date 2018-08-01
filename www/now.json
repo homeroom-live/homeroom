@@ -1,0 +1,26 @@
+{
+  "type": "npm",
+  "name": "homeroom-www",
+  "alias": "homeroom.live",
+  "scale": {
+    "sfo1": {
+      "min": 2,
+      "max": 4
+    },
+    "bru1": {
+      "min": 2,
+      "max": 4
+    }
+  },
+  "env": {
+    "NODE_ENV": "production",
+    "AUTH0_CLIENT_ID": "",
+    "AUTH0_DOMAIN": "",
+    "AUTH0_REDIRECT_URL": "",
+    "PRISMA_ENDPOINT": "",
+    "PRISMA_WS_ENDPOINT": "",
+    "STRIPE_KEY": "",
+    "STRIPE_ID": "",
+    "STRIPE_CALLBACK": ""
+  }
+}

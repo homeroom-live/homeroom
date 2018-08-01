@@ -1,0 +1,21 @@
+{
+  "type": "npm",
+  "name": "homeroom-server",
+  "alias": "api.homeroom.live",
+  "scale": {
+    "sfo1": {
+      "min": 2,
+      "max": 4
+    },
+    "bru1": {
+      "min": 2,
+      "max": 4
+    }
+  },
+  "env": {
+    "NODE_ENV": "production",
+    "STRIPE_ID": "",
+    "STRIPE_SECRET": "",
+    "PROXY_ENDPOINT": ""
+  }
+}

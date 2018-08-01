@@ -1,0 +1,19 @@
+{
+  "type": "npm",
+  "name": "homeroom-proxy",
+  "alias": "proxy.homeroom.live",
+  "scale": {
+    "sfo1": {
+      "min": 2,
+      "max": 4
+    },
+    "bru1": {
+      "min": 2,
+      "max": 4
+    }
+  },
+  "env": {
+    "NODE_ENV": "production",
+    "PORT": "2000"
+  }
+}
