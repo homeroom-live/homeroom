@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { colors } from 'utils/theme'
 
 const sizes = {
-  xsmall: '14px',
+  xsmall: '18px',
   small: '24px',
   regular: '32px',
   medium: '48px',

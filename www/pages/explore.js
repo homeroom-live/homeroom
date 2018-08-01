@@ -2,6 +2,7 @@ import React from 'react'
 import { Query } from 'react-apollo'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
+import { NetworkStatus } from 'apollo-client'
 
 // Components
 
@@ -12,8 +13,9 @@ import { FlexRow } from 'components/FlexRow'
 import { Button } from 'components/Button'
 import { Link } from 'components/Link'
 import { Footer } from 'components/Footer'
-
+import { fragments } from 'components/LessonCard'
 import { Lessons } from 'components/Lessons'
+import { Classrooms } from 'components/Classrooms'
 
 // Icons
 
@@ -23,8 +25,7 @@ import iconGraphBar from 'static/assets/icons/ui/graph-bar.svg'
 
 // Utils
 
-import { spacing, colors } from 'utils/theme'
-import { NetworkStatus } from '../node_modules/apollo-client'
+import { spacing, colors, opacity } from 'utils/theme'
 
 // Elements
 
@@ -34,7 +35,7 @@ const SideNavigationCol = styled(FlexCol)`
   z-index: 10;
   width: 250px !important;
   height: 100vh;
-  padding: ${spacing.medium};
+  padding: ${spacing.medium} ${spacing.regular};
   background: ${colors.white};
   border-right: 1px solid ${colors.grayLightest};
   box-shadow: 15px 0 30px 0 rgba(66, 75, 84, 0.1);
@@ -42,6 +43,14 @@ const SideNavigationCol = styled(FlexCol)`
 `
 const SideNavigationButton = styled(Button)`
   justify-content: flex-start;
+`
+const SideNavigationLabel = styled(SideNavigationButton)`
+  margin-top: ${spacing.large};
+  &:hover {
+    opacity: ${opacity};
+    background: none;
+    cursor: initial;
+  }
 `
 const TeachLink = styled(Link)`
   margin-top: auto;
@@ -74,6 +83,71 @@ const viewerQuery = gql`
   }
 `
 
+const liveLessonsQuery = gql`
+  query Viewer($cursor: String) {
+    viewer {
+      explore {
+        liveLessonsConnection(first: 8, after: $cursor) {
+          pageInfo {
+            endCursor
+          }
+          edges {
+            node {
+              ...LessonCard
+            }
+          }
+        }
+      }
+    }
+  }
+  ${fragments.card}
+`
+
+const hottestLessonsQuery = gql`
+  query Viewer($cursor: String) {
+    viewer {
+      explore {
+        hottestLessonsConnection(first: 8, after: $cursor) {
+          pageInfo {
+            endCursor
+          }
+          edges {
+            node {
+              ...LessonCard
+            }
+          }
+        }
+      }
+    }
+  }
+  ${fragments.card}
+`
+
+const featuredClassroomsQuery = gql`
+  query Viewer {
+    viewer {
+      explore {
+        featuredClassroomsConnection(first: 5) {
+          edges {
+            node {
+              id
+              name
+              username
+              picture {
+                id
+                url
+              }
+              live {
+                id
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
 // Explore
 
 class ExplorePage extends React.Component {
@@ -83,6 +157,9 @@ class ExplorePage extends React.Component {
 
   scrollToId = id => e => {
     e.preventDefault()
+    document.querySelector(id).scrollIntoView({
+      behavior: 'smooth',
+    })
   }
 
   render() {
@@ -97,7 +174,7 @@ class ExplorePage extends React.Component {
           {({ networkStatus, data }) => {
             switch (networkStatus) {
               case NetworkStatus.ready: {
-                if (data.viewer.status === 'NO_VIEWER') {
+                if (!data.viewer.user) {
                   return <WelcomeHero />
                 } else {
                   return null
@@ -125,36 +202,49 @@ class ExplorePage extends React.Component {
             >
               Popular
             </SideNavigationButton>
-            <SideNavigationButton
-              color="tertiary"
-              src={iconHome}
-              onClick={this.scrollToId('#subscribedLessons')}
-            >
-              Subscribed
-            </SideNavigationButton>
+
+            <SideNavigationLabel color="tertiary" src={iconHome}>
+              Featured
+            </SideNavigationLabel>
+            <Query query={featuredClassroomsQuery} notifyOnNetworkStatusChange>
+              {({ networkStatus, data, fetchMore }) => (
+                <Classrooms
+                  networkStatus={networkStatus}
+                  data={data.viewer.explore.featuredClassroomsConnection.edges}
+                />
+              )}
+            </Query>
+
             <TeachLink href="/teach">
               <TeachButton color="primary">Start Teaching</TeachButton>
             </TeachLink>
           </SideNavigationCol>
+
           <HeroCol>
-            <Lessons
-              id="liveLessons"
-              icon={iconVideo}
-              label="Live Lessons"
-              query={''}
-            />
-            <Lessons
-              id="popularLessons"
-              icon={iconGraphBar}
-              label="Popular Lessons"
-              query={''}
-            />
-            <Lessons
-              id="subscribedLessons"
-              icon={iconHome}
-              label="Subscribed Lessons"
-              query={''}
-            />
+            <Query query={liveLessonsQuery} notifyOnNetworkStatusChange>
+              {({ networkStatus, data, fetchMore }) => (
+                <Lessons
+                  id="liveLessons"
+                  icon={iconVideo}
+                  label="Live Lessons"
+                  networkStatus={networkStatus}
+                  data={data.viewer.explore.liveLessonsConnection.edges}
+                  fetchMore={fetchMore}
+                />
+              )}
+            </Query>
+            <Query query={hottestLessonsQuery} notifyOnNetworkStatusChange>
+              {({ networkStatus, data, fetchMore }) => (
+                <Lessons
+                  id="popularLessons"
+                  icon={iconGraphBar}
+                  label="Popular Lessons"
+                  networkStatus={networkStatus}
+                  data={data.viewer.explore.hottestLessonsConnection.edges}
+                  fetchMore={fetchMore}
+                />
+              )}
+            </Query>
           </HeroCol>
         </ContainerRow>
         <Footer />
