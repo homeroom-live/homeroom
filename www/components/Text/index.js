@@ -23,9 +23,13 @@ const P = styled.p`
   width: 100%;
   outline: none;
 `
+const StyledLinkify = styled(Linkify)`
+  display: flex;
+  min-width: 0;
+`
 
 export const Text = ({ children, ...props }) => (
-  <Linkify target="_blank">
+  <StyledLinkify target="_blank">
     <P {...props}>{children}</P>
-  </Linkify>
+  </StyledLinkify>
 )

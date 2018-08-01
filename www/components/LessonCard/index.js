@@ -81,7 +81,7 @@ const LessonMetaItem = styled(Text)`
 `
 const LessonVideo = styled(Player)`
   object-fit: contain;
-  max-height: 300px;
+  height: 280px;
   margin-bottom: ${spacing.small};
   border-radius: 4px;
   background: ${colors.black};

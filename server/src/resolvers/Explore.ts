@@ -29,7 +29,7 @@ export const Explore = {
   ) {
     return ctx.db.query.lessonsConnection(
       {
-        where: { live: { id_not: null } },
+        where: { live: { id_not: null }, archived_not: true },
         orderBy: 'createdAt_DESC',
         after,
         before,
@@ -47,6 +47,7 @@ export const Explore = {
   ) {
     return ctx.db.query.lessonsConnection(
       {
+        where: { archived_not: true },
         orderBy: 'createdAt_DESC',
         after,
         before,
