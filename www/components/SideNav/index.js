@@ -30,7 +30,7 @@ import { spacing, colors, opacity, HEIGHT_MINUS_NAVBAR } from 'utils/theme'
 const stripeAccountUrl = gql`
   query Viewer {
     viewer {
-      requiresSetup
+      status
       user {
         id
       }
@@ -129,7 +129,7 @@ export const SideNav = ({ children, activeSection }) => (
                     Courses
                   </SideNavLink>
                   */}
-                  {!data.viewer.requiresSetup && (
+                  {data.viewer.status === 'READY' && (
                     <SideNavLink
                       size="small"
                       weight="bold"

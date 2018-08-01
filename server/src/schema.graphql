@@ -60,11 +60,16 @@ type Mutation {
 
 # Payloads -------------------------------------------------------------------
 
+enum ViewerStatus {
+  NO_VIEWER
+  REQUIRES_SETUP
+  READY
+}
+
 type Viewer {
   explore: Explore!
   user: User
-  requiresSetup: Boolean
-  isLoggedIn: Boolean
+  status: ViewerStatus
 }
 
 type Explore {

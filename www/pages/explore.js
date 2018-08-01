@@ -69,7 +69,7 @@ const viewerQuery = gql`
       user {
         id
       }
-      requiresSetup
+      status
     }
   }
 `
@@ -97,7 +97,7 @@ class ExplorePage extends React.Component {
           {({ networkStatus, data }) => {
             switch (networkStatus) {
               case NetworkStatus.ready: {
-                if (!data.viewer) {
+                if (data.viewer.status === 'NO_VIEWER') {
                   return <WelcomeHero />
                 } else {
                   return null

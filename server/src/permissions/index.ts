@@ -6,7 +6,6 @@ export const permissions = shield(
   {
     Viewer: {
       user: and(rules.isUserAuthenticated, rules.isUserSetup),
-      requiresSetup: rules.isUserAuthenticated,
     },
   },
   {

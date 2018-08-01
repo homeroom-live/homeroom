@@ -82,13 +82,6 @@ const DropdownLink = styled(Link)`
     text-decoration: none;
   }
 `
-const LoadingPlaceholder = styled.span`
-  display: block;
-  height: 32px;
-  width: 32px;
-  border-radius: 50%;
-  background: ${colors.grayDarkest};
-`
 
 // Queries
 
@@ -102,7 +95,7 @@ const viewerQuery = gql`
           url
         }
       }
-      requiresSetup
+      status
     }
   }
 `
@@ -148,35 +141,47 @@ export const Navbar = ({ transparent, activePage }) => (
         {({ networkStatus, data }) => {
           switch (networkStatus) {
             case NetworkStatus.ready: {
-              if (data.viewer && data.viewer.user) {
-                return (
-                  <Dropdown
-                    image={
-                      data.viewer.user.picture
-                        ? data.viewer.user.picture.url
-                        : ''
-                    }
-                  >
-                    <DropdownLink href="/profile">
-                      <DropdownOption>Profile</DropdownOption>
-                    </DropdownLink>
-                    <DropdownLink href="/logout">
-                      <DropdownOption>Logout</DropdownOption>
-                    </DropdownLink>
-                  </Dropdown>
-                )
-              } else {
-                return (
-                  <NavLink color={colors.primary} href="/signup">
-                    Sign up & Login
-                  </NavLink>
-                )
+              switch (data.viewer.status) {
+                case 'READY': {
+                  return (
+                    <Dropdown
+                      image={
+                        data.viewer.user.picture
+                          ? data.viewer.user.picture.url
+                          : ''
+                      }
+                    >
+                      <DropdownLink href="/profile">
+                        <DropdownOption>Profile</DropdownOption>
+                      </DropdownLink>
+                      <DropdownLink href="/logout">
+                        <DropdownOption>Logout</DropdownOption>
+                      </DropdownLink>
+                    </Dropdown>
+                  )
+                }
+
+                case 'REQUIRES_SETUP': {
+                  return (
+                    <NavLink color={colors.primary} href="/profile">
+                      Finish Signup
+                    </NavLink>
+                  )
+                }
+
+                case 'NO_VIEWER':
+                default: {
+                  return (
+                    <NavLink color={colors.primary} href="/signup">
+                      Sign up & Login
+                    </NavLink>
+                  )
+                }
               }
             }
 
-            case NetworkStatus.loading:
             default: {
-              return <LoadingPlaceholder />
+              return null
             }
           }
         }}

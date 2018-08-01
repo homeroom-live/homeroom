@@ -11,8 +11,7 @@ const viewerQuery = gql`
       user {
         id
       }
-      requiresSetup
-      isLoggedIn
+      status
     }
   }
 `
@@ -44,13 +43,26 @@ export const withLogin = (ComposedComponent, options) =>
         })
       }
 
-      if (!auth.data.viewer.isLoggedIn) {
-        return redirect(ctx, '/signup')
-      } else if (auth.data.viewer.requiresSetup && options.setup) {
-        return redirect(ctx, '/profile')
-      } else {
-        return {
-          ...composedInitialProps,
+      switch (auth.data.viewer.status) {
+        case 'READY': {
+          return {
+            ...composedInitialProps,
+          }
+        }
+
+        case 'REQUIRES_SETUP': {
+          if (options.setup) {
+            return redirect(ctx, '/profile')
+          } else {
+            return {
+              ...composedInitialProps,
+            }
+          }
+        }
+
+        case 'NO_VIEWER':
+        default: {
+          return redirect(ctx, '/signup')
         }
       }
     }

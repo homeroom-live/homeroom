@@ -13,13 +13,17 @@ export const Viewer = {
       info,
     )
   },
-  async requiresSetup(parent, args, ctx: Context, info) {
+  async status(parent, args, ctx: Context, info) {
+    if (!ctx.request.user) {
+      return 'NO_VIEWER'
+    }
     const auth0Id = ctx.request.user.sub
     const exists = await ctx.db.exists.User({ auth0Id })
 
-    return !exists
-  },
-  async isLoggedIn(parent, args, ctx: Context, info) {
-    return ctx.request.user !== undefined
+    if (exists) {
+      return 'READY'
+    } else {
+      return 'REQUIRES_SETUP'
+    }
   },
 }

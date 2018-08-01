@@ -49,7 +49,7 @@ const profileQuery = gql`
         }
         receiveNotifications
       }
-      requiresSetup
+      status
     }
   }
 `
@@ -307,32 +307,37 @@ class ProfilePage extends React.Component {
             {({ networkStatus, data }) => {
               switch (networkStatus) {
                 case NetworkStatus.ready: {
-                  if (data.viewer.requiresSetup) {
-                    return (
-                      <Profile
-                        name=""
-                        username=""
-                        email=""
-                        bio=""
-                        picture={null}
-                        price={0}
-                        receiveNotifications={true}
-                      />
-                    )
-                  } else {
-                    return (
-                      <Profile
-                        name={data.viewer.user.name}
-                        username={data.viewer.user.username}
-                        email={data.viewer.user.email}
-                        bio={data.viewer.user.bio}
-                        picture={data.viewer.user.picture}
-                        price={data.viewer.user.price}
-                        receiveNotifications={
-                          data.viewer.user.receiveNotifications
-                        }
-                      />
-                    )
+                  switch (data.viewer.status) {
+                    case 'READY': {
+                      return (
+                        <Profile
+                          name={data.viewer.user.name}
+                          username={data.viewer.user.username}
+                          email={data.viewer.user.email}
+                          bio={data.viewer.user.bio}
+                          picture={data.viewer.user.picture}
+                          price={data.viewer.user.price}
+                          receiveNotifications={
+                            data.viewer.user.receiveNotifications
+                          }
+                        />
+                      )
+                    }
+                    case 'NO_VIEWER':
+                    case 'REQUIRES_SETUP':
+                    default: {
+                      return (
+                        <Profile
+                          name=""
+                          username=""
+                          email=""
+                          bio=""
+                          picture={null}
+                          price={0}
+                          receiveNotifications={true}
+                        />
+                      )
+                    }
                   }
                 }
 
