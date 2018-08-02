@@ -45,7 +45,7 @@ class Callback extends React.Component {
       })
     }
 
-    redirect({}, '/profile')
+    redirect({}, '/')
   }
 
   render() {

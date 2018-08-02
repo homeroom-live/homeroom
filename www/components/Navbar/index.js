@@ -4,6 +4,12 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 import { NetworkStatus } from 'apollo-client'
 
+// Lib
+
+import { redirect } from 'lib/redirect'
+
+// Utils
+
 import { colors, spacing, fontSizes, fontWeights, opacity } from 'utils/theme'
 import logoDark from 'static/assets/images/logos/logo-dark.svg'
 import iconHelp from 'static/assets/icons/ui/help.svg'
@@ -138,6 +144,16 @@ export const Navbar = ({ transparent, activePage }) => (
           switch (networkStatus) {
             case NetworkStatus.ready: {
               switch (data.viewer.status) {
+                case 'REQUIRES_SETUP': {
+                  // BROKEN – Router not available
+                  // setTimeout(() => redirect({}, '/auth/setup'), 1000)
+                  return (
+                    <NavLink color={colors.primary} href="/auth/setup">
+                      Finish Profile
+                    </NavLink>
+                  )
+                }
+
                 case 'READY': {
                   return (
                     <Dropdown
@@ -150,25 +166,17 @@ export const Navbar = ({ transparent, activePage }) => (
                       <DropdownLink href="/profile">
                         <DropdownOption>Profile</DropdownOption>
                       </DropdownLink>
-                      <DropdownLink href="/logout">
+                      <DropdownLink href="/auth/logout">
                         <DropdownOption>Logout</DropdownOption>
                       </DropdownLink>
                     </Dropdown>
                   )
                 }
 
-                case 'REQUIRES_SETUP': {
-                  return (
-                    <NavLink color={colors.primary} href="/profile">
-                      Finish Signup
-                    </NavLink>
-                  )
-                }
-
                 case 'NO_VIEWER':
                 default: {
                   return (
-                    <NavLink color={colors.primary} href="/signup">
+                    <NavLink color={colors.primary} href="/auth/signup">
                       Sign up & Login
                     </NavLink>
                   )

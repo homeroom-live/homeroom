@@ -84,7 +84,7 @@ export const Body = () => (
           Educate, grow, and monetize your audience with educational
           livestreams.
         </Text>
-        <TeachLink href="/signup">
+        <TeachLink href="/auth/signup">
           <Button color="primary">Get Started</Button>
         </TeachLink>
       </TeachCol>

@@ -15,7 +15,7 @@ const server = new GraphQLServer({
     db: new Prisma({
       fragmentReplacements,
       endpoint: process.env.PRISMA_ENDPOINT,
-      debug: process.env.NODE_ENV !== 'production',
+      // debug: process.env.NODE_ENV !== 'production',
       secret: process.env.PRISMA_SECRET,
     }),
   }),

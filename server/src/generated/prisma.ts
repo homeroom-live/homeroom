@@ -2215,9 +2215,9 @@ type User implements Node {
   username: String!
   email: String!
   email_verified: Boolean!
-  name: String
+  name: String!
   gender: Gender!
-  bio: String!
+  bio: String
   picture(where: FileWhereInput): File
   price: Float
   live(where: LessonWhereInput): Lesson
@@ -2246,9 +2246,9 @@ input UserCreateInput {
   username: String!
   email: String!
   email_verified: Boolean
-  name: String
+  name: String!
   gender: Gender!
-  bio: String!
+  bio: String
   price: Float
   stripeId: String
   stripeCustomerId: String
@@ -2292,9 +2292,9 @@ input UserCreateWithoutLessonsInput {
   username: String!
   email: String!
   email_verified: Boolean
-  name: String
+  name: String!
   gender: Gender!
-  bio: String!
+  bio: String
   price: Float
   stripeId: String
   stripeCustomerId: String
@@ -2312,9 +2312,9 @@ input UserCreateWithoutLiveInput {
   username: String!
   email: String!
   email_verified: Boolean
-  name: String
+  name: String!
   gender: Gender!
-  bio: String!
+  bio: String
   price: Float
   stripeId: String
   stripeCustomerId: String
@@ -2332,9 +2332,9 @@ input UserCreateWithoutMessagesInput {
   username: String!
   email: String!
   email_verified: Boolean
-  name: String
+  name: String!
   gender: Gender!
-  bio: String!
+  bio: String
   price: Float
   stripeId: String
   stripeCustomerId: String
@@ -2352,9 +2352,9 @@ input UserCreateWithoutSubscribersInput {
   username: String!
   email: String!
   email_verified: Boolean
-  name: String
+  name: String!
   gender: Gender!
-  bio: String!
+  bio: String
   price: Float
   stripeId: String
   stripeCustomerId: String
@@ -2372,9 +2372,9 @@ input UserCreateWithoutSubscriptionsInput {
   username: String!
   email: String!
   email_verified: Boolean
-  name: String
+  name: String!
   gender: Gender!
-  bio: String!
+  bio: String
   price: Float
   stripeId: String
   stripeCustomerId: String
@@ -2437,9 +2437,9 @@ type UserPreviousValues {
   username: String!
   email: String!
   email_verified: Boolean!
-  name: String
+  name: String!
   gender: Gender!
-  bio: String!
+  bio: String
   price: Float
   stripeId: String
   stripeCustomerId: String
@@ -3528,9 +3528,9 @@ export interface UserCreateWithoutSubscribersInput {
   username: String
   email: String
   email_verified?: Boolean
-  name?: String
+  name: String
   gender: Gender
-  bio: String
+  bio?: String
   price?: Float
   stripeId?: String
   stripeCustomerId?: String
@@ -3796,9 +3796,9 @@ export interface UserCreateWithoutSubscriptionsInput {
   username: String
   email: String
   email_verified?: Boolean
-  name?: String
+  name: String
   gender: Gender
-  bio: String
+  bio?: String
   price?: Float
   stripeId?: String
   stripeCustomerId?: String
@@ -4025,9 +4025,9 @@ export interface UserCreateInput {
   username: String
   email: String
   email_verified?: Boolean
-  name?: String
+  name: String
   gender: Gender
-  bio: String
+  bio?: String
   price?: Float
   stripeId?: String
   stripeCustomerId?: String
@@ -4074,9 +4074,9 @@ export interface UserCreateWithoutLessonsInput {
   username: String
   email: String
   email_verified?: Boolean
-  name?: String
+  name: String
   gender: Gender
-  bio: String
+  bio?: String
   price?: Float
   stripeId?: String
   stripeCustomerId?: String
@@ -4172,9 +4172,9 @@ export interface UserCreateWithoutMessagesInput {
   username: String
   email: String
   email_verified?: Boolean
-  name?: String
+  name: String
   gender: Gender
-  bio: String
+  bio?: String
   price?: Float
   stripeId?: String
   stripeCustomerId?: String
@@ -4221,9 +4221,9 @@ export interface UserCreateWithoutLiveInput {
   username: String
   email: String
   email_verified?: Boolean
-  name?: String
+  name: String
   gender: Gender
-  bio: String
+  bio?: String
   price?: Float
   stripeId?: String
   stripeCustomerId?: String
@@ -4772,9 +4772,9 @@ export interface User extends Node {
   username: String
   email: String
   email_verified: Boolean
-  name?: String
+  name: String
   gender: Gender
-  bio: String
+  bio?: String
   picture?: File
   price?: Float
   live?: Lesson
@@ -4917,9 +4917,9 @@ export interface UserPreviousValues {
   username: String
   email: String
   email_verified: Boolean
-  name?: String
+  name: String
   gender: Gender
-  bio: String
+  bio?: String
   price?: Float
   stripeId?: String
   stripeCustomerId?: String

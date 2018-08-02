@@ -62,7 +62,7 @@ export const withLogin = (ComposedComponent, options) =>
 
         case 'NO_VIEWER':
         default: {
-          return redirect(ctx, '/signup')
+          return redirect(ctx, '/auth/signup')
         }
       }
     }

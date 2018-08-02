@@ -12,11 +12,11 @@ type Mutation {
   # User
   updateProfile(
     name: String!
-    username: String
-    bio: String!
+    username: String!
+    bio: String
     picture: Upload
     price: Float
-    receiveNotifications: Boolean!
+    receiveNotifications: Boolean
   ): User
   deleteProfile: User
   # Stripe

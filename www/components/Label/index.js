@@ -10,7 +10,7 @@ import {
 
 const inputSizes = {
   xsmall: '64px',
-  small: '128px',
+  small: '130px',
   regular: '256px',
   medium: '384px',
   large: '512px',

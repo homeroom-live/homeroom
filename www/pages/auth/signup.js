@@ -152,7 +152,7 @@ class Auth extends React.Component {
   render() {
     return (
       <>
-        <Navbar transparent />
+        <Navbar />
         <Motion
           style={{
             height: spring(this.getHeight()),

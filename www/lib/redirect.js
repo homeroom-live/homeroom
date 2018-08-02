@@ -5,6 +5,6 @@ export const redirect = (ctx, target) => {
     ctx.res.writeHead(303, { Location: target })
     ctx.res.end()
   } else {
-    Router.replace(target)
+    Router.push(target)
   }
 }

@@ -46,7 +46,7 @@ export const WelcomeHero = () => (
           interactive and educational livestreams.
         </Text>
         <FlexRow>
-          <WelcomeLink href="/signup">
+          <WelcomeLink href="/auth/signup">
             <Button color="primary">Get Started</Button>
           </WelcomeLink>
           <WelcomeLink href="/teach">

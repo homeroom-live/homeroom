@@ -36,12 +36,14 @@ const Illustration = styled.img.attrs({
   alt: 'Loading Homeroom',
 })`
   max-width: 512px;
+  width: 100%;
   margin-top: ${spacing.xlarge};
   margin-bottom: ${spacing.regular};
   object-fit: contain;
 `
-export const LoadingIllustration = () => (
+export const LoadingIllustration = ({ children, className }) => (
   <ContainerCol>
-    <Illustration />
+    <Illustration className={className} />
+    {children}
   </ContainerCol>
 )

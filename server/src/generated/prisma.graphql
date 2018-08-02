@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/homeroom-team/v1/dev
-# timestamp: Tue Jul 31 2018 23:14:35 GMT+0200 (CEST)
+# timestamp: Thu Aug 02 2018 10:16:36 GMT-0400 (EDT)
 
 type AggregateClassroomSubscription {
   count: Int!
@@ -2112,9 +2112,9 @@ type User implements Node {
   username: String!
   email: String!
   email_verified: Boolean!
-  name: String
+  name: String!
   gender: Gender!
-  bio: String!
+  bio: String
   picture(where: FileWhereInput): File
   price: Float
   live(where: LessonWhereInput): Lesson
@@ -2143,9 +2143,9 @@ input UserCreateInput {
   username: String!
   email: String!
   email_verified: Boolean
-  name: String
+  name: String!
   gender: Gender!
-  bio: String!
+  bio: String
   price: Float
   stripeId: String
   stripeCustomerId: String
@@ -2189,9 +2189,9 @@ input UserCreateWithoutLessonsInput {
   username: String!
   email: String!
   email_verified: Boolean
-  name: String
+  name: String!
   gender: Gender!
-  bio: String!
+  bio: String
   price: Float
   stripeId: String
   stripeCustomerId: String
@@ -2209,9 +2209,9 @@ input UserCreateWithoutLiveInput {
   username: String!
   email: String!
   email_verified: Boolean
-  name: String
+  name: String!
   gender: Gender!
-  bio: String!
+  bio: String
   price: Float
   stripeId: String
   stripeCustomerId: String
@@ -2229,9 +2229,9 @@ input UserCreateWithoutMessagesInput {
   username: String!
   email: String!
   email_verified: Boolean
-  name: String
+  name: String!
   gender: Gender!
-  bio: String!
+  bio: String
   price: Float
   stripeId: String
   stripeCustomerId: String
@@ -2249,9 +2249,9 @@ input UserCreateWithoutSubscribersInput {
   username: String!
   email: String!
   email_verified: Boolean
-  name: String
+  name: String!
   gender: Gender!
-  bio: String!
+  bio: String
   price: Float
   stripeId: String
   stripeCustomerId: String
@@ -2269,9 +2269,9 @@ input UserCreateWithoutSubscriptionsInput {
   username: String!
   email: String!
   email_verified: Boolean
-  name: String
+  name: String!
   gender: Gender!
-  bio: String!
+  bio: String
   price: Float
   stripeId: String
   stripeCustomerId: String
@@ -2334,9 +2334,9 @@ type UserPreviousValues {
   username: String!
   email: String!
   email_verified: Boolean!
-  name: String
+  name: String!
   gender: Gender!
-  bio: String!
+  bio: String
   price: Float
   stripeId: String
   stripeCustomerId: String

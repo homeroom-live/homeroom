@@ -12,9 +12,9 @@ type User {
 
   # Meta
 
-  name: String
+  name: String!
   gender: Gender!
-  bio: String!
+  bio: String
   picture: File @relation(name: "UserPicture", onDelete: CASCADE)
   price: Float @default(value: "10")
   live: Lesson @relation(name: "LiveLesson", onDelete: SET_NULL)
