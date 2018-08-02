@@ -29,7 +29,7 @@ const NavbarContainer = styled.nav`
   border-bottom: ${({ transparent }) =>
     transparent ? 'none' : `1px solid ${colors.grayLighter}`};
   box-shadow: ${({ transparent }) =>
-    transparent ? 'none' : '0 5px 15px 0 rgba(66,75,84,0.10)'};
+    transparent ? 'none' : colors.shadowBottomSmall};
   z-index: 15;
 `
 const NavLeft = styled(FlexRow)`

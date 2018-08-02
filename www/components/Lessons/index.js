@@ -88,7 +88,7 @@ export class Lessons extends React.Component {
               <LessonCardLarge
                 node={node}
                 key={node.id}
-                href={`/${node.teacher.username}/${node.id}`}
+                href={`/classroom/${node.teacher.username}/${node.id}`}
               />
             ))}
             <ShowMoreButton

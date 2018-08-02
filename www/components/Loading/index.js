@@ -25,6 +25,7 @@ export const Loading = styled.img.attrs({
   align-items: center;
   justify-content: center;
   height: ${props => props.height || `100%`};
+  max-height: 32px;
 `
 
 const ContainerCol = styled(FlexCol)`

@@ -22,8 +22,8 @@ app.prepare().then(() => {
     })
   })
 
-  server.get('/:username/:lessonId', (req, res) => {
-    return app.render(req, res, '/live', {
+  server.get('/classroom/:username/:lessonId', (req, res) => {
+    return app.render(req, res, '/classroom', {
       username: req.params.username,
       lessonId: req.params.lessonId,
     })

@@ -194,6 +194,7 @@ export class Chat extends React.Component {
                       {(mutate, { loading, error }) => (
                         <ChatTextarea
                           type="text"
+                          placeholder="Say something..."
                           minRows={1}
                           maxRows={2}
                           value={this.state.message}
