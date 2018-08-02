@@ -14,6 +14,7 @@ import iconVideo from 'static/assets/icons/ui/video.svg'
 import iconFile from 'static/assets/icons/ui/file.svg'
 
 const TabRow = styled(FlexRow)`
+  flex-shrink: 0;
   border-bottom: 1px solid ${colors.grayLightest};
 `
 const activeSideNavLinkStyles = () => `

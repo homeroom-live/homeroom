@@ -20,15 +20,18 @@ import { spacing } from 'utils/theme'
 const Container = styled(FlexCol)`
   min-width: 256px;
   height: 100%;
+  flex: 1;
 `
 const MessagesCol = styled(FlexCol)`
   overflow: auto;
+  flex: 1;
 `
 const TextareaRow = styled(FlexRow)`
   min-height: 76px;
   margin-top: auto;
   padding: ${spacing.regular};
   box-sizing: border-box;
+  box-shadow: 0 -5px 15px 0 rgba(66, 75, 84, 0.1);
 `
 const ChatTextarea = styled(Textarea)`
   width: 100%;
@@ -143,7 +146,7 @@ export class Chat extends React.Component {
             text: this.state.message,
             createdAt: new Date(),
             is_viewer_message: true,
-            is_teacher_message: true,
+            is_teacher_message: false,
             sender: { ...data.viewer.user },
           },
         },

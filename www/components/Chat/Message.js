@@ -84,6 +84,7 @@ const MessageFragment = gql`
       username
       picture {
         id
+        url
       }
     }
   }
@@ -95,7 +96,7 @@ const Message = ({ node }) => (
     isViewer={node.is_viewer_message}
   >
     <ThumbnailCol>
-      <Thumbnail src={'test' || node.sender.picture} />
+      <Thumbnail src={node.sender.picture.url} />
     </ThumbnailCol>
 
     <FlexCol>

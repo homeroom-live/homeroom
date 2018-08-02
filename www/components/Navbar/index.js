@@ -4,10 +4,6 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 import { NetworkStatus } from 'apollo-client'
 
-// Lib
-
-import { redirect } from 'lib/redirect'
-
 // Utils
 
 import { colors, spacing, fontSizes, fontWeights, opacity } from 'utils/theme'
@@ -145,8 +141,6 @@ export const Navbar = ({ transparent, activePage }) => (
             case NetworkStatus.ready: {
               switch (data.viewer.status) {
                 case 'REQUIRES_SETUP': {
-                  // BROKEN – Router not available
-                  // setTimeout(() => redirect({}, '/auth/setup'), 1000)
                   return (
                     <NavLink color={colors.primary} href="/auth/setup">
                       Finish Profile

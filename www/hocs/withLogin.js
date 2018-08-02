@@ -52,7 +52,7 @@ export const withLogin = (ComposedComponent, options) =>
 
         case 'REQUIRES_SETUP': {
           if (options.setup) {
-            return redirect(ctx, '/profile')
+            return redirect(ctx, '/auth/setup')
           } else {
             return {
               ...composedInitialProps,
