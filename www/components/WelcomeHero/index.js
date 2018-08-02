@@ -42,8 +42,8 @@ export const WelcomeHero = () => (
       <WelcomeCol>
         <Header size="xlarge">Learn anything in realtime</Header>
         <Text size="medium">
-          Get feedback, meet people with similar interests, and grow while
-          participating in educational livestreams.
+          Get feedback, meet people with similar interests, and grow through
+          interactive and educational livestreams.
         </Text>
         <FlexRow>
           <WelcomeLink href="/signup">

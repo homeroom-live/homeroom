@@ -16,10 +16,10 @@ import { Container } from 'components/Container'
 
 // Icons
 
-import iconUserWhite from 'static/assets/icons/ui/user-white.svg'
-import iconCurrencyDollarWhite from 'static/assets/icons/ui/currency-dollar-white.svg'
-import iconVideoWhite from 'static/assets/icons/ui/video-white.svg'
-import iconFileWhite from 'static/assets/icons/ui/file-white.svg'
+import iconUser from 'static/assets/icons/ui/user.svg'
+import iconCurrencyDollar from 'static/assets/icons/ui/currency-dollar.svg'
+import iconVideo from 'static/assets/icons/ui/video.svg'
+import iconFile from 'static/assets/icons/ui/file.svg'
 
 // Utils
 
@@ -44,19 +44,25 @@ const SideNavContainer = styled(FlexCol)`
   min-height: ${HEIGHT_MINUS_NAVBAR};
   width: 250px;
   max-width: 250px;
-  background: ${colors.grayDarkest};
+  background: ${colors.white};
+  border-right: 1px solid ${colors.grayLighter};
+  box-shadow: 15px 0 30px 0 rgba(66, 75, 84, 0.1);
+  z-index: 5;
 `
+// background: ${colors.grayDarkest};
 const SideNavSticky = styled(FlexCol)`
   position: sticky;
   top: 0;
   padding: ${spacing.medium} 0;
 `
 const activeSideNavLinkStyles = `
-  opacity: 1;
-  color: ${colors.white};
-  background: ${lighten(0.1, colors.grayDarkest)};
+  color: ${colors.secondary};
   text-decoration: none;
-`
+  opacity: 1;
+  background: ${colors.grayLighter};
+  `
+// color: ${colors.white};
+// background: ${lighten(0.1, colors.grayDarkest)};
 const disabledSideNavLinkStyles = `
   opacity: 0.5;
   text-decoration: none;
@@ -69,7 +75,7 @@ const disabledSideNavLinkStyles = `
 const SideNavLink = styled(Link)`
   display: flex;
   padding: ${spacing.regular} ${spacing.medium};
-  color: ${colors.white};
+  color: ${colors.secondary};
   white-space: nowrap;
   text-decoration: none;
   opacity: ${opacity};
@@ -106,7 +112,7 @@ export const SideNav = ({ children, activeSection }) => (
                     href="/profile"
                     active={activeSection === ''}
                   >
-                    <SideNavIcon src={iconUserWhite} />
+                    <SideNavIcon src={iconUser} />
                     Profile
                   </SideNavLink>
                   <SideNavLink
@@ -115,7 +121,7 @@ export const SideNav = ({ children, activeSection }) => (
                     href="/profile/lessons"
                     active={activeSection === 'lessons'}
                   >
-                    <SideNavIcon src={iconVideoWhite} />
+                    <SideNavIcon src={iconVideo} />
                     Lessons
                   </SideNavLink>
                   {/*
@@ -125,7 +131,7 @@ export const SideNav = ({ children, activeSection }) => (
                     href="/profile/courses"
                     active={activeSection === 'courses'}
                   >
-                    <SideNavIcon src={iconFileWhite} />
+                    <SideNavIcon src={iconFile} />
                     Courses
                   </SideNavLink>
                   */}
@@ -140,7 +146,7 @@ export const SideNav = ({ children, activeSection }) => (
                       }
                       active={activeSection === 'stripe'}
                     >
-                      <SideNavIcon src={iconCurrencyDollarWhite} />
+                      <SideNavIcon src={iconCurrencyDollar} />
                       Stripe Account
                     </SideNavLink>
                   )}

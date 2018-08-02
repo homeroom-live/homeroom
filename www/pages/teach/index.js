@@ -8,7 +8,7 @@ class TeachPage extends React.Component {
   render() {
     return (
       <>
-        <Navbar transparent />
+        <Navbar />
         <Body />
         <Footer />
       </>

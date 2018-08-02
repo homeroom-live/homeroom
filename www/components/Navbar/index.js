@@ -5,9 +5,7 @@ import styled from 'styled-components'
 import { NetworkStatus } from 'apollo-client'
 
 import { colors, spacing, fontSizes, fontWeights, opacity } from 'utils/theme'
-import logoLight from 'static/assets/images/logos/logo-light.svg'
 import logoDark from 'static/assets/images/logos/logo-dark.svg'
-import iconHelpWhite from 'static/assets/icons/ui/help-white.svg'
 import iconHelp from 'static/assets/icons/ui/help.svg'
 
 // Components
@@ -25,10 +23,12 @@ const NavbarContainer = styled.nav`
   min-height: 32px; // prevent Navbar from changing height on load
   padding: ${spacing.regular};
   background: ${({ transparent }) =>
-    transparent ? 'transparent' : colors.black};
+    transparent ? 'transparent' : colors.white};
   border-bottom: ${({ transparent }) =>
-    transparent ? 'none' : `4px solid ${colors.primary}`};
-  z-index: 10;
+    transparent ? 'none' : `1px solid ${colors.grayLighter}`};
+  box-shadow: ${({ transparent }) =>
+    transparent ? 'none' : '0 5px 15px 0 rgba(66,75,84,0.10)'};
+  z-index: 15;
 `
 const NavLeft = styled(FlexRow)`
   flex: 1;
@@ -107,18 +107,14 @@ export const Navbar = ({ transparent, activePage }) => (
     <NavLeft>
       <Link href="/" prefetch>
         <ImageLinkContainer>
-          <Logo src={transparent ? logoDark : logoLight} />
+          <Logo src={logoDark} />
         </ImageLinkContainer>
       </Link>
-      <NavLink
-        color={transparent ? colors.secondary : colors.white}
-        href="/"
-        active={activePage === ''}
-      >
+      <NavLink color={colors.secondary} href="/" active={activePage === ''}>
         Explore
       </NavLink>
       <NavLink
-        color={transparent ? colors.secondary : colors.white}
+        color={colors.secondary}
         href="/profile"
         active={activePage === 'profile'}
       >
@@ -129,7 +125,7 @@ export const Navbar = ({ transparent, activePage }) => (
     <NavRight>
       <Link href="mailto:team@homeroom.live">
         <ImageLinkContainer>
-          <HelpIcon src={transparent ? iconHelp : iconHelpWhite} />
+          <HelpIcon src={iconHelp} />
         </ImageLinkContainer>
       </Link>
       <Query
