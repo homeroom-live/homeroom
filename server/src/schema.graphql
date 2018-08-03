@@ -4,7 +4,7 @@ scalar Upload
 
 type Query {
   viewer: Viewer!
-  user(username: String!): User!
+  user(username: String!): Lesson
   lesson(id: ID!): Lesson
 }
 

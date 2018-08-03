@@ -16,6 +16,8 @@
     "NODE_ENV": "production",
     "STRIPE_ID": "",
     "STRIPE_SECRET": "",
+    "MUX_TOKEN_ID": "",
+    "MUX_TOKEN_SECRET": "",
     "PROXY_ENDPOINT": ""
   }
 }

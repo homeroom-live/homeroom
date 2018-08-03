@@ -1,4 +1,5 @@
 import { Context } from '../../utils'
+import { createStreamInstance } from '../../mux'
 
 export const lesson = {
   async createLesson(
@@ -9,8 +10,16 @@ export const lesson = {
   ) {
     const auth0Id = ctx.request.user.sub
 
-    const streamID = ''
-    const streamKey = ''
+    // Mux
+
+    const stream = await createStreamInstance({
+      playback_policy: ['public'],
+      new_asset_settings: {
+        playback_policy: ['public'],
+      },
+    })
+
+    // Prisma
 
     return ctx.db.mutation.createLesson(
       {
@@ -22,8 +31,8 @@ export const lesson = {
           schedule: schedule ? schedule : new Date().toISOString(),
           premium,
           course,
-          streamID,
-          streamKey,
+          streamID: stream.id,
+          streamKey: stream.stream_key,
           files: files ? { create: files } : null,
         },
       },

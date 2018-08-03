@@ -396,15 +396,11 @@ class LessonPage extends React.Component {
                                 <VideoSettingsLabelsRow>
                                   <VideoSettingsLabel>
                                     Server Url
-                                    <Text>https://stream.homeroom.live</Text>
+                                    <Text>{data.lesson.serverURL}</Text>
                                   </VideoSettingsLabel>
                                   <VideoSettingsLabel>
-                                    Live Stream Key
-                                    <Text>Super-Secret-Streams</Text>
-                                  </VideoSettingsLabel>
-                                  <VideoSettingsLabel>
-                                    Preview Stream Key
-                                    <Text>Preview-Streams</Text>
+                                    Stream Key
+                                    <Text>{data.lesson.streamKey}</Text>
                                   </VideoSettingsLabel>
                                 </VideoSettingsLabelsRow>
                                 <VideoSettingsLink
