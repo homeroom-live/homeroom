@@ -18,6 +18,9 @@ import { Video } from './Video'
 import { PlayButton } from './PlayButton'
 import { ControlBar } from './ControlBar'
 
+// Utils
+
+import { fullscreen } from './utils'
 import { borderRadius } from 'utils/theme'
 
 // Styles
@@ -25,7 +28,8 @@ import { borderRadius } from 'utils/theme'
 const Container = styled.div`
   position: relative;
   display: flex;
-  overflow: hidden;
+  height: 100%;
+  width: 100%;
 `
 
 export class Player extends React.Component {
@@ -76,26 +80,11 @@ export class Player extends React.Component {
   }
 
   handleToggleFullscreen = e => {
-    console.log(document.fullscreen)
-    if (document.fullscreen) {
-      if (document.exitFullscreen) {
-        document.exitFullscreen()
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen()
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen()
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen()
-      }
-    } else {
-      if (this.container.requestFullscreen) {
-        this.container.requestFullscreen()
-      } else if (this.container.mozRequestFullScreen) {
-        this.container.mozRequestFullScreen()
-      } else if (this.container.msRequestFullScreen) {
-        this.container.msRequestFullScreen()
-      } else if (this.container.webkitRequestFullscreen) {
-        this.container.webkitRequestFullscreen()
+    if (fullscreen.enabled) {
+      if (fullscreen.isFullscreen) {
+        fullscreen.exit()
+      } else {
+        fullscreen.start(this.container)
       }
     }
   }
@@ -124,13 +113,12 @@ export class Player extends React.Component {
           onClick={this.handleTogglePlay}
         />
         <PlayButton
-          active={!this.state.playing}
-          hover={this.state.hovering}
+          playing={this.state.playing}
           onClick={this.handleTogglePlay}
         />
         <ControlBar
-          active={!this.state.playing}
-          hover={this.state.hovering}
+          playing={this.state.playing}
+          hovering={this.state.hovering}
           onTogglePlay={this.handleTogglePlay}
           onToggleFullscreen={this.handleToggleFullscreen}
         />

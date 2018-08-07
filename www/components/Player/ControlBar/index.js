@@ -3,18 +3,17 @@ import styled from 'styled-components'
 
 import { Icon } from 'components/Icon'
 import { spacing, colors, borderRadius, opacity, transition } from 'utils/theme'
+import { HIDE } from '../utils'
 
 import iconPlayWhite from 'static/assets/icons/ui/play-white.svg'
 import iconPauseWhite from 'static/assets/icons/ui/pause-white.svg'
 import iconExpandWhite from 'static/assets/icons/ui/expand-white.svg'
 
-const getOpacity = ({ active, hover }) => {
-  if (hover) {
-    return 1
-  } else if (!active) {
-    return 0
-  } else {
+const getOpacity = ({ playing, hovering }) => {
+  if (hovering) {
     return opacity
+  } else {
+    return HIDE
   }
 }
 
@@ -67,18 +66,14 @@ const Container = styled.div`
 `
 
 export class ControlBar extends React.Component {
-  handleToggleFullscreen = e => {
-    this.props.video.toggleFullscreen()
-  }
-
   render() {
-    const { active, hover, onTogglePlay, onToggleFullscreen } = this.props
+    const { playing, hovering, onTogglePlay, onToggleFullscreen } = this.props
 
     return (
-      <Container active={active} hover={hover}>
+      <Container playing={playing} hovering={hovering}>
         <LeftButtons>
           <SmallPlayButton
-            src={active ? iconPlayWhite : iconPauseWhite}
+            src={playing ? iconPauseWhite : iconPlayWhite}
             onClick={onTogglePlay}
           />
         </LeftButtons>

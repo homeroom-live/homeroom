@@ -1,14 +1,13 @@
 import styled from 'styled-components'
 
 import { Icon } from 'components/Icon'
+import { HIDE } from './utils'
 import { spacing, colors, borderRadius, opacity } from 'utils/theme'
 import iconPlayWhite from 'static/assets/icons/ui/play-white.svg'
 
-const getOpacity = ({ active, hover }) => {
-  if (!active) {
-    return 0
-  } else if (hover) {
-    return 1
+const getOpacity = ({ playing }) => {
+  if (playing) {
+    return HIDE
   } else {
     return opacity
   }
@@ -31,5 +30,6 @@ export const PlayButton = styled(Icon).attrs({
   opacity: ${props => getOpacity(props)};
   &:hover {
     cursor: pointer;
+    opacity: 1;
   }
 `

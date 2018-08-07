@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 // Utils
 
-import { colors, borderRadius } from 'utils/theme'
+import { colors } from 'utils/theme'
 
 // Styles
 
@@ -40,7 +40,6 @@ export class Video extends React.Component {
         preload={preload}
         autoPlay={autoPlay}
         muted={muted}
-        className={className}
         crossOrigin={crossOrigin}
         innerRef={innerRef}
         onClick={onClick}
