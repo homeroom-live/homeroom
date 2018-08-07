@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { spacing } from 'utils/theme'
+import { spacing, transition } from 'utils/theme'
 
 const inlineIcon = () => `
   margin-top: -4px;
@@ -9,6 +9,6 @@ const inlineIcon = () => `
 
 export const Icon = styled.img`
   height: ${props => props.height || 'initial'};
-  transition: all 0.25s ease-out;
+  transition: ${transition};
   ${props => (props.inline ? inlineIcon() : null)};
 `
