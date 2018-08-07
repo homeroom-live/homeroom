@@ -5,6 +5,9 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 import moment from 'moment-timezone'
 import Router from 'next/router'
+import getConfig from 'next/config'
+
+// Lib
 
 import { redirect } from 'lib/redirect'
 
@@ -55,6 +58,10 @@ import { withLogin } from 'hocs/withLogin'
 // Utils
 
 import { spacing, shadow, colors } from 'utils/theme'
+
+// Config
+
+const { publicRuntimeConfig } = getConfig()
 
 // Elements
 
@@ -159,9 +166,10 @@ const lessonQuery = gql`
       }
       schedule
       premium
+      streamId
       streamKey
-      streamURL
       isLive
+      playbackUrl
       course {
         id
         name
@@ -309,7 +317,6 @@ class LessonPage extends React.Component {
             notifyOnNetworkStatusChange
           >
             {({ networkStatus, data }) => {
-              console.log(data)
               switch (networkStatus) {
                 case NetworkStatus.loading: {
                   return <LoadingIllustration />
@@ -390,13 +397,15 @@ class LessonPage extends React.Component {
                             <SectionBody>
                               <LessonPlayer
                                 autoPlay={data.lesson.isLive}
-                                src="https://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"
+                                src={data.lesson.playbackUrl}
                               />
                               <VideoSettingsRow>
                                 <VideoSettingsLabelsRow>
                                   <VideoSettingsLabel>
                                     Server Url
-                                    <Text>{data.lesson.serverURL}</Text>
+                                    <Text>
+                                      {publicRuntimeConfig.muxRtmpUrl}
+                                    </Text>
                                   </VideoSettingsLabel>
                                   <VideoSettingsLabel>
                                     Stream Key
@@ -590,9 +599,7 @@ class LessonPage extends React.Component {
                             <SectionBody>
                               <Mutation
                                 mutation={deleteLessonMutation}
-                                variables={{
-                                  id: this.props.lessonId,
-                                }}
+                                variables={{ id: this.props.lessonId }}
                               >
                                 {(archive, status) => (
                                   <Button

@@ -132,7 +132,7 @@ const createLessonMutation = gql`
       #   name
       # }
       streamKey
-      streamURL
+      streamId
     }
   }
 `

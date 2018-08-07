@@ -1,7 +1,7 @@
 // Animations and Transitions
 
 export const transition = 'all 0.2s ease-in'
-export const opacity = '0.75'
+export const opacity = '0.6'
 
 // Spacing
 

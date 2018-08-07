@@ -1,6 +1,7 @@
-import { Context } from '../utils'
-import { stripe } from '../stripe'
 import { ICard } from 'stripe'
+
+import { Context } from '../utils'
+import { stripe } from '../services/stripe'
 
 export const User = {
   stripeURL: {

@@ -1,5 +1,5 @@
 import { Context } from '../utils'
-import { auth0 } from '../auth0'
+import { auth0 } from '../services/auth0'
 
 export const Viewer = {
   explore: () => ({}),

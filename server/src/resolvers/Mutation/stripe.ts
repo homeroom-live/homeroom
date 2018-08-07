@@ -1,5 +1,5 @@
 import * as request from 'request-promise'
-import { stripe as _stripe } from '../../stripe'
+import { stripe as _stripe } from '../../services/stripe'
 import { Context } from '../../utils'
 
 export const stripe = {

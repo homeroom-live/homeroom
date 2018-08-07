@@ -51,7 +51,7 @@ export const withLogin = (ComposedComponent, options) =>
         }
 
         case 'REQUIRES_SETUP': {
-          if (options.setup) {
+          if (options && options.setup) {
             return redirect(ctx, '/auth/setup')
           } else {
             return {

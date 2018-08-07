@@ -32,6 +32,8 @@ interface MuxPlayback {
 
 if (!process.env.MUX_TOKEN_ID || !process.env.MUX_TOKEN_SECRET) {
   console.warn('Missing Mux credentials!')
+} else if (!process.env.MUX_PLAYBACK_URL) {
+  console.warn('Missing Mux playback url!')
 }
 
 // Functions

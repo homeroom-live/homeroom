@@ -1,5 +1,5 @@
 import { Context } from '../../utils'
-import { createStreamInstance } from '../../mux'
+import { createStreamInstance } from '../../services/mux'
 
 export const lesson = {
   async createLesson(

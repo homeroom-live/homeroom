@@ -21,5 +21,7 @@ module.exports = withPlugins([withCSS, withImages], {
       `https://connect.stripe.com/express/oauth/authorize` +
       `?redirect_uri=${process.env.STRIPE_CALLBACK}` +
       `&client_id=${process.env.STRIPE_ID}`,
+    muxRtmpUrl: 'rtmp://live.mux.com/app',
+    muxHlsUrl: 'https://stream.mux.com',
   },
 })

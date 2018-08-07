@@ -25,7 +25,7 @@ import iconTwitter from 'static/assets/icons/ui/twitter.svg'
 const FooterWrapper = styled.footer`
   display: flex;
   align-items: flex-start;
-  padding: ${spacing.xlarge} ${spacing.small};
+  padding: ${spacing.xlarge} ${spacing.medium};
   border-top: 1px solid ${colors.grayLighter};
 `
 const FooterLink = styled(Link)`
@@ -45,6 +45,9 @@ const FooterCol = styled(FlexCol)`
   align-items: flex-start;
   flex-basis: 0;
   white-space: nowrap;
+  &:last-child {
+    margin-right: 0;
+  }
 `
 const LogoCol = styled(FooterCol)`
   margin-right: 180px;

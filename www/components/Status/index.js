@@ -37,7 +37,6 @@ export class Status extends React.Component {
 
   render() {
     const { status, inline, className } = this.props
-    console.log('status')
     return (
       <StatusContainer inline={inline} className={className}>
         {status.loading && <Loading color={'tertiary'} height="16px" />}

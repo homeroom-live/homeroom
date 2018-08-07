@@ -191,6 +191,7 @@ type Lesson {
   streamKey: String!
   streamId: String!
   playbackId: String!
+  playbackUrl: String!
   isLive: Boolean!
 
   # Extras

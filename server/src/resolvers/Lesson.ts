@@ -1,12 +1,12 @@
 import { Context } from '../utils'
 
 export const Lesson = {
-  // streamURL: {
-  //   fragment: `fragment LessonStreamID on Lesson { streamId }`,
-  //   resolve: async function({ streamId }, args, ctx: Context, info) {
-  //     return ``
-  //   },
-  // },
+  playbackUrl: {
+    fragment: `fragment LessonPlaybackID on Lesson { playbackId }`,
+    resolve: async function({ playbackId }, args, ctx: Context, info) {
+      return `${process.env.MUX_PLAYBACK_URL}/${playbackId}.m3u8`
+    },
+  },
   isLive: {
     fragment: `fragment LessonID on Lesson { id }`,
     resolve: async function({ id }, args, ctx: Context, info) {
