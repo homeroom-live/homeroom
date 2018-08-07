@@ -189,7 +189,8 @@ type Lesson {
   # Stream
 
   streamKey: String!
-  streamURL: String!
+  streamId: String!
+  playbackId: String!
   isLive: Boolean!
 
   # Extras

@@ -1,12 +1,12 @@
 import { Context } from '../utils'
 
 export const Lesson = {
-  streamURL: {
-    fragment: `fragment LessonStreamID on Lesson { streamID }`,
-    resolve: async function({ streamID }, args, ctx: Context, info) {
-      return ``
-    },
-  },
+  // streamURL: {
+  //   fragment: `fragment LessonStreamID on Lesson { streamId }`,
+  //   resolve: async function({ streamId }, args, ctx: Context, info) {
+  //     return ``
+  //   },
+  // },
   isLive: {
     fragment: `fragment LessonID on Lesson { id }`,
     resolve: async function({ id }, args, ctx: Context, info) {

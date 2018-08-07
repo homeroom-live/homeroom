@@ -73,8 +73,9 @@ type Lesson {
 
   # Stream
 
-  streamID: String!
+  streamId: String!
   streamKey: String!
+  playbackId: String!
 
   # Extras
 

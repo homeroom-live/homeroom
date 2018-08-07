@@ -1089,8 +1089,9 @@ type Lesson implements Node {
   premium: Boolean!
   course(where: CourseWhereInput): Course
   live(where: UserWhereInput): User
-  streamID: String!
+  streamId: String!
   streamKey: String!
+  playbackId: String!
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
   files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File!]
   archived: Boolean!
@@ -1111,8 +1112,9 @@ input LessonCreateInput {
   description: String!
   schedule: DateTime!
   premium: Boolean
-  streamID: String!
+  streamId: String!
   streamKey: String!
+  playbackId: String!
   archived: Boolean
   teacher: UserCreateOneWithoutLessonsInput!
   thumbnail: FileCreateOneInput
@@ -1152,8 +1154,9 @@ input LessonCreateWithoutCourseInput {
   description: String!
   schedule: DateTime!
   premium: Boolean
-  streamID: String!
+  streamId: String!
   streamKey: String!
+  playbackId: String!
   archived: Boolean
   teacher: UserCreateOneWithoutLessonsInput!
   thumbnail: FileCreateOneInput
@@ -1167,8 +1170,9 @@ input LessonCreateWithoutFilesInput {
   description: String!
   schedule: DateTime!
   premium: Boolean
-  streamID: String!
+  streamId: String!
   streamKey: String!
+  playbackId: String!
   archived: Boolean
   teacher: UserCreateOneWithoutLessonsInput!
   thumbnail: FileCreateOneInput
@@ -1182,8 +1186,9 @@ input LessonCreateWithoutLiveInput {
   description: String!
   schedule: DateTime!
   premium: Boolean
-  streamID: String!
+  streamId: String!
   streamKey: String!
+  playbackId: String!
   archived: Boolean
   teacher: UserCreateOneWithoutLessonsInput!
   thumbnail: FileCreateOneInput
@@ -1197,8 +1202,9 @@ input LessonCreateWithoutMessagesInput {
   description: String!
   schedule: DateTime!
   premium: Boolean
-  streamID: String!
+  streamId: String!
   streamKey: String!
+  playbackId: String!
   archived: Boolean
   teacher: UserCreateOneWithoutLessonsInput!
   thumbnail: FileCreateOneInput
@@ -1212,8 +1218,9 @@ input LessonCreateWithoutTeacherInput {
   description: String!
   schedule: DateTime!
   premium: Boolean
-  streamID: String!
+  streamId: String!
   streamKey: String!
+  playbackId: String!
   archived: Boolean
   thumbnail: FileCreateOneInput
   course: CourseCreateOneWithoutLessonsInput
@@ -1246,10 +1253,12 @@ enum LessonOrderByInput {
   schedule_DESC
   premium_ASC
   premium_DESC
-  streamID_ASC
-  streamID_DESC
+  streamId_ASC
+  streamId_DESC
   streamKey_ASC
   streamKey_DESC
+  playbackId_ASC
+  playbackId_DESC
   archived_ASC
   archived_DESC
 }
@@ -1262,8 +1271,9 @@ type LessonPreviousValues {
   description: String!
   schedule: DateTime!
   premium: Boolean!
-  streamID: String!
+  streamId: String!
   streamKey: String!
+  playbackId: String!
   archived: Boolean!
 }
 
@@ -1311,8 +1321,9 @@ input LessonUpdateInput {
   description: String
   schedule: DateTime
   premium: Boolean
-  streamID: String
+  streamId: String
   streamKey: String
+  playbackId: String
   archived: Boolean
   teacher: UserUpdateOneWithoutLessonsInput
   thumbnail: FileUpdateOneInput
@@ -1371,8 +1382,9 @@ input LessonUpdateWithoutCourseDataInput {
   description: String
   schedule: DateTime
   premium: Boolean
-  streamID: String
+  streamId: String
   streamKey: String
+  playbackId: String
   archived: Boolean
   teacher: UserUpdateOneWithoutLessonsInput
   thumbnail: FileUpdateOneInput
@@ -1386,8 +1398,9 @@ input LessonUpdateWithoutFilesDataInput {
   description: String
   schedule: DateTime
   premium: Boolean
-  streamID: String
+  streamId: String
   streamKey: String
+  playbackId: String
   archived: Boolean
   teacher: UserUpdateOneWithoutLessonsInput
   thumbnail: FileUpdateOneInput
@@ -1401,8 +1414,9 @@ input LessonUpdateWithoutLiveDataInput {
   description: String
   schedule: DateTime
   premium: Boolean
-  streamID: String
+  streamId: String
   streamKey: String
+  playbackId: String
   archived: Boolean
   teacher: UserUpdateOneWithoutLessonsInput
   thumbnail: FileUpdateOneInput
@@ -1416,8 +1430,9 @@ input LessonUpdateWithoutMessagesDataInput {
   description: String
   schedule: DateTime
   premium: Boolean
-  streamID: String
+  streamId: String
   streamKey: String
+  playbackId: String
   archived: Boolean
   teacher: UserUpdateOneWithoutLessonsInput
   thumbnail: FileUpdateOneInput
@@ -1431,8 +1446,9 @@ input LessonUpdateWithoutTeacherDataInput {
   description: String
   schedule: DateTime
   premium: Boolean
-  streamID: String
+  streamId: String
   streamKey: String
+  playbackId: String
   archived: Boolean
   thumbnail: FileUpdateOneInput
   course: CourseUpdateOneWithoutLessonsInput
@@ -1677,46 +1693,46 @@ input LessonWhereInput {
 
   """All values that are not equal to given value."""
   premium_not: Boolean
-  streamID: String
+  streamId: String
 
   """All values that are not equal to given value."""
-  streamID_not: String
+  streamId_not: String
 
   """All values that are contained in given list."""
-  streamID_in: [String!]
+  streamId_in: [String!]
 
   """All values that are not contained in given list."""
-  streamID_not_in: [String!]
+  streamId_not_in: [String!]
 
   """All values less than the given value."""
-  streamID_lt: String
+  streamId_lt: String
 
   """All values less than or equal the given value."""
-  streamID_lte: String
+  streamId_lte: String
 
   """All values greater than the given value."""
-  streamID_gt: String
+  streamId_gt: String
 
   """All values greater than or equal the given value."""
-  streamID_gte: String
+  streamId_gte: String
 
   """All values containing the given string."""
-  streamID_contains: String
+  streamId_contains: String
 
   """All values not containing the given string."""
-  streamID_not_contains: String
+  streamId_not_contains: String
 
   """All values starting with the given string."""
-  streamID_starts_with: String
+  streamId_starts_with: String
 
   """All values not starting with the given string."""
-  streamID_not_starts_with: String
+  streamId_not_starts_with: String
 
   """All values ending with the given string."""
-  streamID_ends_with: String
+  streamId_ends_with: String
 
   """All values not ending with the given string."""
-  streamID_not_ends_with: String
+  streamId_not_ends_with: String
   streamKey: String
 
   """All values that are not equal to given value."""
@@ -1757,6 +1773,46 @@ input LessonWhereInput {
 
   """All values not ending with the given string."""
   streamKey_not_ends_with: String
+  playbackId: String
+
+  """All values that are not equal to given value."""
+  playbackId_not: String
+
+  """All values that are contained in given list."""
+  playbackId_in: [String!]
+
+  """All values that are not contained in given list."""
+  playbackId_not_in: [String!]
+
+  """All values less than the given value."""
+  playbackId_lt: String
+
+  """All values less than or equal the given value."""
+  playbackId_lte: String
+
+  """All values greater than the given value."""
+  playbackId_gt: String
+
+  """All values greater than or equal the given value."""
+  playbackId_gte: String
+
+  """All values containing the given string."""
+  playbackId_contains: String
+
+  """All values not containing the given string."""
+  playbackId_not_contains: String
+
+  """All values starting with the given string."""
+  playbackId_starts_with: String
+
+  """All values not starting with the given string."""
+  playbackId_not_starts_with: String
+
+  """All values ending with the given string."""
+  playbackId_ends_with: String
+
+  """All values not ending with the given string."""
+  playbackId_not_ends_with: String
   archived: Boolean
 
   """All values that are not equal to given value."""
@@ -3167,10 +3223,12 @@ export type LessonOrderByInput =   'id_ASC' |
   'schedule_DESC' |
   'premium_ASC' |
   'premium_DESC' |
-  'streamID_ASC' |
-  'streamID_DESC' |
+  'streamId_ASC' |
+  'streamId_DESC' |
   'streamKey_ASC' |
   'streamKey_DESC' |
+  'playbackId_ASC' |
+  'playbackId_DESC' |
   'archived_ASC' |
   'archived_DESC'
 
@@ -3562,8 +3620,9 @@ export interface LessonUpdateWithoutFilesDataInput {
   description?: String
   schedule?: DateTime
   premium?: Boolean
-  streamID?: String
+  streamId?: String
   streamKey?: String
+  playbackId?: String
   archived?: Boolean
   teacher?: UserUpdateOneWithoutLessonsInput
   thumbnail?: FileUpdateOneInput
@@ -3666,20 +3725,20 @@ export interface LessonWhereInput {
   schedule_gte?: DateTime
   premium?: Boolean
   premium_not?: Boolean
-  streamID?: String
-  streamID_not?: String
-  streamID_in?: String[] | String
-  streamID_not_in?: String[] | String
-  streamID_lt?: String
-  streamID_lte?: String
-  streamID_gt?: String
-  streamID_gte?: String
-  streamID_contains?: String
-  streamID_not_contains?: String
-  streamID_starts_with?: String
-  streamID_not_starts_with?: String
-  streamID_ends_with?: String
-  streamID_not_ends_with?: String
+  streamId?: String
+  streamId_not?: String
+  streamId_in?: String[] | String
+  streamId_not_in?: String[] | String
+  streamId_lt?: String
+  streamId_lte?: String
+  streamId_gt?: String
+  streamId_gte?: String
+  streamId_contains?: String
+  streamId_not_contains?: String
+  streamId_starts_with?: String
+  streamId_not_starts_with?: String
+  streamId_ends_with?: String
+  streamId_not_ends_with?: String
   streamKey?: String
   streamKey_not?: String
   streamKey_in?: String[] | String
@@ -3694,6 +3753,20 @@ export interface LessonWhereInput {
   streamKey_not_starts_with?: String
   streamKey_ends_with?: String
   streamKey_not_ends_with?: String
+  playbackId?: String
+  playbackId_not?: String
+  playbackId_in?: String[] | String
+  playbackId_not_in?: String[] | String
+  playbackId_lt?: String
+  playbackId_lte?: String
+  playbackId_gt?: String
+  playbackId_gte?: String
+  playbackId_contains?: String
+  playbackId_not_contains?: String
+  playbackId_starts_with?: String
+  playbackId_not_starts_with?: String
+  playbackId_ends_with?: String
+  playbackId_not_ends_with?: String
   archived?: Boolean
   archived_not?: Boolean
   teacher?: UserWhereInput
@@ -3713,8 +3786,9 @@ export interface LessonCreateWithoutMessagesInput {
   description: String
   schedule: DateTime
   premium?: Boolean
-  streamID: String
+  streamId: String
   streamKey: String
+  playbackId: String
   archived?: Boolean
   teacher: UserCreateOneWithoutLessonsInput
   thumbnail?: FileCreateOneInput
@@ -3816,8 +3890,9 @@ export interface LessonUpdateWithoutCourseDataInput {
   description?: String
   schedule?: DateTime
   premium?: Boolean
-  streamID?: String
+  streamId?: String
   streamKey?: String
+  playbackId?: String
   archived?: Boolean
   teacher?: UserUpdateOneWithoutLessonsInput
   thumbnail?: FileUpdateOneInput
@@ -3845,8 +3920,9 @@ export interface LessonCreateInput {
   description: String
   schedule: DateTime
   premium?: Boolean
-  streamID: String
+  streamId: String
   streamKey: String
+  playbackId: String
   archived?: Boolean
   teacher: UserCreateOneWithoutLessonsInput
   thumbnail?: FileCreateOneInput
@@ -3861,8 +3937,9 @@ export interface LessonUpdateInput {
   description?: String
   schedule?: DateTime
   premium?: Boolean
-  streamID?: String
+  streamId?: String
   streamKey?: String
+  playbackId?: String
   archived?: Boolean
   teacher?: UserUpdateOneWithoutLessonsInput
   thumbnail?: FileUpdateOneInput
@@ -3897,8 +3974,9 @@ export interface LessonCreateWithoutCourseInput {
   description: String
   schedule: DateTime
   premium?: Boolean
-  streamID: String
+  streamId: String
   streamKey: String
+  playbackId: String
   archived?: Boolean
   teacher: UserCreateOneWithoutLessonsInput
   thumbnail?: FileCreateOneInput
@@ -4059,8 +4137,9 @@ export interface LessonCreateWithoutFilesInput {
   description: String
   schedule: DateTime
   premium?: Boolean
-  streamID: String
+  streamId: String
   streamKey: String
+  playbackId: String
   archived?: Boolean
   teacher: UserCreateOneWithoutLessonsInput
   thumbnail?: FileCreateOneInput
@@ -4102,8 +4181,9 @@ export interface LessonCreateWithoutLiveInput {
   description: String
   schedule: DateTime
   premium?: Boolean
-  streamID: String
+  streamId: String
   streamKey: String
+  playbackId: String
   archived?: Boolean
   teacher: UserCreateOneWithoutLessonsInput
   thumbnail?: FileCreateOneInput
@@ -4157,8 +4237,9 @@ export interface LessonUpdateWithoutLiveDataInput {
   description?: String
   schedule?: DateTime
   premium?: Boolean
-  streamID?: String
+  streamId?: String
   streamKey?: String
+  playbackId?: String
   archived?: Boolean
   teacher?: UserUpdateOneWithoutLessonsInput
   thumbnail?: FileUpdateOneInput
@@ -4201,8 +4282,9 @@ export interface LessonCreateWithoutTeacherInput {
   description: String
   schedule: DateTime
   premium?: Boolean
-  streamID: String
+  streamId: String
   streamKey: String
+  playbackId: String
   archived?: Boolean
   thumbnail?: FileCreateOneInput
   course?: CourseCreateOneWithoutLessonsInput
@@ -4433,8 +4515,9 @@ export interface LessonUpdateWithoutTeacherDataInput {
   description?: String
   schedule?: DateTime
   premium?: Boolean
-  streamID?: String
+  streamId?: String
   streamKey?: String
+  playbackId?: String
   archived?: Boolean
   thumbnail?: FileUpdateOneInput
   course?: CourseUpdateOneWithoutLessonsInput
@@ -4616,8 +4699,9 @@ export interface LessonUpdateWithoutMessagesDataInput {
   description?: String
   schedule?: DateTime
   premium?: Boolean
-  streamID?: String
+  streamId?: String
   streamKey?: String
+  playbackId?: String
   archived?: Boolean
   teacher?: UserUpdateOneWithoutLessonsInput
   thumbnail?: FileUpdateOneInput
@@ -4943,8 +5027,9 @@ export interface Lesson extends Node {
   premium: Boolean
   course?: Course
   live?: User
-  streamID: String
+  streamId: String
   streamKey: String
+  playbackId: String
   messages?: Message[]
   files?: File[]
   archived: Boolean
@@ -5040,8 +5125,9 @@ export interface LessonPreviousValues {
   description: String
   schedule: DateTime
   premium: Boolean
-  streamID: String
+  streamId: String
   streamKey: String
+  playbackId: String
   archived: Boolean
 }
 
