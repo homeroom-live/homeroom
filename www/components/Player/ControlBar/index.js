@@ -1,7 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { Progress } from './Progress'
 import { Icon } from 'components/Icon'
+
 import { spacing, colors, borderRadius, opacity, transition } from 'utils/theme'
 import { HIDE } from '../utils'
 
@@ -67,8 +69,13 @@ const Container = styled.div`
 
 export class ControlBar extends React.Component {
   render() {
-    const { playing, hovering, onTogglePlay, onToggleFullscreen } = this.props
-
+    const {
+      video,
+      playing,
+      hovering,
+      onTogglePlay,
+      onToggleFullscreen,
+    } = this.props
     return (
       <Container playing={playing} hovering={hovering}>
         <LeftButtons>
@@ -76,6 +83,7 @@ export class ControlBar extends React.Component {
             src={playing ? iconPauseWhite : iconPlayWhite}
             onClick={onTogglePlay}
           />
+          <Progress video={video} currentTime={this.props.currentTime} />
         </LeftButtons>
         <RightButtons>
           <FullscreenButton

@@ -34,6 +34,13 @@ const Container = styled.div`
 
 export class Player extends React.Component {
   componentDidMount() {
+    if (this.video) {
+      this.video.addEventListener('timeupdate', e => {
+        this.setState({
+          currentTime: this.video.currentTime,
+        })
+      })
+    }
     // const video = document.getElementById('video')
     // if (video && Hls.isSupported()) {
     //   var hls = new Hls()
@@ -50,15 +57,22 @@ export class Player extends React.Component {
     // }
   }
 
+  componentWillUnmount() {
+    this.video.removeEventListener('timeupdate')
+  }
+
   state = {
     playing: this.props.autoPlay || false,
     hovering: false,
+    currentTime: 0,
   }
 
-  handleToggleHover = e => {
-    this.setState({
-      hovering: !this.state.hovering,
-    })
+  handleHoverStart = e => {
+    this.setState({ hovering: true })
+  }
+
+  handleHoverEnd = e => {
+    this.setState({ hovering: false })
   }
 
   handlePlay = () => {
@@ -96,8 +110,8 @@ export class Player extends React.Component {
         innerRef={el => {
           this.container = el
         }}
-        onMouseEnter={this.handleToggleHover}
-        onMouseLeave={this.handleToggleHover}
+        onMouseEnter={this.handleHoverStart}
+        onMouseLeave={this.handleHoverEnd}
       >
         <Video
           controls
@@ -117,6 +131,8 @@ export class Player extends React.Component {
           onClick={this.handleTogglePlay}
         />
         <ControlBar
+          video={this.video}
+          currentTime={this.state.currentTime}
           playing={this.state.playing}
           hovering={this.state.hovering}
           onTogglePlay={this.handleTogglePlay}

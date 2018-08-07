@@ -27,13 +27,11 @@ export class Video extends React.Component {
       autoPlay,
       muted,
       crossOrigin,
-      className,
       innerRef,
       onClick,
     } = this.props
     return (
       <_Video
-        // controls
         id={id}
         src={src}
         poster={poster}
