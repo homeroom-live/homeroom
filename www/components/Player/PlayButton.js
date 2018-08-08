@@ -28,7 +28,7 @@ export const PlayButton = styled(Icon).attrs({
   border-radius: ${borderRadius};
   background: ${colors.black};
   opacity: ${props => getOpacity(props)};
-  display: ${props => (props.playing ? 'none' : 'initial')};
+  display: ${props => (props.playing || props.buffering ? 'none' : 'initial')};
   &:hover {
     cursor: pointer;
     opacity: 1;

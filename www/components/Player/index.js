@@ -9,7 +9,6 @@
  */
 
 import React from 'react'
-// import Hls from 'hls.js'
 import styled from 'styled-components'
 
 // Components
@@ -17,11 +16,11 @@ import styled from 'styled-components'
 import { Video } from './Video'
 import { PlayButton } from './PlayButton'
 import { ControlBar } from './ControlBar'
+import { Loading } from './Loading'
 
 // Utils
 
 import { fullscreen } from './utils'
-import { borderRadius } from 'utils/theme'
 
 // Styles
 
@@ -36,22 +35,28 @@ export class Player extends React.Component {
   state = {
     playing: this.props.autoPlay || false,
     hovering: false,
+    buffering: true,
     currentTime: 0,
   }
 
   componentDidMount() {
-    if (this.video) {
-      this.video.addEventListener('timeupdate', this.handleCurrentTimeUpdate)
+    if (!this.video) {
+      return
     }
+
+    const Hls = require('hls.js')
+    this.hls = new Hls()
+
+    this.hls.on(Hls.Events.MEDIA_ATTACHING, this.handleToggleBuffering(true))
+    this.hls.on(Hls.Events.MEDIA_ATTACHED, this.handleToggleBuffering(false))
+
+    this.hls.loadSource(this.props.src)
+    this.hls.attachMedia(this.video)
+    this.video.addEventListener('timeupdate', this.handleCurrentTimeUpdate)
     // const video = document.getElementById('video')
-    // if (video && Hls.isSupported()) {
-    //   var hls = new Hls()
-    //   hls.loadSource(this.props.src)
-    //   hls.attachMedia(video)
-    //   hls.on(Hls.Events.MANIFEST_PARSED, function() {
-    //     video.play()
-    //   })
-    // } else if (video && video.canPlayType('application/vnd.apple.mpegurl')) {
+    // this.hls.on(Hls.Events.MANIFEST_PARSED, this.handlePlay)
+
+    // else if (video && video.canPlayType('application/vnd.apple.mpegurl')) {
     //   video.src = this.props.src
     //   video.addEventListener('loadedmetadata', function() {
     //     video.play()
@@ -61,6 +66,17 @@ export class Player extends React.Component {
 
   componentWillUnmount() {
     this.video.removeEventListener('timeupdate', this.handleCurrentTimeUpdate)
+  }
+
+  handleError = (event, data) => {
+    console.error('HLS ERROR')
+    console.error(event, data)
+  }
+
+  handleToggleBuffering = buffering => () => {
+    this.setState({
+      buffering,
+    })
   }
 
   handleCurrentTimeUpdate = e => {
@@ -128,8 +144,10 @@ export class Player extends React.Component {
         />
         <PlayButton
           playing={this.state.playing}
+          buffering={this.state.buffering}
           onClick={this.handleTogglePlay}
         />
+        <Loading color="white" buffering={this.state.buffering} />
         <ControlBar
           video={this.video}
           currentTime={this.state.currentTime}
