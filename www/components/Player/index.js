@@ -6,6 +6,9 @@
  * Design: 
  * Vimeo meets YouTube meets Homeroom
  * 
+ * Test Streams:
+ * https://azure.microsoft.com/en-us/blog/live-247-reference-streams-available/
+ * 
  */
 
 import React from 'react'
@@ -52,9 +55,10 @@ export class Player extends React.Component {
 
     this.hls.loadSource(this.props.src)
     this.hls.attachMedia(this.video)
+
     this.video.addEventListener('timeupdate', this.handleCurrentTimeUpdate)
-    // const video = document.getElementById('video')
-    // this.hls.on(Hls.Events.MANIFEST_PARSED, this.handlePlay)
+    this.video.addEventListener('seeking', this.handleToggleBuffering(true))
+    this.video.addEventListener('seeked', this.handleToggleBuffering(false))
 
     // else if (video && video.canPlayType('application/vnd.apple.mpegurl')) {
     //   video.src = this.props.src
@@ -66,6 +70,8 @@ export class Player extends React.Component {
 
   componentWillUnmount() {
     this.video.removeEventListener('timeupdate', this.handleCurrentTimeUpdate)
+    this.video.removeEventListener('seeking', this.handleToggleBuffering(true))
+    this.video.removeEventListener('seeked', this.handleToggleBuffering(false))
   }
 
   handleError = (event, data) => {
@@ -141,6 +147,7 @@ export class Player extends React.Component {
             this.video = el
           }}
           onClick={this.handleTogglePlay}
+          onSeeking={this.handleToggleBuffering(true)}
         />
         <PlayButton
           playing={this.state.playing}

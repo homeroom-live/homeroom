@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { darken } from 'polished'
-import { findDOMNode } from 'react-dom'
 
 import { Text } from 'components/Text'
 
@@ -23,15 +22,22 @@ const _ProgressBar = styled.div`
   right: 0;
   display: flex;
   flex-direction: row;
-  height: 4px;
+  height: 5px;
   width: 100%;
-  background: ${colors.black};
+  background: ${colors.secondary};
+  cursor: pointer;
 `
 const Bar = styled.div`
   position: absolute;
-  height: 4px;
+  height: 5px;
   width: ${props => props.width || 0};
   background: ${props => props.color};
+`
+const HoverBar = styled.span`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding-top: 20px;
 `
 const {
   Provider: ParentProvider,
@@ -49,7 +55,7 @@ class ProgressBar extends React.Component {
 
   handleMouseMove = e => {
     const newTime =
-      getPointerPosition(this.progressBar, e).x * this.props.duration
+      getPointerPosition(this.progressBar, e).x * this.props.video.duration
     const position = e.pageX - findElPosition(this.progressBar).left
     this.setState({
       hovering: true,
@@ -64,6 +70,10 @@ class ProgressBar extends React.Component {
     this.setState({ hovering: false })
   }
 
+  handleClick = e => {
+    this.props.video.currentTime = this.state.mouseTime.time
+  }
+
   render() {
     return (
       <ParentProvider
@@ -76,10 +86,12 @@ class ProgressBar extends React.Component {
           innerRef={el => {
             this.progressBar = el
           }}
+          onClick={this.handleClick}
           onMouseMove={this.handleMouseMove}
           onMouseEnter={this.handleMouseMove}
           onMouseLeave={this.handleMouseLeave}
         >
+          <HoverBar />
           {this.props.children}
         </_ProgressBar>
       </ParentProvider>
@@ -136,7 +148,7 @@ const PlayedBar = ({ currentTime, duration }) => (
 const TimePopoverContainer = styled.div`
   position: absolute;
   top: -42px;
-  left: ${props => (props.mouseTime ? props.mouseTime.position : 0)}px;
+  left: ${props => (props.mouseTime ? props.mouseTime.position : 0) - 15}px;
   padding: ${spacing.xsmall};
   border-radius: ${borderRadius};
   background: ${colors.black};
@@ -171,7 +183,7 @@ export const Progress = ({ video }) => (
       video.currentTime,
       video.duration,
     )}/${formatTime(video.duration)}`}</ProgressText>
-    <ProgressBar duration={video.duration}>
+    <ProgressBar video={video}>
       <PlayedBar currentTime={video.currentTime} duration={video.duration} />
       <BufferedBar buffered={video.buffered} duration={video.duration} />
       <ChildConsumer>{props => <TimePopover {...props} />}</ChildConsumer>
