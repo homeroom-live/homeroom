@@ -39,7 +39,6 @@ export class Player extends React.Component {
     playing: this.props.autoPlay || false,
     hovering: false,
     buffering: true,
-    currentTime: 0,
   }
 
   componentDidMount() {
@@ -157,7 +156,6 @@ export class Player extends React.Component {
         <Loading color="white" buffering={this.state.buffering} />
         <ControlBar
           video={this.video}
-          currentTime={this.state.currentTime}
           playing={this.state.playing}
           hovering={this.state.hovering}
           onTogglePlay={this.handleTogglePlay}

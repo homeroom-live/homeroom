@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { Progress } from './Progress'
+import { Volume } from './Volume'
 import { Icon } from 'components/Icon'
 
 import { spacing, colors, borderRadius, opacity, transition } from 'utils/theme'
@@ -73,7 +74,6 @@ export class ControlBar extends React.Component {
       video,
       playing,
       hovering,
-      currentTime,
       onTogglePlay,
       onToggleFullscreen,
     } = this.props
@@ -89,7 +89,8 @@ export class ControlBar extends React.Component {
             src={playing ? iconPauseWhite : iconPlayWhite}
             onClick={onTogglePlay}
           />
-          <Progress video={video} currentTime={this.props.currentTime} />
+          <Volume video={video} />
+          <Progress video={video} />
         </LeftButtons>
         <RightButtons>
           <FullscreenButton

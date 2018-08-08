@@ -9,7 +9,7 @@ import {
   getPointerPosition,
   findElPosition,
 } from 'components/Player/utils'
-import { transition, borderRadius, spacing, opacity, colors } from 'utils/theme'
+import { borderRadius, spacing, opacity, colors } from 'utils/theme'
 
 // ================================================================================================
 // ProgressBar
@@ -99,12 +99,6 @@ class ProgressBar extends React.Component {
   }
 }
 
-// ProgressBar.onClick = e => {
-//   console.log(e)
-//   var pos = (e.pageX - this.offsetLeft) / this.offsetWidth
-//   this.props.video.currentTime = pos * this.props.video.duration
-// }
-
 // ================================================================================================
 // BufferedBar
 // ================================================================================================
@@ -171,6 +165,10 @@ const ProgressText = styled(Text)`
   margin: 0;
   margin-right: ${spacing.regular};
   opacity: ${opacity};
+  &:hover {
+    cursor: default;
+    opacity: 1;
+  }
 `
 
 // ================================================================================================
@@ -182,7 +180,7 @@ export const Progress = ({ video }) => (
     <ProgressText size="small" weight="bold" color="white">{`${formatTime(
       video.currentTime,
       video.duration,
-    )}/${formatTime(video.duration)}`}</ProgressText>
+    )} / ${formatTime(video.duration)}`}</ProgressText>
     <ProgressBar video={video}>
       <PlayedBar currentTime={video.currentTime} duration={video.duration} />
       <BufferedBar buffered={video.buffered} duration={video.duration} />
