@@ -73,9 +73,15 @@ export class ControlBar extends React.Component {
       video,
       playing,
       hovering,
+      currentTime,
       onTogglePlay,
       onToggleFullscreen,
     } = this.props
+
+    if (!video) {
+      return null
+    }
+
     return (
       <Container playing={playing} hovering={hovering}>
         <LeftButtons>

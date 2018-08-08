@@ -33,13 +33,15 @@ const Container = styled.div`
 `
 
 export class Player extends React.Component {
+  state = {
+    playing: this.props.autoPlay || false,
+    hovering: false,
+    currentTime: 0,
+  }
+
   componentDidMount() {
     if (this.video) {
-      this.video.addEventListener('timeupdate', e => {
-        this.setState({
-          currentTime: this.video.currentTime,
-        })
-      })
+      this.video.addEventListener('timeupdate', this.handleCurrentTimeUpdate)
     }
     // const video = document.getElementById('video')
     // if (video && Hls.isSupported()) {
@@ -58,13 +60,11 @@ export class Player extends React.Component {
   }
 
   componentWillUnmount() {
-    this.video.removeEventListener('timeupdate')
+    this.video.removeEventListener('timeupdate', this.handleCurrentTimeUpdate)
   }
 
-  state = {
-    playing: this.props.autoPlay || false,
-    hovering: false,
-    currentTime: 0,
+  handleCurrentTimeUpdate = e => {
+    this.setState({ currentTime: this.video.currentTime })
   }
 
   handleHoverStart = e => {

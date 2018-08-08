@@ -12,19 +12,11 @@ const ProgressText = styled(Text)`
   opacity: ${opacity};
 `
 
-export class Progress extends React.Component {
-  render() {
-    const { video } = this.props
-    if (!video) {
-      return null
-    }
-    return (
-      <div>
-        <ProgressText size="small" weight="bold" color="white">{`${formatTime(
-          this.props.currentTime,
-          video.duration,
-        )}/${formatTime(video.duration)}`}</ProgressText>
-      </div>
-    )
-  }
-}
+export const Progress = ({ video }) => (
+  <div>
+    <ProgressText size="small" weight="bold" color="white">{`${formatTime(
+      video.currentTime,
+      video.duration,
+    )}/${formatTime(video.duration)}`}</ProgressText>
+  </div>
+)

@@ -68,6 +68,8 @@ const LessonTitle = styled(Header)`
 `
 const LessonMeta = styled(FlexCol)`
   width: initial;
+  margin-top: ${spacing.small};
+  flex-shrink: 0;
 `
 const LessonMetaStatsRow = styled(FlexRow)`
   flex-wrap: wrap;
@@ -75,8 +77,8 @@ const LessonMetaStatsRow = styled(FlexRow)`
 const LessonMetaItem = styled(Text)`
   display: flex;
   align-items: center;
+  margin: 0;
   margin-right: ${spacing.small};
-  margin-top: 0;
   letter-spacing: 0.2px;
 `
 const LessonVideo = styled(Player)`
