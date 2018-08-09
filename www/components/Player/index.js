@@ -36,7 +36,7 @@ const Container = styled.div`
 
 export class Player extends React.Component {
   state = {
-    playing: this.props.autoPlay || false,
+    playing: false,
     hovering: false,
     buffering: true,
   }
@@ -54,6 +54,9 @@ export class Player extends React.Component {
 
     this.hls.loadSource(this.props.src)
     this.hls.attachMedia(this.video)
+    if (this.props.autoPlay) {
+      this.handlePlay()
+    }
 
     this.video.addEventListener('timeupdate', this.handleCurrentTimeUpdate)
     this.video.addEventListener('seeking', this.handleToggleBuffering(true))

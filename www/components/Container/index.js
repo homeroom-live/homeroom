@@ -1,11 +1,10 @@
 import styled from 'styled-components'
 
-import { spacing } from 'utils/spacing'
-
 export const Container = styled.div`
   display: flex;
   flex-direction: ${props => props.direction || 'column'};
   margin: 0 auto;
+  overflow: auto;
   @media (max-width: 767.98px) {
     width: 750px;
   }
