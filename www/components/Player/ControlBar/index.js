@@ -5,8 +5,8 @@ import { Progress } from './Progress'
 import { Volume } from './Volume'
 import { Icon } from 'components/Icon'
 
-import { spacing, colors, borderRadius, opacity, transition } from 'utils/theme'
-import { HIDE } from '../utils'
+import { spacing, colors, opacity, transition } from 'utils/theme'
+import { HIDE } from 'components/Player/utils'
 
 import iconPlayWhite from 'static/assets/icons/ui/play-white.svg'
 import iconPauseWhite from 'static/assets/icons/ui/pause-white.svg'
@@ -22,6 +22,7 @@ const getOpacity = ({ playing, hovering }) => {
 
 const BarIcon = styled(Icon)`
   height: 16px;
+  padding: ${spacing.small};
   opacity: ${opacity};
   &:hover {
     opacity: 1;
@@ -39,13 +40,10 @@ const LeftButtons = styled.div`
 
 // SmallPlayButton
 
-const SmallPlayButton = styled(BarIcon)`
-  margin-right: ${spacing.regular};
-`
+const SmallPlayButton = styled(BarIcon)``
 
 const FullscreenButton = styled(BarIcon)`
   align-self: flex-end;
-  margin-left: ${spacing.regular};
 `
 
 // ControlBar
@@ -59,7 +57,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: ${spacing.small} ${spacing.regular};
+  padding: 0 ${spacing.xsmall};
   background: ${colors.black};
   opacity: ${props => getOpacity(props)};
   transition: ${transition};

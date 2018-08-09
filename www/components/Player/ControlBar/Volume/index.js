@@ -13,7 +13,7 @@ const VolumeContainer = styled.div`
 `
 const VolumeIcon = styled(Icon)`
   height: 16px;
-  margin-right: ${spacing.regular};
+  padding: ${spacing.small};
   opacity: ${opacity};
   &:hover {
     opacity: 1;
@@ -23,8 +23,8 @@ const VolumeIcon = styled(Icon)`
 const VolumeSliderContainer = styled.div`
   z-index: 120;
   position: absolute;
-  top: -68px;
-  left: -40px;
+  top: -61px;
+  left: -32px;
   display: flex;
   align-items: center;
   justify-content: center;

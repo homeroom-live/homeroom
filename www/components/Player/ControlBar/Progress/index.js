@@ -163,7 +163,7 @@ const TimePopover = ({ hovering, mouseTime, duration }) => (
 
 const ProgressText = styled(Text)`
   margin: 0;
-  margin-right: ${spacing.regular};
+  padding: ${spacing.small};
   opacity: ${opacity};
   &:hover {
     cursor: default;
