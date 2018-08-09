@@ -57,7 +57,7 @@ import { withLogin } from 'hocs/withLogin'
 
 // Utils
 
-import { spacing, shadow, colors } from 'utils/theme'
+import { spacing, shadow, colors, borderRadius } from 'utils/theme'
 
 // Config
 
@@ -104,6 +104,7 @@ const LessonIcon = styled(Icon)`
 `
 const LessonPlayer = styled(Player)`
   max-height: 256px;
+  border-radius: ${borderRadius};
 `
 const LessonBody = styled(FlexCol)`
   width: initial;
@@ -396,8 +397,10 @@ class LessonPage extends React.Component {
                             <IconHeader src={iconVideo} value="Video" />
                             <SectionBody>
                               <LessonPlayer
+                                controls
                                 autoPlay={data.lesson.isLive}
                                 src={data.lesson.playbackUrl}
+                                type="application/x-mpegURL"
                               />
                               <VideoSettingsRow>
                                 <VideoSettingsLabelsRow>

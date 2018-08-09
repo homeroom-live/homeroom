@@ -65,14 +65,11 @@ const lessonQuery = gql`
       name
       schedule
       description
+      playbackUrl
       thumbnail {
         id
         url
       }
-      # vod {
-      #   id
-      #   url
-      # }
       teacher {
         id
         name
@@ -518,11 +515,15 @@ class LivePage extends React.Component {
           {({ networkStatus, data }) => {
             switch (networkStatus) {
               case NetworkStatus.ready: {
-                console.log(data)
                 return (
                   <LessonRow>
                     <LessonBodyCol>
-                      <LessonPlayer />
+                      <LessonPlayer
+                        controls
+                        src={data.lesson.playbackUrl}
+                        autoPlay={true}
+                        type="application/x-mpegURL"
+                      />
                       <LessonInfo data={data} lessonId={lessonId} />
 
                       <LessonHeader>

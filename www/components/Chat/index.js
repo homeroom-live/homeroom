@@ -71,6 +71,7 @@ const messagesQuery = gql`
         username
         picture {
           id
+          url
         }
       }
     }

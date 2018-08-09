@@ -52,8 +52,10 @@ export class Player extends React.Component {
     this.hls.on(Hls.Events.MEDIA_ATTACHING, this.handleToggleBuffering(true))
     this.hls.on(Hls.Events.MEDIA_ATTACHED, this.handleToggleBuffering(false))
 
-    this.hls.loadSource(this.props.src)
-    this.hls.attachMedia(this.video)
+    if (this.props.src) {
+      this.hls.loadSource(this.props.src)
+      this.hls.attachMedia(this.video)
+    }
     if (this.props.autoPlay) {
       this.handlePlay()
     }
@@ -93,10 +95,12 @@ export class Player extends React.Component {
 
   handleHoverStart = e => {
     this.setState({ hovering: true })
+    this.handleTogglePlayPreview(true)
   }
 
   handleHoverEnd = e => {
     this.setState({ hovering: false })
+    this.handleTogglePlayPreview(false)
   }
 
   handlePlay = () => {
@@ -117,6 +121,16 @@ export class Player extends React.Component {
     }
   }
 
+  handleTogglePlayPreview = hovering => {
+    if (!this.props.controls) {
+      if (hovering) {
+        this.handlePlay()
+      } else {
+        this.handlePause()
+      }
+    }
+  }
+
   handleToggleFullscreen = e => {
     if (fullscreen.enabled) {
       if (fullscreen.isFullscreen) {
@@ -128,7 +142,15 @@ export class Player extends React.Component {
   }
 
   render() {
-    const { src, poster, type, className, autoPlay } = this.props
+    const {
+      src,
+      poster,
+      type,
+      className,
+      autoPlay,
+      loop,
+      controls,
+    } = this.props
     return (
       <Container
         innerRef={el => {
@@ -144,6 +166,7 @@ export class Player extends React.Component {
           poster={poster}
           src={src}
           autoPlay={autoPlay}
+          loop={loop}
           className={className}
           innerRef={el => {
             this.video = el
@@ -151,19 +174,23 @@ export class Player extends React.Component {
           onClick={this.handleTogglePlay}
           onSeeking={this.handleToggleBuffering(true)}
         />
-        <PlayButton
-          playing={this.state.playing}
-          buffering={this.state.buffering}
-          onClick={this.handleTogglePlay}
-        />
-        <Loading color="white" buffering={this.state.buffering} />
-        <ControlBar
-          video={this.video}
-          playing={this.state.playing}
-          hovering={this.state.hovering}
-          onTogglePlay={this.handleTogglePlay}
-          onToggleFullscreen={this.handleToggleFullscreen}
-        />
+        {controls && (
+          <React.Fragment>
+            <PlayButton
+              playing={this.state.playing}
+              buffering={this.state.buffering}
+              onClick={this.handleTogglePlay}
+            />
+            <Loading color="white" buffering={this.state.buffering} />
+            <ControlBar
+              video={this.video}
+              playing={this.state.playing}
+              hovering={this.state.hovering}
+              onTogglePlay={this.handleTogglePlay}
+              onToggleFullscreen={this.handleToggleFullscreen}
+            />
+          </React.Fragment>
+        )}
       </Container>
     )
   }

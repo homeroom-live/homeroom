@@ -24,6 +24,7 @@ const fragments = {
     fragment LessonCard on Lesson {
       id
       name
+      playbackUrl
       thumbnail {
         id
         url
@@ -92,8 +93,9 @@ const LessonVideo = styled(Player)`
 const LessonCard = ({ node, href, className }) => (
   <LessonCardContainer onClick={() => Router.push(href)} className={className}>
     <LessonVideo
-      src={null} // node.live.url || node.vod.url
+      src={node.playbackUrl}
       poster={node.thumbnail ? node.thumbnail.url : ''}
+      loop={true}
     />
     <LessonMeta>
       <Link
