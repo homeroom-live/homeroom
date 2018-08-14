@@ -32,6 +32,8 @@ const Container = styled.div`
   display: flex;
   height: 100%;
   width: 100%;
+  min-height: ${props => props.height || 'inherit'};
+  min-width: ${props => props.width || 'inherit'};
 `
 
 export class Player extends React.Component {
@@ -64,6 +66,8 @@ export class Player extends React.Component {
     this.video.addEventListener('seeking', this.handleToggleBuffering(true))
     this.video.addEventListener('seeked', this.handleToggleBuffering(false))
 
+    // NOTE: For Mobile
+    // --
     // else if (video && video.canPlayType('application/vnd.apple.mpegurl')) {
     //   video.src = this.props.src
     //   video.addEventListener('loadedmetadata', function() {
@@ -150,9 +154,13 @@ export class Player extends React.Component {
       autoPlay,
       loop,
       controls,
+      height,
+      width,
     } = this.props
     return (
       <Container
+        width={width}
+        height={height}
         innerRef={el => {
           this.container = el
         }}
@@ -161,13 +169,13 @@ export class Player extends React.Component {
       >
         <Video
           controls
+          className={className}
           id="video"
           type={type}
           poster={poster}
           src={src}
           autoPlay={autoPlay}
           loop={loop}
-          className={className}
           innerRef={el => {
             this.video = el
           }}

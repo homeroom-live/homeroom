@@ -82,17 +82,16 @@ const LessonMetaItem = styled(Text)`
   margin-right: ${spacing.small};
   letter-spacing: 0.2px;
 `
-const LessonVideo = styled(Player)`
+// height: 280px;
+const LessonPlayer = styled(Player)`
   object-fit: contain;
-  height: 280px;
-  margin-bottom: ${spacing.small};
   border-radius: 4px;
   background: ${colors.black};
 `
 
 const LessonCard = ({ node, href, className }) => (
   <LessonCardContainer onClick={() => Router.push(href)} className={className}>
-    <LessonVideo
+    <LessonPlayer
       src={node.playbackUrl}
       poster={node.thumbnail ? node.thumbnail.url : ''}
       loop={true}

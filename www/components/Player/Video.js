@@ -27,6 +27,7 @@ export class Video extends React.Component {
       autoPlay,
       muted,
       crossOrigin,
+      className,
       innerRef,
       onClick,
     } = this.props
@@ -38,6 +39,7 @@ export class Video extends React.Component {
         preload={preload}
         autoPlay={autoPlay}
         muted={muted}
+        className={className}
         crossOrigin={crossOrigin}
         innerRef={innerRef}
         onClick={onClick}

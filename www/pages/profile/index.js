@@ -256,7 +256,8 @@ class Profile extends React.Component {
                       onChange={this.handlePictureChange}
                     />
                   </Label>
-                  <Label size="small">
+                  {/*
+                    <Label size="small">
                     Subscription Price
                     <Input
                       type="number"
@@ -264,6 +265,7 @@ class Profile extends React.Component {
                       value={this.state.price}
                     />
                   </Label>
+                  
                   <Label>
                     Credit Card
                     <Input
@@ -273,6 +275,7 @@ class Profile extends React.Component {
                       value={this.state.price}
                     />
                   </Label>
+                  */}
                 </FlexCol>
               </UserFormRow>
               <FlexRow>

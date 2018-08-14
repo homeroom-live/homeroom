@@ -8,14 +8,13 @@ import moment from 'moment-timezone'
 // Components
 
 import { Navbar } from 'components/Navbar'
-import { LessonCard, fragments } from 'components/LessonCard'
+import { fragments } from 'components/LessonCard'
 import { FlexCol } from 'components/FlexCol'
 import { FlexRow } from 'components/FlexRow'
 import { Player } from 'components/Player'
 import { Text } from 'components/Text'
 import { TextStyle } from 'components/TextStyle'
 import { Link } from 'components/Link'
-import { Button } from 'components/Button'
 import { IconHeader } from 'components/IconHeader'
 import { Header } from 'components/Header'
 import { Icon } from 'components/Icon'
@@ -371,23 +370,20 @@ class LessonInfo extends React.Component {
 
         {this.state.profile && (
           <CardRow>
-            <CardColLeft>
+            <CardCol>
               <IconHeader
                 src={iconInformation}
                 value={`About ${data.lesson.teacher.name}`}
               />
               <CardBody>
                 <CardLabel>
-                  Subscribers
-                  <Text margin="5px 0">123</Text>
-                </CardLabel>
-                <CardLabel>
                   Bio
                   <Text margin="5px 0">{data.lesson.teacher.bio}</Text>
                 </CardLabel>
               </CardBody>
-            </CardColLeft>
-            <CardCol>
+            </CardCol>
+            {/*
+              <CardCol>
               <IconHeader src={iconHeart} value="Social" />
               <FlexCol>
                 <SocialLink
@@ -402,6 +398,7 @@ class LessonInfo extends React.Component {
                 </SocialLink>
               </FlexCol>
             </CardCol>
+            */}
           </CardRow>
         )}
 
@@ -456,9 +453,8 @@ const LessonBodyCol = styled(FlexCol)`
   overflow: auto;
 `
 const CLASS_HEADER_HEIGHT = '127px'
-const LessonPlayer = styled(Player)`
-  min-height: calc(${HEIGHT_MINUS_NAVBAR} - ${CLASS_HEADER_HEIGHT});
-`
+const LessonPlayer = styled(Player)``
+// min-height: calc(${HEIGHT_MINUS_NAVBAR} - ${CLASS_HEADER_HEIGHT});
 const LessonHeader = styled(FlexRow)`
   flex-shrink: 0;
   position: sticky;
@@ -520,6 +516,7 @@ class LivePage extends React.Component {
                     <LessonBodyCol>
                       <LessonPlayer
                         controls
+                        height={`calc(${HEIGHT_MINUS_NAVBAR} - ${CLASS_HEADER_HEIGHT})`}
                         src={data.lesson.playbackUrl}
                         autoPlay={true}
                         type="application/x-mpegURL"
